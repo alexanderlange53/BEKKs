@@ -3,13 +3,12 @@
 BHHH_arch <- function(r2, q, theta, epsilon, Z, Tob, max_iter, crit){
   # BHHH algorithm based on first order derivatives and outer product for ARCH(q) model
 
-  step_width <- seq(1, 0, length.out = 5)
+  step_width <- seq(1, 0, length.out = 100) # find the optimal step width
 
   quit <- 0
   iter <- 1
 
   while (quit == 0 & iter < max_iter) {
-    theta_0 <- matrix(0, nrow = nrow(theta), ncol = 5)
 
     score_function <- score(epsilon, Z, theta)
 
@@ -17,34 +16,34 @@ BHHH_arch <- function(r2, q, theta, epsilon, Z, Tob, max_iter, crit){
 
     sum_grad <- rowSums(score_function)
 
-    theta_hat <- matrix(0, nrow = nrow(theta), ncol = 5)
-    for (i in 1:5) {
+    theta_hat <- matrix(0, nrow = nrow(theta), ncol = 100)
+    for (i in 1:100) {
       theta_hat[,i] <- theta + step_width[i] * solve(out_prod_grad) %*% sum_grad
     }
 
     theta_hat <- abs(theta_hat)
 
-    candidates <- matrix(0, 5, 1)
+    candidates <- matrix(0, 100, 1)
 
-    candidates[5, ] <- likelihood_arch(Z, Tob, q, theta, epsilon)
+    candidates[1, ] <- likelihood_arch(Z, Tob, q, theta, epsilon)
 
     quit_inner <- 0
-    iter_inner <- 4
+    iter_inner <- 2
 
-    while (iter_inner > 1 & quit_inner == 0) {
+    while (iter_inner < 100 & quit_inner == 0) {
       candidates[iter_inner, ] <- likelihood_arch(Z, Tob, q, theta_hat[, iter_inner], epsilon)
 
-      if (candidates[iter_inner+1] < candidates[iter_inner]) {
+      if (candidates[iter_inner] < candidates[iter_inner-1]) {
         quit_inner <- 1
       }
-      iter_inner <- iter_inner - 1
+      iter_inner <- iter_inner + 1
     }
 
     min_lik <- which.min(candidates)
 
     best_candidate <- candidates[min_lik,]
 
-    if ((best_candidate - candidates[5,])^2 / abs(candidates[5,]) <  crit) {
+    if ((best_candidate - candidates[1,])^2 / abs(candidates[1,]) <  crit) {
       quit <- 1
     }
 

@@ -16,5 +16,5 @@ test_that("ARCH(6) model with daily DAX returns works", {
   a1 <- arch(DAX30, 6)
 
   expect_equal(round(a1$loglik, 1), 7537)
-  expect_equal(round(a1$theta, 3),  c(0.000, 0.038, 0.144, 0.164, 0.132, 0.176, 0.164))
+  expect_equal(round(a1$theta, 3),  c(0.000, 0.038, 0.144, 0.163, 0.132, 0.175, 0.165))
 })
