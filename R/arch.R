@@ -6,7 +6,7 @@
 #' @param crit determiens the precision of the BHHH algorithm
 #' @export
 
-  arch <- function(r, q, max_iter = 30000, crit = 0.000000001) {
+  arch <- function(r, q, max_iter = 30000, crit = 1e-12) {
     r <- as.matrix(r)
 
     Tob <- nrow(r)
