@@ -18,8 +18,6 @@
 
     # generating intital parameters
     theta <- as.matrix(c(ucvar*0.05, rep(1, q) * 0.05/q, rep(1, p) * 0.9/p))
-    #m_r2 <- mean(r2)
-    #theta[1,1] <-  # inital value for constant
 
     Z = YLagCr(r2, q) # Generate regressor matrix
 
@@ -38,9 +36,6 @@
     Z_pre_sample <- YLagCr0(r2, Tob, q , ucvar)
     Z_pre_sample <- rbind(Z_pre_sample, Z)
 
-    # imp_var_pre_sample <- Z_pre_sample %*% theta
-    # imp_var <- Z %*% theta
-    # imp_var <- sqrt(rbind(imp_var_pre_sample, imp_var))
     imp_var <- greatZ0_garch(Tob, Z_pre_sample, q, p, ucvar, theta)
 
     resid <- r/imp_var

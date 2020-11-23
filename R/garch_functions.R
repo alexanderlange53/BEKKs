@@ -57,19 +57,6 @@ BHHH_garch <- function(r2, q, p, theta, epsilon2, Z, Tob, max_iter, crit, ucvar)
   return(c(theta, lik_optim))
 }
 
-# score <- function (epsilon2, Z, theta) {
-#   # Calculates the first order derivatives
-#
-#   sigma2 <- Z %*% theta
-#
-#   sigg1 <- kronecker(sigma2^(-1), matrix(1, nrow = 1, ncol(Z))) * Z
-#   sigg2 <- kronecker(sigma2^(-2), matrix(1, nrow = 1, ncol(Z))) * Z
-#
-#   lt <- 0.5 * ((-1) * sigg1 + epsilon2 * sigg2)
-#
-#   return(t(lt))
-# }
-
 score_garch <- function(epsilon2, Z, Tob, q, p, theta, ucvar) {
   theta <- matrix(theta, nrow = p+q+1, ncol = 1)
   vvec <- greatZ_garch(Tob, Z, q, p, ucvar, theta) # GARCH variance sigma^2
@@ -87,8 +74,8 @@ score_garch <- function(epsilon2, Z, Tob, q, p, theta, ucvar) {
   gz <- gz[,1:nparam]
   vabl <- matrix(0, nrow=(Tob-q), ncol = nparam)
 
-  e <- aa %*% matrix(1, p, nparam)
-  e[,1] <- aa2 %*% matrix(1, p, 1)
+  e <- c(aa) * matrix(1, p, nparam)
+  e[,1] <- c(aa2) * matrix(1, p, 1)
   vabl <- rbind(e, vabl)
 
   for (i in (p+1):(Tob-q+p)) {
@@ -130,23 +117,6 @@ likelihood_garch <- function(Z, Tob, q, p, theta, epsilon2, ucvar) {
   return(loglik)
 }
 
-# YLagCr0A <- function(r2, Tob, q, m_r2) {
-#
-#   help_m <- matrix(1, nrow = nrow(r2) + q, ncol = q +1)
-#   for (j in 2:(q + 1)) {
-#     k <- 1
-#     for (i in 1:q) {
-#       if (i < j) {
-#         help_m[i, j] <- m_r2
-#       } else {
-#         help_m[i, j] <- r2[k,]
-#         k <- k + 1
-#       }
-#     }
-#   }
-#
-#   return(help_m[1:q, 1:(q+1)])
-# }
 
 # Generates vector of GRACH variances (Sigma_e)
 greatZ_garch <- function(Tob, Z, q, p, ucvar, theta) {
