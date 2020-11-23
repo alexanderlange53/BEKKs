@@ -18,9 +18,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// YLagCr0
+arma::mat YLagCr0(arma::mat& r2, int& Tob, int& q, double& m_r2);
+RcppExport SEXP _BEKKs_YLagCr0(SEXP r2SEXP, SEXP TobSEXP, SEXP qSEXP, SEXP m_r2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type r2(r2SEXP);
+    Rcpp::traits::input_parameter< int& >::type Tob(TobSEXP);
+    Rcpp::traits::input_parameter< int& >::type q(qSEXP);
+    Rcpp::traits::input_parameter< double& >::type m_r2(m_r2SEXP);
+    rcpp_result_gen = Rcpp::wrap(YLagCr0(r2, Tob, q, m_r2));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_BEKKs_YLagCr", (DL_FUNC) &_BEKKs_YLagCr, 2},
+    {"_BEKKs_YLagCr0", (DL_FUNC) &_BEKKs_YLagCr0, 4},
     {NULL, NULL, 0}
 };
 
