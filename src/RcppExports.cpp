@@ -6,6 +6,20 @@
 
 using namespace Rcpp;
 
+// SigmaGARCHuniv
+arma::vec SigmaGARCHuniv(const arma::vec& param, int Tob, double& SigmaE, const arma::vec est);
+RcppExport SEXP _BEKKs_SigmaGARCHuniv(SEXP paramSEXP, SEXP TobSEXP, SEXP SigmaESEXP, SEXP estSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type param(paramSEXP);
+    Rcpp::traits::input_parameter< int >::type Tob(TobSEXP);
+    Rcpp::traits::input_parameter< double& >::type SigmaE(SigmaESEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type est(estSEXP);
+    rcpp_result_gen = Rcpp::wrap(SigmaGARCHuniv(param, Tob, SigmaE, est));
+    return rcpp_result_gen;
+END_RCPP
+}
 // YLagCr
 arma::mat YLagCr(arma::mat y, int p);
 RcppExport SEXP _BEKKs_YLagCr(SEXP ySEXP, SEXP pSEXP) {
@@ -34,6 +48,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_BEKKs_SigmaGARCHuniv", (DL_FUNC) &_BEKKs_SigmaGARCHuniv, 4},
     {"_BEKKs_YLagCr", (DL_FUNC) &_BEKKs_YLagCr, 2},
     {"_BEKKs_YLagCr0", (DL_FUNC) &_BEKKs_YLagCr0, 4},
     {NULL, NULL, 0}
