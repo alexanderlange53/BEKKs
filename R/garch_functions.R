@@ -1,4 +1,4 @@
-# Script containing the functions to estimate the ARCH(q) parameter
+# Script containing the functions to estimate the GARCH(p, q) parameter
 
 BHHH_garch <- function(r2, q, p, theta, epsilon2, Z, Tob, max_iter, crit, ucvar){
   # BHHH algorithm based on first order derivatives and outer product for ARCH(q) model
@@ -46,10 +46,10 @@ BHHH_garch <- function(r2, q, p, theta, epsilon2, Z, Tob, max_iter, crit, ucvar)
 
     if ((best_candidate - candidates[1,])^2 / abs(candidates[1,]) <  crit) {
       quit <- 1
+    } else {
+      theta <- as.matrix(theta_hat[, min_lik])
+      iter <- iter + 1
     }
-
-    theta <- as.matrix(theta_hat[, min_lik])
-    iter <- iter + 1
   }
 
   lik_optim <- likelihood_garch(Z, Tob, q, p, theta, epsilon2, ucvar)
