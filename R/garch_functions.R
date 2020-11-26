@@ -65,8 +65,8 @@ score_garch <- function(epsilon2, Z, Tob, q, p, theta, ucvar) {
   vvec1 <- c(ucvar, vvec)
   vvec1 <- vvec1[1:(Tob-q)]
 
-  aa <- ucvar/(1 - theta[(q + 2):nrow(theta)] %*% rep(1, nrow(theta) - q -q))
-  aa2 <- 1/(1 - theta[(q+2):nrow(theta)] %*% rep(1, nrow(theta) - q -q))
+  aa <- ucvar/(1 - theta[(q + 2):nrow(theta)] %*% rep(1, nrow(theta) - q - 1))
+  aa2 <- 1/(1 - theta[(q+2):nrow(theta)] %*% rep(1, nrow(theta) - q - 1))
 
   gz <- cbind(Z, vvec1, vvec2)
   nparam <- nrow(theta)
