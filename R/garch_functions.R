@@ -60,18 +60,35 @@ BHHH_garch <- function(r2, q, p, theta, epsilon2, Z, Tob, max_iter, crit, ucvar)
 score_garch <- function(epsilon2, Z, Tob, q, p, theta, ucvar) {
   theta <- matrix(theta, nrow = p+q+1, ncol = 1)
   vvec <- greatZ_garch(Tob, Z, q, p, ucvar, theta) # GARCH variance sigma^2
-  vvec2 <- c(ucvar, ucvar, vvec) # combining with unconditonal variance
-  vvec2 <- vvec2[1:(Tob-q)] # discarding last q observations
-  vvec1 <- c(ucvar, vvec)
-  vvec1 <- vvec1[1:(Tob-q)]
+
+  vvec2_new <- matrix(NA, nrow = Tob-q, ncol = p)
+
+  k <- 1
+  for (j in 1:p) {
+    k <- 1
+    for (i in 1:nrow(vvec2_new)) {
+      if (j>=i) {
+        vvec2_new[i, j] <- ucvar
+      } else {
+        vvec2_new[i, j] <- vvec[k]
+        k <- k+1
+      }
+    }
+  }
+
+
+  # vvec2 <- c(ucvar, ucvar, vvec) # combining with unconditonal variance
+  # vvec2 <- vvec2[1:(Tob-q)] # discarding last q observations
+  # vvec1 <- c(ucvar, vvec)
+  # vvec1 <- vvec1[1:(Tob-q)]
 
   aa <- ucvar/(1 - theta[(q + 2):nrow(theta)] %*% rep(1, nrow(theta) - q - 1))
   aa2 <- 1/(1 - theta[(q+2):nrow(theta)] %*% rep(1, nrow(theta) - q - 1))
 
-  gz <- cbind(Z, vvec1, vvec2)
+  gz <- cbind(Z, vvec2_new)
   nparam <- nrow(theta)
 
-  gz <- gz[,1:nparam]
+  #gz <- gz[,1:nparam]
   vabl <- matrix(0, nrow=(Tob-q), ncol = nparam)
 
   e <- c(aa) * matrix(1, p, nparam)
