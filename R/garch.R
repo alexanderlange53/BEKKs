@@ -25,7 +25,7 @@
 
     theta <- parameter[1:(q + p + 1)]
 
-    scores <- score_garch(epsilon2, Z, Tob, q, p, theta, ucvar)
+    scores <- ScoreGarch(matrix(epsilon2, 1, length(epsilon2)), Z, Tob, q, p, matrix(theta, ncol = 1), ucvar)
     cov_mat <- solve(tcrossprod(scores) / (Tob - q)) / (Tob - q)
 
     se <- sqrt(diag(cov_mat))

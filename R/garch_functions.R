@@ -10,7 +10,9 @@ BHHH_garch <- function(r2, q, p, theta, epsilon2, Z, Tob, max_iter, crit, ucvar)
 
   while (quit == 0 & iter < max_iter) {
 
-    score_function <- score_garch(epsilon2, Z, Tob, q, p, theta, ucvar)
+    theta <- matrix(theta, nrow = p+q+1, ncol = 1)
+    #score_function <- score_garch(epsilon2, Z, Tob, q, p, theta, ucvar)
+    score_function <- ScoreGarch(matrix(epsilon2, 1, length(epsilon2)), Z, Tob, q, p, theta, ucvar)
 
     out_prod_grad <- score_function %*% t(score_function)
 
@@ -32,11 +34,6 @@ BHHH_garch <- function(r2, q, p, theta, epsilon2, Z, Tob, max_iter, crit, ucvar)
 
     while (iter_inner < 100 & quit_inner == 0) {
       candidates[iter_inner, ] <- likelihood_garch(Z, Tob, q, p, theta_hat[, iter_inner], epsilon2, ucvar)
-
-      # if (candidates[iter_inner] < candidates[iter_inner-1]) {
-      #   quit_inner <- 1
-      #   cat('stop')
-      # }
       iter_inner <- iter_inner + 1
     }
 
@@ -57,76 +54,13 @@ BHHH_garch <- function(r2, q, p, theta, epsilon2, Z, Tob, max_iter, crit, ucvar)
   return(c(theta, lik_optim))
 }
 
-score_garch <- function(epsilon2, Z, Tob, q, p, theta, ucvar) {
-  theta <- matrix(theta, nrow = p+q+1, ncol = 1)
-  vvec <- greatZ_garch(Tob, Z, q, p, ucvar, theta) # GARCH variance sigma^2
-
-  vvec2_new <- matrix(NA, nrow = Tob-q, ncol = p)
-
-  k <- 1
-  for (j in 1:p) {
-    k <- 1
-    for (i in 1:nrow(vvec2_new)) {
-      if (j>=i) {
-        vvec2_new[i, j] <- ucvar
-      } else {
-        vvec2_new[i, j] <- vvec[k]
-        k <- k+1
-      }
-    }
-  }
-
-
-  # vvec2 <- c(ucvar, ucvar, vvec) # combining with unconditonal variance
-  # vvec2 <- vvec2[1:(Tob-q)] # discarding last q observations
-  # vvec1 <- c(ucvar, vvec)
-  # vvec1 <- vvec1[1:(Tob-q)]
-
-  aa <- ucvar/(1 - theta[(q + 2):nrow(theta)] %*% rep(1, nrow(theta) - q - 1))
-  aa2 <- 1/(1 - theta[(q+2):nrow(theta)] %*% rep(1, nrow(theta) - q - 1))
-
-  gz <- cbind(Z, vvec2_new)
-  nparam <- nrow(theta)
-
-  #gz <- gz[,1:nparam]
-  vabl <- matrix(0, nrow=(Tob-q), ncol = nparam)
-
-  e <- c(aa) * matrix(1, p, nparam)
-  e[,1] <- c(aa2) * matrix(1, p, 1)
-  vabl <- rbind(e, vabl)
-
-  for (i in (p+1):(Tob-q+p)) {
-    b <- matrix(vabl[(i - p):(i-1),], nrow = p)
-    b <- b[rev(1:nrow(b)),]
-    b <- theta[(q+2):nparam,]*b
-    if(p > 1) {
-      b <- t(colSums(b))
-    }else{
-      b <- t(b)
-    }
-
-    vabl[i,] <- gz[(i-p),] + b
-  }
-
-  vabl <- vabl[(p+1):(Tob-q+p),]
-
-  siggi1 <- vabl/vvec
-  siggi2 <- vvec^2
-  siggi2 <- epsilon2/siggi2
-  siggi2 <- matrix(rep(siggi2, ncol(vabl)), nrow= length(siggi2), ncol=ncol(vabl), byrow = FALSE)*vabl
-
-  ltv <- 0.5 * (siggi2 - siggi1)
-
-  return(t(ltv))
-}
 
 likelihood_garch <- function(Z, Tob, q, p, theta, epsilon2, ucvar) {
   # likelihood function for specific parameter 'theta'
 
   theta <- matrix(theta, nrow = p+q+1, ncol = 1)
 
-  #sigma2 <- Z %*% theta
-  sigma2 <- greatZ_garch(Tob, Z, q, p, ucvar, theta)
+  sigma2 <- c(GarchVariance(Tob, q, p, ucvar, theta, Z))
 
   term2 <- epsilon2 / sigma2
 
@@ -134,27 +68,6 @@ likelihood_garch <- function(Z, Tob, q, p, theta, epsilon2, ucvar) {
   return(loglik)
 }
 
-
-# Generates vector of GRACH variances (Sigma_e)
-greatZ_garch <- function(Tob, Z, q, p, ucvar, theta) {
-  vvec <- rep(0, Tob-q)
-
-  e <- ucvar * rep(1, p)
-  vvec <- c(e, vvec)
-
-  g <- nrow(theta)
-
-  for (i in (p+1):(Tob-q+p)) {
-    b <- vvec[(i-p):(i-1)]
-    b <- rev(b)
-    b <- theta[(q+2):g]*b
-    b <- sum(b)
-
-    vvec[i] <- Z[i-p, ] %*% theta[1:(q+1)] + b
-  }
-
-  return(vvec[(p+1):(Tob-q+p)])
-}
 
 # Generates vector of GRACH variances (Sigma_e)
 greatZ0_garch <- function(Tob, Z, q, p, ucvar, theta) {

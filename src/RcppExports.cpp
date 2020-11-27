@@ -6,6 +6,54 @@
 
 using namespace Rcpp;
 
+// SigmaLagCr
+arma::mat SigmaLagCr(arma::mat y, int Tob, int q, int p, double ucvar);
+RcppExport SEXP _BEKKs_SigmaLagCr(SEXP ySEXP, SEXP TobSEXP, SEXP qSEXP, SEXP pSEXP, SEXP ucvarSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type y(ySEXP);
+    Rcpp::traits::input_parameter< int >::type Tob(TobSEXP);
+    Rcpp::traits::input_parameter< int >::type q(qSEXP);
+    Rcpp::traits::input_parameter< int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< double >::type ucvar(ucvarSEXP);
+    rcpp_result_gen = Rcpp::wrap(SigmaLagCr(y, Tob, q, p, ucvar));
+    return rcpp_result_gen;
+END_RCPP
+}
+// GarchVariance
+arma::mat GarchVariance(int Tob, int q, int p, double ucvar, arma::mat theta, arma::mat Z);
+RcppExport SEXP _BEKKs_GarchVariance(SEXP TobSEXP, SEXP qSEXP, SEXP pSEXP, SEXP ucvarSEXP, SEXP thetaSEXP, SEXP ZSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type Tob(TobSEXP);
+    Rcpp::traits::input_parameter< int >::type q(qSEXP);
+    Rcpp::traits::input_parameter< int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< double >::type ucvar(ucvarSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Z(ZSEXP);
+    rcpp_result_gen = Rcpp::wrap(GarchVariance(Tob, q, p, ucvar, theta, Z));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ScoreGarch
+arma::mat ScoreGarch(arma::mat epsilon2, arma::mat Z, int Tob, int q, int p, arma::mat theta, double ucvar);
+RcppExport SEXP _BEKKs_ScoreGarch(SEXP epsilon2SEXP, SEXP ZSEXP, SEXP TobSEXP, SEXP qSEXP, SEXP pSEXP, SEXP thetaSEXP, SEXP ucvarSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type epsilon2(epsilon2SEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< int >::type Tob(TobSEXP);
+    Rcpp::traits::input_parameter< int >::type q(qSEXP);
+    Rcpp::traits::input_parameter< int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< double >::type ucvar(ucvarSEXP);
+    rcpp_result_gen = Rcpp::wrap(ScoreGarch(epsilon2, Z, Tob, q, p, theta, ucvar));
+    return rcpp_result_gen;
+END_RCPP
+}
 // SigmaGARCHuniv
 arma::vec SigmaGARCHuniv(const arma::vec& param, int Tob, double& SigmaE, const arma::vec est);
 RcppExport SEXP _BEKKs_SigmaGARCHuniv(SEXP paramSEXP, SEXP TobSEXP, SEXP SigmaESEXP, SEXP estSEXP) {
@@ -48,6 +96,9 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_BEKKs_SigmaLagCr", (DL_FUNC) &_BEKKs_SigmaLagCr, 5},
+    {"_BEKKs_GarchVariance", (DL_FUNC) &_BEKKs_GarchVariance, 6},
+    {"_BEKKs_ScoreGarch", (DL_FUNC) &_BEKKs_ScoreGarch, 7},
     {"_BEKKs_SigmaGARCHuniv", (DL_FUNC) &_BEKKs_SigmaGARCHuniv, 4},
     {"_BEKKs_YLagCr", (DL_FUNC) &_BEKKs_YLagCr, 2},
     {"_BEKKs_YLagCr0", (DL_FUNC) &_BEKKs_YLagCr0, 4},
