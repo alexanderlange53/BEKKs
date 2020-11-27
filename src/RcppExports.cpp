@@ -54,6 +54,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// LikelihoodGarch
+double LikelihoodGarch(arma::mat Z, int Tob, int q, int p, arma::mat theta, arma::mat epsilon2, double ucvar);
+RcppExport SEXP _BEKKs_LikelihoodGarch(SEXP ZSEXP, SEXP TobSEXP, SEXP qSEXP, SEXP pSEXP, SEXP thetaSEXP, SEXP epsilon2SEXP, SEXP ucvarSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< int >::type Tob(TobSEXP);
+    Rcpp::traits::input_parameter< int >::type q(qSEXP);
+    Rcpp::traits::input_parameter< int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type epsilon2(epsilon2SEXP);
+    Rcpp::traits::input_parameter< double >::type ucvar(ucvarSEXP);
+    rcpp_result_gen = Rcpp::wrap(LikelihoodGarch(Z, Tob, q, p, theta, epsilon2, ucvar));
+    return rcpp_result_gen;
+END_RCPP
+}
 // SigmaGARCHuniv
 arma::vec SigmaGARCHuniv(const arma::vec& param, int Tob, double& SigmaE, const arma::vec est);
 RcppExport SEXP _BEKKs_SigmaGARCHuniv(SEXP paramSEXP, SEXP TobSEXP, SEXP SigmaESEXP, SEXP estSEXP) {
@@ -99,6 +116,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BEKKs_SigmaLagCr", (DL_FUNC) &_BEKKs_SigmaLagCr, 5},
     {"_BEKKs_GarchVariance", (DL_FUNC) &_BEKKs_GarchVariance, 6},
     {"_BEKKs_ScoreGarch", (DL_FUNC) &_BEKKs_ScoreGarch, 7},
+    {"_BEKKs_LikelihoodGarch", (DL_FUNC) &_BEKKs_LikelihoodGarch, 7},
     {"_BEKKs_SigmaGARCHuniv", (DL_FUNC) &_BEKKs_SigmaGARCHuniv, 4},
     {"_BEKKs_YLagCr", (DL_FUNC) &_BEKKs_YLagCr, 2},
     {"_BEKKs_YLagCr0", (DL_FUNC) &_BEKKs_YLagCr0, 4},

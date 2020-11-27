@@ -13,6 +13,10 @@ ScoreGarch <- function(epsilon2, Z, Tob, q, p, theta, ucvar) {
     .Call('_BEKKs_ScoreGarch', PACKAGE = 'BEKKs', epsilon2, Z, Tob, q, p, theta, ucvar)
 }
 
+LikelihoodGarch <- function(Z, Tob, q, p, theta, epsilon2, ucvar) {
+    .Call('_BEKKs_LikelihoodGarch', PACKAGE = 'BEKKs', Z, Tob, q, p, theta, epsilon2, ucvar)
+}
+
 SigmaGARCHuniv <- function(param, Tob, SigmaE, est) {
     .Call('_BEKKs_SigmaGARCHuniv', PACKAGE = 'BEKKs', param, Tob, SigmaE, est)
 }

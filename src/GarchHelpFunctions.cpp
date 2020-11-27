@@ -33,7 +33,7 @@ arma::mat SigmaLagCr(arma::mat y, int Tob, int q, int p, double ucvar){
   return SigmaLag;
 }
 
-// Generates vector of GRACH variances (Sigma_e)
+// Generates vector of GARCH variances (Sigma_e)
 // [[Rcpp::export]]
 arma::mat GarchVariance(int Tob, int q, int p, double ucvar, arma::mat theta, arma::mat Z){
 
@@ -115,5 +115,25 @@ arma::mat ScoreGarch(arma::mat epsilon2, arma::mat Z, int Tob, int q, int p, arm
 
   arma::mat ltv = 0.5 * (score2 - score1);
 
-   return ltv.t();
+  return ltv.t();
+}
+
+// Gaussian log-likelihood for GARCH(p, q) model
+// [[Rcpp::export]]
+double LikelihoodGarch(arma::mat Z, int Tob, int q, int p, arma::mat theta, arma::mat epsilon2, double ucvar) {
+
+  // Args:
+  //    - Z: Regressor matrix
+  //    - Tob: Number of observations
+  //    - q: ARCH order
+  //    - p: GARCH order
+  //    - epsilon2: GARCH process of squared returns
+  //    - ucvar: unconditional variance
+
+  arma::mat sigma2 = GarchVariance(Tob, q, p, ucvar, theta, Z);
+
+  arma::mat term2 = epsilon2 / sigma2;
+
+  double loglik = 0.5 * (Tob - q) * log(2 * M_PI) + arma::as_scalar(0.5 * arma::sum(log(sigma2), 1)) + 0.5 * arma::as_scalar(arma::sum(term2, 1));
+  return loglik;
 }

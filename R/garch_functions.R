@@ -11,7 +11,6 @@ BHHH_garch <- function(r2, q, p, theta, epsilon2, Z, Tob, max_iter, crit, ucvar)
   while (quit == 0 & iter < max_iter) {
 
     theta <- matrix(theta, nrow = p+q+1, ncol = 1)
-    #score_function <- score_garch(epsilon2, Z, Tob, q, p, theta, ucvar)
     score_function <- ScoreGarch(matrix(epsilon2, 1, length(epsilon2)), Z, Tob, q, p, theta, ucvar)
 
     out_prod_grad <- score_function %*% t(score_function)
@@ -27,13 +26,13 @@ BHHH_garch <- function(r2, q, p, theta, epsilon2, Z, Tob, max_iter, crit, ucvar)
 
     candidates <- matrix(0, 100, 1)
 
-    candidates[1, ] <- likelihood_garch(Z, Tob, q, p, theta, epsilon2, ucvar)
+    candidates[1, ] <- LikelihoodGarch(Z, Tob, q, p, matrix(theta, ncol = 1), matrix(epsilon2, 1, length(epsilon2)), ucvar)
 
     quit_inner <- 0
     iter_inner <- 2
 
     while (iter_inner < 100 & quit_inner == 0) {
-      candidates[iter_inner, ] <- likelihood_garch(Z, Tob, q, p, theta_hat[, iter_inner], epsilon2, ucvar)
+      candidates[iter_inner, ] <- LikelihoodGarch(Z, Tob, q, p, matrix(theta_hat[, iter_inner], ncol= 1), matrix(epsilon2, 1, length(epsilon2)), ucvar)
       iter_inner <- iter_inner + 1
     }
 
@@ -49,23 +48,9 @@ BHHH_garch <- function(r2, q, p, theta, epsilon2, Z, Tob, max_iter, crit, ucvar)
     }
   }
 
-  lik_optim <- likelihood_garch(Z, Tob, q, p, theta, epsilon2, ucvar)
+  lik_optim <- LikelihoodGarch(Z, Tob, q, p, matrix(theta, ncol = 1), matrix(epsilon2, 1, length(epsilon2)), ucvar)
 
   return(c(theta, lik_optim))
-}
-
-
-likelihood_garch <- function(Z, Tob, q, p, theta, epsilon2, ucvar) {
-  # likelihood function for specific parameter 'theta'
-
-  theta <- matrix(theta, nrow = p+q+1, ncol = 1)
-
-  sigma2 <- c(GarchVariance(Tob, q, p, ucvar, theta, Z))
-
-  term2 <- epsilon2 / sigma2
-
-  loglik <- 0.5 * (Tob - q) * log(2 * pi) + 0.5 * sum(log(sigma2)) + 0.5 * sum(term2)
-  return(loglik)
 }
 
 
