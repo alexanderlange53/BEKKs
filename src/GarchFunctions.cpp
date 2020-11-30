@@ -137,3 +137,73 @@ double LikelihoodGarch(arma::mat Z, int Tob, int q, int p, arma::mat theta, arma
   double loglik = 0.5 * (Tob - q) * log(2 * M_PI) + arma::as_scalar(0.5 * arma::sum(log(sigma2), 1)) + 0.5 * arma::as_scalar(arma::sum(term2, 1));
   return loglik;
 }
+
+// BHHH algorithm based on first order derivatives and outer product for Gaussian GARCH(p, q) model
+// [[Rcpp::export]]
+arma::vec BhhhGarch(arma::mat r2, int q, int p, arma::mat theta, arma::mat epsilon2, arma::mat Z, int Tob, int max_iter, double crit, double ucvar){
+
+  // Args:
+  //    - r2: squared returns
+  //    - q: ARCH order
+  //    - p: GARCH order
+  //    - theta: parameter to optimize
+  //    - epsilon2: GARCH process of squared returns
+  //    - Z: Regressor matrix
+  //    - Tob: Number of observations
+  //    - max_iter: maximum nimber of algorithm iterations
+  //    - crit: accuracy of algorithm
+  //    - ucvar: unconditional variance
+
+  // Generating candidate step width
+  arma::vec step_width = arma::linspace(1, 0, 100);
+  int quit = 0;
+  int iter = 1;
+
+  while (quit == 0 && iter < max_iter) {
+
+    arma::mat score_function = ScoreGarch(epsilon2, Z, Tob, q, p, theta, ucvar);
+
+    arma::mat out_prod_grad = score_function * score_function.t();
+
+    arma::mat sum_grad = arma::sum(score_function, 1);
+
+    arma::mat theta_hat = arma::zeros(theta.n_rows, 100);
+    for (int i = 0; i < 100; i++) {
+      theta_hat.col(i) = theta + step_width(i) * out_prod_grad.i() * sum_grad;
+    }
+
+    theta_hat = arma::abs(theta_hat);
+
+    arma::vec candidates = arma::zeros(100);
+
+    candidates(0) = LikelihoodGarch(Z, Tob, q, p, theta, epsilon2, ucvar);
+
+    int quit_inner = 0;
+    int iter_inner = 1;
+
+    while (iter_inner < 100 && quit_inner == 0) {
+      candidates(iter_inner) = LikelihoodGarch(Z, Tob, q, p, theta_hat.col(iter_inner), epsilon2, ucvar);
+      iter_inner += 1;
+    }
+
+    int min_lik = candidates.index_min();
+
+    double best_candidate = candidates.min();
+
+    if (pow(best_candidate - candidates(0), 2) / abs(candidates(0)) <  crit) {
+      quit = 1;
+    } else {
+      theta = theta_hat.col(min_lik);
+      iter += 1;
+    }
+  }
+
+  double lik_optim = LikelihoodGarch(Z, Tob, q, p, theta, epsilon2, ucvar);
+
+  arma::vec theta_out = arma::vectorise(theta);
+  int sz = theta_out.size();
+  theta_out.resize(sz+1);
+  theta_out(sz) = lik_optim;
+
+  return theta_out;
+}

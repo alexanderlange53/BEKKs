@@ -12,7 +12,7 @@
 
     Tob <- nrow(r)
 
-    r2 <- r^2 # squared residuals
+    r2 <- r^2 # squared returns
     epsilon2 <- r2[-c(1:q),] # GARCH process
     ucvar <- sum(r2) / (Tob - q) # unconditional variance
 
@@ -21,8 +21,7 @@
 
     Z = YLagCr(r2, q) # Generate regressor matrix
 
-    parameter <- BHHH_garch(r2, q, p, theta, epsilon2, Z, Tob, max_iter, crit, ucvar)
-
+    parameter <- c(BhhhGarch(r2, q, p, matrix(theta, nrow = p+q+1, ncol = 1), matrix(epsilon2, 1, length(epsilon2)), Z, Tob, max_iter, crit, ucvar))
     theta <- parameter[1:(q + p + 1)]
 
     scores <- ScoreGarch(matrix(epsilon2, 1, length(epsilon2)), Z, Tob, q, p, matrix(theta, ncol = 1), ucvar)
