@@ -45,20 +45,20 @@ arma::mat GarchVariance(int Tob, int q, int p, double ucvar, arma::mat theta, ar
   //    - theta: parameter to optimize
   //    - Z: Regressor matrix
 
-  arma::mat vvec = arma::zeros(1, Tob-q);
+  arma::mat sigma2 = arma::zeros(1, Tob-q);
 
   arma::mat e = ucvar * arma::ones(1, 1, p);
-  vvec = arma::join_horiz(e, vvec);
+  sigma2 = arma::join_horiz(e, sigma2);
 
   int g = theta.n_rows;
 
   for (int i = p; i < (Tob-q+p); i++) {
-    arma::mat b = arma::reverse(vvec.cols((i-p), (i-1)), 1);
+    arma::mat b = arma::reverse(sigma2.cols((i-p), (i-1)), 1);
     b = b * theta.rows(q+1, g-1);
-    vvec.col(i) = Z.row(i-p) * theta.rows(0, q) + b;
+    sigma2.col(i) = Z.row(i-p) * theta.rows(0, q) + b;
   }
 
-  return vvec.cols(p, (Tob-q+p-1));
+  return sigma2.cols(p, (Tob-q+p-1));
 }
 
 // Score function of Gaussian log-likelihood for GARCH(p, q) model
@@ -75,11 +75,12 @@ arma::mat ScoreGarch(arma::mat epsilon2, arma::mat Z, int Tob, int q, int p, arm
   //    - ucvar: unconditional variance
 
   // GARCH variance sigma^2
-  arma::mat vvec = GarchVariance(Tob, q, p, ucvar, theta, Z);
+  arma::mat sigma2 = GarchVariance(Tob, q, p, ucvar, theta, Z);
 
   // Lag matrix for recursive  volatility
-  arma:: mat sigma_lag_mat = SigmaLagCr(vvec, Tob, q, p, ucvar);
+  arma:: mat sigma_lag_mat = SigmaLagCr(sigma2, Tob, q, p, ucvar);
 
+  // initial parameter
   double aa;
   aa = arma::as_scalar(ucvar/(1 - arma::sum(theta.rows((q + 1), (theta.n_rows-1)))));
   double aa2;
@@ -108,14 +109,14 @@ arma::mat ScoreGarch(arma::mat epsilon2, arma::mat Z, int Tob, int q, int p, arm
 
   vabl = vabl.rows(p, (Tob-q+p-1));
 
-  arma::mat score1 = vabl/arma::repmat(vvec.t(), 1, vabl.n_cols);
-  arma::mat score2 = arma::pow(vvec, 2);
+  arma::mat score1 = vabl/arma::repmat(sigma2.t(), 1, vabl.n_cols);
+  arma::mat score2 = arma::pow(sigma2, 2);
   score2 = epsilon2/score2;
   score2 = arma::repmat(score2.t(), 1, vabl.n_cols) % vabl;
 
-  arma::mat ltv = 0.5 * (score2 - score1);
+  arma::mat score_full = 0.5 * (score2 - score1);
 
-  return ltv.t();
+  return score_full.t();
 }
 
 // Gaussian log-likelihood for GARCH(p, q) model

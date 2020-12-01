@@ -21,10 +21,6 @@ BhhhGarch <- function(r2, q, p, theta, epsilon2, Z, Tob, max_iter, crit, ucvar) 
     .Call('_BEKKs_BhhhGarch', PACKAGE = 'BEKKs', r2, q, p, theta, epsilon2, Z, Tob, max_iter, crit, ucvar)
 }
 
-SigmaGARCHuniv <- function(param, Tob, SigmaE, est) {
-    .Call('_BEKKs_SigmaGARCHuniv', PACKAGE = 'BEKKs', param, Tob, SigmaE, est)
-}
-
 YLagCr <- function(y, p) {
     .Call('_BEKKs_YLagCr', PACKAGE = 'BEKKs', y, p)
 }
