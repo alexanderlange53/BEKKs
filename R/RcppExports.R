@@ -25,7 +25,3 @@ YLagCr <- function(y, p) {
     .Call('_BEKKs_YLagCr', PACKAGE = 'BEKKs', y, p)
 }
 
-YLagCr0 <- function(r2, Tob, q, m_r2) {
-    .Call('_BEKKs_YLagCr0', PACKAGE = 'BEKKs', r2, Tob, q, m_r2)
-}
-
