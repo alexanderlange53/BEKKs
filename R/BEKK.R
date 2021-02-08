@@ -7,7 +7,7 @@
 #' @export
 
 bekk <- function(r, init_values = NULL, max_iter = 300000) {
-  N <- cols(r)
+  N <- ncol(r)
 
   if (is.null(init_values)) {
       # Grid search

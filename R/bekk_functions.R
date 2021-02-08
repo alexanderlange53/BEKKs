@@ -10,7 +10,11 @@ bhh_bekk <- function(r, theta, max_iter) {
     theta <- theta_candidate
     theta_temp <- matrix(0, nrow = nrow(theta), length(steps))
 
-    score_functio <- score_bekk(r)
+    score_function <- score_bekk(theta, r)
+    outer_score <- tcrossprod(score_function)
+    score_function <- colSums(score_function)
+
+    # Hier likelihood
   }
 
 
@@ -31,21 +35,54 @@ score_bekk <- function(theta, r) {
 
   c0 <- c_mat$c0
   a <- c_mat$a
-  g <- c_mat$b
+  g <- c_mat$g
 
   c_full <- crossprod(c0)
 
-  # Partial derivatives for initial perdio t = 1
+  # Partial derivatives for initial period t = 1
   ht <- crossprod(r)/nrow(r)
 
-  dHda <- 2 * D_duplication %*% D_gen_inv %*% kronecker(diag(N), t(a) %*% h)
-  dHdg <- 2 * D_duplication %*% D_gen_inv %*% kronecker(diag(N), t(g) %*% h)
-  dHdc <- 2 * D_duplication %*% D_gen_inv %*% kronecker(c0, diag(N)) %*% t(L_elimination)
+  dHda <- 2 * D_duplication %*% D_gen_inv %*% kronecker(diag(N), t(a) %*% ht)
+  dHdg <- 2 * D_duplication %*% D_gen_inv %*% kronecker(diag(N), t(g) %*% ht)
+  dHdc <- 2 * D_duplication %*% D_gen_inv %*% kronecker(t(c0), diag(N)) %*% t(L_elimination)
 
-  dHdtheta <- cbind(dHda, dHdg, dHdc)
+  dHdtheta <- t(cbind(dHdc, dHda, dHdg))
 
   ht_sqrt_inv <- solve(sqrtm(ht))
 
+  et <- ht_sqrt_inv %*% r[1,]
+  # Score function
+  for (k in 1:nrow(theta)) {
+    dh <- matrix(dHdtheta[k, ], N, N)
+
+    mat_temp <- ht_sqrt_inv %*% dh %*% ht_sqrt_inv %*% (diag(N) - tcrossprod(et))
+
+    gradients[1, k] <- -(0.5) * sum(diag(mat_temp))
+  }
+
+  # Partial derivatives for period t >= 2
+  for (i in 2:nrow(r)) {
+    dHda <- 2 * D_duplication %*% D_gen_inv %*% kronecker(diag(N), t(a) %*% r[(i-1), ] %*% t(r[(i-1), ])) + t(kronecker(g, g)) %*% dHda
+    dHdg <- 2 * D_duplication %*% D_gen_inv %*% kronecker(diag(N), t(g) %*% ht) + t(kronecker(g, g)) %*% dHdg
+    dHdc <- 2 * D_duplication %*% D_gen_inv %*% kronecker(t(c0), diag(N)) %*% t(L_elimination) + t(kronecker(g, g)) %*% dHdc
+
+    dHdtheta <- t(cbind(dHdc, dHda, dHdg))
+
+    ht <- c_full + t(a) %*% r[(i-1), ] %*% t(r[(i-1), ]) + t(g) %*% ht %*%g
+
+    ht_sqrt_inv <- solve(sqrtm(ht))
+    et <- ht_sqrt_inv %*% r[i,]
+
+    for (k in 1:nrow(theta)) {
+      dh <- matrix(dHdtheta[k, ], N, N)
+
+      mat_temp <- ht_sqrt_inv %*% dh %*% ht_sqrt_inv %*% (diag(N) - tcrossprod(et))
+
+      gradients[i, k] <- -(0.5) * sum(diag(mat_temp))
+    }
+  }
+
+  return(gradients)
 }
 
 # Generates an elimination matrix for size 'n'
@@ -108,16 +145,16 @@ commutation_mat <- function(n) {
 # Converts parameter vefctor into coefficients matrices of BEKK model
 coef_mat <- function(theta, N) {
   c_0 <- theta[1:(N * (N + 1)/2), ]
-  a_0 <- theta[(N * (N+1)/2 + 1):(3 * N^2 + N)/2, ]
-  g_0 <- theta[((3 * N^2 + N)/2 + 1):(2*N^2 + (N * (N + 1)/2)), ]
+  a_0 <- theta[(N * (N+1)/2 + 1):(N^2 + (N * (N + 1)/2)), ]
+  g_0 <- theta[((N^2 + (N * (N + 1)/2)) + 1):(2*N^2 + (N * (N + 1)/2)), ]
 
-  a <- t(matrix(c_0, n, n))
-  g <- t(matrix(g_0, n, n))
+  a <- (matrix(a_0, N, N))
+  g <- (matrix(g_0, N, N))
 
   c0 <- matrix(0, N, N)
   c0[lower.tri(c0, diag = TRUE)] <- c_0
 
-  return(list(c0 = c0,
+  return(list(c0 = t(c0),
               a = a,
               g = g))
 }
