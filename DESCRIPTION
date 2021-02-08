@@ -8,7 +8,7 @@ Authors@R:
            email = "first.last@example.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
-Imports: Rcpp
+Imports: Rcpp, expm 
 LinkingTo: Rcpp, RcppArmadillo
 NeedsCompilation: yes
 SystemRequirements: C++11
