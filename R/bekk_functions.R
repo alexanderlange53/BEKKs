@@ -217,7 +217,6 @@ loglike_bekk <- function(theta, r) {
       index=index+1
     }
   }
-  print(C)
   A = matrix(theta[index:(index+n^2-1)], n)
   G = matrix(theta[(index+n^2):numb_of_vars], n)
 
