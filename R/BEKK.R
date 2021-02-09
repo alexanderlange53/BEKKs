@@ -6,7 +6,7 @@
 #' @param crit determiens the precision of the BHHH algorithm
 #' @export
 
-bekk <- function(r, init_values = NULL, max_iter = 300000) {
+bekk <- function(r, init_values = NULL, max_iter = 50, crit = 1e-9) {
   N <- ncol(r)
 
   if (is.null(init_values)) {
@@ -15,6 +15,7 @@ bekk <- function(r, init_values = NULL, max_iter = 300000) {
       theta <- init_values
   }
 
+    params <- bhh_bekk(r, theta, max_iter, crit)
 
 
 

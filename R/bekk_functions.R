@@ -1,23 +1,56 @@
-bhh_bekk <- function(r, theta, max_iter) {
+bhh_bekk <- function(r, theta, max_iter, crit) {
 
   steps <- seq(5,0, by = -0.5)
   step <- 0.01
   count_loop <- 1
   theta_candidate <- theta
+  exit_loop <- 0
 
 
-  while (count_loop < max_iter) {
+  while (count_loop < max_iter & exit_loop == 0) {
     theta <- theta_candidate
     theta_temp <- matrix(0, nrow = nrow(theta), length(steps))
 
     score_function <- score_bekk(theta, r)
-    outer_score <- tcrossprod(score_function)
+    outer_score <- crossprod(score_function)
     score_function <- colSums(score_function)
 
     # Hier likelihood
+    lik <- loglike_bekk(theta, r)
+
+    for (i in 1:length(steps)) {
+      temp <- theta_candidate + step * steps[i]*solve(outer_score) %*% score_function # hier nochmal gucken H2 hat da kontrolliert on inverser exstiert
+      theta_temp[, i] <- temp
+    }
+
+    likelihood_candidates <- rep(0, length(steps))
+    likelihood_candidates[1] <- lik
+
+    for (i in 2:length(steps)) {
+      likelihood_candidates[i] <- loglike_bekk(theta_temp[, i], r)
+    }
+
+    max_index <- which.max(likelihood_candidates)
+    likelihood_best <- likelihood_candidates[max_index]
+
+    # exit criterion strange
+    if ((likelihood_best - likelihood_candidates[length(likelihood_candidates)])^2/abs(likelihood_candidates[length(likelihood_candidates)]) < crit) {
+      exit_loop <- 1
+    }
+    theta_candidate <- matrix(theta_temp[, max_index], ncol= 1)
+    count_loop <- count_loop + 1
   }
 
+  likelihood_final <- loglike_bekk(theta_candidate, r)
+  score_final <- score_bekk(theta_candidate, r)
+  s1 <- sqrt(diag(solve(crossprod(score_final))))
 
+  t_val <- theta_candidate/s1
+
+  return(list(theta = theta_candidate,
+              t_val = t_val,
+              likelihood = likelihood_final,
+              iter = count_loop))
 }
 
 score_bekk <- function(theta, r) {
@@ -159,7 +192,7 @@ coef_mat <- function(theta, N) {
               g = g))
 }
 
-#Testing existance, uniqueness and stationarity 
+#Testing existance, uniqueness and stationarity
 valid_bekk <- function(C, A, G) {
   # condition for positive-definit covariance
   if (any(diag(C) < 0)) {
@@ -202,6 +235,8 @@ comph_bekk <- function(C, A, G, r) {
   }
   return(H)
 }
+
+
 #Log-Likelihood Value
 loglike_bekk <- function(theta, r) {
   # convert to matrices
