@@ -68,7 +68,7 @@ score_bekk <- function(theta, r) {
 
     dHdtheta <- t(cbind(dHdc, dHda, dHdg))
 
-    ht <- c_full + t(a) %*% r[(i-1), ] %*% t(r[(i-1), ]) + t(g) %*% ht %*%g
+    ht <- c_full + t(a) %*% r[(i-1), ] %*% t(r[(i-1), ]) %*% a + t(g) %*% ht %*%g
 
     ht_sqrt_inv <- solve(sqrtm(ht))
     et <- ht_sqrt_inv %*% r[i,]
