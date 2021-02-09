@@ -1,6 +1,6 @@
 bhh_bekk <- function(r, theta, max_iter, crit) {
 
-  steps <- seq(5,0, by = -0.5)
+  steps <- c(5,2,1,0.5,0.25,0.1,0.01,0.005,0)#seq(5,0, by = -0.5)
   step <- 0.01
   count_loop <- 1
   theta_candidate <- theta
@@ -24,13 +24,19 @@ bhh_bekk <- function(r, theta, max_iter, crit) {
     }
 
     likelihood_candidates <- rep(0, length(steps))
-    likelihood_candidates[1] <- lik
+    likelihood_candidates[length(steps)] <- lik
 
-    for (i in 2:length(steps)) {
-      likelihood_candidates[i] <- loglike_bekk(theta_temp[, i], r)
+    j <- length(steps) - 1
+    exit_inner <-0
+    while (j >= 1 & exit_inner == 0) {
+      likelihood_candidates[j] <- loglike_bekk(theta_temp[, j], r)
+      if (likelihood_candidates[j+1] > likelihood_candidates[j]) {
+        exit_inner <-1
+      }
+      j <- j-1
     }
 
-    max_index <- which.max(likelihood_candidates)
+    max_index <- which.max(likelihood_candidates[(j+1):length(likelihood_candidates)]) + j
     likelihood_best <- likelihood_candidates[max_index]
 
     # exit criterion strange

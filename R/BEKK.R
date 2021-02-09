@@ -15,7 +15,7 @@ bekk <- function(r, init_values = NULL, max_iter = 50, crit = 1e-9) {
       theta <- init_values
   }
 
-    params <- bhh_bekk(r, theta, max_iter, crit)
+  params <- bhh_bekk(r, theta, max_iter, crit)
 
 
 
