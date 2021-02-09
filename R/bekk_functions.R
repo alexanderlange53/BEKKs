@@ -414,7 +414,6 @@ random_grid_search_BEKK=function(r,sampleSize){
       }
     }
 
-    print(index)
     A = matrix(theta[index:(index+n^2-1)], n)
     G = matrix(theta[(index+n^2):numb_of_vars], n)
 
