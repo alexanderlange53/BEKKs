@@ -158,3 +158,82 @@ coef_mat <- function(theta, N) {
               a = a,
               g = g))
 }
+
+#Testing existance, uniqueness and stationarity 
+valid_bekk <- function(C, A, G) {
+  # condition for positive-definit covariance
+  if (any(diag(C) < 0)) {
+    return(FALSE)
+  }
+
+  # condition for uniqueness
+  if (A[1, 1] < 0 || G[1, 1] < 0) {
+    return(FALSE)
+  }
+
+  # check stationarity for BEKK(1,1): Engle & Kroner (1995), Prop. 2.7
+  if (!all(abs(eigen(kronecker(A, A)
+                     + kronecker(G, G))$values) < 1)) {
+    return(FALSE)
+  }
+
+  return(TRUE)
+}
+
+#Computation of BEKK
+comph_bekk <- function(C, A, G, r) {
+  # dimensions
+  n      = nrow(r)
+
+  # redefine for convenience
+  CC     = t(C) %*% C
+  At     = t(A)
+  Gt     = t(G)
+
+  # compute uncond. covariance matrix
+  Hu     = (t(r) %*% r) / nrow(r)
+
+  # compute H trajectory
+  H      = vector(mode = "list", n)
+  H[[1]] = Hu
+  for (i in 2:n) {
+    H[[i]] <- (CC + At %*% (r[i - 1,] %*% t(r[i - 1,])) %*% A
+               + Gt %*% H[[i - 1]] %*% G)
+  }
+  return(H)
+}
+#Log-Likelihood Value
+loglike_bekk <- function(theta, r) {
+  # convert to matrices
+  n=ncol(r)
+  #Length of each series
+  NoOBs=nrow(r)
+  numb_of_vars=2*n^2+n*(n+1)/2
+  C=matrix(0,ncol = n,nrow = n)
+  index=1
+  for(i in 1 : n){
+    for (j in i:n) {
+      C[j,i]=theta[index]
+      index=index+1
+    }
+  }
+  print(C)
+  A = matrix(theta[index:(index+n^2-1)], n)
+  G = matrix(theta[(index+n^2):numb_of_vars], n)
+
+  # check constraints
+  if (!valid_bekk(C, A, G)) {
+    return(-10*n)
+  }
+
+  # compute H
+  H   = comph_bekk(C, A, G, r)
+  # compute llv
+
+  llv = numeric(NoOBs)
+  for (i in 1:NoOBs) {
+    llv[i] = c(t(r[i,]) %*% solve(H[[i]]) %*% r[i,])
+  }
+  llv = -0.5 * (2 * log(2 * pi) + log(sapply(H, det)) + llv)
+  return(sum(llv))
+}
