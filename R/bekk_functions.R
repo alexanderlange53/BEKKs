@@ -185,6 +185,7 @@ loglike_bekk <- function(theta, r) {
       index=index+1
     }
   }
+  C <- t(C)
   A = matrix(theta[index:(index+n^2-1)], n)
   G = matrix(theta[(index+n^2):numb_of_vars], n)
 
@@ -204,5 +205,4 @@ loglike_bekk <- function(theta, r) {
   llv = -0.5 * (n * log(2 * pi) + log(sapply(H, det)) + llv)
   return(sum(llv))
 }
-
 
