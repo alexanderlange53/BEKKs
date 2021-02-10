@@ -146,43 +146,20 @@ valid_bekk <- function(C, A, G) {
   return(TRUE)
 }
 
-#Computation of BEKK
-comph_bekk <- function(C, A, G, r) {
-  # dimensions
-  n      = nrow(r)
 
-  # redefine for convenience
-  CC     = t(C) %*% C
-  At     = t(A)
-  Gt     = t(G)
-
-  # compute uncond. covariance matrix
-  Hu     = (t(r) %*% r) / nrow(r)
-
-  # compute H trajectory
-  H      = vector(mode = "list", n)
-  H[[1]] = Hu
-  for (i in 2:n) {
-    H[[i]] <- (CC + At %*% (r[i - 1,] %*% t(r[i - 1,])) %*% A
-               + Gt %*% H[[i - 1]] %*% G)
-  }
-  return(H)
-}
-
-
-#Log-Likelihood Value
+# Log-Likelihood function
 loglike_bekk <- function(theta, r) {
   # convert to matrices
-  n=ncol(r)
+  n <- ncol(r)
   #Length of each series
-  NoOBs=nrow(r)
-  numb_of_vars=2*n^2+n*(n+1)/2
-  C=matrix(0,ncol = n,nrow = n)
-  index=1
-  for(i in 1 : n){
+  NoOBs <- nrow(r)
+  numb_of_vars <- 2*n^2+n*(n+1)/2
+  C <- matrix(0,ncol = n,nrow = n)
+  index <- 1
+  for(i in 1:n){
     for (j in i:n) {
-      C[j,i]=theta[index]
-      index=index+1
+      C[j,i] <- theta[index]
+      index <- index+1
     }
   }
   C <- t(C)
@@ -191,18 +168,22 @@ loglike_bekk <- function(theta, r) {
 
   # check constraints
   if (!valid_bekk(C, A, G)) {
-    return(-10*n)
+    return(-1e25)
   }
 
-  # compute H
-  H   = comph_bekk(C, A, G, r)
-  # compute llv
+  # compute inital H
+  H <- (t(r) %*% r) / nrow(r)
+
+  CC  <- t(C) %*% C
+  At  <- t(A)
+  Gt  <- t(G)
+
 
   llv = numeric(NoOBs)
-  for (i in 1:NoOBs) {
-    llv[i] = c(t(r[i,]) %*% solve(H[[i]]) %*% r[i,])
+  llv[1] <- -0.5 * (n * log(2 * pi) + log(det(H)) + c(t(r[1,]) %*% solve(H) %*% r[1,]))
+  for (i in 2:NoOBs) {
+    H <- (CC + At %*% (r[i - 1,] %*% t(r[i - 1,])) %*% A + Gt %*% H %*% G)
+    llv[i] = -0.5 * (n * log(2 * pi) + log(det(H)) + c(t(r[i,]) %*% solve(H) %*% r[i,]))
   }
-  llv = -0.5 * (n * log(2 * pi) + log(sapply(H, det)) + llv)
   return(sum(llv))
 }
-

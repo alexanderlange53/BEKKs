@@ -1,4 +1,3 @@
-
 test_that("Testing GridSearch works with TS_new", {
   set.seed(6723217)
   gs1 <- random_grid_search_BEKK(TS_Example,250)
