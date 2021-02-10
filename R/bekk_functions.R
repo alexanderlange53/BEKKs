@@ -125,7 +125,6 @@ score_bekk <- function(theta, r) {
 }
 
 
-
 #Testing existance, uniqueness and stationarity
 valid_bekk <- function(C, A, G) {
   # condition for positive-definit covariance
