@@ -1,3 +1,4 @@
+
 #H2 Code
 gridSearch_BEKK=function(r){
   n=ncol(r)
@@ -23,84 +24,85 @@ gridSearch_BEKK=function(r){
 
     }
   }
-  print(c)
+
   c = t(chol(c))
   c0 = c[,1]
 
-  for (i in 2:(n-1)){
-    c0 = c(c0,c[i:n,i])
-  }
+for (i in 2:(n-1)){
+  c0 = c(c0,c[i:n,i])
+}
 
-  c0 = c(c0,c[n,n])
+c0 = c(c0,c[n,n])
 
-  # deterministic variance components
+# deterministic variance components
 
-  th0 = c(c0,c(a),c(g))
+th0 = c(c0,c(a),c(g))
 
-  #change elements of a and g and compute likelihood in each step
+#change elements of a and g and compute likelihood in each step
 
-  likmax = -9999999
+likmax = -9999999
 
-  #print th0
-  result= recursive_search_BEKK(r,c0,vec(a),vec(g),1,th0,likmax)
-  th0=result[[1]]
-  likmax=result[[2]]
-  return(list(th0,likmax))
+#print th0
+result= recursive_search_BEKK(r,c0,c(a),c(g),1,th0,likmax)
+th0=result[[1]]
+likmax=result[[2]]
+return(list(th0,likmax))
 
 }
 
 
 recursive_search_BEKK=function(r,c0,avec,gvec,index,thetaopt,likmax){
 
-  n=ncol(r)
-  start= -3
-  endr = 3
-  step = 6
-  indextest=0
+n=ncol(r)
+start= -3
+endr = 3
+step = 6
+indextest=0
 
-  if (index == n^2){
-    index = index + 2;
-  } else if (index < n^2){
-    indextest = (index-1)/(n+1)
-  } else{
-    indextest = (index-n^2-1)/(n+1)
-  }
-  # we have a diagonal element
-  if (indextest - floor(indextest) == 0){
+if (index == n^2){
+  index = index + 2;
+} else if (index < n^2){
+indextest = (index-1)/(n+1)
+} else{
+  indextest = (index-n^2-1)/(n+1)
+}
+# we have a diagonal element
+if (indextest - floor(indextest) == 0){
     index = index + 1
+}
+
+for (i in seq(start, endr, step)){
+val = i/100
+
+#set a and g respectively according to index, exclude diagonal elements
+  if (index <= n^2){
+    avec[index,1] = val
+  } else{
+    gvec[index-n^2,1] = val
   }
-
-  for (i in seq(start, endr, step)){
-    val = i/100
-
-    #set a and g respectively according to index, exclude diagonal elements
-    if (index <= n^2){
-      avec[index,1] = val
-    } else{
-      gvec[index-n^2,1] = val
+#last element is excluded
+  if (index < (2*n^2-1)){
+# recursive step
+ result= recursive_search_BEKK(r,c0,avec,gvec,index+1,thetaopt,likmax)
+ thetaopt=result[[1]]
+ likmax=result[[2]]
+  } else{
+    #final step
+    theta = c(c0,avec,gvec)
+    #likelihood
+    lik = loglike_bekk(theta,r)
+    if (lik > likmax){
+      thetaopt = theta
+      likmax = lik
     }
-    #last element is excluded
-    if (index < (2*n^2-1)){
-      # recursive step
-      result= recursive_search_BEKK(r,c0,avec,gvec,index+1,thetaopt,likmax)
-      thetaopt=result[[1]]
-      likmax=result[[2]]
-    } else{
-      #final step
-      theta = c(c0,avec,gvec)
-      #likelihood
-      lik = loglike_bekk(theta,r)
-      if (lik > likmax){
-        thetaopt = theta
-        likmax = lik
-      }
 
-    }
   }
+}
 
-  return(list(thetaopt,likmax))
+return(list(thetaopt,likmax))
 
 }
+
 
 
 #Now Grid Search with generation of random candidates
@@ -138,6 +140,7 @@ random_grid_search_BEKK=function(r,sampleSize){
         index=index+1
       }
     }
+
 
     A = matrix(theta[index:(index+n^2-1)], n)
     G = matrix(theta[(index+n^2):numb_of_vars], n)
