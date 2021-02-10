@@ -21,6 +21,18 @@ BhhhGarch <- function(r2, q, p, theta, epsilon2, Z, Tob, max_iter, crit, ucvar) 
     .Call('_BEKKs_BhhhGarch', PACKAGE = 'BEKKs', r2, q, p, theta, epsilon2, Z, Tob, max_iter, crit, ucvar)
 }
 
+elimination_mat <- function(n) {
+    .Call('_BEKKs_elimination_mat', PACKAGE = 'BEKKs', n)
+}
+
+commutation_mat <- function(n) {
+    .Call('_BEKKs_commutation_mat', PACKAGE = 'BEKKs', n)
+}
+
+duplication_mat <- function(n) {
+    .Call('_BEKKs_duplication_mat', PACKAGE = 'BEKKs', n)
+}
+
 YLagCr <- function(y, p) {
     .Call('_BEKKs_YLagCr', PACKAGE = 'BEKKs', y, p)
 }
