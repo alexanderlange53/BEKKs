@@ -10,7 +10,9 @@ bekk <- function(r, init_values = NULL, max_iter = 50, crit = 1e-9) {
   N <- ncol(r)
 
   if (is.null(init_values)) {
-      # Grid search
+      theta <- gridSearch_BEKK(r)
+  } else if (init_values == 'random') {
+
   } else {
       theta <- init_values
   }
