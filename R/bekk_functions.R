@@ -1,6 +1,6 @@
 bhh_bekk <- function(r, theta, max_iter, crit) {
 
-  steps <- c(5,2,1,0.5,0.25,0.1,0.01,0.005,0)#seq(5,0, by = -0.5)
+  steps <- c(5,2,1,0.5,0.25,0.1,0.01,0.005,0)
   step <- 0.01
   count_loop <- 1
   theta_candidate <- theta

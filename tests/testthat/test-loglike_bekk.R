@@ -4,6 +4,6 @@ test_that("Log-likelihood works with 2-dimensional sample data", {
               0.298887218, 0.976954018, 0.003170047, 0.019283272, 0.941393723)
 
 
-  expect_equal(loglike_bekk(theta, r), -7596.925)
+  expect_equal(loglike_bekk(theta, data.matrix(BI)), -7596.925)
 })
 
