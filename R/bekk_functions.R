@@ -59,7 +59,7 @@ bhh_bekk <- function(r, theta, max_iter, crit) {
               iter = count_loop))
 }
 
-score_bekk <- function(theta, r) {
+score_bekk2 <- function(theta, r) {
   N <- ncol(r)
   N2 <- N^2
 
