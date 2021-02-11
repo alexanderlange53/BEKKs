@@ -179,3 +179,67 @@ arma::mat score_bekk(arma::mat theta, arma::mat r) {
 
   return gradients;
 }
+
+// [[Rcpp::export]]
+Rcpp::List bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
+
+  arma::vec steps = {5,2,1,0.5,0.25,0.1,0.01,0.005,0};
+  double step = 0.01;
+  int count_loop = 1;
+  arma::mat theta_candidate = theta;
+  int exit_loop = 0;
+
+
+  while (count_loop < max_iter && exit_loop == 0) {
+    theta = theta_candidate;
+    arma::mat theta_temp = arma::zeros(theta.n_rows, steps.n_elem);
+
+    arma::mat score_function = score_bekk(theta, r);
+    arma::mat outer_score = score_function.t() * score_function;
+    score_function = arma::sum(score_function);
+
+    double lik = loglike_bekk(theta, r);
+
+     for (int i = 0; i < steps.n_elem; i++) {
+        arma::vec temp = theta_candidate + step * steps(i) * arma::inv(outer_score) * score_function.t(); // hier nochmal gucken H2 hat da kontrolliert on inverser exstiert
+        theta_temp.col(i) = temp;
+      }
+
+
+      arma::vec likelihood_candidates(steps.n_elem, arma::fill::zeros);
+      likelihood_candidates(steps.n_elem - 1) = lik;
+
+      int  j = steps.n_elem - 2;
+      int exit_inner = 0;
+      while (j >= 1 && exit_inner == 0) {
+        likelihood_candidates(j) = loglike_bekk(theta_temp.col(j), r);
+        if (likelihood_candidates(j+1) > likelihood_candidates(j)) {
+          exit_inner = 1;
+        }
+        j -= 1;
+      }
+
+      int max_index = arma::index_max(likelihood_candidates.subvec(j, (steps.n_elem -1))) + j;
+      double likelihood_best = likelihood_candidates(max_index);
+
+      // exit criterion strange
+      if (pow(likelihood_best - likelihood_candidates(steps.n_elem -1), 2)/abs(likelihood_candidates(steps.n_elem -1)) < crit) {
+        exit_loop = 1;
+      }
+      theta_candidate = theta_temp.col(max_index);
+      count_loop += 1;
+  }
+
+  double likelihood_final = loglike_bekk(theta_candidate, r);
+  arma::mat score_final = score_bekk(theta_candidate, r);
+  arma::mat s1_temp = arma::diagmat(arma::inv(score_final.t() * score_final));
+  arma::mat s1 = arma::sqrt(s1_temp.diag());
+
+  arma::mat t_val = theta_candidate/s1;
+
+  return Rcpp::List::create(Rcpp::Named("theta") = theta_candidate,
+                       Rcpp::Named("t_val") = t_val,
+                       Rcpp::Named("likelihood") = likelihood_final,
+                       Rcpp::Named("iter") = count_loop);
+
+}
