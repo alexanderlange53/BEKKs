@@ -243,3 +243,59 @@ Rcpp::List bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
                        Rcpp::Named("iter") = count_loop);
 
 }
+// [[Rcpp::export]]
+arma::mat random_grid_search_BEKK(arma::mat r, int sampleSize) {
+  int n =r.n_cols;
+  int numb_of_vars=2*(n^2)+n*(n+1)/2;
+  arma::mat theta = arma::vec(numb_of_vars,0);
+  arma::mat thetaOptim=theta;
+  double best_val = -1e25;
+  // Generating random values for A, C and G
+  for (int i = 1; i <= sampleSize; i++){
+    int counter= 1;
+    int diagonal_elements = n;
+    int diagonal_counter = 0;
+
+    for (int j=0; j <= numb_of_vars;j++){
+
+      if(j == counter && j <= (n*(n+1)/2)){
+        theta[j]=  static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        counter+=diagonal_elements;
+        diagonal_elements--;
+      }
+      if(j == (n*(n+1)/2+1+diagonal_counter*n)) {
+        theta[j]= static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+
+        diagonal_counter++;
+      }
+      else{
+        theta[j]=-0.5 + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(1)));
+
+      }
+    }
+
+    arma::mat C = arma::zeros(n,n);
+    int  index=1;
+    for(int j=1; j <=n; j++){
+      for (int k = j;k <= n; k++) {
+        C(k,j)=theta[index];
+        index++;
+      }
+    }
+    arma::mat A = arma::reshape(theta.rows((n * (n+1)/2), (pow(n, 2) + (n * (n + 1)/2) - 1)), n, n);
+    arma::mat G = arma::reshape(theta.rows(((pow(n, 2) + (n * (n + 1)/2))), (2*pow(n, 2) + (n * (n + 1)/2) - 1)), n, n);
+
+    if(valid_bekk(C,A,G)){
+      double llv=loglike_bekk(theta,r);
+      if(llv>best_val){
+        best_val=llv;
+        thetaOptim=theta;
+      }
+    }
+
+  }
+  return Rcpp::List::create(Rcpp::Named("thetaOptim") = thetaOptim,
+                            Rcpp::Named("best_val") = best_val);
+
+}
+
