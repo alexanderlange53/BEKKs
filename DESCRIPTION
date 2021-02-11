@@ -8,7 +8,7 @@ Authors@R:
            email = "first.last@example.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
-Depends: expm
+Depends: R (>= 3.5.0), expm
 Imports: Rcpp, expm 
 LinkingTo: Rcpp, RcppArmadillo
 NeedsCompilation: yes

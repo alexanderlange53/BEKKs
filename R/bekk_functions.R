@@ -125,26 +125,7 @@
 # # }
 #
 #
-#Testing existance, uniqueness and stationarity
-valid_bekk <- function(C, A, G) {
-  # condition for positive-definit covariance
-  if (any(diag(C) < 0)) {
-    return(0)
-  }
 
-  # condition for uniqueness
-  if (A[1, 1] < 0 || G[1, 1] < 0) {
-    return(0)
-  }
-
-  # check stationarity for BEKK(1,1): Engle & Kroner (1995), Prop. 2.7
-  if (!all(abs(eigen(kronecker(A, A)
-                     + kronecker(G, G))$values) < 1)) {
-    return(0)
-  }
-
-  return(1)
-}
 
 
 # Log-Likelihood function
@@ -187,6 +168,27 @@ valid_bekk <- function(C, A, G) {
 #   }
 #   return(sum(llv))
 # }
+
+#Testing existance, uniqueness and stationarity
+valid_bekk <- function(C, A, G) {
+  # condition for positive-definit covariance
+  if (any(diag(C) < 0)) {
+    return(0)
+  }
+
+  # condition for uniqueness
+  if (A[1, 1] < 0 || G[1, 1] < 0) {
+    return(0)
+  }
+
+  # check stationarity for BEKK(1,1): Engle & Kroner (1995), Prop. 2.7
+  if (!all(abs(eigen(kronecker(A, A)
+                     + kronecker(G, G))$values) < 1)) {
+    return(0)
+  }
+
+  return(1)
+}
 
 hessian_BEKK=function(theta,r){
 
@@ -376,4 +378,39 @@ for (i in 2:n){
 }
 
 return(hessian*(-1))
+}
+
+# Obtaining QML t-ratios
+QML_t_ratios <- function(theta, r) {
+  s1 <- score_bekk(theta, r)
+  s1 <- crossprod(s1)
+
+  s2 <- hessian_BEKK(theta, r)
+  s2 <- solve(s2) %*% s1 %*% solve(s2)
+
+  s2 <- sqrt(diag(s2))
+
+  return(theta/s2)
+}
+
+# Computation of second order moment time paths and GARCH innovations
+sigma_bekk <- function(r, C, A, G) {
+  N <- ncol(r)
+  N2 <- N^2
+
+  sigma <- matrix(0, nrow(r), N2)
+  et <- matrix(0, nrow(r), N)
+  ht <- crossprod(r)/nrow(et)
+  sigma[1, ] <- c(ht)
+
+  et[1, ] <- solve(sqrtm(ht)) %*%  r[1,]
+
+  for (i in 2:nrow(r)) {
+    ht <- crossprod(C) + t(A) %*% r[(i-1), ] %*% t(r[(i-1), ]) %*% A + t(G) %*% ht %*% G
+    sigma[i, ] <- c(ht)
+    et[i, ] <- solve(sqrtm(ht)) %*% r[i,]
+  }
+
+  return(list(sigma_t = sigma,
+              e_t = et))
 }

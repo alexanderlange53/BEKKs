@@ -4,9 +4,6 @@
 \name{BEKKs}
 \alias{BEKKs}
 \title{BEKKs: Volatility modelling}
-\description{
-BEKKs: Volatility modelling
-}
 \author{
 \itemize{
 \item Alexander Lange \email{alexander.lange@uni-goettingen.de}

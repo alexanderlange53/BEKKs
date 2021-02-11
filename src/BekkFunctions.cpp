@@ -87,13 +87,13 @@ double loglike_bekk(arma::vec theta, arma::mat r) {
    arma::mat A = arma::reshape(theta.subvec(index, (index + n^2) - 1 ), n, n);
    arma::mat G = arma::reshape(theta.subvec((index + n^2), numb_of_vars-1), n, n);
 
-    Rcpp::Function f("valid_bekk");
+   /* Rcpp::Function f("valid_bekk");
 
 // check constraints
     if (f(C, A, G) == 0) {
       return -1e25;
     }
-
+*/
 // compute inital H
     arma::mat H = (r.t() * r) / r.n_rows;
 
