@@ -243,8 +243,9 @@ Rcpp::List bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
                        Rcpp::Named("iter") = count_loop);
 
 }
-// [[Rcpp::export]]
-arma::mat random_grid_search_BEKK(arma::mat r, int sampleSize) {
+
+
+/*arma::mat random_grid_search_BEKK(arma::mat r, int sampleSize) {
   int n =r.n_cols;
   int numb_of_vars=2*(n^2)+n*(n+1)/2;
   arma::mat theta = arma::vec(numb_of_vars,0);
@@ -297,8 +298,7 @@ arma::mat random_grid_search_BEKK(arma::mat r, int sampleSize) {
   return Rcpp::List::create(Rcpp::Named("thetaOptim") = thetaOptim,
                             Rcpp::Named("best_val") = best_val);
 
-}
-
+}*/
 
 // [[Rcpp::export]]
 Rcpp::List sigma_bekk(arma::mat r, arma::mat C, arma::mat A, arma::mat G) {
