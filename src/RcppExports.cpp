@@ -77,6 +77,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// sigma_bekk
+Rcpp::List sigma_bekk(arma::mat r, arma::mat C, arma::mat A, arma::mat G);
+RcppExport SEXP _BEKKs_sigma_bekk(SEXP rSEXP, SEXP CSEXP, SEXP ASEXP, SEXP GSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type r(rSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type C(CSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type G(GSEXP);
+    rcpp_result_gen = Rcpp::wrap(sigma_bekk(r, C, A, G));
+    return rcpp_result_gen;
+END_RCPP
+}
 // SigmaLagCr
 arma::mat SigmaLagCr(arma::mat y, int Tob, int q, int p, double ucvar);
 RcppExport SEXP _BEKKs_SigmaLagCr(SEXP ySEXP, SEXP TobSEXP, SEXP qSEXP, SEXP pSEXP, SEXP ucvarSEXP) {
@@ -182,6 +196,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BEKKs_loglike_bekk", (DL_FUNC) &_BEKKs_loglike_bekk, 2},
     {"_BEKKs_score_bekk", (DL_FUNC) &_BEKKs_score_bekk, 2},
     {"_BEKKs_bhh_bekk", (DL_FUNC) &_BEKKs_bhh_bekk, 4},
+    {"_BEKKs_sigma_bekk", (DL_FUNC) &_BEKKs_sigma_bekk, 4},
     {"_BEKKs_SigmaLagCr", (DL_FUNC) &_BEKKs_SigmaLagCr, 5},
     {"_BEKKs_GarchVariance", (DL_FUNC) &_BEKKs_GarchVariance, 6},
     {"_BEKKs_ScoreGarch", (DL_FUNC) &_BEKKs_ScoreGarch, 7},

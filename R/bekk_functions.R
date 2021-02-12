@@ -392,25 +392,3 @@ QML_t_ratios <- function(theta, r) {
 
   return(theta/s2)
 }
-
-# Computation of second order moment time paths and GARCH innovations
-sigma_bekk <- function(r, C, A, G) {
-  N <- ncol(r)
-  N2 <- N^2
-
-  sigma <- matrix(0, nrow(r), N2)
-  et <- matrix(0, nrow(r), N)
-  ht <- crossprod(r)/nrow(et)
-  sigma[1, ] <- c(ht)
-
-  et[1, ] <- solve(sqrtm(ht)) %*%  r[1,]
-
-  for (i in 2:nrow(r)) {
-    ht <- crossprod(C) + t(A) %*% r[(i-1), ] %*% t(r[(i-1), ]) %*% A + t(G) %*% ht %*% G
-    sigma[i, ] <- c(ht)
-    et[i, ] <- solve(sqrtm(ht)) %*% r[i,]
-  }
-
-  return(list(sigma_t = sigma,
-              e_t = et))
-}

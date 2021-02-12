@@ -25,6 +25,10 @@ bhh_bekk <- function(r, theta, max_iter, crit) {
     .Call('_BEKKs_bhh_bekk', PACKAGE = 'BEKKs', r, theta, max_iter, crit)
 }
 
+sigma_bekk <- function(r, C, A, G) {
+    .Call('_BEKKs_sigma_bekk', PACKAGE = 'BEKKs', r, C, A, G)
+}
+
 SigmaLagCr <- function(y, Tob, q, p, ucvar) {
     .Call('_BEKKs_SigmaLagCr', PACKAGE = 'BEKKs', y, Tob, q, p, ucvar)
 }

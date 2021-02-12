@@ -243,3 +243,30 @@ Rcpp::List bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
                        Rcpp::Named("iter") = count_loop);
 
 }
+
+// [[Rcpp::export]]
+Rcpp::List sigma_bekk(arma::mat r, arma::mat C, arma::mat A, arma::mat G) {
+// Computation of second order moment time paths and GARCH innovations
+  int N = r.n_cols;
+  int N2 = pow(N, 2);
+
+  arma::mat sigma = arma::zeros(r.n_rows, N2);
+  arma::mat et = arma::zeros(r.n_rows, N);
+  arma::mat ht = r.t() * r / r.n_rows;
+  sigma.row(0) = arma::vectorise(ht).t();
+
+  et.row(0) <- arma::inv(arma::sqrtmat_sympd(ht)) *  r.row(0).t();
+
+  arma::mat CC  = C * C.t();
+  arma::mat At  = A.t();
+  arma::mat Gt  = G.t();
+
+  for (int i = 1; i < r.n_rows; i++) {
+    ht = CC + At * r.row(i - 1).t() * r.row(i - 1) * A + Gt * ht * G;
+    sigma.row(i) = arma::vectorise(ht).t();
+    et.row(i) = (arma::inv(arma::sqrtmat_sympd(ht)) *  r.row(i).t()).t();
+  }
+
+  return Rcpp::List::create(Rcpp::Named("sigma_t")= sigma,
+                            Rcpp::Named("et") = et);
+}

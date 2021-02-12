@@ -27,7 +27,8 @@ bekk <- function(r, init_values = NULL,
     if (is.null(init_values)) {
       theta <- gridSearch_BEKK(r)
     } else if (init_values == 'random') {
-
+      theta <- random_grid_search_BEKK(r, 250)
+      theta <- theta[[1]]
     }
   } else {
       theta <- init_values
