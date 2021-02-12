@@ -61,8 +61,28 @@ bekk <- function(r, init_values = NULL,
   param_mat <- coef_mat(params$theta, N)
 
   var_process <- sigma_bekk(r, param_mat$c0, param_mat$a, param_mat$g)
+  sigma_t <- as.data.frame(var_process$sigma_t)
+  colnames(sigma_t) <- rep(1, N^2)
+
+  k <- 1
+  k2 <- 1
+  for (i in 1:N) {
+    for (j in 1:N) {
+      if (i == j) {
+        colnames(sigma_t)[k2] <- paste('Conditional variances of ', colnames(r)[k])
+        k <- k + 1
+        k2 <- k2 +1
+      } else {
+        colnames(sigma_t)[k2] <- paste('Conditional covariances of ', colnames(r)[i], ' and ', colnames(r)[j])
+        k2 <- k2 +1
+      }
+    }
+  }
+
   elim <- elimination_mat(N)
-  sigma_t <- t(elim %*% t(var_process$sigma_t))
+  sigma_t <- sigma_t[, which(colSums(elim) == 1)]
+
+
 
   result <- list(C0 =  param_mat$c0,
                  A = param_mat$a,
