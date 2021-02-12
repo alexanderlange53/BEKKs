@@ -9,7 +9,7 @@ Authors@R:
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
 Depends: R (>= 3.5.0), expm
-Imports: Rcpp, expm 
+Imports: Rcpp, expm, reshape2, ggplot2
 LinkingTo: Rcpp, RcppArmadillo
 NeedsCompilation: yes
 SystemRequirements: C++11

@@ -19,9 +19,19 @@
 
 bekk <- function(r, init_values = NULL,
                  QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9){
-  N <- ncol(r)
 
-  r <- data.matrix(r)
+  # Checking for valid input
+  r <- as.matrix(r)
+  if (any(is.na(r)))
+    stop("\nNAs in y.\n")
+  if (ncol(r) < 2)
+    stop("The matrix 'r' should contain at least two variables.")
+  if (is.null(colnames(r))) {
+    colnames(r) <- paste("y", 1:ncol(r), sep = "")
+  }
+
+
+  N <- ncol(r)
 
   if(!is.numeric(init_values)) {
     if (is.null(init_values)) {
@@ -31,7 +41,10 @@ bekk <- function(r, init_values = NULL,
       # theta <- theta[[1]]
     }
   } else {
-      theta <- init_values
+    if(length(init_values) != 2 * N^2 + N * (N + 1)/2) {
+      stop('Number of initial parameter does not match dimension of data.')
+    }
+    theta <- init_values
   }
 
   theta <- matrix(theta, ncol =1)
@@ -51,14 +64,17 @@ bekk <- function(r, init_values = NULL,
   elim <- elimination_mat(N)
   sigma_t <- t(elim %*% t(var_process$sigma_t))
 
-  return(list(C0 =  param_mat$c0,
-              A = param_mat$a,
-              G = param_mat$g,
-              C0_t = tratios_mat$c0,
-              A_t = tratios_mat$a,
-              G_t = tratios_mat$g,
-              log_likelihood = params$likelihood,
-              sigma_t = sigma_t,
-              e_t = var_process$e_t,
-              iter = params$iter))
+  result <- list(C0 =  param_mat$c0,
+                 A = param_mat$a,
+                 G = param_mat$g,
+                 C0_t = tratios_mat$c0,
+                 A_t = tratios_mat$a,
+                 G_t = tratios_mat$g,
+                 log_likelihood = params$likelihood,
+                 sigma_t = sigma_t,
+                 e_t = var_process$e_t,
+                 iter = params$iter,
+                 data = r)
+  class(result) <- 'bekk'
+  return(result)
 }
