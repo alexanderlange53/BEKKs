@@ -13,6 +13,10 @@ duplication_mat <- function(n) {
     .Call('_BEKKs_duplication_mat', PACKAGE = 'BEKKs', n)
 }
 
+valid_bekk <- function(C, A, G) {
+    .Call('_BEKKs_valid_bekk', PACKAGE = 'BEKKs', C, A, G)
+}
+
 loglike_bekk <- function(theta, r) {
     .Call('_BEKKs_loglike_bekk', PACKAGE = 'BEKKs', theta, r)
 }
@@ -23,6 +27,10 @@ score_bekk <- function(theta, r) {
 
 bhh_bekk <- function(r, theta, max_iter, crit) {
     .Call('_BEKKs_bhh_bekk', PACKAGE = 'BEKKs', r, theta, max_iter, crit)
+}
+
+random_grid_search_BEKK <- function(r, sampleSize) {
+    .Call('_BEKKs_random_grid_search_BEKK', PACKAGE = 'BEKKs', r, sampleSize)
 }
 
 sigma_bekk <- function(r, C, A, G) {

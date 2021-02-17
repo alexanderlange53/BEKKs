@@ -39,6 +39,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// valid_bekk
+bool valid_bekk(arma::mat C, arma::mat A, arma::mat G);
+RcppExport SEXP _BEKKs_valid_bekk(SEXP CSEXP, SEXP ASEXP, SEXP GSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type C(CSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type G(GSEXP);
+    rcpp_result_gen = Rcpp::wrap(valid_bekk(C, A, G));
+    return rcpp_result_gen;
+END_RCPP
+}
 // loglike_bekk
 double loglike_bekk(arma::vec theta, arma::mat r);
 RcppExport SEXP _BEKKs_loglike_bekk(SEXP thetaSEXP, SEXP rSEXP) {
@@ -74,6 +87,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type max_iter(max_iterSEXP);
     Rcpp::traits::input_parameter< double >::type crit(critSEXP);
     rcpp_result_gen = Rcpp::wrap(bhh_bekk(r, theta, max_iter, crit));
+    return rcpp_result_gen;
+END_RCPP
+}
+// random_grid_search_BEKK
+Rcpp::List random_grid_search_BEKK(arma::mat r, int sampleSize);
+RcppExport SEXP _BEKKs_random_grid_search_BEKK(SEXP rSEXP, SEXP sampleSizeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type r(rSEXP);
+    Rcpp::traits::input_parameter< int >::type sampleSize(sampleSizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(random_grid_search_BEKK(r, sampleSize));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -193,9 +218,11 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BEKKs_elimination_mat", (DL_FUNC) &_BEKKs_elimination_mat, 1},
     {"_BEKKs_commutation_mat", (DL_FUNC) &_BEKKs_commutation_mat, 1},
     {"_BEKKs_duplication_mat", (DL_FUNC) &_BEKKs_duplication_mat, 1},
+    {"_BEKKs_valid_bekk", (DL_FUNC) &_BEKKs_valid_bekk, 3},
     {"_BEKKs_loglike_bekk", (DL_FUNC) &_BEKKs_loglike_bekk, 2},
     {"_BEKKs_score_bekk", (DL_FUNC) &_BEKKs_score_bekk, 2},
     {"_BEKKs_bhh_bekk", (DL_FUNC) &_BEKKs_bhh_bekk, 4},
+    {"_BEKKs_random_grid_search_BEKK", (DL_FUNC) &_BEKKs_random_grid_search_BEKK, 2},
     {"_BEKKs_sigma_bekk", (DL_FUNC) &_BEKKs_sigma_bekk, 4},
     {"_BEKKs_SigmaLagCr", (DL_FUNC) &_BEKKs_SigmaLagCr, 5},
     {"_BEKKs_GarchVariance", (DL_FUNC) &_BEKKs_GarchVariance, 6},

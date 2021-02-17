@@ -28,5 +28,9 @@ data(bivariate)
 x1 <- bekk(BI, init_values = NULL,
 QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 
+summary(x1)
+
+plot(x1)
+
 }
 }

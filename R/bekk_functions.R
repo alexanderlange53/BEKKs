@@ -170,25 +170,25 @@
 # }
 
 #Testing existance, uniqueness and stationarity
-valid_bekk <- function(C, A, G) {
-  # condition for positive-definit covariance
-  if (any(diag(C) < 0)) {
-    return(0)
-  }
-
-  # condition for uniqueness
-  if (A[1, 1] < 0 || G[1, 1] < 0) {
-    return(0)
-  }
-
-  # check stationarity for BEKK(1,1): Engle & Kroner (1995), Prop. 2.7
-  if (!all(abs(eigen(kronecker(A, A)
-                     + kronecker(G, G))$values) < 1)) {
-    return(0)
-  }
-
-  return(1)
-}
+# valid_bekk <- function(C, A, G) {
+#   # condition for positive-definit covariance
+#   if (any(diag(C) < 0)) {
+#     return(0)
+#   }
+#
+#   # condition for uniqueness
+#   if (A[1, 1] < 0 || G[1, 1] < 0) {
+#     return(0)
+#   }
+#
+#   # check stationarity for BEKK(1,1): Engle & Kroner (1995), Prop. 2.7
+#   if (!all(abs(eigen(kronecker(A, A)
+#                      + kronecker(G, G))$values) < 1)) {
+#     return(0)
+#   }
+#
+#   return(1)
+# }
 
 hessian_BEKK=function(theta,r){
 

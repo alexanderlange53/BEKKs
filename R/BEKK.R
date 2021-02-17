@@ -14,6 +14,10 @@
 #' x1 <- bekk(BI, init_values = NULL,
 #' QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 #'
+#' summary(x1)
+#'
+#' plot(x1)
+#'
 #' }
 #' @export
 
@@ -37,8 +41,8 @@ bekk <- function(r, init_values = NULL,
     if (is.null(init_values)) {
       theta <- gridSearch_BEKK(r)
     } else if (init_values == 'random') {
-      # theta <- random_grid_search_BEKK(r, 250)
-      # theta <- theta[[1]]
+      theta <- random_grid_search_BEKK(r, 250)
+      theta <- theta[[1]]
     }
   } else {
     if(length(init_values) != 2 * N^2 + N * (N + 1)/2) {

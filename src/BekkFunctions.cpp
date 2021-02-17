@@ -65,6 +65,37 @@ arma::mat duplication_mat(int n) {
 }
 
 // [[Rcpp::export]]
+bool valid_bekk(arma::mat C,arma::mat A,arma::mat G){
+  int n =C.n_cols;
+  arma::mat prod = kron(A,A)+kron(G,G);
+
+  arma::vec eigvals;
+  eigvals= abs(arma::eig_gen(prod));
+  double max=0;
+  for (int i=0; i< n; i++){
+    if(eigvals[i]>max){
+      max=eigvals[i];
+    }
+  }
+  if(max >= 1){
+    return false;
+  }
+
+  for (int i=0; i<n;i++){
+    if(C(i,i)<0){
+      return false;
+    }
+  }
+  if(A(1,1)<0 && G(1,1)<0) {
+    return false;
+  }
+
+  else{
+    return true;
+  }
+}
+
+// [[Rcpp::export]]
 double loglike_bekk(arma::vec theta, arma::mat r) {
 // Log-Likelihood function
 
@@ -87,13 +118,11 @@ double loglike_bekk(arma::vec theta, arma::mat r) {
    arma::mat A = arma::reshape(theta.subvec(index, (index + n^2) - 1 ), n, n);
    arma::mat G = arma::reshape(theta.subvec((index + n^2), numb_of_vars-1), n, n);
 
-   /* Rcpp::Function f("valid_bekk");
-
 // check constraints
-    if (f(C, A, G) == 0) {
+    if (valid_bekk(C, A, G) == FALSE) {
       return -1e25;
     }
-*/
+
 // compute inital H
     arma::mat H = (r.t() * r) / r.n_rows;
 
@@ -244,37 +273,6 @@ Rcpp::List bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
 
 }
 
-
-/// [[Rcpp::export]]
-bool valid_bekk(arma::mat C,arma::mat A,arma::mat G){
-  int n =C.n_cols;
-  arma::mat prod = kron(A,A)+kron(G,G);
-
-  arma::vec eigvals;
-  eigvals= abs(arma::eig_gen(prod));
-  double max=0;
-   for (int i=0; i< n; i++){
-     if(eigvals[i]>max){
-      max=eigvals[i];
-     }
-  }
- if(max >= 1){
-   return false;
-   }
-  
-  for (int i=0; i<n;i++){
-    if(C(i,i)<0){
-      return false;
-    }
-  }
-  if(A(1,1)<0 && G(1,1)<0) {
-    return false;
-  }
-
-  else{
-    return true;
-  }
-}
 //[[Rcpp::export]]
 Rcpp::List random_grid_search_BEKK(arma::mat r, int sampleSize) {
   int n =r.n_cols;
