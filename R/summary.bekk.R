@@ -7,6 +7,8 @@ summary.bekk <- function(object, ...) {
   cat(underScore)
   cat("\nLog-likelihood: ")
   cat(bekkObject$log_likelihood)
+  cat("\nBEKK model stationary: ")
+  cat(bekkObject$BEKK_valid)
   cat("\nEstimated paramater matrices: \n")
   cat("\nC \n")
   print(bekkObject$C0)

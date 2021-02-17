@@ -39,6 +39,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// inv_gen
+arma::mat inv_gen(arma::mat m);
+RcppExport SEXP _BEKKs_inv_gen(SEXP mSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type m(mSEXP);
+    rcpp_result_gen = Rcpp::wrap(inv_gen(m));
+    return rcpp_result_gen;
+END_RCPP
+}
 // valid_bekk
 bool valid_bekk(arma::mat C, arma::mat A, arma::mat G);
 RcppExport SEXP _BEKKs_valid_bekk(SEXP CSEXP, SEXP ASEXP, SEXP GSEXP) {
@@ -218,6 +229,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BEKKs_elimination_mat", (DL_FUNC) &_BEKKs_elimination_mat, 1},
     {"_BEKKs_commutation_mat", (DL_FUNC) &_BEKKs_commutation_mat, 1},
     {"_BEKKs_duplication_mat", (DL_FUNC) &_BEKKs_duplication_mat, 1},
+    {"_BEKKs_inv_gen", (DL_FUNC) &_BEKKs_inv_gen, 1},
     {"_BEKKs_valid_bekk", (DL_FUNC) &_BEKKs_valid_bekk, 3},
     {"_BEKKs_loglike_bekk", (DL_FUNC) &_BEKKs_loglike_bekk, 2},
     {"_BEKKs_score_bekk", (DL_FUNC) &_BEKKs_score_bekk, 2},

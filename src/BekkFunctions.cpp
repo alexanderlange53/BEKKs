@@ -65,6 +65,18 @@ arma::mat duplication_mat(int n) {
 }
 
 // [[Rcpp::export]]
+arma::mat inv_gen(arma::mat m) {
+  // Checks if a matrix is positive definit nad calculates
+  // the inverse of generalized inverse
+
+  if (m.is_sympd() == TRUE) {
+    return m.i();
+  } else {
+   return arma::pinv(m);
+  }
+}
+
+// [[Rcpp::export]]
 bool valid_bekk(arma::mat C,arma::mat A,arma::mat G){
   int n =C.n_cols;
   arma::mat prod = kron(A,A)+kron(G,G);
@@ -130,10 +142,10 @@ double loglike_bekk(arma::vec theta, arma::mat r) {
     arma::mat At  = A.t();
     arma::mat Gt  = G.t();
 
-    double llv = -0.5 * arma::as_scalar(n * log(2 * M_PI) + log(arma::det(H)) + r.row(0) * arma::inv(H) * r.row(0).t());
+    double llv = -0.5 * arma::as_scalar(n * log(2 * M_PI) + log(arma::det(H)) + r.row(0) * inv_gen(H) * r.row(0).t());
     for (int i = 1; i < NoOBs; i++) {
       H = CC + At * r.row(i - 1).t() * r.row(i - 1) * A + Gt * H * G;
-      llv += -0.5 * arma::as_scalar(n * log(2 * M_PI) + log(arma::det(H)) + r.row(i) * arma::inv(H) * r.row(i).t());
+      llv += -0.5 * arma::as_scalar(n * log(2 * M_PI) + log(arma::det(H)) + r.row(i) * inv_gen(H) * r.row(i).t());
     }
     return llv;
 }

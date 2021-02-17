@@ -13,6 +13,10 @@ duplication_mat <- function(n) {
     .Call('_BEKKs_duplication_mat', PACKAGE = 'BEKKs', n)
 }
 
+inv_gen <- function(m) {
+    .Call('_BEKKs_inv_gen', PACKAGE = 'BEKKs', m)
+}
+
 valid_bekk <- function(C, A, G) {
     .Call('_BEKKs_valid_bekk', PACKAGE = 'BEKKs', C, A, G)
 }

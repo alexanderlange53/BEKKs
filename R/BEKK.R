@@ -41,7 +41,7 @@ bekk <- function(r, init_values = NULL,
     if (is.null(init_values)) {
       theta <- gridSearch_BEKK(r)
     } else if (init_values == 'random') {
-      theta <- random_grid_search_BEKK(r, 250)
+      theta <- random_grid_search_BEKK(r, 1000)
       theta <- theta[[1]]
     }
   } else {
@@ -86,6 +86,8 @@ bekk <- function(r, init_values = NULL,
   elim <- elimination_mat(N)
   sigma_t <- sigma_t[, which(colSums(elim) == 1)]
 
+  # Final check if BEKK is valid
+  BEKK_valid <- valid_bekk(param_mat$c0, param_mat$a, param_mat$g)
 
 
   result <- list(C0 =  param_mat$c0,
@@ -95,6 +97,7 @@ bekk <- function(r, init_values = NULL,
                  A_t = tratios_mat$a,
                  G_t = tratios_mat$g,
                  log_likelihood = params$likelihood,
+                 BEKK_valid = BEKK_valid,
                  sigma_t = sigma_t,
                  e_t = var_process$e_t,
                  iter = params$iter,
