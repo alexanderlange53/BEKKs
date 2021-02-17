@@ -183,7 +183,7 @@ arma::mat score_bekk(arma::mat theta, arma::mat r) {
 
   arma::mat dHdtheta = arma::join_horiz(dHdc, dHda, dHdg).t();
 
-  arma::mat ht_sqrt_inv = arma::inv(arma::sqrtmat_sympd(ht));
+  arma::mat ht_sqrt_inv = arma::inv(arma::real(arma::sqrtmat(ht)));
 
   arma::vec et = ht_sqrt_inv * r.row(0).t();
   // Score function
@@ -206,7 +206,7 @@ arma::mat score_bekk(arma::mat theta, arma::mat r) {
 
     ht = c_full + a.t() * r.row(i-1).t() * r.row(i-1) * a + g.t() * ht * g;
 
-    ht_sqrt_inv = arma::inv(arma::sqrtmat_sympd(ht));
+    ht_sqrt_inv = arma::inv(arma::real(arma::sqrtmat(ht)));
     et = ht_sqrt_inv * r.row(i).t();
 
     for (int k = 0; k < theta.n_rows; k++) {
@@ -242,7 +242,7 @@ Rcpp::List bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
     double lik = loglike_bekk(theta, r);
 
      for (int i = 0; i < steps.n_elem; i++) {
-        arma::vec temp = theta_candidate + step * steps(i) * arma::inv(outer_score) * score_function.t(); // hier nochmal gucken H2 hat da kontrolliert on inverser exstiert
+        arma::vec temp = theta_candidate + step * steps(i) * inv_gen(outer_score) * score_function.t();
         theta_temp.col(i) = temp;
       }
 
@@ -360,7 +360,7 @@ Rcpp::List sigma_bekk(arma::mat r, arma::mat C, arma::mat A, arma::mat G) {
   arma::mat ht = r.t() * r / r.n_rows;
   sigma.row(0) = arma::vectorise(ht).t();
 
-  et.row(0) <- arma::inv(arma::sqrtmat_sympd(ht)) *  r.row(0).t();
+  et.row(0) <- inv_gen(arma::sqrtmat_sympd(ht)) *  r.row(0).t();
 
   arma::mat CC  = C * C.t();
   arma::mat At  = A.t();
@@ -369,7 +369,7 @@ Rcpp::List sigma_bekk(arma::mat r, arma::mat C, arma::mat A, arma::mat G) {
   for (int i = 1; i < r.n_rows; i++) {
     ht = CC + At * r.row(i - 1).t() * r.row(i - 1) * A + Gt * ht * G;
     sigma.row(i) = arma::vectorise(ht).t();
-    et.row(i) = (arma::inv(arma::sqrtmat_sympd(ht)) *  r.row(i).t()).t();
+    et.row(i) = (inv_gen(arma::sqrtmat_sympd(ht)) *  r.row(i).t()).t();
   }
 
   return Rcpp::List::create(Rcpp::Named("sigma_t")= sigma,
