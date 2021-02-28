@@ -430,22 +430,22 @@ arma::mat hesse_bekk(arma::mat theta, arma::mat r){
         arma::mat dHHda=arma::join_horiz(dHdadc,dHdada,dHdadg);
         arma::mat dHHdg=arma::join_horiz(dHdgdc,dHdgda,dHdgdg);
 
-        arma::mat dHHdtheta=arma::join_horiz(dHHdc,dHHda,dHHdg).t();
+        arma::mat dHHdtheta=arma::join_vert(dHHdc,dHHda,dHHdg);
 
 
         arma::mat matt= arma::zeros(theta.n_rows,N2);
         matt(0,0)=1;
 
-          for(int i=0; i < theta.n_rows; i++){
-            arma::mat mat=arma::zeros(theta.n_rows,N2);
+          for(int i=1; i < theta.n_rows; i++){
+            mat=arma::zeros(theta.n_rows,N2);
             mat(i,0)=1;
             arma::mat matt=arma::join_horiz(matt,mat);
           }
           arma::mat dHH=matt*dHHdtheta;
 
-            for (int i=0; i<N2; i++){
-              arma::mat matt = arma::join_horiz(arma::zeros(mat.n_rows, 1), matt.cols(0,matt.n_cols-3));
-              dHH=arma::join_horiz(dHH,matt*dHHdtheta).t();
+            for (int i=1; i<N2; i++){
+              matt = arma::join_horiz(arma::zeros(mat.n_rows, 1), matt.cols(0,matt.n_cols-2));
+              dHH=arma::join_vert(dHH,matt*dHHdtheta);
             }
 
             for(int i=0; i<theta.n_rows;i++){
@@ -466,7 +466,7 @@ arma::mat hesse_bekk(arma::mat theta, arma::mat r){
                 temp= arma::reshape(temp,N,N);
                 arma::mat ddh = temp.t();
 
-                arma::mat mat = ddh*ht_inv-dhi*ht_inv*dhj*ht_inv+r.row(1).t()*r.row(1)*ht_inv*dhj*ht_inv*dhi*ht_inv-r.row(1).t()*r.row(1)*ht_inv*ddh*ht_inv+r.row(1).t()*r.row(1)*ht_inv*dhi*ht_inv*dhj*ht_inv;
+                arma::mat mat = ddh*ht_inv-dhi*ht_inv*dhj*ht_inv+r.row(0).t()*r.row(0)*ht_inv*dhj*ht_inv*dhi*ht_inv-r.row(0).t()*r.row(0)*ht_inv*ddh*ht_inv+r.row(0).t()*r.row(1)*ht_inv*dhi*ht_inv*dhj*ht_inv;
 //update hessian
                   hessian(i,j) = (-0.5)*arma::sum(mat.diag());
               }
@@ -474,7 +474,7 @@ arma::mat hesse_bekk(arma::mat theta, arma::mat r){
 
 //Second derivatives for t>1
 
-            for (int i=0; i<n;i++){
+            for (int i=1; i<n;i++){
               arma::mat dHdada = C3*arma::kron(arma::reshape(arma::eye(N,N),1,N2),arma::kron(r.row(i-1).t()*r.row(i-1),arma::eye(N,N)))*K_commutation+arma::kron(arma::eye(N2,N2),t_kron_g)*dHdada;
               arma::mat dHdadg = arma::kron(dHda.t(), arma::eye(N2,N2))*C1*(kron_comm_cgt + arma::kron(arma::reshape(gt,1,N2),K_commutation))+(arma::kron(arma::eye(N2,N2),arma::kron(g,gt).t()))*dHdadg;
               arma::mat dHdadc = dHdadc; // Always zero (row may be deleted later on)
@@ -506,13 +506,13 @@ arma::mat hesse_bekk(arma::mat theta, arma::mat r){
                     arma::mat dHHdc=arma::join_horiz(dHdcdc,dHdcda,dHdcdg);
                     arma::mat dHHda=arma::join_horiz(dHdadc,dHdada,dHdadg);
                     arma::mat dHHdg=arma::join_horiz(dHdgdc,dHdgda,dHdgdg);
-                    arma::mat dHHdtheta=arma::join_horiz(dHHdc,dHHda,dHHdg).t();
+                    arma::mat dHHdtheta=arma::join_vert(dHHdc,dHHda,dHHdg);
 
 
                     arma::mat matt=arma::zeros(theta.n_rows,N2);
                     matt(0,0)=1;
 
-                  for (int j=0;j<theta.n_rows;j++){
+                  for (int j=1;j<theta.n_rows;j++){
                     arma::mat mat=arma::zeros(theta.n_rows,N2);
                     mat(j,0)=1;
                     matt=arma::join_horiz(matt,mat);
@@ -520,8 +520,8 @@ arma::mat hesse_bekk(arma::mat theta, arma::mat r){
                   arma::mat dHH=matt*dHHdtheta;
 
                     for (int j=1;j<N2;j++){
-                      arma::mat matt=arma::join_horiz(arma::zeros(mat.n_cols,1),matt.cols(0,matt.n_cols-3));
-                      arma::mat dHH=arma::join_horiz(dHH,matt*dHHdtheta).t();
+                      arma::mat matt=arma::join_horiz(arma::zeros(mat.n_cols,1),matt.cols(0,matt.n_cols-2));
+                      arma::mat dHH=arma::join_vert(dHH,matt*dHHdtheta);
                     }
 
 
