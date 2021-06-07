@@ -451,7 +451,7 @@ arma::mat hesse_bekk(arma::mat theta, arma::mat r){
           for(int i=1; i < theta.n_rows; i++){
             mat=arma::zeros(theta.n_rows,N2);
             mat(i,0)=1;
-            arma::mat matt=arma::join_horiz(matt,mat);
+            matt=arma::join_horiz(matt,mat);
           }
           arma::mat dHH=matt*dHHdtheta;
 
@@ -469,7 +469,7 @@ arma::mat hesse_bekk(arma::mat theta, arma::mat r){
                 dhj = arma::reshape(dhj,N,N);
 
                 arma::mat temp = arma::zeros(1,N2);
-                temp(0,0)=dHH(i,j);
+                  temp(0,0)=dHH(i,j);
 
                 for(int k=1; k<N2; k++) {
                   temp(0,k) = dHH(k*(theta.n_rows)+i-1,j);
@@ -543,14 +543,14 @@ arma::mat hesse_bekk(arma::mat theta, arma::mat r){
                         arma::mat dhi = dHdtheta.row(l).t();
                         dhi = arma::reshape(dhi,N,N);
 
-                        arma::mat dhj = dHdtheta.row(l).t();
+                        arma::mat dhj = dHdtheta.row(j).t();
                         dhj = arma::reshape(dhj,N,N);
 
                         arma::mat temp = arma::zeros(1,N2);
-                         temp(0,0)= dHH(l,j);
+                        temp(0,0) = dHH(l,j);
 
                         for (int k=1; k<N2; k++) {
-                          temp(0,k) = dHH(k*(theta.n_rows)+i-1,j);
+                          temp(0,k) = dHH(k*(theta.n_rows)+l-1,j);
                         }
 
                           temp = arma::reshape(temp,N,N);
