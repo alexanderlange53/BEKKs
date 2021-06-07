@@ -1,5 +1,5 @@
 Package: BEKKs
-Title: MGARCH estimation
+Title: Conditional volatility modelling
 Version: 0.0.0.9000
 Author: Markus Fülle [aut, cre],
         Helmut Herwartz [aut],
