@@ -392,3 +392,36 @@ QML_t_ratios <- function(theta, r) {
 
   return(theta/s2)
 }
+
+simulate_bekk(theta,r){
+  n <- ncol(r)
+  #   #Length of each series
+  NoOBs <- nrow(r)
+  numb_of_vars <- 2*n^2+n*(n+1)/2
+  C <- matrix(0,ncol = n,nrow = n)
+    index <- 1
+    for(i in 1:n){
+      for (j in i:n) {
+        C[j,i] <- theta[index]
+        index <- index+1
+      }
+    }
+    C <- t(C)
+    C_full=crossprod(C)
+    A = matrix(theta[index:(index+n^2-1)], n)
+    At=t(A)
+    G = matrix(theta[(index+n^2):numb_of_vars], n)
+    Gt=t(G)
+
+    H      = vector(mode = "list", n)
+    #unconditional variance
+    Uncond_var=matrix(solve(diag(4) - t(kronecker(A, A)) - t(kronecker(G, G))) %*% c(CC),2)
+
+    H[[1]]=Uncond_var
+
+    for(i in 2:n){
+      H[[i]]=H=C_full+At%*%r[i-1,]%*%t(r[i-1,])%*%A+Gt%*%H%*%G
+    }
+
+return(H)
+}
