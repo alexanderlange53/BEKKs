@@ -86,6 +86,10 @@ bekk <- function(r, init_values = NULL,
   elim <- elimination_mat(N)
   sigma_t <- sigma_t[, which(colSums(elim) == 1)]
 
+  if (inherits(r, "ts")) {
+    sigma_t <- ts(sigma_t, start = time(r)[1], frequency = frequency(r))
+  }
+
   # Final check if BEKK is valid
   BEKK_valid <- valid_bekk(param_mat$c0, param_mat$a, param_mat$g)
 

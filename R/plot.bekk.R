@@ -3,9 +3,47 @@
 #' @export
 
 plot.bekk <- function(x, ...){
-  xx <- cbind(seq(1, nrow(x$sigma_t)), x$sigma_t)
-  colnames(xx)[1] <- 'time'
-  xx <- melt(xx, id = 'time')
-  ggplot(xx) + geom_line(aes(x = time, y = value, group = variable)) +
-    facet_wrap(~variable, scales = 'free_y', ncol = ncol(result0$data)) + theme_bw() + ylab('')
+
+  trianglePlotGrid <- function(plots){
+    #take a list of plots and returns a single plot where the elements in the list arranged in a triangular grid
+    #plots should be a list of 1 or 3 or 6... plots to be arranged in a trianglular structure with 1 plot in the top row
+    ncols <- (-1 + sqrt(1 + 8*length(plots)))/2
+    i = 0; j = 0
+
+    grobs <- list()
+
+    for(p in plots){
+      grobs[[length(grobs)+1]] <- p
+      j = (j+1) %% ncols
+
+      while(j > i){
+        grobs[[length(grobs)+1]] <- nullGrob()
+        j = (j+1) %% ncols
+      }
+
+      if(j == 0) i = i + 1
+    }
+
+    do.call("grid.arrange", c(grobs, ncol=ncols))
+  }
+
+
+
+
+  if (inherits(x$sigma_t, "ts")) {
+    xx1 <- as.list(x$sigma_t)
+    xxc <- colnames(x$sigma_t)
+    plist <- lapply(xx1, function(x){autoplot(x) + theme_bw()})
+  } else {
+    xx1 <- as.list(as.data.frame(x$sigma_t))
+    xxc <- colnames(x$sigma_t)
+    plist <- lapply(xx1, function(x){ggplot() + geom_line() + theme_bw()})
+  }
+
+
+  for (i in 1:length(xx1)) {
+    plist[[i]] <- plist[[i]] + ggtitle(xxc[i])
+  }
+
+  trianglePlotGrid(plist)
 }
