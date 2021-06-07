@@ -549,7 +549,7 @@ arma::mat hesse_bekk(arma::mat theta, arma::mat r){
                          arma::mat = dHH(l,j);
 
                         for (int k=1; k<N2; k++) {
-                          temp(0,k) = dHH(k*(theta.n_rows)+i-1,j);
+                          temp(0,k) = dHH(k*(theta.n_rows)+l-1,j);
                         }
 
                           temp = arma::reshape(temp,N,N);
