@@ -393,7 +393,7 @@ QML_t_ratios <- function(theta, r) {
   return(theta/s2)
 }
 
-simulate_bekk(theta,r){
+simulate_bekk=function(theta,r){
   n <- ncol(r)
   #   #Length of each series
   NoOBs <- nrow(r)
