@@ -37,4 +37,7 @@ To get started, use the example data set which is included in the package. The d
 ```r
 library("ggplot2")
 library("ggfortify")
-autoplot(StocksBonds, facet = TRUE) + theme_bw()
+autoplot(StocksBonds  , facet = TRUE) + theme_bw()
+```
+
+![](man/figures/data.png)
