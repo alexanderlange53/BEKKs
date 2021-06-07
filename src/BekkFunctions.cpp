@@ -467,11 +467,12 @@ arma::mat hesse_bekk(arma::mat theta, arma::mat r){
 
                 arma::mat dhj = dHdtheta.row(j).t();
                 dhj = arma::reshape(dhj,N,N);
-//hier könnte der Fehler sein
-                arma::mat temp = dHH(i,j);
+
+                arma::mat temp = arma::zeros(1,N2);
+                  temp(0,0)=dHH(i,j);
 
                 for(int k=1; k<N2; k++) {
-                  temp =  arma::join_horiz(temp,dHH(k*(theta.n_rows)+i-1,j));
+                  temp(0,k) = dHH(k*(theta.n_rows)+i-1,j);
                 }
 
                 temp= arma::reshape(temp,N,N);
@@ -546,7 +547,7 @@ arma::mat hesse_bekk(arma::mat theta, arma::mat r){
                         dhj = arma::reshape(dhj,N,N);
 
                         arma::mat temp = arma::zeros(1,N2);
-                         arma::mat = dHH(l,j);
+                        temp(0,0) = dHH(l,j);
 
                         for (int k=1; k<N2; k++) {
                           temp(0,k) = dHH(k*(theta.n_rows)+l-1,j);
