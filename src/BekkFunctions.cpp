@@ -471,7 +471,7 @@ arma::mat hesse_bekk(arma::mat theta, arma::mat r){
                 arma::mat temp = dHH(i,j);
 
                 for(int k=1; k<N2; k++) {
-                  temp =  arma::join_horiz(temp,dHH(k*(theta.n_rows)+i-1,j);
+                  temp =  arma::join_horiz(temp,dHH(k*(theta.n_rows)+i-1,j));
                 }
 
                 temp= arma::reshape(temp,N,N);
