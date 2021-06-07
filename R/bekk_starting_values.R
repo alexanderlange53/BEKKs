@@ -163,4 +163,4 @@ random_grid_search_BEKK=function(r,sampleSize){
   }
   return(list(thetaOptim,best_val,C,A,G))
 }
-random_grid_search_BEKK(rmvnorm(1000,sigma=diag(5)),10)
+
