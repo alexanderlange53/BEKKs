@@ -301,26 +301,28 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int sampleSize) {
     int diagonal_elements = n;
     int diagonal_counter = 0;
 
-    for (int j=0; j < numb_of_vars;j++){
+    for (int j=0; j < (n*(n+1)/2);j++){
 
-      if(j == counter && j < (n*(n+1)/2)){
+      if(j == counter){
         theta[j]=  static_cast <float> (rand()) / static_cast <float> (RAND_MAX) ;
         counter+=diagonal_elements;
         diagonal_elements--;
       }
-      else if(j== ((n*(n+1)/2) + diagonal_counter*(n+1)) ||  j== ((n*(n+1)/2)+n*n + diagonal_counter*(n+1))) {
-        theta[j]= static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-
-        diagonal_counter++;
-        if(diagonal_counter==n){
-          diagonal_counter=0;
-        }
-      }
       else{
-        theta[j]=-0.5 + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(1)));
+        theta[j]=-0.9 + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(1)));
 
       }
     }
+    for (int j=(n*(n+1)/2); j < numb_of_vars;j++){
+
+      if(j ==(n*(n+1)/2)|| j==(n*(n+1)/2+n*n)){
+        theta[j]=  static_cast <float> (rand()) / static_cast <float> (RAND_MAX) ;
+      }
+      else{
+        theta[j]=-0.9 + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(1)));
+      }
+      }
+
 
     //arma::mat C = arma::zeros(n,n);
     int  index=0;

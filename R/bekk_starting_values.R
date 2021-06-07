@@ -118,19 +118,23 @@ random_grid_search_BEKK=function(r,sampleSize){
     counter=1
     diagonal_elements=n
     diagonal_counter=0
-    for (j in 1:numb_of_vars){
+    for (j in 1:(n*(n+1)/2)){
       if(j==counter & j<=(n*(n+1)/2)){
         theta[j]=runif(1,min = 0, max = 1)
         counter=counter+diagonal_elements
         diagonal_elements=diagonal_elements-1
 
-      }else if(j==(n*(n+1)/2+1+diagonal_counter*n)){
-        theta[j]=runif(1,min = 0, max = 1)
-
-        diagonal_counter=diagonal_counter+1
       }else{
-        theta[j]=runif(1,min = -0.5, max = 0.5)
+        theta[j]=runif(1,min = -0.9, max = 0.9)
       }
+    }
+    for(j in (1+n*(n+1)/2):numb_of_vars){
+      if(j==1+n*(n+1)/2 || j==(1+n*(n+1)/2 +n*n)){
+        theta[j]=runif(1,min = 0, max = 0.9)
+      }else{
+        theta[j]=runif(1,min = -0.9, max = 0.9)
+        }
+
     }
     C=matrix(0,ncol = n,nrow = n)
     index=1
@@ -159,4 +163,4 @@ random_grid_search_BEKK=function(r,sampleSize){
   }
   return(list(thetaOptim,best_val,C,A,G))
 }
-random_grid_search_BEKK(rmvnorm(1000,sigma=diag(2)),10)
+random_grid_search_BEKK(rmvnorm(1000,sigma=diag(5)),10)
