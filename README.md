@@ -40,4 +40,4 @@ library("ggfortify")
 autoplot(StocksBonds  , facet = TRUE) + theme_bw()
 ```
 
-![](man/figures/data.png)
+![](man/figures/Data.png)
