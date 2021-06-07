@@ -37,7 +37,10 @@ plot.bekk <- function(x, ...){
   } else {
     xx1 <- as.list(as.data.frame(x$sigma_t))
     xxc <- colnames(x$sigma_t)
-    plist <- lapply(xx1, function(x){ggplot() + geom_line() + theme_bw()})
+    plist <- lapply(xx1, function(x){
+      x <- as.data.frame(x)
+      colnames(x) <-c('V1')
+      ggplot(x, aes(x = 1:nrow(x), y = V1)) + geom_line() + theme_bw()+ xlab('') + ylab('')})
   }
 
 
