@@ -128,46 +128,46 @@
 
 
 
-# Log-Likelihood function
-# loglike_bekk <- function(theta, r) {
-#   # convert to matrices
-#   n <- ncol(r)
-#   #Length of each series
-#   NoOBs <- nrow(r)
-#   numb_of_vars <- 2*n^2+n*(n+1)/2
-#   C <- matrix(0,ncol = n,nrow = n)
-#   index <- 1
-#   for(i in 1:n){
-#     for (j in i:n) {
-#       C[j,i] <- theta[index]
-#       index <- index+1
-#     }
-#   }
-#   C <- t(C)
-#   A = matrix(theta[index:(index+n^2-1)], n)
-#   G = matrix(theta[(index+n^2):numb_of_vars], n)
-#
-#   # check constraints
-#   if (!valid_bekk(C, A, G)) {
-#     return(-1e25)
-#   }
-#
-#   # compute inital H
-#   H <- (t(r) %*% r) / nrow(r)
-#
-#   CC  <- t(C) %*% C
-#   At  <- t(A)
-#   Gt  <- t(G)
-#
-#
-#   llv = numeric(NoOBs)
-#   llv[1] <- -0.5 * (n * log(2 * pi) + log(det(H)) + c(t(r[1,]) %*% solve(H) %*% r[1,]))
-#   for (i in 2:NoOBs) {
-#     H <- (CC + At %*% (r[i - 1,] %*% t(r[i - 1,])) %*% A + Gt %*% H %*% G)
-#     llv[i] = -0.5 * (n * log(2 * pi) + log(det(H)) + c(t(r[i,]) %*% solve(H) %*% r[i,]))
-#   }
-#   return(sum(llv))
-# }
+#Log-Likelihood function
+loglike_bekk <- function(theta, r) {
+  # convert to matrices
+  n <- ncol(r)
+  #Length of each series
+  NoOBs <- nrow(r)
+  numb_of_vars <- 2*n^2+n*(n+1)/2
+  C <- matrix(0,ncol = n,nrow = n)
+  index <- 1
+  for(i in 1:n){
+    for (j in i:n) {
+      C[j,i] <- theta[index]
+      index <- index+1
+    }
+  }
+  C <- t(C)
+  A = matrix(theta[index:(index+n^2-1)], n)
+  G = matrix(theta[(index+n^2):numb_of_vars], n)
+
+  # check constraints
+  if (!valid_bekk(C, A, G)) {
+    return(-1e25)
+  }
+
+  # compute inital H
+  H <- (t(r) %*% r) / nrow(r)
+
+  CC  <- t(C) %*% C
+  At  <- t(A)
+  Gt  <- t(G)
+
+
+  llv = numeric(NoOBs)
+  llv[1] <- -0.5 * (n * log(2 * pi) + log(det(H)) + c(t(r[1,]) %*% solve(H) %*% r[1,]))
+  for (i in 2:NoOBs) {
+    H <- (CC + At %*% (r[i - 1,] %*% t(r[i - 1,])) %*% A + Gt %*% H %*% G)
+    llv[i] = -0.5 * (n * log(2 * pi) + log(det(H)) + c(t(r[i,]) %*% solve(H) %*% r[i,]))
+  }
+  return(sum(llv))
+}
 
 #Testing existance, uniqueness and stationarity
 # valid_bekk <- function(C, A, G) {
