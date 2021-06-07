@@ -317,7 +317,7 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int sampleSize) {
         }
       }
       else{
-        theta[j]=-0.8 + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(1)));
+        theta[j]=-0.5 + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(1)));
 
       }
     }
