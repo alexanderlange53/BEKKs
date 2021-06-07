@@ -1,19 +1,28 @@
 Package: BEKKs
-Title: What the Package Does (One Line, Title Case)
+Title: MGARCH estimation
 Version: 0.0.0.9000
-Authors@R: 
-    person(given = "First",
-           family = "Last",
+Author: Markus Fülle [aut, cre],
+        Helmut Herwartz [aut],
+        Alexander Lange [aut, cre],
+Authors@R:  
+    c(person(given = "Markus",
+           family = "Fülle",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+           email = "fuelle@uni-goettingen.de"),
+      person("Helmut", "Herwartz", 
+           role = c("aut"), 
+           email = "hherwartz@uni-goettingen.de"),
+      person("Alexander", "Lange", 
+          role = c("aut", "cre"),
+          email = "alexander.lange@uni-goettingen.de"))
+Maintainer: Alexander Lange <alexander.lange@uni-goettingen.de>
 Description: What the package does (one paragraph).
 Depends: R (>= 3.5.0), expm
 Imports: Rcpp, expm, reshape2, ggplot2
 LinkingTo: Rcpp, RcppArmadillo
 NeedsCompilation: yes
 SystemRequirements: C++11
-License: What license it uses
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests: 

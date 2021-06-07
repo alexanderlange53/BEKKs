@@ -41,6 +41,10 @@ sigma_bekk <- function(r, C, A, G) {
     .Call('_BEKKs_sigma_bekk', PACKAGE = 'BEKKs', r, C, A, G)
 }
 
+hesse_bekk <- function(theta, r) {
+    .Call('_BEKKs_hesse_bekk', PACKAGE = 'BEKKs', theta, r)
+}
+
 SigmaLagCr <- function(y, Tob, q, p, ucvar) {
     .Call('_BEKKs_SigmaLagCr', PACKAGE = 'BEKKs', y, Tob, q, p, ucvar)
 }
