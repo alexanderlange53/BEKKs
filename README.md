@@ -88,4 +88,6 @@ summary(m1)
 # [2,]   1.539511 343.88192299
 ```
 
-The summary includes general information on the estimation (see `?bekk`), the estimated parameter matrices C, A and G and the corresponding t-values.
+The summary includes general information on the estimation (see `?bekk`), the estimated parameter matrices C, A and G and the corresponding t-values. The estimated volatility and covariance processes can be shown with `plot(m1)`.
+
+![](man/figures/est_vola.png)
