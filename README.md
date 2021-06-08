@@ -46,4 +46,46 @@ We estimate the conditional variance and covariance processes via the BEKK(1,1) 
 
 ```r
 m1 <- bekk(StocksBonds)
+summary(m1)
+
+# BEKK estiamtion results
+# -----------------------
+# Log-likelihood: -7407.91
+# BEKK model stationary: TRUE
+# Number of BHHH iterations: 50
+# Estimated paramater matrices: 
+# 
+# C 
+#            [,1]         [,2]
+# [1,] 0.02781423 0.0006233005
+# [2,] 0.00000000 0.1181025776
+# 
+# A 
+#              [,1]       [,2]
+# [1,]  0.186828249 0.02482309
+# [2,] -0.009778605 0.28638092
+# 
+# G 
+#             [,1]          [,2]
+# [1,] 0.976841591 -0.0007262051
+# [2,] 0.001180173  0.9493469743
+# 
+# t-values of paramater matrices: 
+# 
+# C 
+#          [,1]        [,2]
+# [1,] 11.35226  0.04609706
+# [2,]  0.00000 19.02970255
+# 
+# A 
+#          [,1]       [,2]
+# [1,] 26.25035  0.9269617
+# [2,] -4.01463 37.3502093
+# 
+# G 
+#            [,1]         [,2]
+# [1,] 497.842578  -0.08394647
+# [2,]   1.539511 343.88192299
 ```
+
+The summary includes general information on the estimation (see `?bekk`), the estimated parameter matrices C, A and G and the corresponding t-values.
