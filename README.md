@@ -41,3 +41,9 @@ autoplot(StocksBonds  , facet = TRUE) + theme_bw()
 ```
 
 ![](man/figures/Data.png)
+
+We estimate the conditional variance and covariance processes via the BEKK(1,1) model
+
+```r
+m1 <- bekk(StocksBonds)
+```

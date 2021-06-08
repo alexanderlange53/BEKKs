@@ -26,10 +26,12 @@ bekk <- function(r, init_values = NULL,
 
   # Checking for valid input
   r <- as.matrix(r)
-  if (any(is.na(r)))
+  if (any(is.na(r))) {
     stop("\nNAs in y.\n")
-  if (ncol(r) < 2)
+  }
+  if (ncol(r) < 2) {
     stop("The matrix 'r' should contain at least two variables.")
+  }
   if (is.null(colnames(r))) {
     colnames(r) <- paste("y", 1:ncol(r), sep = "")
   }
@@ -40,7 +42,8 @@ bekk <- function(r, init_values = NULL,
   if(!is.numeric(init_values)) {
     if (is.null(init_values)) {
       theta <- gridSearch_BEKK(r)
-    } else if (init_values == 'random') {
+      theta <- theta[[1]]
+  } else if (init_values == 'random') {
       theta <- random_grid_search_BEKK(r, 1000)
       theta <- theta[[1]]
     }
