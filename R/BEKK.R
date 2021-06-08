@@ -44,8 +44,13 @@ bekk <- function(r, init_values = NULL,
       theta <- gridSearch_BEKK(r)
       theta <- theta[[1]]
   } else if (init_values == 'random') {
-      theta <- random_grid_search_BEKK(r, 1000)
-      theta <- theta[[1]]
+      pp <- FALSE
+      while(pp == FALSE) {
+        theta <- random_grid_search_BEKK(r, 1000)
+        theta <- theta[[1]]
+        para <- coef_mat(theta, N)
+        pp <- valid_bekk(para$c0, para$a, para$g)
+      }
     }
   } else {
     if(length(init_values) != 2 * N^2 + N * (N + 1)/2) {
