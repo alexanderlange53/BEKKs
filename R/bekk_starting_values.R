@@ -27,9 +27,9 @@ gridSearch_BEKK <- function(r){
   C = t(chol(C))
   C0 = C[,1]
 
-  if ((N-1) > 2) {
+  if (N > 2) {
     for (i in 2:(N-1)){
-      C0 = c(c0, C[i:N, i])
+      C0 = c(C0, C[i:N, i])
     }
   }
 
@@ -101,67 +101,4 @@ for (i in seq(start, endr, step)){
 }
 
 return(list(thetaopt,likmax))
-
 }
-
-
-
-#Now Grid Search with generation of random candidates
-# random_grid_search_BEKK=function(r,sampleSize){
-#   n=ncol(r)
-#   numb_of_vars=2*n^2+n*(n+1)/2
-#   theta=numeric(numb_of_vars)
-#   thetaOptim=theta
-#   best_val=-999999
-#   #Generating random values for A, C and G
-#
-#   for (i in 1:sampleSize){
-#     counter=1
-#     diagonal_elements=n
-#     diagonal_counter=0
-#     for (j in 1:(n*(n+1)/2)){
-#       if(j==counter & j<=(n*(n+1)/2)){
-#         theta[j]=runif(1,min = 0, max = 1)
-#         counter=counter+diagonal_elements
-#         diagonal_elements=diagonal_elements-1
-#
-#       }else{
-#         theta[j]=runif(1,min = -0.9, max = 0.9)
-#       }
-#     }
-#     for(j in (1+n*(n+1)/2):numb_of_vars){
-#       if(j==1+n*(n+1)/2 || j==(1+n*(n+1)/2 +n*n)){
-#         theta[j]=runif(1,min = 0, max = 0.9)
-#       }else{
-#         theta[j]=runif(1,min = -0.9, max = 0.9)
-#         }
-#
-#     }
-#     C=matrix(0,ncol = n,nrow = n)
-#     index=1
-#     for(j in 1 : n){
-#       for (k in j:n) {
-#         C[k,j]=theta[index]
-#         index=index+1
-#       }
-#     }
-#
-#
-#     A = matrix(theta[index:(index+n^2-1)], n)
-#     G = matrix(theta[(index+n^2):numb_of_vars], n)
-#
-#     if(!valid_bekk(C,A,G)){
-#       NULL
-#
-#     }else{
-#       llv=loglike_bekk(theta,r)
-#       if(llv>best_val){
-#         best_val=llv
-#         thetaOptim=theta
-#       }
-#     }
-#
-#   }
-#   return(list(thetaOptim,best_val,C,A,G))
-# }
-

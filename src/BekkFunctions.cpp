@@ -226,9 +226,10 @@ Rcpp::List bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
 
   arma::vec steps = {5,2,1,0.5,0.25,0.1,0.01,0.005,0};
   double step = 0.01;
-  int count_loop = 1;
+  int count_loop = 0;
   arma::mat theta_candidate = theta;
   int exit_loop = 0;
+  arma::vec lik_all(max_iter, arma::fill::zeros);
 
 
   while (count_loop < max_iter && exit_loop == 0) {
@@ -268,6 +269,7 @@ Rcpp::List bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
         exit_loop = 1;
       }
       theta_candidate = theta_temp.col(max_index);
+      lik_all(count_loop) = likelihood_candidates(steps.n_elem -1);
       count_loop += 1;
   }
 
@@ -281,7 +283,8 @@ Rcpp::List bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
   return Rcpp::List::create(Rcpp::Named("theta") = theta_candidate,
                        Rcpp::Named("t_val") = t_val,
                        Rcpp::Named("likelihood") = likelihood_final,
-                       Rcpp::Named("iter") = count_loop);
+                       Rcpp::Named("iter") = count_loop,
+                       Rcpp::Named("likelihood_iter") = lik_all);
 
 }
 

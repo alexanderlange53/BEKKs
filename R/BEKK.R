@@ -97,6 +97,8 @@ bekk <- function(r, init_values = NULL,
   BEKK_valid <- valid_bekk(param_mat$c0, param_mat$a, param_mat$g)
 
 
+  params$likelihood_iter <- params$likelihood_iter[params$likelihood_iter != 0]
+
   result <- list(C0 =  param_mat$c0,
                  A = param_mat$a,
                  G = param_mat$g,
@@ -108,6 +110,7 @@ bekk <- function(r, init_values = NULL,
                  sigma_t = sigma_t,
                  e_t = var_process$e_t,
                  iter = params$iter,
+                 likelihood_iter = params$likelihood_iter,
                  data = r)
   class(result) <- 'bekk'
   return(result)

@@ -9,6 +9,8 @@ summary.bekk <- function(object, ...) {
   cat(bekkObject$log_likelihood)
   cat("\nBEKK model stationary: ")
   cat(bekkObject$BEKK_valid)
+  cat("\nNumber of BHHH iterations: ")
+  cat(bekkObject$iter)
   cat("\nEstimated paramater matrices: \n")
   cat("\nC \n")
   print(bekkObject$C0)
