@@ -31,9 +31,11 @@ plot.bekk <- function(x, ...){
 
 
   if (inherits(x$sigma_t, "ts")) {
-    xx1 <- as.list(x$sigma_t)
+    plist <- vector(mode = "list", length = ncol(x$sigma_t))
     xxc <- colnames(x$sigma_t)
-    plist <- lapply(xx1, function(x){autoplot(x) + theme_bw()})
+    for (i in 1:ncol(x$sigma_t)) {
+      plist[[i]] <- autoplot(x$sigma_t[,i]) + theme_bw()
+    }
   } else {
     xx1 <- as.list(as.data.frame(x$sigma_t))
     xxc <- colnames(x$sigma_t)
@@ -44,7 +46,7 @@ plot.bekk <- function(x, ...){
   }
 
 
-  for (i in 1:length(xx1)) {
+  for (i in 1:ncol(x$sigma_t)) {
     plist[[i]] <- plist[[i]] + ggtitle(xxc[i])
   }
 
