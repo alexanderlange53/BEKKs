@@ -4,9 +4,19 @@
 \name{BEKKs}
 \alias{BEKKs}
 \title{BEKKs: Volatility modelling}
+\description{
+This package implements MGARCH estimation techniques for conditional volatility modelling.\cr
+}
+\details{
+The main functions to retrieve structural impact matrices are:
+\itemize{
+\item \tabular{ll}{ \code{\link{bekk}} \tab Estimates a BEKK(1,1,1) model,}
+}
+}
 \author{
 \itemize{
-\item Alexander Lange \email{alexander.lange@uni-goettingen.de}
+\item Markus Fülle  \email{fuelle@uni-goettingen.de}
 \item Helmut Herwartz \email{hherwartz@uni-goettingen.de}
+\item Alexander Lange \email{alexander.lange@uni-goettingen.de}
 }
 }

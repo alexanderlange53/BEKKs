@@ -4,7 +4,14 @@
 \alias{bekk}
 \title{Estimating a BEKK(1, 1) model}
 \usage{
-bekk(r, init_values = NULL, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-09)
+bekk(
+  r,
+  init_values = NULL,
+  QML_t_ratios = FALSE,
+  seed = NULL,
+  max_iter = 50,
+  crit = 1e-09
+)
 }
 \arguments{
 \item{r}{data input}

@@ -305,7 +305,7 @@ Rcpp::List  bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
 //[[Rcpp::export]]
 Rcpp::List random_grid_search_BEKK(arma::mat r, int seed) {
   int n =r.n_cols;
-  int l;
+  int l=0;
   arma::mat C = arma::zeros(n,n);
   arma::mat A = arma::zeros(n,n);
   arma::mat G = arma::zeros(n,n);
@@ -357,7 +357,7 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed) {
     G = arma::reshape(theta.rows(((pow(n, 2) + (n * (n + 1)/2))), (2*pow(n, 2) + (n * (n + 1)/2) - 1)), n, n);
 
    if(valid_bekk(C,A,G)){
-     l+=1;
+     l++;
        double llv=loglike_bekk(theta,r);
       if(llv>best_val){
          best_val=llv;
