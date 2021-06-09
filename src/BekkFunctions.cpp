@@ -335,7 +335,7 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int sampleSize) {
         index++;
       }
     }
-    thetaOptim=theta;
+    
     A = arma::reshape(theta.rows((n * (n+1)/2), (pow(n, 2) + (n * (n + 1)/2) - 1)), n, n);
     G = arma::reshape(theta.rows(((pow(n, 2) + (n * (n + 1)/2))), (2*pow(n, 2) + (n * (n + 1)/2) - 1)), n, n);
 
