@@ -21,8 +21,8 @@
 #' }
 #' @export
 
-bekk <- function(r, init_values = NULL,
-                 QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9){
+bekk <- function(r, init_values = NULL, QML_t_ratios = FALSE,
+                 seed = NULL, max_iter = 50, crit = 1e-9){
 
   # Checking for valid input
   r <- as.matrix(r)
@@ -45,12 +45,11 @@ bekk <- function(r, init_values = NULL,
       theta <- theta[[1]]
   } else if (init_values == 'random') {
       pp <- FALSE
-      while(pp == FALSE) {
-        theta <- random_grid_search_BEKK(r, 10000)
-        theta <- theta[[1]]
-        para <- coef_mat(theta, N)
-        pp <- valid_bekk(para$c0, para$a, para$g)
+      if(is.null(seed)) {
+        seed <- round(runif(1, 0, 100))
       }
+      theta <- random_grid_search_BEKK(r, 10000, seed)
+      theta <- theta[[1]]
     }
   } else {
     if(length(init_values) != 2 * N^2 + N * (N + 1)/2) {
