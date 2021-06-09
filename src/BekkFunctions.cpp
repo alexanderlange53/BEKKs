@@ -222,14 +222,15 @@ arma::mat score_bekk(arma::mat theta, arma::mat r) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
+Rcpp::List  bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
 
-  arma::vec steps = {9,5,2,1,0.5,0.25,0.1,0.01,0.005,0.001,0};
+  arma::vec steps = {9,8,7,6,5,4,3,2,1,0.5,0.25,0.1,0.01,0.005,0.001,0};
   double step = 0.1;
   int count_loop = 0;
   arma::mat theta_candidate = theta;
   int exit_loop = 0;
   arma::vec lik_all(max_iter, arma::fill::zeros);
+  lik_all(0) = loglike_bekk(theta, r);
 
 
   while (count_loop < max_iter && exit_loop == 0) {
@@ -254,24 +255,38 @@ Rcpp::List bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
 
       int  j = steps.n_elem - 2;
       int exit_inner = 0;
-      while (j >= 1 && exit_inner == 0) {
+      while (j >= 0 && exit_inner == 0) {
         likelihood_candidates(j) = loglike_bekk(theta_temp.col(j), r);
-        if (likelihood_candidates(j+1) > likelihood_candidates(j)) {
-          exit_inner = 1;
-        }
+        //if (likelihood_candidates(j+1) > likelihood_candidates(j)) {
+        //  exit_inner = 1;
+        //}
         j -= 1;
       }
 
-      int max_index = arma::index_max(likelihood_candidates.subvec(j, (steps.n_elem -1))) + j;
+      //return likelihood_candidates;
+
+      //int max_index = arma::index_max(likelihood_candidates.subvec(j, (steps.n_elem -1))) + j;
+      int max_index = arma::index_max(likelihood_candidates);
+      //return max_index;
       double likelihood_best = likelihood_candidates(max_index);
 
       // exit criterion strange
-      if (pow(likelihood_best - likelihood_candidates(steps.n_elem -1), 2)/abs(likelihood_candidates(steps.n_elem -1)) < crit) {
+      //if (pow(likelihood_best - likelihood_candidates(steps.n_elem -1), 2)/abs(likelihood_candidates(steps.n_elem -1)) < crit) {
+      //  exit_loop = 1;
+      //}
+      if (likelihood_best < lik_all(count_loop)) {
         exit_loop = 1;
+        count_loop += 1;
+      } else if (pow(likelihood_best - lik_all(count_loop), 2)/abs(lik_all(count_loop)) < crit) {
+        exit_loop = 1;
+        count_loop += 1;
+        theta_candidate = theta_temp.col(max_index);
+        lik_all(count_loop) = likelihood_candidates(steps.n_elem -1);
+      } else {
+        theta_candidate = theta_temp.col(max_index);
+        count_loop += 1;
+        lik_all(count_loop) = likelihood_candidates(steps.n_elem -1);
       }
-      theta_candidate = theta_temp.col(max_index);
-      lik_all(count_loop) = likelihood_candidates(steps.n_elem -1);
-      count_loop += 1;
   }
 
   double likelihood_final = loglike_bekk(theta_candidate, r);
@@ -280,13 +295,11 @@ Rcpp::List bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
   arma::mat s1 = arma::sqrt(s1_temp.diag());
 
   arma::mat t_val = theta_candidate/s1;
-
   return Rcpp::List::create(Rcpp::Named("theta") = theta_candidate,
                        Rcpp::Named("t_val") = t_val,
                        Rcpp::Named("likelihood") = likelihood_final,
                        Rcpp::Named("iter") = count_loop,
                        Rcpp::Named("likelihood_iter") = lik_all);
-
 }
 
 //[[Rcpp::export]]
@@ -338,7 +351,7 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int sampleSize, int seed) {
         index++;
       }
     }
-    
+
     A = arma::reshape(theta.rows((n * (n+1)/2), (pow(n, 2) + (n * (n + 1)/2) - 1)), n, n);
     G = arma::reshape(theta.rows(((pow(n, 2) + (n * (n + 1)/2))), (2*pow(n, 2) + (n * (n + 1)/2) - 1)), n, n);
 
