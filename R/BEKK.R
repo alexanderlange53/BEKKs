@@ -48,7 +48,7 @@ bekk <- function(r, init_values = NULL, QML_t_ratios = FALSE,
       if(is.null(seed)) {
         seed <- round(runif(1, 0, 100))
       }
-      theta <- random_grid_search_BEKK(r, 10000, seed)
+      theta <- random_grid_search_BEKK(r, seed)
       theta <- theta[[1]]
     }
   } else {

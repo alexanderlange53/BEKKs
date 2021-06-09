@@ -303,8 +303,9 @@ Rcpp::List  bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
 }
 
 //[[Rcpp::export]]
-Rcpp::List random_grid_search_BEKK(arma::mat r, int sampleSize, int seed) {
+Rcpp::List random_grid_search_BEKK(arma::mat r, int seed) {
   int n =r.n_cols;
+  int j;
   arma::mat C = arma::zeros(n,n);
   arma::mat A = arma::zeros(n,n);
   arma::mat G = arma::zeros(n,n);
@@ -315,7 +316,7 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int sampleSize, int seed) {
   //set the seed
   arma::arma_rng::set_seed(seed);
   // Generating random values for A, C and G
-  for (int i = 1; i <= sampleSize; i++){
+  while(j<(1000/n)){
     int counter= 0;
     int diagonal_elements = n;
     int diagonal_counter = 0;
@@ -328,7 +329,7 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int sampleSize, int seed) {
         diagonal_elements--;
       }
       else{
-        theta[j]=-0.9 + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(1)));
+        theta[j]=-0.9 + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(1.8)));
 
       }
     }
@@ -365,7 +366,6 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int sampleSize, int seed) {
 
   }
   return Rcpp::List::create(Rcpp::Named("thetaOptim") = thetaOptim,
-                            Rcpp::Named("C") = A,
                             Rcpp::Named("best_val") = best_val);
 
 }
