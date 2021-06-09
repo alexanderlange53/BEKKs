@@ -290,7 +290,7 @@ Rcpp::List bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
 }
 
 //[[Rcpp::export]]
-Rcpp::List random_grid_search_BEKK(arma::mat r, int sampleSize, int seed) {
+Rcpp::List random_grid_search_BEKK(arma::mat r, int seed) {
   int n =r.n_cols;
   int j;
   arma::mat C = arma::zeros(n,n);
