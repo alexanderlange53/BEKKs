@@ -224,8 +224,8 @@ arma::mat score_bekk(arma::mat theta, arma::mat r) {
 // [[Rcpp::export]]
 Rcpp::List bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
 
-  arma::vec steps = {5,2,1,0.5,0.25,0.1,0.01,0.005,0};
-  double step = 0.01;
+  arma::vec steps = {9,5,2,1,0.5,0.25,0.1,0.01,0.005,0.001,0};
+  double step = 0.1;
   int count_loop = 0;
   arma::mat theta_candidate = theta;
   int exit_loop = 0;
@@ -238,12 +238,13 @@ Rcpp::List bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
 
     arma::mat score_function = score_bekk(theta, r);
     arma::mat outer_score = score_function.t() * score_function;
+    arma::mat outer_score_inv = inv_gen(outer_score);
     score_function = arma::sum(score_function);
 
     double lik = loglike_bekk(theta, r);
 
      for (int i = 0; i < steps.n_elem; i++) {
-        arma::vec temp = theta_candidate + step * steps(i) * inv_gen(outer_score) * score_function.t();
+        arma::vec temp = theta_candidate + step * steps(i) * outer_score_inv * score_function.t();
         theta_temp.col(i) = temp;
       }
 
@@ -561,7 +562,7 @@ arma::mat hesse_bekk(arma::mat theta, arma::mat r){
                         }
 
                          temp = arma::reshape(temp,N,N);
-                       
+
                            arma::mat ddh = temp.t();
  //get partial derivtatives for ll
                            arma::mat mat = ddh*ht_inv-dhi*ht_inv*dhj*ht_inv+r.row(i).t()*r.row(i)*ht_inv*dhj*ht_inv*dhi*ht_inv- r.row(i).t()*r.row(i)*ht_inv*ddh*ht_inv+r.row(i).t()*r.row(i)*ht_inv*dhi*ht_inv*dhj*ht_inv;

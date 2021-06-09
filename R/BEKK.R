@@ -46,7 +46,7 @@ bekk <- function(r, init_values = NULL,
   } else if (init_values == 'random') {
       pp <- FALSE
       while(pp == FALSE) {
-        theta <- random_grid_search_BEKK(r, 1000)
+        theta <- random_grid_search_BEKK(r, 10000)
         theta <- theta[[1]]
         para <- coef_mat(theta, N)
         pp <- valid_bekk(para$c0, para$a, para$g)
