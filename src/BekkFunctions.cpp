@@ -66,8 +66,8 @@ arma::mat duplication_mat(int n) {
 
 // [[Rcpp::export]]
 arma::mat inv_gen(arma::mat m) {
-  // Checks if a matrix is positive definit nad calculates
-  // the inverse of generalized inverse
+  // Checks if a matrix is positive definit and calculates
+  // the inverse or generalized inverse
 
   if (m.is_sympd() == TRUE) {
     return m.i();
@@ -84,7 +84,7 @@ bool valid_bekk(arma::mat C,arma::mat A,arma::mat G){
   arma::vec eigvals;
   eigvals= abs(arma::eig_gen(prod));
   double max=0;
-  for (int i=0; i< n; i++){
+  for (int i=0; i< eigvals.n_elem; i++){
     if(eigvals[i]>max){
       max=eigvals[i];
     }
@@ -101,7 +101,6 @@ bool valid_bekk(arma::mat C,arma::mat A,arma::mat G){
   if(A(1,1)<0 && G(1,1)<0) {
     return false;
   }
-
   else{
     return true;
   }
@@ -303,9 +302,12 @@ Rcpp::List  bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
 }
 
 //[[Rcpp::export]]
-Rcpp::List random_grid_search_BEKK(arma::mat r, int seed) {
+Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
   int n =r.n_cols;
   int l=0;
+  int N = r.n_cols;
+  int N2 = pow(N,2);
+  int NoOfVars_C = N*(N+1)/2;
   arma::mat C = arma::zeros(n,n);
   arma::mat A = arma::zeros(n,n);
   arma::mat G = arma::zeros(n,n);
@@ -316,7 +318,7 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed) {
   //set the seed
   arma::arma_rng::set_seed(seed);
   // Generating random values for A, C and G
-  while(l<(1000/n)){
+  while(l<(10000/(n*nc))){
     int counter= 0;
     int diagonal_elements = n;
     int diagonal_counter = 0;
@@ -339,7 +341,7 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed) {
         theta[j]=  static_cast <float> (rand()) / static_cast <float> (RAND_MAX) ;
       }
       else{
-        theta[j]=-0.9 + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(1)));
+        theta[j]=-0.9 + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(1.8)));
       }
       }
 
@@ -358,7 +360,7 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed) {
 
    if(valid_bekk(C,A,G)){
      l++;
-       double llv=loglike_bekk(theta,r);
+     double llv=loglike_bekk(theta,r);
       if(llv>best_val){
          best_val=llv;
        thetaOptim=theta;

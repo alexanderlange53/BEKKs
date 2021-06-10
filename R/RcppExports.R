@@ -33,8 +33,8 @@ bhh_bekk <- function(r, theta, max_iter, crit) {
     .Call('_BEKKs_bhh_bekk', PACKAGE = 'BEKKs', r, theta, max_iter, crit)
 }
 
-random_grid_search_BEKK <- function(r, seed) {
-    .Call('_BEKKs_random_grid_search_BEKK', PACKAGE = 'BEKKs', r, seed)
+random_grid_search_BEKK <- function(r, seed, nc) {
+    .Call('_BEKKs_random_grid_search_BEKK', PACKAGE = 'BEKKs', r, seed, nc)
 }
 
 sigma_bekk <- function(r, C, A, G) {
