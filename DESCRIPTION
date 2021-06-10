@@ -18,7 +18,7 @@ Authors@R:
 Maintainer: Alexander Lange <alexander.lange@uni-goettingen.de>
 Description: What the package does (one paragraph).
 Depends: R (>= 3.5.0), expm
-Imports: Rcpp, expm, reshape2, ggplot2, gridExtra, grid
+Imports: Rcpp, expm, reshape2, ggplot2, gridExtra, grid, ggfortify
 LinkingTo: Rcpp, RcppArmadillo
 NeedsCompilation: yes
 SystemRequirements: C++11
