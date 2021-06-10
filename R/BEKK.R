@@ -22,7 +22,7 @@
 #' @export
 
 bekk <- function(r, init_values = NULL, QML_t_ratios = FALSE,
-                 seed = NULL, max_iter = 50, crit = 1e-9){
+                 seed = NULL, max_iter = 50, crit = 1e-9, nc = 1){
 
   # Checking for valid input
   r <- as.matrix(r)
@@ -44,11 +44,18 @@ bekk <- function(r, init_values = NULL, QML_t_ratios = FALSE,
       theta <- gridSearch_BEKK(r)
       theta <- theta[[1]]
   } else if (init_values == 'random') {
-      pp <- FALSE
       if(is.null(seed)) {
-        seed <- round(runif(1, 0, 100))
+        seed <- round(runif(nc, 1, 100))
+      } else {
+        set.seed(seed)
+        seed <- round(runif(nc, 1, 100))
       }
-      theta <- random_grid_search_BEKK(r, seed)
+    cat('Generating starting values \n')
+      theta_list <- pblapply(seed, random_grid_search_BEKK, r = r,
+                             nc = nc,
+                             cl =nc)
+      max_index <- which.max(sapply(theta_list, '[[', 'best_val'))
+      theta <- theta_list[[max_index]]
       theta <- theta[[1]]
     }
   } else {
