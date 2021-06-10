@@ -331,19 +331,24 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
         diagonal_elements--;
       }
       else{
-        theta[j]=-0.9 + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(1.8)));
+        theta[j]=-0.8 + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(1.6)));
 
       }
     }
+    diagonal_counter=0;
     for (int j=(n*(n+1)/2); j < numb_of_vars;j++){
-
-      if(j ==(n*(n+1)/2)|| j==(n*(n+1)/2+n*n)){
-        theta[j]=  static_cast <float> (rand()) / static_cast <float> (RAND_MAX) ;
+      if(j == (n*(n+1)/2+diagonal_counter*(n+1)) && j< ((n*(n+1)/2) +n*n)){
+        diagonal_counter++;
+        theta[j]= arma::randn()*0.1+0.3;
+      }
+      else if(j == (n*(n+1)/2+n*n+(diagonal_counter-n)*(n+1)) && j>=(n*(n+1)/2+n*n)){
+        diagonal_counter++;
+        theta[j]= arma::randn()*0.1+0.9;
       }
       else{
-        theta[j]=-0.9 + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(1.8)));
+        theta[j]=arma::randn()*0.05;
       }
-      }
+    }
 
 
     //arma::mat C = arma::zeros(n,n);
