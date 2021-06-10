@@ -224,12 +224,12 @@ arma::mat score_bekk(arma::mat theta, arma::mat r) {
 // [[Rcpp::export]]
 Rcpp::List  bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
 
-  arma::vec steps = {9,8,7,6,5,4,3,2,1,0.5,0.25,0.1,0.01,0.005,0.001,0};
+  arma::vec steps = {9,8,7,6,5,4,3,2,1,0.5,0.25,0.1,0.01,0.005,0.001,0.0005,0.0001,0};
   double step = 0.1;
   int count_loop = 0;
   arma::mat theta_candidate = theta;
   int exit_loop = 0;
-  arma::vec lik_all(max_iter, arma::fill::zeros);
+  arma::vec lik_all(max_iter+1, arma::fill::zeros);
   lik_all(0) = loglike_bekk(theta, r);
 
 
@@ -274,10 +274,10 @@ Rcpp::List  bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
       //if (pow(likelihood_best - likelihood_candidates(steps.n_elem -1), 2)/abs(likelihood_candidates(steps.n_elem -1)) < crit) {
       //  exit_loop = 1;
       //}
-      if (likelihood_best < lik_all(count_loop)) {
+     if (likelihood_best < lik_all(count_loop)) {
         exit_loop = 1;
         count_loop += 1;
-      } else if (pow(likelihood_best - lik_all(count_loop), 2)/abs(lik_all(count_loop)) < crit) {
+      } else if (pow(likelihood_best - likelihood_candidates(steps.n_elem -1), 2)/abs(likelihood_candidates(steps.n_elem -1)) < crit) {// if (pow(likelihood_best - lik_all(count_loop), 2)/abs(lik_all(count_loop)) < crit) {
         exit_loop = 1;
         count_loop += 1;
         theta_candidate = theta_temp.col(max_index);
