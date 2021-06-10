@@ -9,7 +9,7 @@ gridSearch_BEKK <- function(r){
   C <- matrix(0, ncol = N, nrow = N)
   #th0=numeric(2*n^2+n*(n+1)/2)
 
-  diag(A) <- sqrt(0.05)
+  diag(A) <- 0.3
   diag(G) <- sqrt(0.9)
   diag(C) <- 0.05*diag(uncond_var)
 
