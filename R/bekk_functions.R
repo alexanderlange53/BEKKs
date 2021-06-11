@@ -201,7 +201,8 @@
 #   dHHda=cbind(dHdadc,dHdada,dHdadg)
 #   dHHdg=cbind(dHdgdc,dHdgda,dHdgdg)
 #   dHHdtheta=rbind(dHHdc,dHHda,dHHdg)
-#
+#   print(dHdcdc)
+#   print(dHHdc)
 #
 #   matt=matrix(0, nrow=nrow(theta),ncol=N2)
 #   matt[1,1]=1
@@ -236,6 +237,7 @@
 #
 #       temp = matrix(temp,ncol=N, nrow=N)
 #       ddh = t(temp)
+#       print(ddh)
 #       #get partial derivtatives for ll
 #       mat = ddh%*%ht_inv-dhi%*%ht_inv%*%dhj%*%ht_inv+r[i,]%*%t(r[i,])%*%ht_inv%*%dhj%*%ht_inv%*%dhi%*%ht_inv-
 #         r[i,]%*%t(r[i,])%*%ht_inv%*%ddh%*%ht_inv+r[i,]%*%t(r[i,])%*%ht_inv%*%dhi%*%ht_inv%*%dhj%*%ht_inv
@@ -249,6 +251,7 @@
 #
 # return(hessian*(-1))
 # }
+#
 
 # Obtaining QML t-ratios
 QML_t_ratios <- function(theta, r) {
