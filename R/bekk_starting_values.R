@@ -10,7 +10,7 @@ gridSearch_BEKK <- function(r){
   #th0=numeric(2*n^2+n*(n+1)/2)
 
   diag(A) <- 0.3
-  diag(G) <- sqrt(0.9)
+  diag(G) <- 0.92
   diag(C) <- 0.05*diag(uncond_var)
 
 
@@ -44,7 +44,7 @@ gridSearch_BEKK <- function(r){
   likmax = -1e25
 
   #print th0
-  result= recursive_search_BEKK(r, C0, c(A), c(G), 1, th0, likmax)
+  result= recursiveSearch_BEKK(r, C0, c(A), c(G), 1, th0, likmax)
   th0=result[[1]]
   likmax=result[[2]]
   return(list(th0,likmax))
@@ -52,7 +52,7 @@ gridSearch_BEKK <- function(r){
 }
 
 
-recursive_search_BEKK=function(r, c0, avec, gvec, index, thetaopt, likmax){
+recursiveSearch_BEKK=function(r, c0, avec, gvec, index, thetaopt, likmax){
 
 n=ncol(r)
 start= -3
@@ -84,7 +84,7 @@ for (i in seq(start, endr, step)){
   #last element is excluded
   if (index < (2*n^2-1)){
     # recursive step
-    result= recursive_search_BEKK(r, c0, avec, gvec, index+1, thetaopt, likmax)
+    result= recursiveSearch_BEKK(r, c0, avec, gvec, index+1, thetaopt, likmax)
     thetaopt=result[[1]]
     likmax=result[[2]]
   } else{

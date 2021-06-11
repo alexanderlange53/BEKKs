@@ -600,3 +600,118 @@ arma::mat hesse_bekk(arma::mat theta, arma::mat r){
 
 }
 
+// [[Rcpp::export]]
+Rcpp::List recursive_search_BEKK(arma::mat r, arma::vec c0, arma::vec avec,
+                                arma::vec gvec, int index, arma::mat thetaopt, double likmax){
+
+  int n  = r.n_cols;
+  int start = -3;
+  int endr = 3;
+  int step = 6;
+  int indextest = 0;
+
+  if (index == pow(n, 2)){
+    index += 2;
+  } else if (index < pow(n, 2)){
+    indextest = (index-1)/(n+1);
+  } else{
+    indextest = (index-pow(n, 2)-1)/(n+1);
+  }
+  // we have a diagonal element
+  if (indextest - floor(indextest) == 0){
+    index += 1;
+  }
+
+  arma::vec seq = arma::regspace(start, step, endr);
+
+  for (int i = 0; i < seq.size(); i++){
+    double inner = seq(i);
+    double val = inner/100;
+
+    // set a and g respectively according to index, exclude diagonal elements
+    if (index <= pow(n, 2)) {
+      avec(index-1) = val;
+    } else {
+      gvec(index-pow(n, 2)-1) = val;
+    }
+    // last element is excluded
+    if (index < (2*pow(n, 2)-1)) {
+      // recursive step
+      Rcpp::List result = recursive_search_BEKK(r, c0, avec, gvec, index+1, thetaopt, likmax);
+      arma::mat thetaopt = result(0);
+      likmax = result(1);
+    } else{
+      // final step
+      arma::mat theta = arma::join_cols(c0,avec,gvec);
+      //likelihood
+      double lik = loglike_bekk(theta, r);
+      if (lik > likmax){
+        thetaopt = theta;
+        likmax = lik;
+      }
+    }
+  }
+
+  return Rcpp::List::create(Rcpp::Named("theta")= thetaopt,
+                              Rcpp::Named("lik") = likmax);
+}
+
+// [[Rcpp::export]]
+Rcpp::List grid_search_BEKK(arma::mat r) {
+  int N  = r.n_cols;
+
+  arma::mat uncond_var = r.t() * r / r.n_rows;
+  arma::mat A = arma::zeros(N, N);
+  arma::mat G = arma::zeros(N, N);
+  arma::mat C = arma::zeros(N, N);
+
+  arma::mat hel = 0.05*uncond_var.diag();
+
+
+  for (int i = 0; i < N; i++) {
+    A(i,i) = 0.3;
+    G(i,i) = 0.92;
+    C(i,i) = hel(i,0);
+  }
+
+  double cij;
+
+  for (int i = 0; i < N; i++){
+    for (int j = i; j < N; j++){
+      cij = uncond_var(i, j)/sqrt(uncond_var(i,i)*uncond_var(j,j));
+      C(i,j) = cij*sqrt(C(i, i)*C(j, j));
+      C(j, i) = C(i,j);
+    }
+  }
+
+  C = chol(C, "lower");
+
+  arma::mat C0;
+  C0 = C.col(0);
+
+  if (N > 2) {
+    for (int i = 1; 1 < (N-1); i++){
+      C0 = arma::join_cols(C0, C(arma::span(i,N-1), i));
+    }
+  }
+
+  int csize = C0.size();
+  C0.resize(csize+1);
+  C0(csize) = C(N-1,N-1);
+
+
+  // deterministic variance components
+
+  arma::mat th0 = arma::join_cols(C0, arma::vectorise(A), arma::vectorise(G));
+
+  // change elements of A and G and compute likelihood in each step
+
+  double likmax = -1e25;
+
+  Rcpp::List result = recursive_search_BEKK(r, C0, arma::vectorise(A), arma::vectorise(G), 1, th0, likmax);
+  //th0 = result[0];
+  //likmax=result[[2]]
+  //return(list(th0,likmax))
+
+  return result;
+}

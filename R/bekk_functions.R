@@ -258,7 +258,7 @@ QML_t_ratios <- function(theta, r) {
   s1 <- score_bekk(theta, r)
   s1 <- crossprod(s1)
 
-  s2 <- hesse_bekk(theta, r)
+  s2 <- hessian_BEKK(theta, r)
   s2 <- solve(s2) %*% s1 %*% solve(s2)
 
   s2 <- sqrt(diag(s2))
