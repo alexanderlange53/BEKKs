@@ -310,14 +310,41 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
   arma::mat C = arma::zeros(n,n);
   arma::mat A = arma::zeros(n,n);
   arma::mat G = arma::zeros(n,n);
+
   int numb_of_vars=2*(pow(n,2))+n*(n+1)/2;
   arma::vec theta = arma::zeros(numb_of_vars,1);
   arma::vec thetaOptim=theta;
+  arma::vec theta_mu=theta;
+  int counter= 0;
+  int diagonal_elements = n;
+  int diagonal_counter = 0;
+  //set the initial expected values of the parameters
+  for (int j=0; j < (n*(n+1)/2);j++){
+
+    if(j == counter){
+      theta_mu[j]=  0.5;
+      counter+=diagonal_elements;
+      diagonal_elements--;
+    }
+
+  }
+  diagonal_counter=0;
+  for (int j=(n*(n+1)/2); j < numb_of_vars;j++){
+    if(j == (n*(n+1)/2+diagonal_counter*(n+1)) && j< ((n*(n+1)/2) +n*n)){
+      diagonal_counter++;
+      theta_mu[j]=0.3;
+    }
+    else if(j == (n*(n+1)/2+n*n+(diagonal_counter-n)*(n+1)) && j>=(n*(n+1)/2+n*n)){
+      diagonal_counter++;
+      theta_mu[j]= 0.9;
+    }
+  }
+
   double best_val = -1e25;
   //set the seed
   arma::arma_rng::set_seed(seed);
   // Generating random values for A, C and G
-  while(l<(50000/(n*nc))){
+  while(l<(10000/(n*nc))){
     int counter= 0;
     int diagonal_elements = n;
     int diagonal_counter = 0;
@@ -325,12 +352,12 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
     for (int j=0; j < (n*(n+1)/2);j++){
 
       if(j == counter){
-        theta[j]=  static_cast <float> (rand()) / static_cast <float> (RAND_MAX) ;
+        theta[j]=  theta_mu[j]+arma::randn()*0.02;
         counter+=diagonal_elements;
         diagonal_elements--;
       }
       else{
-        theta[j]=arma::randn()*0.2;
+        theta[j]=arma::randn()*0.03+theta_mu[j];
 
       }
     }
@@ -338,14 +365,14 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
     for (int j=(n*(n+1)/2); j < numb_of_vars;j++){
       if(j == (n*(n+1)/2+diagonal_counter*(n+1)) && j< ((n*(n+1)/2) +n*n)){
         diagonal_counter++;
-        theta[j]= arma::randn()*0.05+0.3;
+        theta[j]= arma::randn()*0.01+theta_mu[j];
       }
       else if(j == (n*(n+1)/2+n*n+(diagonal_counter-n)*(n+1)) && j>=(n*(n+1)/2+n*n)){
         diagonal_counter++;
-        theta[j]= arma::randn()*0.05+0.9;
+        theta[j]= arma::randn()*0.01+theta_mu[j];
       }
       else{
-        theta[j]=arma::randn()*0.1;
+        theta[j]=arma::randn()*0.04+theta_mu[j];
       }
     }
 
@@ -368,6 +395,9 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
       if(llv>best_val){
          best_val=llv;
        thetaOptim=theta;
+       if(l>4){
+         theta_mu=thetaOptim;
+       }
     }
      }
 

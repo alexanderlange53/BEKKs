@@ -140,6 +140,34 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// recursive_search_BEKK
+Rcpp::List recursive_search_BEKK(arma::mat r, arma::vec c0, arma::vec avec, arma::vec gvec, int index, arma::mat thetaopt, double likmax);
+RcppExport SEXP _BEKKs_recursive_search_BEKK(SEXP rSEXP, SEXP c0SEXP, SEXP avecSEXP, SEXP gvecSEXP, SEXP indexSEXP, SEXP thetaoptSEXP, SEXP likmaxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type r(rSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type c0(c0SEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type avec(avecSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type gvec(gvecSEXP);
+    Rcpp::traits::input_parameter< int >::type index(indexSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type thetaopt(thetaoptSEXP);
+    Rcpp::traits::input_parameter< double >::type likmax(likmaxSEXP);
+    rcpp_result_gen = Rcpp::wrap(recursive_search_BEKK(r, c0, avec, gvec, index, thetaopt, likmax));
+    return rcpp_result_gen;
+END_RCPP
+}
+// grid_search_BEKK
+Rcpp::List grid_search_BEKK(arma::mat r);
+RcppExport SEXP _BEKKs_grid_search_BEKK(SEXP rSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type r(rSEXP);
+    rcpp_result_gen = Rcpp::wrap(grid_search_BEKK(r));
+    return rcpp_result_gen;
+END_RCPP
+}
 // SigmaLagCr
 arma::mat SigmaLagCr(arma::mat y, int Tob, int q, int p, double ucvar);
 RcppExport SEXP _BEKKs_SigmaLagCr(SEXP ySEXP, SEXP TobSEXP, SEXP qSEXP, SEXP pSEXP, SEXP ucvarSEXP) {
@@ -250,6 +278,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BEKKs_random_grid_search_BEKK", (DL_FUNC) &_BEKKs_random_grid_search_BEKK, 3},
     {"_BEKKs_sigma_bekk", (DL_FUNC) &_BEKKs_sigma_bekk, 4},
     {"_BEKKs_hesse_bekk", (DL_FUNC) &_BEKKs_hesse_bekk, 2},
+    {"_BEKKs_recursive_search_BEKK", (DL_FUNC) &_BEKKs_recursive_search_BEKK, 7},
+    {"_BEKKs_grid_search_BEKK", (DL_FUNC) &_BEKKs_grid_search_BEKK, 1},
     {"_BEKKs_SigmaLagCr", (DL_FUNC) &_BEKKs_SigmaLagCr, 5},
     {"_BEKKs_GarchVariance", (DL_FUNC) &_BEKKs_GarchVariance, 6},
     {"_BEKKs_ScoreGarch", (DL_FUNC) &_BEKKs_ScoreGarch, 7},
