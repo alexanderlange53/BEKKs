@@ -57,6 +57,41 @@ bekk <- function(r, init_values = NULL, QML_t_ratios = FALSE,
       max_index <- which.max(sapply(theta_list, '[[', 'best_val'))
       theta <- theta_list[[max_index]]
       theta <- theta[[1]]
+  } else if (init_values == 'simple') {
+    uncond_var <- crossprod(r)/nrow(r)
+    A <- matrix(0, ncol = N, nrow = N)
+    G <- matrix(0, ncol = N, nrow = N)
+    C <- matrix(0, ncol = N, nrow = N)
+    #th0=numeric(2*n^2+n*(n+1)/2)
+
+    diag(A) <- 0.3
+    diag(G) <- 0.92
+    diag(C) <- 0.05*diag(uncond_var)
+
+
+    for (i in 1:N){
+      for (j in seq(i,N)){
+
+        cij <- uncond_var[i, j]/sqrt(uncond_var[i, i]*uncond_var[j, j])
+        C[i,j] <- cij*sqrt(C[i, i]*C[j, j])
+        C[j,i] <- C[i, j]
+
+      }
+    }
+
+    C = t(chol(C))
+    C0 = C[,1]
+
+    if (N > 2) {
+      for (i in 2:(N-1)){
+        C0 = c(C0, C[i:N, i])
+      }
+    }
+
+    C0 = c(C0, C[N, N])
+
+    theta = c(C0, c(A), c(G))
+
     }
   } else {
     if(length(init_values) != 2 * N^2 + N * (N + 1)/2) {

@@ -601,6 +601,7 @@ arma::mat hesse_bekk(arma::mat theta, arma::mat r){
 
 }
 
+/*
 // [[Rcpp::export]]
 Rcpp::List recursive_search_BEKK(arma::mat r, arma::vec c0, arma::vec avec,
                                 arma::vec gvec, int index, arma::mat thetaopt, double likmax){
@@ -716,3 +717,4 @@ Rcpp::List grid_search_BEKK(arma::mat r) {
 
   return result;
 }
+ */
