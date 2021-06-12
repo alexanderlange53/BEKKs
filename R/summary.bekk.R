@@ -2,8 +2,8 @@
 
 summary.bekk <- function(object, ...) {
   bekkObject <- object
-  cat(paste("\n", "BEKK estiamtion results", "\n", sep = ""))
-  underScore <- paste(rep("-", nchar("BEKK estiamtion results")), collapse = "")
+  cat(paste("\n", "BEKK estimation results", "\n", sep = ""))
+  underScore <- paste(rep("-", nchar("BEKK estimation results")), collapse = "")
   cat(underScore)
   cat("\nLog-likelihood: ")
   cat(bekkObject$log_likelihood)

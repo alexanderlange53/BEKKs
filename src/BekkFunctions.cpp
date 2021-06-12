@@ -13,7 +13,6 @@ arma::mat elimination_mat(int n) {
   int oes = 1;
 
   arma::mat eli  = init.col(0);
-
   int block = n;
 
   while (eli.n_cols < n2) {
@@ -311,9 +310,36 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
   arma::mat C = arma::zeros(n,n);
   arma::mat A = arma::zeros(n,n);
   arma::mat G = arma::zeros(n,n);
+
   int numb_of_vars=2*(pow(n,2))+n*(n+1)/2;
   arma::vec theta = arma::zeros(numb_of_vars,1);
   arma::vec thetaOptim=theta;
+  arma::vec theta_mu=theta;
+  int counter= 0;
+  int diagonal_elements = n;
+  int diagonal_counter = 0;
+  //set the initial expected values of the parameters
+  for (int j=0; j < (n*(n+1)/2);j++){
+
+    if(j == counter){
+      theta_mu[j]=  0.5;
+      counter+=diagonal_elements;
+      diagonal_elements--;
+    }
+
+  }
+  diagonal_counter=0;
+  for (int j=(n*(n+1)/2); j < numb_of_vars;j++){
+    if(j == (n*(n+1)/2+diagonal_counter*(n+1)) && j< ((n*(n+1)/2) +n*n)){
+      diagonal_counter++;
+      theta_mu[j]=0.3;
+    }
+    else if(j == (n*(n+1)/2+n*n+(diagonal_counter-n)*(n+1)) && j>=(n*(n+1)/2+n*n)){
+      diagonal_counter++;
+      theta_mu[j]= 0.9;
+    }
+  }
+
   double best_val = -1e25;
   //set the seed
   arma::arma_rng::set_seed(seed);
@@ -326,12 +352,12 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
     for (int j=0; j < (n*(n+1)/2);j++){
 
       if(j == counter){
-        theta[j]=  static_cast <float> (rand()) / static_cast <float> (RAND_MAX) ;
+        theta[j]=  theta_mu[j]+arma::randn()*0.02;
         counter+=diagonal_elements;
         diagonal_elements--;
       }
       else{
-        theta[j]=-0.8 + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(1.6)));
+        theta[j]=arma::randn()*0.03+theta_mu[j];
 
       }
     }
@@ -339,14 +365,14 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
     for (int j=(n*(n+1)/2); j < numb_of_vars;j++){
       if(j == (n*(n+1)/2+diagonal_counter*(n+1)) && j< ((n*(n+1)/2) +n*n)){
         diagonal_counter++;
-        theta[j]= arma::randn()*0.1+0.3;
+        theta[j]= arma::randn()*0.01+theta_mu[j];
       }
       else if(j == (n*(n+1)/2+n*n+(diagonal_counter-n)*(n+1)) && j>=(n*(n+1)/2+n*n)){
         diagonal_counter++;
-        theta[j]= arma::randn()*0.1+0.9;
+        theta[j]= arma::randn()*0.01+theta_mu[j];
       }
       else{
-        theta[j]=arma::randn()*0.05;
+        theta[j]=arma::randn()*0.04+theta_mu[j];
       }
     }
 
@@ -369,6 +395,9 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
       if(llv>best_val){
          best_val=llv;
        thetaOptim=theta;
+       if(l>4){
+         theta_mu=thetaOptim;
+       }
     }
      }
 
@@ -439,33 +468,33 @@ arma::mat hesse_bekk(arma::mat theta, arma::mat r){
       arma::mat at=a.t();
       arma::mat kron_comm_cgt=arma::kron(K_commutation,arma::reshape(gt,gt.size(),1));
 
+      // Partial derivatives for initial period t = 1
+      arma::mat ht = r.t() * r / r.n_rows;
 
+      arma::mat dHda = 2 * D_duplication * D_gen_inv * arma::kron(arma::eye(N, N), at * ht);
+      arma::mat dHdg = 2 * D_duplication * D_gen_inv * arma::kron(arma::eye(N,N), gt * ht);
+      arma::mat dHdc = 2 * D_duplication * D_gen_inv * arma::kron(c0.t(), arma::eye(N,N)) * L_elimination.t();
+
+      arma::mat dHdtheta = arma::join_horiz(dHdc, dHda, dHdg).t();
+
+      arma::mat ht_inv = arma::inv(ht);
 //Hessian
       arma::mat hessian = arma::zeros(theta.n_rows,theta.n_rows);
 
 //Second derivatives for t=1
-      arma::mat dHdada = arma::zeros(pow(N2,2),N2); //Fehler bei h2??
+      arma::mat dHdada = C3*(arma::kron(arma::reshape(arma::eye(N,N),N2,1),arma::kron(ht,arma::eye(N,N))*K_commutation));
       arma::mat dHdadc = arma::zeros(pow(N2,2),NoOfVars_C);
       arma::mat dHdadg = arma::zeros(pow(N2,2),N2);
 
       arma::mat dHdgda = arma::zeros(pow(N2,2),N2);
-      arma::mat dHdgdg = arma::zeros(pow(N2,2),N2); //Fehler bei h2??
+      arma::mat dHdgdg = C3*(arma::kron(arma::reshape(arma::eye(N,N),N2,1),arma::kron(ht,arma::eye(N,N))*K_commutation));
       arma::mat dHdgdc = arma::zeros(pow(N2,2),NoOfVars_C);
 
-      arma::mat dHdcdc = arma::zeros(NoOfVars_C*N2,NoOfVars_C);
+      arma::mat dHdcdc = 2*arma::kron(L_elimination,D_duplication*D_gen_inv)*C1*arma::kron(arma::eye(N2,N2),arma::reshape(arma::eye(N,N),N2,1))*L_elimination.t();
       arma::mat dHdcdg = arma::zeros(NoOfVars_C*N2,N2);
       arma::mat dHdcda = arma::zeros(NoOfVars_C*N2,N2);
 
-          // Partial derivatives for initial period t = 1
-        arma::mat ht = r.t() * r / r.n_rows;
 
-        arma::mat dHda = 2 * D_duplication * D_gen_inv * arma::kron(arma::eye(N, N), at * ht);
-        arma::mat dHdg = 2 * D_duplication * D_gen_inv * arma::kron(arma::eye(N,N), gt * ht);
-        arma::mat dHdc = 2 * D_duplication * D_gen_inv * arma::kron(c0.t(), arma::eye(N,N)) * L_elimination.t();
-
-        arma::mat dHdtheta = arma::join_horiz(dHdc, dHda, dHdg).t();
-
-        arma::mat ht_inv = arma::inv(ht);
 
         arma::mat dHHdc=arma::join_horiz(dHdcdc,dHdcda,dHdcdg);
         arma::mat dHHda=arma::join_horiz(dHdadc,dHdada,dHdadg);
@@ -492,17 +521,17 @@ arma::mat hesse_bekk(arma::mat theta, arma::mat r){
 
             for(int i=0; i<theta.n_rows;i++){
               for(int j=0; j<theta.n_rows;j++){
-                arma::mat dhi = dHdtheta.row(i); //transponieren falsch?
+                arma::mat dhi = dHdtheta.row(i).t();
                 dhi = arma::reshape(dhi,N,N);
 
-                arma::mat dhj = dHdtheta.row(j); //transponieren falsch?
+                arma::mat dhj = dHdtheta.row(j).t();
                 dhj = arma::reshape(dhj,N,N);
 
                 arma::mat temp = arma::zeros(1,N2);
                   temp(0,0)=dHH(i,j);
 
                 for(int k=1; k<N2; k++) {
-                  temp(0,k) = dHH(k*(theta.n_rows)+i,j); //transponieren?
+                  temp(0,k) = dHH(k*(theta.n_rows)+i,j);
                 }
 
                 temp= arma::reshape(temp,N,N);
@@ -571,10 +600,10 @@ arma::mat hesse_bekk(arma::mat theta, arma::mat r){
 
                     for (int l=0; l<theta.n_rows;l++){
                       for (int j=0; j<theta.n_rows;j++){
-                        arma::mat dhi = dHdtheta.row(l);
+                        arma::mat dhi = dHdtheta.row(l).t();
                         dhi = arma::reshape(dhi,N,N);
 
-                        arma::mat dhj = dHdtheta.row(j);
+                        arma::mat dhj = dHdtheta.row(j).t();
                         dhj = arma::reshape(dhj,N,N);
 
                         arma::mat temp = arma::zeros(1,N2);
