@@ -45,14 +45,6 @@ hesse_bekk <- function(theta, r) {
     .Call('_BEKKs_hesse_bekk', PACKAGE = 'BEKKs', theta, r)
 }
 
-recursive_search_BEKK <- function(r, c0, avec, gvec, index, thetaopt, likmax) {
-    .Call('_BEKKs_recursive_search_BEKK', PACKAGE = 'BEKKs', r, c0, avec, gvec, index, thetaopt, likmax)
-}
-
-grid_search_BEKK <- function(r) {
-    .Call('_BEKKs_grid_search_BEKK', PACKAGE = 'BEKKs', r)
-}
-
 SigmaLagCr <- function(y, Tob, q, p, ucvar) {
     .Call('_BEKKs_SigmaLagCr', PACKAGE = 'BEKKs', y, Tob, q, p, ucvar)
 }
