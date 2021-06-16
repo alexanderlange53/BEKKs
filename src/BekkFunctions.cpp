@@ -97,7 +97,7 @@ bool valid_bekk(arma::mat C,arma::mat A,arma::mat G){
       return false;
     }
   }
-  if(A(1,1)<0 && G(1,1)<0) {
+  if(A(0,0)<=0 && G(0,0)<=0) {
     return false;
   }
   else{
@@ -124,6 +124,7 @@ double loglike_bekk(arma::vec theta, arma::mat r) {
       index += 1;
     }
    }
+
 
    arma::mat A = arma::reshape(theta.subvec(index, (index + n^2) - 1 ), n, n);
    arma::mat G = arma::reshape(theta.subvec((index + n^2), numb_of_vars-1), n, n);
@@ -344,7 +345,7 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
   //set the seed
   arma::arma_rng::set_seed(seed);
   // Generating random values for A, C and G
-  while(l<(10000/(n*nc))){
+  while(l<(5000/(nc))){
     int counter= 0;
     int diagonal_elements = n;
     int diagonal_counter = 0;
