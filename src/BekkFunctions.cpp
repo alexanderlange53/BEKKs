@@ -4,7 +4,7 @@
 // [[Rcpp::plugins(cpp11)]]
 
 // [[Rcpp::export]]
-arma::mat elimination_mat(int n) {
+arma::mat elimination_mat(const int& n) {
   // Generates an elimination matrix for size 'n'
   int n1 = n * (n + 1) / 2;
   int n2 = pow(n, 2);
@@ -37,7 +37,7 @@ arma::mat elimination_mat(int n) {
 }
 
 // [[Rcpp::export]]
-arma::mat commutation_mat(int n) {
+arma::mat commutation_mat(const int& n) {
   // generates a (square) commutation matrix for 'n'
   arma::mat K = arma::zeros(pow(n, 2), pow(n, 2));
 
@@ -50,7 +50,7 @@ arma::mat commutation_mat(int n) {
 }
 
 // [[Rcpp::export]]
-arma::mat duplication_mat(int n) {
+arma::mat duplication_mat(const int& n) {
   // Generates a duplication matrix for size 'n'
   int n2 = pow(n, 2);
 
@@ -64,7 +64,7 @@ arma::mat duplication_mat(int n) {
 }
 
 // [[Rcpp::export]]
-arma::mat inv_gen(arma::mat m) {
+arma::mat inv_gen(const arma::mat& m) {
   // Checks if a matrix is positive definit and calculates
   // the inverse or generalized inverse
 
@@ -76,7 +76,7 @@ arma::mat inv_gen(arma::mat m) {
 }
 
 // [[Rcpp::export]]
-bool valid_bekk(arma::mat C,arma::mat A,arma::mat G){
+bool valid_bekk(arma::mat& C,arma::mat& A,arma::mat& G){
   int n =C.n_cols;
   arma::mat prod = kron(A,A)+kron(G,G);
 
@@ -106,7 +106,7 @@ bool valid_bekk(arma::mat C,arma::mat A,arma::mat G){
 }
 
 // [[Rcpp::export]]
-double loglike_bekk(arma::vec theta, arma::mat r) {
+double loglike_bekk(const arma::vec& theta, const arma::mat& r) {
 // Log-Likelihood function
 
 // convert to matrices
@@ -144,13 +144,13 @@ double loglike_bekk(arma::vec theta, arma::mat r) {
     double llv = -0.5 * arma::as_scalar(n * log(2 * M_PI) + log(arma::det(H)) + r.row(0) * inv_gen(H) * r.row(0).t());
     for (int i = 1; i < NoOBs; i++) {
       H = CC + At * r.row(i - 1).t() * r.row(i - 1) * A + Gt * H * G;
-      llv += -0.5 * arma::as_scalar(n * log(2 * M_PI) + log(arma::det(H)) + r.row(i) * inv_gen(H) * r.row(i).t());
+      llv += arma::as_scalar(log(arma::det(H)) + r.row(i) * inv_gen(H) * r.row(i).t());
     }
-    return llv;
+    return -0.5 * n * log(2 * M_PI) - 0.5 * llv;
 }
 
 // [[Rcpp::export]]
-arma::mat score_bekk(arma::mat theta, arma::mat r) {
+arma::mat score_bekk(const arma::mat& theta, arma::mat& r) {
   int N = r.n_cols;
   int N2 = pow(N, 2);
 
@@ -221,9 +221,9 @@ arma::mat score_bekk(arma::mat theta, arma::mat r) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List  bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
+Rcpp::List  bhh_bekk(arma::mat& r, const arma::mat& theta, int& max_iter, double& crit) {
 
-  arma::vec steps = {9,8,7,6,5,4,3,2,1,0.5,0.25,0.1,0.01,0.005,0.001,0.0005,0.0001,0};
+  arma::vec steps = {9.9,9,8,7,6,5,4,3,2,1,0.5,0.25,0.1,0.01,0.005,0.001,0.0005,0.0001,0};
   double step = 0.1;
   int count_loop = 0;
   arma::mat theta_candidate = theta;
@@ -233,18 +233,18 @@ Rcpp::List  bhh_bekk(arma::mat r, arma::mat theta, int max_iter, double crit) {
 
 
   while (count_loop < max_iter && exit_loop == 0) {
-    theta = theta_candidate;
-    arma::mat theta_temp = arma::zeros(theta.n_rows, steps.n_elem);
+    arma::mat theta_loop = theta_candidate;
+    arma::mat theta_temp = arma::zeros(theta_loop.n_rows, steps.n_elem);
 
-    arma::mat score_function = score_bekk(theta, r);
+    arma::mat score_function = score_bekk(theta_loop, r);
     arma::mat outer_score = score_function.t() * score_function;
     arma::mat outer_score_inv = inv_gen(outer_score);
-    score_function = arma::sum(score_function);
+    arma::mat score_function_sum = arma::sum(score_function);
 
-    double lik = loglike_bekk(theta, r);
+    double lik = loglike_bekk(theta_loop, r);
 
      for (int i = 0; i < steps.n_elem; i++) {
-        arma::vec temp = theta_candidate + step * steps(i) * outer_score_inv * score_function.t();
+        arma::vec temp = theta_candidate + step * steps(i) * outer_score_inv * score_function_sum.t();
         theta_temp.col(i) = temp;
       }
 
@@ -409,7 +409,7 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List sigma_bekk(arma::mat r, arma::mat C, arma::mat A, arma::mat G) {
+Rcpp::List sigma_bekk(arma::mat& r, arma::mat& C, arma::mat& A, arma::mat& G) {
 // Computation of second order moment time paths and GARCH innovations
   int N = r.n_cols;
   int N2 = pow(N, 2);
