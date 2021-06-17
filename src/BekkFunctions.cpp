@@ -97,7 +97,7 @@ bool valid_bekk(arma::mat& C,arma::mat& A,arma::mat& G){
       return false;
     }
   }
-  if(A(0,0)<=0 && G(0,0)<=0) {
+  if(A(0,0)<=0 || G(0,0)<=0) {
     return false;
   }
   else{
@@ -126,8 +126,8 @@ double loglike_bekk(const arma::vec& theta, const arma::mat& r) {
    }
 
 
-   arma::mat A = arma::reshape(theta.subvec(index, (index + n^2) - 1 ), n, n);
-   arma::mat G = arma::reshape(theta.subvec((index + n^2), numb_of_vars-1), n, n);
+   arma::mat A = arma::reshape(theta.subvec(index, (index + pow(n, 2)) - 1 ).t(), n, n);
+   arma::mat G = arma::reshape(theta.subvec((index +  pow(n, 2)), numb_of_vars-1).t(), n, n);
 
 // check constraints
     if (valid_bekk(C, A, G) == FALSE) {
@@ -141,12 +141,12 @@ double loglike_bekk(const arma::vec& theta, const arma::mat& r) {
     arma::mat At  = A.t();
     arma::mat Gt  = G.t();
 
-    double llv = -0.5 * arma::as_scalar(n * log(2 * M_PI) + log(arma::det(H)) + r.row(0) * inv_gen(H) * r.row(0).t());
+    double llv = arma::as_scalar(log(arma::det(H)) + r.row(0) * inv_gen(H) * r.row(0).t());
     for (int i = 1; i < NoOBs; i++) {
       H = CC + At * r.row(i - 1).t() * r.row(i - 1) * A + Gt * H * G;
       llv += arma::as_scalar(log(arma::det(H)) + r.row(i) * inv_gen(H) * r.row(i).t());
     }
-    return -0.5 * n * log(2 * M_PI) - 0.5 * llv;
+    return -0.5 * n * NoOBs * log(2 * M_PI) - 0.5 * llv;
 }
 
 // [[Rcpp::export]]
@@ -176,8 +176,10 @@ arma::mat score_bekk(const arma::mat& theta, arma::mat& r) {
   // Partial derivatives for initial period t = 1
   arma::mat ht = r.t() * r / r.n_rows;
 
-  arma::mat dHda = 2 * D_duplication * D_gen_inv * arma::kron(arma::eye(N, N), a.t() * ht);
-  arma::mat dHdg = 2 * D_duplication * D_gen_inv * arma::kron(arma::eye(N,N), g.t() * ht);
+  //arma::mat dHda = 2 * D_duplication * D_gen_inv * arma::kron(arma::eye(N, N), a.t() * ht);
+  arma::mat dHda = arma::zeros(N2, N2);
+  arma::mat dHdg = arma::zeros(N2, N2);
+  //arma::mat dHdg = 2 * D_duplication * D_gen_inv * arma::kron(arma::eye(N,N), g.t() * ht);
   arma::mat dHdc = 2 * D_duplication * D_gen_inv * arma::kron(c0.t(), arma::eye(N,N)) * L_elimination.t();
 
   arma::mat dHdtheta = arma::join_horiz(dHdc, dHda, dHdg).t();
@@ -185,11 +187,14 @@ arma::mat score_bekk(const arma::mat& theta, arma::mat& r) {
   arma::mat ht_sqrt_inv = arma::inv(arma::real(arma::sqrtmat(ht)));
 
   arma::vec et = ht_sqrt_inv * r.row(0).t();
+
+  //return dHdtheta;
   // Score function
   for (int k = 0; k < theta.n_rows; k++) {
-    arma::mat dh = arma::reshape(dHdtheta.row(k), N, N);
+    arma::mat dh = arma::reshape(dHdtheta.row(k).t(), N, N);
 
     arma::mat mat_temp = ht_sqrt_inv * dh * ht_sqrt_inv * (arma::eye(N, N) - et * et.t());
+    //arma::mat mat_temp = dh * ht_sqrt_inv - r.row(0).t() * r.row(0) * ht_sqrt_inv * dh * ht_sqrt_inv;
 
     gradients(0, k) = -(0.5) * arma::sum(mat_temp.diag());
   }
@@ -209,9 +214,10 @@ arma::mat score_bekk(const arma::mat& theta, arma::mat& r) {
     et = ht_sqrt_inv * r.row(i).t();
 
     for (int k = 0; k < theta.n_rows; k++) {
-      arma::mat dh = arma::reshape(dHdtheta.row(k), N, N);
+      arma::mat dh = arma::reshape(dHdtheta.row(k).t(), N, N);
 
       arma::mat mat_temp = ht_sqrt_inv * dh * ht_sqrt_inv * (arma::eye(N, N) - et * et.t());
+      //arma::mat mat_temp = dh * ht_sqrt_inv - r.row(i).t() * r.row(i) * ht_sqrt_inv * dh * ht_sqrt_inv;
 
       gradients(i, k) = -(0.5) * arma::sum(mat_temp.diag());
     }
@@ -223,7 +229,8 @@ arma::mat score_bekk(const arma::mat& theta, arma::mat& r) {
 // [[Rcpp::export]]
 Rcpp::List  bhh_bekk(arma::mat& r, const arma::mat& theta, int& max_iter, double& crit) {
 
-  arma::vec steps = {9.9,9,8,7,6,5,4,3,2,1,0.5,0.25,0.1,0.01,0.005,0.001,0.0005,0.0001,0};
+  arma::vec steps = {9.9,9,8,7,6,5,4,3,2,1,0.5,0.25,0.1,0.01,0.005,
+                     0.001,0.0005,0.0001,0.00005,0.00001,0};
   double step = 0.1;
   int count_loop = 0;
   arma::mat theta_candidate = theta;
@@ -345,7 +352,7 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
   //set the seed
   arma::arma_rng::set_seed(seed);
   // Generating random values for A, C and G
-  while(l<(5000/(nc))){
+  while(l<(10000/(nc))){
     int counter= 0;
     int diagonal_elements = n;
     int diagonal_counter = 0;
@@ -396,7 +403,7 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
       if(llv>best_val){
          best_val=llv;
        thetaOptim=theta;
-       if(l>4){
+       if(l>9){
          theta_mu=thetaOptim;
        }
     }
