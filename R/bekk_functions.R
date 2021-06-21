@@ -266,35 +266,37 @@ QML_t_ratios <- function(theta, r) {
   return(theta/s2)
 }
 
-simulate_bekk=function(theta,r){
-  n <- ncol(r)
+simulate_bekk=function(theta,NoOBs,n){
+
   #   #Length of each series
-  NoOBs <- nrow(r)
+  series=matrix(0,ncol = n,nrow=NoOBs)
   numb_of_vars <- 2*n^2+n*(n+1)/2
   C <- matrix(0,ncol = n,nrow = n)
-    index <- 1
+  index <- 1
     for(i in 1:n){
       for (j in i:n) {
         C[j,i] <- theta[index]
         index <- index+1
       }
     }
-    C <- t(C)
+    C <- C
     C_full=crossprod(C)
     A = matrix(theta[index:(index+n^2-1)], n)
     At=t(A)
     G = matrix(theta[(index+n^2):numb_of_vars], n)
     Gt=t(G)
 
-    H      = vector(mode = "list", n)
+    H      = vector(mode = "list", NoOBs)
     #unconditional variance
-    Uncond_var=matrix(solve(diag(4) - t(kronecker(A, A)) - t(kronecker(G, G))) %*% c(CC),2)
+    Uncond_var=matrix(solve(diag(n^2) - t(kronecker(A, A)) - t(kronecker(G, G))) %*% c(C_full),n)
 
     H[[1]]=Uncond_var
-
-    for(i in 2:n){
-      H[[i]]=H=C_full+At%*%r[i-1,]%*%t(r[i-1,])%*%A+Gt%*%H%*%G
+    series[1,]=rmvnorm(1,sigma=H[[1]])
+    for(i in 2:NoOBs){
+      H[[i]]=C_full+At%*%series[i-1,]%*%t(series[i-1,])%*%A+Gt%*%H[[i-1]]%*%G
+      series[i,]=t(rmvnorm(1,sigma=H[[i]]))
     }
 
-return(H)
+return(series)
 }
+

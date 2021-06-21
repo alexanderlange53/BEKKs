@@ -130,7 +130,7 @@ double loglike_bekk(const arma::vec& theta, const arma::mat& r) {
    arma::mat G = arma::reshape(theta.subvec((index +  pow(n, 2)), numb_of_vars-1).t(), n, n);
 
 // check constraints
-    if (valid_bekk(C, A, G) == FALSE) {
+    if (valid_bekk(C, A, G) == false) {
       return -1e25;
     }
 
@@ -216,8 +216,8 @@ arma::mat score_bekk(const arma::mat& theta, arma::mat& r) {
     for (int k = 0; k < theta.n_rows; k++) {
       arma::mat dh = arma::reshape(dHdtheta.row(k).t(), N, N);
 
-      arma::mat mat_temp = ht_sqrt_inv * dh * ht_sqrt_inv * (arma::eye(N, N) - et * et.t());
-      //arma::mat mat_temp = dh * ht_sqrt_inv - r.row(i).t() * r.row(i) * ht_sqrt_inv * dh * ht_sqrt_inv;
+      //arma::mat mat_temp = ht_sqrt_inv * dh * ht_sqrt_inv * (arma::eye(N, N) - et * et.t());
+      arma::mat mat_temp = dh * ht_sqrt_inv - r.row(i).t() * r.row(i) * ht_sqrt_inv * dh * ht_sqrt_inv;
 
       gradients(i, k) = -(0.5) * arma::sum(mat_temp.diag());
     }
