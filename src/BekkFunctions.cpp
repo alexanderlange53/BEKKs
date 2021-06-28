@@ -1,5 +1,7 @@
 #include <RcppArmadillo.h>
 
+
+
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::plugins(cpp11)]]
 
@@ -169,7 +171,6 @@ arma::mat score_bekk(const arma::mat& theta, arma::mat& r) {
   c0.elem(lw_idx) = theta.rows(0, (N * (N + 1)/2) - 1);
   arma::mat a = arma::reshape(theta.rows((N * (N+1)/2), (pow(N, 2) + (N * (N + 1)/2) - 1)), N, N);
   arma::mat g = arma::reshape(theta.rows(((pow(N, 2) + (N * (N + 1)/2))), (2*pow(N, 2) + (N * (N + 1)/2) - 1)), N, N);
-
   arma::mat c_full = c0.t() * c0;
 
 
@@ -184,24 +185,24 @@ arma::mat score_bekk(const arma::mat& theta, arma::mat& r) {
 
   arma::mat dHdtheta = arma::join_horiz(dHdc, dHda, dHdg).t();
 
-  arma::mat ht_sqrt_inv = arma::inv(arma::real(arma::sqrtmat(ht)));
-
-  arma::vec et = ht_sqrt_inv * r.row(0).t();
+  //arma::mat ht_sqrt_inv = arma::inv(arma::real(arma::sqrtmat(ht)));
+  arma::mat ht_sqrt_inv = arma::inv(ht);
+  //arma::vec et = ht_sqrt_inv * r.row(0).t();
 
   //return dHdtheta;
   // Score function
   for (int k = 0; k < theta.n_rows; k++) {
     arma::mat dh = arma::reshape(dHdtheta.row(k).t(), N, N);
 
-    arma::mat mat_temp = ht_sqrt_inv * dh * ht_sqrt_inv * (arma::eye(N, N) - et * et.t());
-    //arma::mat mat_temp = dh * ht_sqrt_inv - r.row(0).t() * r.row(0) * ht_sqrt_inv * dh * ht_sqrt_inv;
+    //arma::mat mat_temp = ht_sqrt_inv * dh * ht_sqrt_inv * (arma::eye(N, N) - et * et.t());
+    arma::mat mat_temp = dh * ht_sqrt_inv - r.row(0).t() * r.row(0) * ht_sqrt_inv * dh * ht_sqrt_inv;
 
     gradients(0, k) = -(0.5) * arma::sum(mat_temp.diag());
   }
-
+  //Rcpp::Rcout << "Matrix M\n" << gradients;
   // Partial derivatives for period t >= 2
   arma::mat GGt = arma::kron(g, g).t();
-  for (int i = 1; i < r.n_rows; i++) {
+    for (int i = 1; i < r.n_rows; i++) {
     dHda = 2 * D_duplication * D_gen_inv * arma::kron(arma::eye(N, N), a.t() * r.row(i-1).t() * r.row(i-1)) + GGt * dHda;
     dHdg = 2 * D_duplication * D_gen_inv * arma::kron(arma::eye(N, N), g.t() * ht) + GGt * dHdg;
     dHdc = 2 * D_duplication * D_gen_inv * arma::kron(c0.t(), arma::eye(N, N)) * L_elimination.t() + GGt * dHdc;
@@ -210,15 +211,15 @@ arma::mat score_bekk(const arma::mat& theta, arma::mat& r) {
 
     ht = c_full + a.t() * r.row(i-1).t() * r.row(i-1) * a + g.t() * ht * g;
 
-    ht_sqrt_inv = arma::inv(arma::real(arma::sqrtmat(ht)));
-    et = ht_sqrt_inv * r.row(i).t();
+    //ht_sqrt_inv = arma::inv(arma::real(arma::sqrtmat(ht)));
+    ht_sqrt_inv = arma::inv(ht);
+    //et = ht_sqrt_inv * r.row(i).t();
+
 
     for (int k = 0; k < theta.n_rows; k++) {
       arma::mat dh = arma::reshape(dHdtheta.row(k).t(), N, N);
-
       //arma::mat mat_temp = ht_sqrt_inv * dh * ht_sqrt_inv * (arma::eye(N, N) - et * et.t());
-      arma::mat mat_temp = dh * ht_sqrt_inv - r.row(i).t() * r.row(i) * ht_sqrt_inv * dh * ht_sqrt_inv;
-
+      arma::mat mat_temp = dh * ht_sqrt_inv - r.row(i).t() * r.row(i)* ht_sqrt_inv * dh * ht_sqrt_inv;
       gradients(i, k) = -(0.5) * arma::sum(mat_temp.diag());
     }
   }
@@ -312,9 +313,8 @@ Rcpp::List  bhh_bekk(arma::mat& r, const arma::mat& theta, int& max_iter, double
 Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
   int n =r.n_cols;
   int l=0;
-  int N = r.n_cols;
-  int N2 = pow(N,2);
-  int NoOfVars_C = N*(N+1)/2;
+
+
   arma::mat C = arma::zeros(n,n);
   arma::mat A = arma::zeros(n,n);
   arma::mat G = arma::zeros(n,n);
@@ -352,7 +352,7 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
   //set the seed
   arma::arma_rng::set_seed(seed);
   // Generating random values for A, C and G
-  while(l<(10000/(nc))){
+  while(l<(30000/(nc))){
     int counter= 0;
     int diagonal_elements = n;
     int diagonal_counter = 0;

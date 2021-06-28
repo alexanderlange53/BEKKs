@@ -43,20 +43,33 @@ bekk <- function(r, init_values = NULL, QML_t_ratios = FALSE,
     if (is.null(init_values)) {
       theta <- gridSearch_BEKK(r)
       theta <- theta[[1]]
-  } else if (init_values == 'random') {
-      if(is.null(seed)) {
+  } else if (init_values == 'random' && nc>1) {
+      if(is.null(seed) ) {
         seed <- round(runif(nc, 1, 100))
       } else {
         set.seed(seed)
         seed <- round(runif(nc, 1, 100))
       }
+
     cat('Generating starting values \n')
-      theta_list <- pblapply(seed, random_grid_search_BEKK, r = r,
-                             nc = nc,
-                             cl =nc)
+      theta_list <- pblapply(X=seed, FUN=random_grid_search_BEKK, r = r,
+                             nc = nc,cl=cl         )
       max_index <- which.max(sapply(theta_list, '[[', 'best_val'))
       theta <- theta_list[[max_index]]
       theta <- theta[[1]]
+  } else if (init_values == 'random' && nc==1) {
+    if(is.null(seed) ) {
+      seed <- round(runif(1, 1, 100))
+    } else {
+      set.seed(seed)
+      seed <- round(runif(1, 1, 100))
+    }
+
+    cat('Generating starting values \n')
+    theta_max <- random_grid_search_BEKK(r=r,seed=seed,nc = nc)
+
+    theta=theta_max$thetaOptim
+
   } else if (init_values == 'simple') {
     uncond_var <- crossprod(r)/nrow(r)
     A <- matrix(0, ncol = N, nrow = N)
