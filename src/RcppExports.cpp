@@ -6,6 +6,21 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
+// set_seed
+void set_seed(double seed);
+RcppExport SEXP _BEKKs_set_seed(SEXP seedSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type seed(seedSEXP);
+    set_seed(seed);
+    return R_NilValue;
+END_RCPP
+}
 // elimination_mat
 arma::mat elimination_mat(const int& n);
 RcppExport SEXP _BEKKs_elimination_mat(SEXP nSEXP) {
@@ -239,6 +254,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_BEKKs_set_seed", (DL_FUNC) &_BEKKs_set_seed, 1},
     {"_BEKKs_elimination_mat", (DL_FUNC) &_BEKKs_elimination_mat, 1},
     {"_BEKKs_commutation_mat", (DL_FUNC) &_BEKKs_commutation_mat, 1},
     {"_BEKKs_duplication_mat", (DL_FUNC) &_BEKKs_duplication_mat, 1},
