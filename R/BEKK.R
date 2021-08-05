@@ -135,11 +135,11 @@ bekk <- function(r, init_values = NULL, QML_t_ratios = FALSE,
   for (i in 1:N) {
     for (j in 1:N) {
       if (i == j) {
-        colnames(sigma_t)[k2] <- paste('Conditional variances of', colnames(r)[k])
+        colnames(sigma_t)[k2] <- paste('Conditional SD of', colnames(r)[k])
         k <- k + 1
         k2 <- k2 +1
       } else {
-        colnames(sigma_t)[k2] <- paste('Conditional covariances of', colnames(r)[i], ' and ', colnames(r)[j])
+        colnames(sigma_t)[k2] <- paste('Conditional correlation of', colnames(r)[i], ' and ', colnames(r)[j])
         k2 <- k2 +1
       }
     }
