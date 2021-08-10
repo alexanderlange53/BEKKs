@@ -122,12 +122,12 @@ bekk <- function(r, init_values = NULL, QML_t_ratios = FALSE,
   for (i in 1:N) {
     for (j in 1:N) {
       if (i == j) {
-        colnames(sigma_t)[k2] <- paste('Conditional SD of', colnames(r)[k])
+        colnames(sigma_t)[k2] <- paste('Conditional standard deviation of \n', colnames(r)[k])
         #sigma_t[,k2] <- sqrt(sigma_t[,k2])
         k <- k + 1
         k2 <- k2 +1
       } else {
-        colnames(sigma_t)[k2] <- paste('Conditional correlation of', colnames(r)[i], ' and ', colnames(r)[j])
+        colnames(sigma_t)[k2] <- paste('Conditional correlation of \n', colnames(r)[i], ' and ', colnames(r)[j])
         #sigma_t[,k2] <- sigma_t[,k2]/(sigma_t[,i*(k-1)] * sqrt(sigma_t[,j*N]))
         k2 <- k2 +1
       }
