@@ -335,6 +335,40 @@ simulate_bekk_alternative=function(theta,NoOBs,n){
 
   return(series)
 }
+simulate_bekk=function(theta,NoOBs,n){
 
+  #   #Length of each series
+  series=matrix(0,ncol = n,nrow=NoOBs)
+  numb_of_vars <- 2*n^2+n*(n+1)/2
+  C <- matrix(0,ncol = n,nrow = n)
+  index <- 1
+  for(i in 1:n){
+    for (j in i:n) {
+      C[j,i] <- theta[index]
+      index <- index+1
+    }
+  }
+  C <- C
+  C_full=crossprod(C)
+  A = matrix(theta[index:(index+n^2-1)], n)
+  At=t(A)
+  G = matrix(theta[(index+n^2):numb_of_vars], n)
+  Gt=t(G)
+
+
+  #unconditional variance
+  Uncond_var=matrix(solve(diag(n^2) - t(kronecker(A, A)) - t(kronecker(G, G))) %*% c(C_full),n)
+
+  H=Uncond_var
+  h_dec=t(chol(H))
+  series[1,]=h_dec%*%t(rnorm(n))
+  for(i in 2:NoOBs){
+    H=C_full+At%*%series[i-1,]%*%t(series[i-1,])%*%A+Gt%*%H%*%G
+    h_dec=t(chol(H))
+    series[i,]=h_dec%*%t(rnorm(n))
+  }
+
+  return(series)
+}
 
 

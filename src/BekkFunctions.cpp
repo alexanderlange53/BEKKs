@@ -154,6 +154,8 @@ double loglike_bekk(const arma::vec& theta, const arma::mat& r) {
       H = CC + At * r.row(i - 1).t() * r.row(i - 1) * A + Gt * H * G;
       llv += arma::as_scalar(log(arma::det(H)) + r.row(i) * inv_gen(H) * r.row(i).t());
     }
+
+    // minus vor 0.5 weg
     return -0.5 * n * NoOBs * log(2 * M_PI) - 0.5 * llv;
 }
 
@@ -173,10 +175,19 @@ arma::mat score_bekk(const arma::mat& theta, arma::mat& r) {
 
   // transform vector of parameter 'theta' to actual parameter matrices of BEKK model
   arma::mat c0 = arma::zeros(N, N);
-  arma::uvec lw_idx = arma::trimatu_ind(arma::size(c0));
-  c0.elem(lw_idx) = theta.rows(0, (N * (N + 1)/2) - 1);
+  //arma::uvec lw_idx = arma::trimatu_ind(arma::size(c0));
+  //c0.elem(lw_idx) = theta.rows(0, (N * (N + 1)/2) - 1);
+  int index = 0;
+
+  for(int i = 0; i < N; i++){
+    for (int j = i; j < N; j++) {
+      c0(j, i) = theta(index);
+      index += 1;
+    }
+  }
   arma::mat a = arma::reshape(theta.rows((N * (N+1)/2), (pow(N, 2) + (N * (N + 1)/2) - 1)), N, N);
   arma::mat g = arma::reshape(theta.rows(((pow(N, 2) + (N * (N + 1)/2))), (2*pow(N, 2) + (N * (N + 1)/2) - 1)), N, N);
+  c0=c0.t();
   arma::mat c_full = c0.t() * c0;
   arma::mat at = a.t();
   arma::mat gt = g.t();
@@ -187,10 +198,9 @@ arma::mat score_bekk(const arma::mat& theta, arma::mat& r) {
   arma::mat dHda = arma::zeros(N2, N2);
 
   arma::mat dHdg = arma::zeros(N2, N2);
-  //arma::mat dHdg = 2 * D_duplication * D_gen_inv * arma::kron(arma::eye(N,N), g.t() * ht);
-  //arma::mat dHdc = 2 * D_duplication * D_gen_inv * arma::kron(c0.t(), arma::eye(N, N)) * L_elimination.t();
+  // arma::mat dHdg = 2 * D_duplication * D_gen_inv * arma::kron(arma::eye(N,N), g.t() * ht);
+  arma::mat dHdc = 2 * D_duplication * D_gen_inv * arma::kron(c0.t(), arma::eye(N, N)) * L_elimination.t();
 
-  arma::mat dHdc = arma::kron(c0.t(),arma::eye(N,N)) *  L_elimination.t() + arma::kron(arma::eye(N,N),c0.t()) * commutation_mat(N)* L_elimination.t();
 
   arma::mat dHdtheta = arma::join_horiz(dHdc, dHda, dHdg).t();
 
@@ -201,7 +211,7 @@ arma::mat score_bekk(const arma::mat& theta, arma::mat& r) {
   //return dHdtheta;
   // Score function
   for (int k = 0; k < theta.n_rows; k++) {
-    //arma::mat dh = arma::reshape(dHdtheta.row(k), N, N).t();
+
     arma::mat dh = arma::reshape(dHdtheta.row(k), N, N);
     //Rcpp::Rcout << ht_sqrt_inv;
     //arma::mat mat_temp = ht_sqrt_inv * dh * ht_sqrt_inv * (arma::eye(N, N) - et * et.t());
@@ -214,19 +224,17 @@ arma::mat score_bekk(const arma::mat& theta, arma::mat& r) {
   // Partial derivatives for period t >= 2
   arma::mat GGt = arma::kron(g, g).t();
     for (int i = 1; i < r.n_rows; i++) {
-      //dHdc = 2 * D_duplication * D_gen_inv * arma::kron(c0.t(), arma::eye(N, N)) * L_elimination.t() + GGt * dHdc;
-
-      dHdc = arma::kron(c0.t(),arma::eye(N,N)) *  L_elimination.t() + arma::kron(arma::eye(N,N),c0.t()) * commutation_mat(N)* L_elimination.t() + arma::kron(g.t(),g) * dHdc;
+      dHdc = 2 * D_duplication * D_gen_inv * arma::kron(c0.t(), arma::eye(N, N)) * L_elimination.t() + GGt * dHdc;
 
 
-    //dHda = 2 * D_duplication * D_gen_inv * arma::kron(arma::eye(N, N), a.t() * r.row(i-1).t() * r.row(i-1)) + GGt * dHda;
 
-    dHda = arma::kron(at * arma::trans(r.row(i-1).t() * r.row(i-1)), arma::eye(N, N) ) * commutation_mat(N) + arma::kron(arma::eye(N, N), a*r.row(i-1).t() * r.row(i-1)) + GGt * dHda;
+    dHda = 2 * D_duplication * D_gen_inv * arma::kron(arma::eye(N, N), a.t() * r.row(i-1).t() * r.row(i-1)) + GGt * dHda;
 
+    //dHda =  arma::kron(arma::eye(N, N),at*r.row(i-1).t() *r.row(i-1)) + arma::kron(at * r.row(i-1).t() *r.row(i-1), arma::eye(N, N)) * commutation_mat(N)+ GGt * dHda;
 
-   // dHdg = 2 * D_duplication * D_gen_inv * arma::kron(arma::eye(N, N), g.t() * ht) + GGt * dHdg;
+   dHdg = 2 * D_duplication * D_gen_inv * arma::kron(arma::eye(N, N), g.t() * ht) + GGt * dHdg;
 
-    dHdg = arma::kron(g.t() , arma::eye(N, N)) *( arma::kron(ht.t(),arma::eye(N, N)) * commutation_mat(N) + arma::kron(arma::eye(N, N),gt) * dHdg ) + arma::kron(arma::eye(N, N),gt*ht);
+    //dHdg = arma::kron(arma::eye(N, N),gt*ht) + arma::kron(gt * ht , arma::eye(N, N)) * commutation_mat(N) + GGt * dHdg;
 
     arma::mat dHdtheta = arma::join_horiz(dHdc, dHda, dHdg).t();
 
@@ -384,7 +392,7 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
     for (int j=0; j < (n*(n+1)/2);j++){
 
       if(j == counter){
-        theta[j]=  theta_mu[j]+arma::randn()*0.05*(1/x);
+        theta[j]=  theta_mu[j]+arma::randn()*0.08*(1/x);
         counter+=diagonal_elements;
         diagonal_elements--;
       }
@@ -397,14 +405,14 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
     for (int j=(n*(n+1)/2); j < numb_of_vars;j++){
       if(j == (n*(n+1)/2+diagonal_counter*(n+1)) && j< ((n*(n+1)/2) +n*n)){
         diagonal_counter++;
-        theta[j]= arma::randn()*0.05*(1/x)+theta_mu[j];
+        theta[j]= arma::randn()*0.08*(1/x)+theta_mu[j];
       }
       else if(j == (n*(n+1)/2+n*n+(diagonal_counter-n)*(n+1)) && j>=(n*(n+1)/2+n*n)){
         diagonal_counter++;
-        theta[j]= arma::randn()*0.05*(1/x)+theta_mu[j];
+        theta[j]= arma::randn()*0.08*(1/x)+theta_mu[j];
       }
       else{
-        theta[j]=arma::randn()*0.05*(1/x)+theta_mu[j];
+        theta[j]=arma::randn()*0.04*(1/x)+theta_mu[j];
       }
     }
 
@@ -431,7 +439,7 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
        if(m>=5){
          theta_mu=thetaOptim;
        }
-       if(l>10000){
+       if(l>5000){
          theta_mu=thetaOptim;
          x+=0.5;
          Rcpp::Rcout << l;
@@ -465,16 +473,16 @@ Rcpp::List sigma_bekk(arma::mat& r, arma::mat& C, arma::mat& A, arma::mat& G) {
   for (int i = 1; i < r.n_rows; i++) {
     ht = CC + At * r.row(i - 1).t() * r.row(i - 1) * A + Gt * ht * G;
     sigma.row(i) = arma::vectorise(ht).t();
-    et.row(i) = (inv_gen(arma::sqrtmat_sympd(ht)) *  r.row(i).t()).t();
+    et.row(i) = (inv_gen(arma::chol(ht).t()) *  r.row(i).t()).t();
     // Transform into Sd and correlation
-    sigma(i,0)=sqrt(sigma(i,0));
-    sigma(i,3)=sqrt(sigma(i,3));
-    sigma(i,1)=sigma(i,1)/(sigma(i,0)*sigma(i,3));
-    sigma(i,2)=sigma(i,2)/(sigma(i,0)*sigma(i,3));
+    //sigma(i,0)=sqrt(sigma(i,0));
+    //sigma(i,3)=sqrt(sigma(i,3));
+    //sigma(i,1)=sigma(i,1)/(sigma(i,0)*sigma(i,3));
+    //sigma(i,2)=sigma(i,2)/(sigma(i,0)*sigma(i,3));
   }
 
   return Rcpp::List::create(Rcpp::Named("sigma_t")= sigma,
-                            Rcpp::Named("et") = et);
+                            Rcpp::Named("e_t") = et);
 }
 
 // [[Rcpp::export]]
