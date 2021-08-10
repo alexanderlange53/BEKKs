@@ -474,11 +474,6 @@ Rcpp::List sigma_bekk(arma::mat& r, arma::mat& C, arma::mat& A, arma::mat& G) {
     ht = CC + At * r.row(i - 1).t() * r.row(i - 1) * A + Gt * ht * G;
     sigma.row(i) = arma::vectorise(ht).t();
     et.row(i) = (inv_gen(arma::chol(ht).t()) *  r.row(i).t()).t();
-    // Transform into Sd and correlation
-    //sigma(i,0)=sqrt(sigma(i,0));
-    //sigma(i,3)=sqrt(sigma(i,3));
-    //sigma(i,1)=sigma(i,1)/(sigma(i,0)*sigma(i,3));
-    //sigma(i,2)=sigma(i,2)/(sigma(i,0)*sigma(i,3));
   }
 
   return Rcpp::List::create(Rcpp::Named("sigma_t")= sigma,
