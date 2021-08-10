@@ -42,50 +42,50 @@ autoplot(StocksBonds  , facet = TRUE) + theme_bw()
 
 ![](man/figures/Data.png)
 
-We estimate the conditional variance and covariance processes via the BEKK(1,1) model
+We estimate the conditional deviations and correlation processes via the BEKK(1,1) model
 
 ```r
 m1 <- bekk(StocksBonds)
 summary(m1)
 
-# BEKK estiamtion results
+# BEKK estimation results
 # -----------------------
-# Log-likelihood: -7407.91
+# Log-likelihood: -7382.256
 # BEKK model stationary: TRUE
-# Number of BHHH iterations: 50
+# Number of BHHH iterations: 15
 # Estimated paramater matrices: 
 # 
 # C 
-#            [,1]         [,2]
-# [1,] 0.02781423 0.0006233005
-# [2,] 0.00000000 0.1181025776
+#            [,1]        [,2]
+# [1,] 0.01978368 -0.01496272
+# [2,] 0.00000000  0.08526574
 # 
 # A 
-#              [,1]       [,2]
-# [1,]  0.186828249 0.02482309
-# [2,] -0.009778605 0.28638092
+#              [,1]        [,2]
+# [1,]  0.178859630 -0.03715201
+# [2,] -0.007691659  0.29814734
 # 
 # G 
-#             [,1]          [,2]
-# [1,] 0.976841591 -0.0007262051
-# [2,] 0.001180173  0.9493469743
+#             [,1]       [,2]
+# [1,] 0.981184605 0.01326038
+# [2,] 0.001337367 0.95143161
 # 
 # t-values of paramater matrices: 
 # 
 # C 
-#          [,1]        [,2]
-# [1,] 11.35226  0.04609706
-# [2,]  0.00000 19.02970255
+#          [,1]     [,2]
+# [1,] 8.979949 -1.21244
+# [2,] 0.000000 13.41001
 # 
 # A 
-#          [,1]       [,2]
-# [1,] 26.25035  0.9269617
-# [2,] -4.01463 37.3502093
+#          [,1]      [,2]
+# [1,] 29.17318 -1.640942
+# [2,] -3.55672 42.056807
 # 
 # G 
-#            [,1]         [,2]
-# [1,] 497.842578  -0.08394647
-# [2,]   1.539511 343.88192299
+#            [,1]       [,2]
+# [1,] 693.873974   2.099117
+# [2,]   2.154099 409.769546
 ```
 
 The summary includes general information on the estimation (see `?bekk`), the estimated parameter matrices C, A and G and the corresponding t-values. The estimated volatility and covariance processes can be shown with `plot(m1)`.
