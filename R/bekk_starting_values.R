@@ -5,7 +5,6 @@ gridSearch_BEKK <- function(r) {
   A <- matrix(0, ncol = N, nrow = N)
   G <- matrix(0, ncol = N, nrow = N)
   C <- matrix(0, ncol = N, nrow = N)
-  #th0=numeric(2*n^2+n*(n+1)/2)
 
   diag(A) <- 0.3
   diag(G) <- 0.92
@@ -54,6 +53,7 @@ gridSearch_BEKK <- function(r) {
   return(list(th0, lik))
 
 }
+<<<<<<< HEAD
 gridSearch_asymmetricBEKK <- function(r) {
   N  <- ncol(r)
 
@@ -219,3 +219,5 @@ gridSearch_asymmetricBEKK <- function(r) {
 #
 #   return(list(thetaopt,likmax))
 # }
+=======
+>>>>>>> master

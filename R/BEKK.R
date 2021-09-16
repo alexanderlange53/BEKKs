@@ -43,33 +43,20 @@ if(asymmetric==FALSE){
     if (is.null(init_values)) {
       theta <- gridSearch_BEKK(r)
       theta <- theta[[1]]
-  } else if (init_values == 'random' && nc>1) {
-      if(is.null(seed) ) {
+  } else if (init_values == 'random') {
+      if(is.null(seed)) {
         seed <- round(runif(nc, 1, 100))
       } else {
         set.seed(seed)
         seed <- round(runif(nc, 1, 100))
       }
-
     cat('Generating starting values \n')
-      theta_list <- pblapply(X=seed, FUN=random_grid_search_BEKK, r = r,
-                             nc = nc,cl=cl         )
+      theta_list <- pblapply(seed, random_grid_search_BEKK, r = r,
+                             nc = nc,
+                             cl =nc)
       max_index <- which.max(sapply(theta_list, '[[', 'best_val'))
       theta <- theta_list[[max_index]]
       theta <- theta[[1]]
-  } else if (init_values == 'random' && nc==1) {
-    if(is.null(seed) ) {
-      seed <- round(runif(1, 1, 100))
-    } else {
-      set.seed(seed)
-      seed <- round(runif(1, 1, 100))
-    }
-
-    cat('Generating starting values \n')
-    theta_max <- random_grid_search_BEKK(r=r,seed=seed,nc = nc)
-
-    theta=theta_max$thetaOptim
-
   } else if (init_values == 'simple') {
     uncond_var <- crossprod(r)/nrow(r)
     A <- matrix(0, ncol = N, nrow = N)
@@ -135,18 +122,28 @@ if(asymmetric==FALSE){
   for (i in 1:N) {
     for (j in 1:N) {
       if (i == j) {
-        colnames(sigma_t)[k2] <- paste('Conditional SD of', colnames(r)[k])
+        colnames(sigma_t)[k2] <- paste('Conditional standard deviation of \n', colnames(r)[k])
+        #sigma_t[,k2] <- sqrt(sigma_t[,k2])
         k <- k + 1
         k2 <- k2 +1
       } else {
-        colnames(sigma_t)[k2] <- paste('Conditional correlation of', colnames(r)[i], ' and ', colnames(r)[j])
+        colnames(sigma_t)[k2] <- paste('Conditional correlation of \n', colnames(r)[i], ' and ', colnames(r)[j])
+        #sigma_t[,k2] <- sigma_t[,k2]/(sigma_t[,i*(k-1)] * sqrt(sigma_t[,j*N]))
         k2 <- k2 +1
       }
     }
   }
 
+  for (i in 1:nrow(sigma_t)) {
+    tm <- matrix(unlist(sigma_t[i,]), N, N, byrow = T)
+    tm2 <- sqrt(solve(diag(diag(tm))))%*%tm%*%sqrt(solve(diag(diag(tm))))
+    diag(tm2) <- sqrt(diag(tm))
+    sigma_t[i,] <- c(tm2)
+  }
+
   elim <- elimination_mat(N)
   sigma_t <- sigma_t[, which(colSums(elim) == 1)]
+
 
   if (inherits(r, "ts")) {
     sigma_t <- ts(sigma_t, start = time(r)[1], frequency = frequency(r))

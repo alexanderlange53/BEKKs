@@ -34,15 +34,26 @@ plot.bekk <- function(x, diagnostic = FALSE, ...){
       plist <- vector(mode = "list", length = ncol(x$sigma_t))
       xxc <- colnames(x$sigma_t)
       for (i in 1:ncol(x$sigma_t)) {
-        plist[[i]] <- autoplot(x$sigma_t[,i]) + theme_bw()
+        if (grepl('correlation', xxc[i])) {
+          plist[[i]] <- suppressMessages(autoplot(x$sigma_t[,i]) + theme_bw() + ylim(-1,1) + geom_hline(yintercept = 0, col = 'red'))
+        } else {
+          plist[[i]] <- autoplot(x$sigma_t[,i]) + theme_bw()
+        }
       }
     } else {
-      xx1 <- as.list(as.data.frame(x$sigma_t))
       xxc <- colnames(x$sigma_t)
-      plist <- lapply(xx1, function(x){
-        x <- as.data.frame(x)
-        colnames(x) <-c('V1')
-        ggplot(x, aes(x = 1:nrow(x), y = V1)) + geom_line() + theme_bw()+ xlab('') + ylab('')})
+
+      plist <- vector(mode = "list", length = ncol(x$sigma_t))
+
+      for (i in 1:ncol(x$sigma_t)) {
+        xx1 <- data.frame(x$sigma_t[,i])
+        colnames(xx1) <- 'V1'
+        if (grepl('correlation', xxc[i])) {
+          plist[[i]] <- ggplot(xx1, aes(x = 1:nrow(x$sigma_t), y = V1)) + geom_line() + theme_bw()+ xlab('') + ylab('') + ylim(-1,1) + geom_hline(yintercept = 0, col = 'red')
+        } else {
+          plist[[i]] <- ggplot(xx1, aes(x = 1:nrow(x$sigma_t), y = V1)) + geom_line() + theme_bw()+ xlab('') + ylab('')
+        }
+      }
     }
 
 
