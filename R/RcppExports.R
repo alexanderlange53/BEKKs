@@ -25,16 +25,32 @@ valid_bekk <- function(C, A, G) {
     .Call('_BEKKs_valid_bekk', PACKAGE = 'BEKKs', C, A, G)
 }
 
+valid_asymm_bekk <- function(C, A, B, G) {
+    .Call('_BEKKs_valid_asymm_bekk', PACKAGE = 'BEKKs', C, A, B, G)
+}
+
 loglike_bekk <- function(theta, r) {
     .Call('_BEKKs_loglike_bekk', PACKAGE = 'BEKKs', theta, r)
+}
+
+loglike_asymm_bekk <- function(theta, r) {
+    .Call('_BEKKs_loglike_asymm_bekk', PACKAGE = 'BEKKs', theta, r)
 }
 
 score_bekk <- function(theta, r) {
     .Call('_BEKKs_score_bekk', PACKAGE = 'BEKKs', theta, r)
 }
 
+score_asymm_bekk <- function(theta, r) {
+    .Call('_BEKKs_score_asymm_bekk', PACKAGE = 'BEKKs', theta, r)
+}
+
 bhh_bekk <- function(r, theta, max_iter, crit) {
     .Call('_BEKKs_bhh_bekk', PACKAGE = 'BEKKs', r, theta, max_iter, crit)
+}
+
+bhh_asymm_bekk <- function(r, theta, max_iter, crit) {
+    .Call('_BEKKs_bhh_asymm_bekk', PACKAGE = 'BEKKs', r, theta, max_iter, crit)
 }
 
 random_grid_search_BEKK <- function(r, seed, nc) {

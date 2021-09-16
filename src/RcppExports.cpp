@@ -78,6 +78,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// valid_asymm_bekk
+bool valid_asymm_bekk(arma::mat& C, arma::mat& A, arma::mat& B, arma::mat& G);
+RcppExport SEXP _BEKKs_valid_asymm_bekk(SEXP CSEXP, SEXP ASEXP, SEXP BSEXP, SEXP GSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type C(CSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type A(ASEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type B(BSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type G(GSEXP);
+    rcpp_result_gen = Rcpp::wrap(valid_asymm_bekk(C, A, B, G));
+    return rcpp_result_gen;
+END_RCPP
+}
 // loglike_bekk
 double loglike_bekk(const arma::vec& theta, const arma::mat& r);
 RcppExport SEXP _BEKKs_loglike_bekk(SEXP thetaSEXP, SEXP rSEXP) {
@@ -87,6 +101,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::vec& >::type theta(thetaSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type r(rSEXP);
     rcpp_result_gen = Rcpp::wrap(loglike_bekk(theta, r));
+    return rcpp_result_gen;
+END_RCPP
+}
+// loglike_asymm_bekk
+double loglike_asymm_bekk(const arma::vec& theta, const arma::mat& r);
+RcppExport SEXP _BEKKs_loglike_asymm_bekk(SEXP thetaSEXP, SEXP rSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type r(rSEXP);
+    rcpp_result_gen = Rcpp::wrap(loglike_asymm_bekk(theta, r));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -102,6 +128,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// score_asymm_bekk
+arma::mat score_asymm_bekk(const arma::mat& theta, arma::mat& r);
+RcppExport SEXP _BEKKs_score_asymm_bekk(SEXP thetaSEXP, SEXP rSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type r(rSEXP);
+    rcpp_result_gen = Rcpp::wrap(score_asymm_bekk(theta, r));
+    return rcpp_result_gen;
+END_RCPP
+}
 // bhh_bekk
 Rcpp::List bhh_bekk(arma::mat& r, const arma::mat& theta, int& max_iter, double& crit);
 RcppExport SEXP _BEKKs_bhh_bekk(SEXP rSEXP, SEXP thetaSEXP, SEXP max_iterSEXP, SEXP critSEXP) {
@@ -113,6 +151,20 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int& >::type max_iter(max_iterSEXP);
     Rcpp::traits::input_parameter< double& >::type crit(critSEXP);
     rcpp_result_gen = Rcpp::wrap(bhh_bekk(r, theta, max_iter, crit));
+    return rcpp_result_gen;
+END_RCPP
+}
+// bhh_asymm_bekk
+Rcpp::List bhh_asymm_bekk(arma::mat& r, const arma::mat& theta, int& max_iter, double& crit);
+RcppExport SEXP _BEKKs_bhh_asymm_bekk(SEXP rSEXP, SEXP thetaSEXP, SEXP max_iterSEXP, SEXP critSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type r(rSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< int& >::type max_iter(max_iterSEXP);
+    Rcpp::traits::input_parameter< double& >::type crit(critSEXP);
+    rcpp_result_gen = Rcpp::wrap(bhh_asymm_bekk(r, theta, max_iter, crit));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -260,9 +312,13 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BEKKs_duplication_mat", (DL_FUNC) &_BEKKs_duplication_mat, 1},
     {"_BEKKs_inv_gen", (DL_FUNC) &_BEKKs_inv_gen, 1},
     {"_BEKKs_valid_bekk", (DL_FUNC) &_BEKKs_valid_bekk, 3},
+    {"_BEKKs_valid_asymm_bekk", (DL_FUNC) &_BEKKs_valid_asymm_bekk, 4},
     {"_BEKKs_loglike_bekk", (DL_FUNC) &_BEKKs_loglike_bekk, 2},
+    {"_BEKKs_loglike_asymm_bekk", (DL_FUNC) &_BEKKs_loglike_asymm_bekk, 2},
     {"_BEKKs_score_bekk", (DL_FUNC) &_BEKKs_score_bekk, 2},
+    {"_BEKKs_score_asymm_bekk", (DL_FUNC) &_BEKKs_score_asymm_bekk, 2},
     {"_BEKKs_bhh_bekk", (DL_FUNC) &_BEKKs_bhh_bekk, 4},
+    {"_BEKKs_bhh_asymm_bekk", (DL_FUNC) &_BEKKs_bhh_asymm_bekk, 4},
     {"_BEKKs_random_grid_search_BEKK", (DL_FUNC) &_BEKKs_random_grid_search_BEKK, 3},
     {"_BEKKs_sigma_bekk", (DL_FUNC) &_BEKKs_sigma_bekk, 4},
     {"_BEKKs_hesse_bekk", (DL_FUNC) &_BEKKs_hesse_bekk, 2},
