@@ -955,6 +955,18 @@ arma::mat hesse_bekk(arma::mat theta, arma::mat r){
 
 }
 
+// [[Rcpp::export]]
+arma::mat eigen_value_decomposition(arma::mat& A){
+  arma::vec eigval;
+  arma::mat eigvec;
+  arma::eig_sym( eigval, eigvec, A );
+
+
+  arma::mat diag_mat_eigval = arma::diagmat(sqrt(eigval));
+  return eigvec*diag_mat_eigval*eigvec.t();
+
+}
+
 /*
 // [[Rcpp::export]]
 Rcpp::List recursive_search_BEKK(arma::mat r, arma::vec c0, arma::vec avec,
