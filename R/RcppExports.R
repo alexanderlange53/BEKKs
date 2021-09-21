@@ -65,6 +65,10 @@ hesse_bekk <- function(theta, r) {
     .Call('_BEKKs_hesse_bekk', PACKAGE = 'BEKKs', theta, r)
 }
 
+eigen_value_decomposition <- function(A) {
+    .Call('_BEKKs_eigen_value_decomposition', PACKAGE = 'BEKKs', A)
+}
+
 SigmaLagCr <- function(y, Tob, q, p, ucvar) {
     .Call('_BEKKs_SigmaLagCr', PACKAGE = 'BEKKs', y, Tob, q, p, ucvar)
 }

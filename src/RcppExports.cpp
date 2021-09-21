@@ -207,6 +207,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// eigen_value_decomposition
+arma::mat eigen_value_decomposition(arma::mat& A);
+RcppExport SEXP _BEKKs_eigen_value_decomposition(SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(eigen_value_decomposition(A));
+    return rcpp_result_gen;
+END_RCPP
+}
 // SigmaLagCr
 arma::mat SigmaLagCr(arma::mat y, int Tob, int q, int p, double ucvar);
 RcppExport SEXP _BEKKs_SigmaLagCr(SEXP ySEXP, SEXP TobSEXP, SEXP qSEXP, SEXP pSEXP, SEXP ucvarSEXP) {
@@ -322,6 +333,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BEKKs_random_grid_search_BEKK", (DL_FUNC) &_BEKKs_random_grid_search_BEKK, 3},
     {"_BEKKs_sigma_bekk", (DL_FUNC) &_BEKKs_sigma_bekk, 4},
     {"_BEKKs_hesse_bekk", (DL_FUNC) &_BEKKs_hesse_bekk, 2},
+    {"_BEKKs_eigen_value_decomposition", (DL_FUNC) &_BEKKs_eigen_value_decomposition, 1},
     {"_BEKKs_SigmaLagCr", (DL_FUNC) &_BEKKs_SigmaLagCr, 5},
     {"_BEKKs_GarchVariance", (DL_FUNC) &_BEKKs_GarchVariance, 6},
     {"_BEKKs_ScoreGarch", (DL_FUNC) &_BEKKs_ScoreGarch, 7},
