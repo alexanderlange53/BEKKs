@@ -69,6 +69,10 @@ eigen_value_decomposition <- function(A) {
     .Call('_BEKKs_eigen_value_decomposition', PACKAGE = 'BEKKs', A)
 }
 
+simulate_bekk_c <- function(theta, NoObs, n) {
+    .Call('_BEKKs_simulate_bekk_c', PACKAGE = 'BEKKs', theta, NoObs, n)
+}
+
 SigmaLagCr <- function(y, Tob, q, p, ucvar) {
     .Call('_BEKKs_SigmaLagCr', PACKAGE = 'BEKKs', y, Tob, q, p, ucvar)
 }

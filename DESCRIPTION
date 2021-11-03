@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Author: Markus Fülle [aut, cre],
         Helmut Herwartz [aut],
         Alexander Lange [aut, cre],
-Authors@R:  
+Authors@R: 
     c(person(given = "Markus",
            family = "Fülle",
            role = c("aut", "cre"),
@@ -27,4 +27,4 @@ Encoding: UTF-8
 LazyData: true
 Suggests: 
     testthat (>= 2.1.0)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2

@@ -10,7 +10,9 @@ bekk(
   QML_t_ratios = FALSE,
   seed = NULL,
   max_iter = 50,
-  crit = 1e-09
+  crit = 1e-09,
+  nc = 1,
+  asymmetric = FALSE
 )
 }
 \arguments{

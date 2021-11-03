@@ -1,4 +1,4 @@
-VaR_BEKK <- function(theta, r, portfolio_weights, level){
+VaR_BEKK <- function(theta, r, portfolio_weights){
   #compute H
   nc = ncol(r)
   n = nrow(r)
@@ -8,5 +8,5 @@ VaR_BEKK <- function(theta, r, portfolio_weights, level){
   H_n1 = c_mats$C0%*%t(c_mats$C0) + t(c_mats$a)%*%t(r[n,])%*%r[n,]%*%c_mats$a+t(c_mats$g)%*%H[[n]]%*%c_mats$g
   nu = portfolio_weights%*%eigen_value_decomposition(H_n1)
 
-  return(qnorm((1-level), sd=sum(portfolio_weights)))
+  return(qnorm((1-nu), sd=sum(portfolio_weights)))
 }
