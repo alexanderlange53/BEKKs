@@ -27,6 +27,7 @@ summary.bekk <- function(object, ...) {
   print(bekkObject$G_t)
 }
 
+#' @export
 summary.asymmetricbekk <- function(object, ...) {
   bekkObject <- object
   cat(paste("\n", "Asymmetric BEKK estimation results", "\n", sep = ""))
