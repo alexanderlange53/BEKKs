@@ -3,7 +3,7 @@
 S3method(plot,bekk)
 S3method(summary,bekk)
 export(arch)
-export(bekk)
+export(bekk_fit)
 export(bekk_sim)
 export(bekk_spec)
 export(garch)

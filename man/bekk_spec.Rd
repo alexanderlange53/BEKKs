@@ -12,9 +12,11 @@ bekk_spec(
 )
 }
 \arguments{
-\item{model}{List containing the model type specification: Currently implemented are "bekk", "diagBekk", "scalarBekk". Moreover it can be specified whether the model should be estimated allowing for asymmetric volatility structure.}
+\item{model}{List containing the model type specification: Currently implemented are "bekk", "diagBekk", "scalarBekk".
+Moreover it can be specified whether the model should be estimated allowing for asymmetric volatility structure.}
 
-\item{init_values}{initial values for BEKK parameter during BHHH algorithm. If object from this function is passed to \link{bekk_sim}, init_values are used as parameters for data generating process.}
+\item{init_values}{initial values for \href{bekk_fit} during BHHH algorithm. It can be either a numerical vector of suitable dimension, or a character vector i.e. "random" to use a random starting values generator, or
+"simple" for relying on a simple initial values generator based on typical values for BEKK parameter found in the literature. If object from this function is passed to \link{bekk_sim}, init_values are used as parameters for data generating process.}
 
 \item{signs}{Vector specifying asymmetry.}
 

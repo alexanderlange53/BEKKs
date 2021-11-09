@@ -1,96 +1,57 @@
-#' Estimating a BEKK(1, 1) model
-#'
-#' @param r data input
-#' @param init_values initial values for BEKK parameter
-#' @param QML_t_ratios Logical. If QML_t_ratios = 'TRUE', the t-ratios of the BEKK parameter matrices
-#'                     are exactly calculated via second order derivatives.
-#' @param max_iter maximum number of BHHH algorithm iterations
-#' @param crit determiens the precision of the BHHH algorithm
-#'
-#' @examples
-#' \donttest{
-#'
-#' data(bivariate)
-#' x1 <- bekk(BI, init_values = NULL,
-#' QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
-#'
-#' summary(x1)
-#'
-#' plot(x1)
-#'
-#' }
-#' @export
-
-bekk <- function(r, init_values = NULL, QML_t_ratios = FALSE,
-                 seed = NULL, max_iter = 50, crit = 1e-9, nc = 1, asymmetric=FALSE){
-
-  # Checking for valid input
-  r <- as.matrix(r)
-  if (any(is.na(r))) {
-    stop("\nNAs in y.\n")
-  }
-  if (ncol(r) < 2) {
-    stop("The matrix 'r' should contain at least two variables.")
-  }
-  if (is.null(colnames(r))) {
-    colnames(r) <- paste("y", 1:ncol(r), sep = "")
-  }
-
-
-  N <- ncol(r)
-if(asymmetric==FALSE){
+.bekk <- function(spec, data, QML_t_ratios = FALSE,
+                  seed = NULL, max_iter = 50, crit = 1e-9, nc = 1) {
   if(!is.numeric(init_values)) {
     if (is.null(init_values)) {
       theta <- gridSearch_BEKK(r)
       theta <- theta[[1]]
-  } else if (init_values == 'random') {
+    } else if (init_values == 'random') {
       if(is.null(seed)) {
         seed <- round(runif(nc, 1, 100))
       } else {
         set.seed(seed)
         seed <- round(runif(nc, 1, 100))
       }
-    cat('Generating starting values \n')
+      cat('Generating starting values \n')
       theta_list <- pblapply(seed, random_grid_search_BEKK, r = r,
                              nc = nc,
                              cl =nc)
       max_index <- which.max(sapply(theta_list, '[[', 'best_val'))
       theta <- theta_list[[max_index]]
       theta <- theta[[1]]
-  } else if (init_values == 'simple') {
-    uncond_var <- crossprod(r)/nrow(r)
-    A <- matrix(0, ncol = N, nrow = N)
-    G <- matrix(0, ncol = N, nrow = N)
-    C <- matrix(0, ncol = N, nrow = N)
-    #th0=numeric(2*n^2+n*(n+1)/2)
+    } else if (init_values == 'simple') {
+      uncond_var <- crossprod(r)/nrow(r)
+      A <- matrix(0, ncol = N, nrow = N)
+      G <- matrix(0, ncol = N, nrow = N)
+      C <- matrix(0, ncol = N, nrow = N)
+      #th0=numeric(2*n^2+n*(n+1)/2)
 
-    diag(A) <- 0.3
-    diag(G) <- 0.92
-    diag(C) <- 0.05*diag(uncond_var)
+      diag(A) <- 0.3
+      diag(G) <- 0.92
+      diag(C) <- 0.05*diag(uncond_var)
 
 
-    for (i in 1:N){
-      for (j in seq(i,N)){
+      for (i in 1:N){
+        for (j in seq(i,N)){
 
-        cij <- uncond_var[i, j]/sqrt(uncond_var[i, i]*uncond_var[j, j])
-        C[i,j] <- cij*sqrt(C[i, i]*C[j, j])
-        C[j,i] <- C[i, j]
+          cij <- uncond_var[i, j]/sqrt(uncond_var[i, i]*uncond_var[j, j])
+          C[i,j] <- cij*sqrt(C[i, i]*C[j, j])
+          C[j,i] <- C[i, j]
 
+        }
       }
-    }
 
-    C = t(chol(C))
-    C0 = C[,1]
+      C = t(chol(C))
+      C0 = C[,1]
 
-    if (N > 2) {
-      for (i in 2:(N-1)){
-        C0 = c(C0, C[i:N, i])
+      if (N > 2) {
+        for (i in 2:(N-1)){
+          C0 = c(C0, C[i:N, i])
+        }
       }
-    }
 
-    C0 = c(C0, C[N, N])
+      C0 = c(C0, C[N, N])
 
-    theta = c(C0, c(A), c(G))
+      theta = c(C0, c(A), c(G))
 
     }
   } else {
@@ -168,10 +129,14 @@ if(asymmetric==FALSE){
                  e_t = var_process$e_t,
                  iter = params$iter,
                  likelihood_iter = params$likelihood_iter,
+                 asymmetric = FALSE,
                  data = r)
-  class(result) <- 'bekk'
+  class(result) <- 'bekkFit'
   return(result)
-}else if(asymmetric==TRUE) {
+}
+
+.bekka <- function(spec, data, QML_t_ratios = FALSE,
+                   seed = NULL, max_iter = 50, crit = 1e-9, nc = 1) {
   if(!is.numeric(init_values)) {
     if (is.null(init_values)) {
       theta <- gridSearch_asymmetricBEKK(r)
@@ -307,8 +272,8 @@ if(asymmetric==FALSE){
                  e_t = var_process$e_t,
                  iter = params$iter,
                  likelihood_iter = params$likelihood_iter,
+                 asymmetric = TRUE,
                  data = r)
-  class(result) <- 'asymmetricbekk'
+  class(result) <- 'bekkFit'
   return(result)
-}
 }
