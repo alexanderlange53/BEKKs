@@ -26,7 +26,6 @@ summary.bekk <- function(object, ...) {
   cat("\nG \n")
   print(bekkObject$G_t)
 }
-
 #' @export
 summary.asymmetricbekk <- function(object, ...) {
   bekkObject <- object

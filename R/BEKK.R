@@ -22,7 +22,7 @@
 #' @export
 
 bekk <- function(r, init_values = NULL, QML_t_ratios = FALSE,
-                 seed = NULL, max_iter = 50, crit = 1e-9, nc = 1, asymmetric=FALSE){
+                 seed = NULL, max_iter = 50, crit = 1e-9, nc = 1, asymmetric=FALSE, signs=NULL){
 
   # Checking for valid input
   r <- as.matrix(r)
@@ -172,9 +172,15 @@ if(asymmetric==FALSE){
   class(result) <- 'bekk'
   return(result)
 }else if(asymmetric==TRUE) {
+  if(is.null(signs)){
+    signs=as.matrix(rep(-1,N))
+  }
+  if(nrow(signs)!=N){
+    cat('Dimension of signs does not match dimension of the series \n')
+  }
   if(!is.numeric(init_values)) {
     if (is.null(init_values)) {
-      theta <- gridSearch_asymmetricBEKK(r)
+      theta <- gridSearch_asymmetricBEKK(r,signs)
       theta <- theta[[1]]
     } else if (init_values == 'random' && nc>1) {
       if(is.null(seed) ) {
@@ -185,8 +191,8 @@ if(asymmetric==FALSE){
       }
 
       cat('Generating starting values \n')
-      theta_list <- pblapply(X=seed, FUN=random_grid_search_BEKK, r = r,
-                             nc = nc,cl=cl         )
+      theta_list <- pblapply(X=seed, FUN=random_grid_search_asymmetric_BEKK, r = r,
+                             nc = nc,cl=cl, signs=signs         )
       max_index <- which.max(sapply(theta_list, '[[', 'best_val'))
       theta <- theta_list[[max_index]]
       theta <- theta[[1]]
@@ -199,7 +205,7 @@ if(asymmetric==FALSE){
       }
 
       cat('Generating starting values \n')
-      theta_max <- random_grid_search_BEKK(r=r,seed=seed,nc = nc)
+      theta_max <- random_grid_search_asymmetric_BEKK(r=r,seed=seed,nc = nc, signs=signs)
 
       theta=theta_max$thetaOptim
 
@@ -211,7 +217,7 @@ if(asymmetric==FALSE){
       C <- matrix(0, ncol = N, nrow = N)
       #th0=numeric(2*n^2+n*(n+1)/2)
 
-      diag(A) <- 0.25
+      diag(A) <- 0.2
       diag(B) <- 0.05
       diag(G) <- 0.92
       diag(C) <- 0.05*diag(uncond_var)
@@ -238,7 +244,7 @@ if(asymmetric==FALSE){
 
       C0 = c(C0, C[N, N])
 
-      theta = c(C0, c(A), c(G))
+      theta = c(C0, c(A),c(B), c(G))
 
     }
   } else {
@@ -250,7 +256,7 @@ if(asymmetric==FALSE){
 
   theta <- matrix(theta, ncol =1)
 
-  params <- bhh_asymm_bekk(r, theta, max_iter, crit)
+  params <- bhh_asymm_bekk(r, theta, max_iter, crit, signs)
 
   if (QML_t_ratios == TRUE) {
     tratios <- QML_t_ratios(params$theta, r)
@@ -288,7 +294,7 @@ if(asymmetric==FALSE){
   }
 
   # Final check if BEKK is valid
-  BEKK_valid <- valid_asymm_bekk(param_mat$c0, param_mat$a, param_mat$b, param_mat$g)
+  BEKK_valid <- valid_asymm_bekk(param_mat$c0, param_mat$a, param_mat$b, param_mat$g,r,signs)
 
 
   params$likelihood_iter <- params$likelihood_iter[params$likelihood_iter != 0]
