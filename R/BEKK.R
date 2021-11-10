@@ -161,7 +161,6 @@ if(asymmetric==FALSE){
                  C0_t = tratios_mat$c0,
                  A_t = tratios_mat$a,
                  G_t = tratios_mat$g,
-                 theta = params$theta,
                  log_likelihood = params$likelihood,
                  BEKK_valid = BEKK_valid,
                  sigma_t = sigma_t,

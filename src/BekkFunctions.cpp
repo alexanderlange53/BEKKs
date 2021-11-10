@@ -1217,7 +1217,7 @@ arma::mat hesse_asymm_bekk(arma::mat theta, arma::mat r, arma::mat& signs){
     }
   }
   //Second derivatives for t>1
-
+  arma::mat GGt = arma::kron(g, g).t();
   for (int i=1; i<n;i++){
 
     dHdada =C3* (arma::kron(arma::reshape(arma::eye(N,N),N2,1),arma::kron(r.row(i-1).t()*r.row(i-1),arma::eye(N,N)))*K_commutation)+arma::kron(arma::eye(N2,N2),t_kron_g)*dHdada;

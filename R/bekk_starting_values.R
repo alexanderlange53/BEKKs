@@ -219,5 +219,4 @@ gridSearch_asymmetricBEKK <- function(r,signs) {
 #
 #   return(list(thetaopt,likmax))
 # }
-=======
->>>>>>> master
+
