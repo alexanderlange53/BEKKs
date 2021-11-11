@@ -7,7 +7,7 @@
 #' @export
 
 bekk_sim <- function(spec, nobs) {
-  UseMethod('bekk_fit')
+  UseMethod('bekk_sim')
 }
 
 #' @export
