@@ -26,6 +26,11 @@ bekk_spec <- function(model = list(type = "bekk", asymmetric = FALSE),
 
   specification <- list(model, init_values, signs, N)
   class(specification) <- 'bekkSpec'
+  class(specification)[2] <- model$type
+
+  if (model$asymmetric == TRUE) {
+    class(specification)[2] <- paste(class(specification)[2], 'a', sep = "")
+  }
 
   return(specification)
 

@@ -7,17 +7,29 @@
 #' @export
 
 bekk_sim <- function(spec, nobs) {
+  UseMethod('bekk_fit')
+}
 
-  if (class(spec) == 'bekk') {
-    theta <- spec$theta
-    N <- ncol(spec$C0)
+#' @export
+bekk_sim.bekk <- function(spec, nobs) {
 
-    sim_dat <- simulate_bekk_c(c(theta), nobs, N)
-  } else if (class(spec) == 'bekkSimSpec') {
+  theta <- spec$theta
 
-  } else {
-    stop("The object 'spec' should be of class 'bekk' or 'bekkSimSpec'.")
-  }
+  N <- ncol(spec$C0)
+
+  sim_dat <- simulate_bekk_c(c(theta), nobs, N)
+
 
   return(ts(sim_dat))
 }
+
+# if (inherits(spec, 'bekk')) {
+#   theta <- spec$theta
+#   N <- ncol(spec$C0)
+#
+#   sim_dat <- simulate_bekk_c(c(theta), nobs, N)
+# } else if (class(spec) == 'bekkSimSpec') {
+#
+# } else {
+#   stop("The object 'spec' should be of class 'bekk' or 'bekkSimSpec'.")
+# }
