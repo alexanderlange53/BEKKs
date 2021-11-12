@@ -65,7 +65,7 @@ gridSearch_asymmetricBEKK <- function(r,signs) {
   #th0=numeric(2*n^2+n*(n+1)/2)
 
   diag(A) <- 0.3
-  diag(B) <- 0.0
+  diag(B) <- 0.3
   diag(G) <- 0.92
   diag(C) <- 0.05*diag(uncond_var)
 
@@ -95,15 +95,15 @@ gridSearch_asymmetricBEKK <- function(r,signs) {
     for (j in 1:N) {
       if (i < j) {
         A[i, j] <-  0.03
-        B[i, j] <-  0.01
+        B[i, j] <-  0.03
         if (j == N & i == 1) {
           A[i, j] <-  -0.03
-          B[i, j] <-  0
+          B[i, j] <-  -0.03
         }
         G[i, j] <- -0.03
       } else if (i > j) {
         A[i, j] <- 0.03
-        B[i, j] <- 0.00
+        B[i, j] <- 0.03
         G[i, j] <- 0.03
       }
     }

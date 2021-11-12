@@ -130,11 +130,12 @@ bool valid_bekk(arma::mat& C,arma::mat& A,arma::mat& G){
 // [[Rcpp::export]]
 bool valid_asymm_bekk(arma::mat& C,arma::mat& A, arma::mat& B ,arma::mat& G, arma::mat r, arma::mat signs){
   int n =C.n_cols;
-  int N =C.n_rows;
+  int N =r.n_rows;
   double exp_indicator_value = 0;
   for (int i=0; i<N;i++){
     exp_indicator_value+=indicatorFunction(r.row(i),signs);
   }
+
   exp_indicator_value=exp_indicator_value/N;
 
   arma::mat prod = kron(A,A)+exp_indicator_value*kron(B,B)+kron(G,G);
@@ -147,6 +148,7 @@ bool valid_asymm_bekk(arma::mat& C,arma::mat& A, arma::mat& B ,arma::mat& G, arm
       max=eigvals[i];
     }
   }
+
   if(max >= 1){
     return false;
   }
@@ -233,7 +235,7 @@ double loglike_asymm_bekk(const arma::vec& theta, const arma::mat& r,arma::mat& 
 
 
   arma::mat A = arma::reshape(theta.subvec(index, (index + pow(n, 2)) - 1 ).t(), n, n);
-  arma::mat B = arma::reshape(theta.subvec(index +  pow(n, 2), index +  2*pow(n, 2)-1).t(), n, n);
+  arma::mat B = arma::reshape(theta.subvec(index +  pow(n, 2), index +  2*pow(n, 2) -1).t(), n, n);
   arma::mat G = arma::reshape(theta.subvec(index +  2*pow(n, 2), numb_of_vars-1).t(), n, n);
 
   // check constraints
@@ -386,7 +388,7 @@ arma::mat score_asymm_bekk(const arma::mat& theta, arma::mat& r, arma::mat& sign
   }
   arma::mat a = arma::reshape(theta.rows((N * (N+1)/2), (pow(N, 2) + (N * (N + 1)/2) - 1)), N, N);
   arma::mat b = arma::reshape(theta.rows(pow(N, 2) + (N * (N + 1)/2), (2*pow(N, 2) + (N * (N + 1)/2) - 1)), N, N);
-  arma::mat g = arma::reshape(theta.rows((2*pow(N, 2) + (N * (N + 1)/2)), (3*pow(N, 2) + (N * (N + 1)/2) - 1)), N, N);
+  arma::mat g = arma::reshape(theta.rows(2*pow(N, 2) + (N * (N + 1)/2), (3*pow(N, 2) + (N * (N + 1)/2) - 1)), N, N);
 
   c0=c0.t();
   arma::mat c_full = c0.t() * c0;
@@ -674,7 +676,7 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
   double best_val = loglike_bekk(theta,r);
   //set the seed
   // Generating random values for A, C and G
-  while(l<30000 && x < 30){
+  while(l<10000 && x < 30){
     int counter= 0;
     int diagonal_elements = n;
     int diagonal_counter = 0;
@@ -682,12 +684,12 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
     for (int j=0; j < (n*(n+1)/2);j++){
 
       if(j == counter){
-        theta[j]=  theta_mu[j]+arma::randn()*0.04;
+        theta[j]=  theta_mu[j]+arma::randn()*0.005;
         counter+=diagonal_elements;
         diagonal_elements--;
       }
       else{
-        theta[j]=arma::randn()*0.05+theta_mu[j];
+        theta[j]=arma::randn()*0.001+theta_mu[j];
 
       }
     }
@@ -695,14 +697,14 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
     for (int j=(n*(n+1)/2); j < numb_of_vars;j++){
       if(j == (n*(n+1)/2+diagonal_counter*(n+1)) && j< ((n*(n+1)/2) +n*n)){
         diagonal_counter++;
-        theta[j]= arma::randn()*0.04+theta_mu[j];
+        theta[j]= arma::randn()*0.005+theta_mu[j];
       }
       else if(j == (n*(n+1)/2+n*n+(diagonal_counter-n)*(n+1)) && j>=(n*(n+1)/2+n*n)){
         diagonal_counter++;
-        theta[j]= arma::randn()*0.04+theta_mu[j];
+        theta[j]= arma::randn()*0.005+theta_mu[j];
       }
       else{
-        theta[j]=arma::randn()*0.005+theta_mu[j];
+        theta[j]=arma::randn()*0.0005+theta_mu[j];
       }
     }
 
@@ -732,7 +734,7 @@ Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
        if(l>5000){
          theta_mu=thetaOptim;
          x++;
-         Rcpp::Rcout << l;
+
        }
     }
      }
@@ -757,9 +759,11 @@ Rcpp::List random_grid_search_asymmetric_BEKK(arma::mat r, int seed, int nc, arm
   arma::mat G = arma::zeros(n,n);
 
   int numb_of_vars=3*(pow(n,2))+n*(n+1)/2;
+
   arma::vec theta = arma::zeros(numb_of_vars,1);
   arma::vec thetaOptim=theta;
-  arma::vec theta_mu=theta;
+  arma::vec theta_mu = theta;
+//arma::vec theta_mu=theta;
   int counter= 0;
   int diagonal_elements = n;
   int diagonal_counter = 0;
@@ -778,22 +782,23 @@ Rcpp::List random_grid_search_asymmetric_BEKK(arma::mat r, int seed, int nc, arm
   for (int j=(n*(n+1)/2); j < numb_of_vars;j++){
     if(j == (n*(n+1)/2+diagonal_counter*(n+1)) && j< ((n*(n+1)/2) +n*n)){
       diagonal_counter++;
-      theta_mu[j]=0.1;
+      theta_mu[j]=0.3;
     }
-    else if(j == (n*(n+1)/2+n*n+(diagonal_counter-n)*(n+1)) && j>=(n*(n+1)/2+n*n) && j<(n*(n+1)/2+2*n*n)){
+    if(j == (n*(n+1)/2+n*n+(diagonal_counter-n)*(n+1)) && j>=(n*(n+1)/2+n*n) && j<(n*(n+1)/2+2*n*n)){
       diagonal_counter++;
       theta_mu[j]= 0.3;
     }
-    else if(j == (n*(n+1)/2+2*n*n+(diagonal_counter-n)*(n+1)) && j>=(n*(n+1)/2+2*n*n)){
+    else if(j == (n*(n+1)/2+2*n*n+(diagonal_counter-2*n)*(n+1)) && j>=(n*(n+1)/2+2*n*n)){
       diagonal_counter++;
       theta_mu[j]= 0.92;
     }
   }
 
-  double best_val = loglike_asymm_bekk(theta,r,signs);
+  double best_val = loglike_asymm_bekk(theta_mu,r,signs);
+  thetaOptim=theta_mu;
   //set the seed
   // Generating random values for A, C and G
-  while(l<30000 && m < 30){
+  while(l<10000/log(1+nc) && m<10){
     int counter= 0;
     int diagonal_elements = n;
     int diagonal_counter = 0;
@@ -801,12 +806,12 @@ Rcpp::List random_grid_search_asymmetric_BEKK(arma::mat r, int seed, int nc, arm
     for (int j=0; j < (n*(n+1)/2);j++){
 
       if(j == counter){
-        theta[j]=  theta_mu[j]+arma::randn()*0.02;
+        theta[j]=  theta_mu[j]+arma::randn()*0.005;
         counter+=diagonal_elements;
         diagonal_elements--;
       }
       else{
-        theta[j]=arma::randn()*0.0051+theta_mu[j];
+        theta[j]=arma::randn()*0.0005+theta_mu[j];
 
       }
     }
@@ -814,18 +819,18 @@ Rcpp::List random_grid_search_asymmetric_BEKK(arma::mat r, int seed, int nc, arm
     for (int j=(n*(n+1)/2); j < numb_of_vars;j++){
       if(j == (n*(n+1)/2+diagonal_counter*(n+1)) && j< ((n*(n+1)/2) +n*n)){
         diagonal_counter++;
-        theta[j]= arma::randn()*0.02+theta_mu[j];
+        theta[j]= arma::randn()*0.0001+theta_mu[j];
       }
       else if(j == (n*(n+1)/2+n*n+(diagonal_counter-n)*(n+1)) && j>=(n*(n+1)/2+n*n) && j<((n*(n+1)/2) +2*n*n)){
         diagonal_counter++;
-        theta[j]= arma::randn()*0.02+theta_mu[j];
+        theta[j]= arma::randn()*0.001+theta_mu[j];
       }
       else if(j == (n*(n+1)/2+2*n*n+(diagonal_counter-2*n)*(n+1)) && j>=(n*(n+1)/2+2*n*n)){
         diagonal_counter++;
-        theta[j]= arma::randn()*0.02+theta_mu[j];
+        theta[j]= arma::randn()*0.0001+theta_mu[j];
       }
       else{
-        theta[j]=arma::randn()*0.005+theta_mu[j];
+        theta[j]=arma::randn()*0.00005+theta_mu[j];
       }
     }
 
@@ -839,17 +844,22 @@ Rcpp::List random_grid_search_asymmetric_BEKK(arma::mat r, int seed, int nc, arm
       }
     }
 
-    A = arma::reshape(theta.rows((n * (n+1)/2), (pow(n, 2) + (n * (n + 1)/2) - 1)), n, n);
-    B = arma::reshape(theta.rows(((pow(n, 2) + (n * (n + 1)/2))), (2*pow(n, 2) + (n * (n + 1)/2) - 1)), n, n);
-    G = arma::reshape(theta.rows((2*(pow(n, 2) + (n * (n + 1)/2))), (3*pow(n, 2) + (n * (n + 1)/2) - 1)), n, n);
+    A = arma::reshape(theta.rows((n * (n+1)/2), pow(n, 2) + (n * (n + 1)/2) - 1), n, n);
+    B = arma::reshape(theta.rows(pow(n, 2) + (n * (n + 1)/2), 2*pow(n, 2) + (n * (n + 1)/2) - 1), n, n);
+    G = arma::reshape(theta.rows(2*pow(n, 2) + (n * (n + 1)/2), 3*pow(n, 2) + (n * (n + 1)/2) - 1), n, n);
 
     if(valid_asymm_bekk(C,A,B,G,r,signs)){
       l++;
       double llv=loglike_asymm_bekk(theta,r,signs);
+
       if(llv>best_val){
+
         m++;
         best_val=llv;
         thetaOptim=theta;
+        theta_mu=thetaOptim;
+      }
+      if(l>2000/log(1+nc) && m>=4){
         theta_mu=thetaOptim;
       }
     }

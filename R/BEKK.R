@@ -175,7 +175,7 @@ if(asymmetric==FALSE){
     signs=as.matrix(rep(-1,N))
   }
   if(nrow(signs)!=N){
-    cat('Dimension of signs does not match dimension of the series \n')
+    stop('Dimension of signs does not match dimension of the series \n')
   }
   if(!is.numeric(init_values)) {
     if (is.null(init_values)) {
@@ -183,10 +183,10 @@ if(asymmetric==FALSE){
       theta <- theta[[1]]
     } else if (init_values == 'random' && nc>1) {
       if(is.null(seed) ) {
-        seed <- round(runif(nc, 1, 100))
+        seed <- sample(1:1000,size=nc)
       } else {
         set.seed(seed)
-        seed <- round(runif(nc, 1, 100))
+        seed <- sample(1:1000,size=nc)
       }
 
       cat('Generating starting values \n')
