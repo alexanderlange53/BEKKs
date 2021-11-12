@@ -23,13 +23,15 @@ bekk_sim.bekk <- function(spec, nobs) {
   return(ts(sim_dat))
 }
 
-# if (inherits(spec, 'bekk')) {
-#   theta <- spec$theta
-#   N <- ncol(spec$C0)
-#
-#   sim_dat <- simulate_bekk_c(c(theta), nobs, N)
-# } else if (class(spec) == 'bekkSimSpec') {
-#
-# } else {
-#   stop("The object 'spec' should be of class 'bekk' or 'bekkSimSpec'.")
-# }
+#' @export
+bekk_sim.bekkSpec <- function(spec, nobs) {
+
+  theta <- spec$init_values
+
+  N <- spec$N
+
+  sim_dat <- simulate_bekk_c(c(theta), nobs, N)
+
+
+  return(ts(sim_dat))
+}
