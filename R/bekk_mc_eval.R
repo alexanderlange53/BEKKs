@@ -1,23 +1,20 @@
-bekk_mc_eval <- function(spec, sample_sizes, iter, nc = 1) {
-  if (class(spec) == 'bekk') {
-    theta <- spec$theta
-    N <- ncol(spec$C0)
+bekk_mc_eval <- function(object, spec, sample_sizes, iter, nc = 1) {
+  UseMethod('bekk_mc_eval')
+}
+
+bekk_mc_eval.bekkFit <- function(object, spec, sample_sizes, iter, nc = 1) {
+    theta <- object$theta
+    N <- ncol(object$C0)
     mse <- rep(NA, length(sample_sizes))
     index <- 1
 
     for(j in sample_sizes) {
+      print(paste('Sample size: ', j))
       sim_dat <- vector(mode = "list", iter)
 
-      # for(i in 1:iter) {
-      #   sim_dat[[i]] <- bekk(bekk_sim(spec, j), nc =nc)
-      # }
+      sim_dat <- mclapply(1:iter, function(x){bekk_sim(object, nobs = j)},  mc.cores = nc)
 
-      for(i in 1:iter) {
-        sim_dat[[i]] <- bekk_sim(spec, j)
-      }
-
-      dd <- pblapply(sim_dat, function(x){bekk(x)}, cl = nc)
-
+      dd <- pblapply(sim_dat, function(x){bekk_fit(spec = spec, data = x)}, cl = nc)
 
       mse[index] <- sum(unlist(lapply(dd, RMSE, theta_true = theta)))/iter
       index <- index +1
@@ -27,17 +24,15 @@ bekk_mc_eval <- function(spec, sample_sizes, iter, nc = 1) {
     result <- data.frame(Sample_size = sample_sizes, MSE = mse)
     colnames(result) <- c('Sample', 'MSE')
     result <- list(result)
-    #rownames(result) <- sample_sizes
 
     class(result) <- 'bekkMC'
     return(result)
-
-  } else if (class(spec) == 'bekkSimSpec') {
-
-  } else {
-    stop("The object 'spec' should be of class 'bekk' or 'bekkSimSpec'.")
-  }
 }
+
+bekk_mc_eval.bekkSpec <- function(spec, sample_sizes, iter, nc = 1) {
+
+}
+
 
 RMSE <- function(x, theta_true) {
   theta_est <- x$theta

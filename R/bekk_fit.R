@@ -22,7 +22,7 @@
 #' @export
 
 bekk_fit <- function(spec, data, QML_t_ratios = FALSE,
-                     seed = NULL, max_iter = 50, crit = 1e-9, nc = 1){
+                     seed = NULL, max_iter = 50, crit = 1e-9){
 
   if (!inherits(spec, 'bekkSpec')) {
     stop('Please provide and object of class "bekkSpec" for spec.')
@@ -44,7 +44,7 @@ bekk_fit <- function(spec, data, QML_t_ratios = FALSE,
 
 #' @export
 bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
-                          seed = NULL, max_iter = 50, crit = 1e-9, nc = 1) {
+                          seed = NULL, max_iter = 50, crit = 1e-9) {
 
   init_values <- spec$init_values
   N <- ncol(data)
@@ -61,9 +61,7 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
         seed <- round(runif(nc, 1, 100))
       }
       cat('Generating starting values \n')
-      theta_list <- pblapply(seed, random_grid_search_BEKK, r = data,
-                             nc = nc,
-                             cl =nc)
+      theta_list <- lapply(seed, random_grid_search_BEKK, r = data)
       max_index <- which.max(sapply(theta_list, '[[', 'best_val'))
       theta <- theta_list[[max_index]]
       theta <- theta[[1]]
@@ -202,8 +200,7 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE, N,
       }
 
       cat('Generating starting values \n')
-      theta_list <- pblapply(X=seed, FUN=random_grid_search_BEKK, r = data,
-                             nc = nc,cl=cl         )
+      theta_list <- lapply(X=seed, FUN=random_grid_search_BEKK, r = data)
       max_index <- which.max(sapply(theta_list, '[[', 'best_val'))
       theta <- theta_list[[max_index]]
       theta <- theta[[1]]
