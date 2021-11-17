@@ -13,25 +13,10 @@ bekk_sim <- function(spec, nobs) {
 #' @export
 bekk_sim.bekk <- function(spec, nobs) {
 
-  theta <- spec$theta
+  xx <- process_object(spec)
 
-  N <- ncol(spec$C0)
-
-  sim_dat <- simulate_bekk_c(c(theta), nobs, N)
-
+  sim_dat <- simulate_bekk_c(c(xx$theta), nobs, xx$N)
 
   return(ts(sim_dat))
 }
 
-#' @export
-bekk_sim.bekkSpec <- function(spec, nobs) {
-
-  theta <- spec$init_values
-
-  N <- spec$N
-
-  sim_dat <- simulate_bekk_c(c(theta), nobs, N)
-
-
-  return(ts(sim_dat))
-}

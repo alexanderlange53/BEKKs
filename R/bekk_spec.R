@@ -24,7 +24,7 @@ bekk_spec <- function(model = list(type = "bekk", asymmetric = FALSE),
     }
   }
 
-  specification <- list(model, init_values, signs, N)
+  specification <- list(model = model, init_values = init_values, signs = signs, N = N)
   class(specification) <- 'bekkSpec'
   class(specification)[2] <- model$type
 

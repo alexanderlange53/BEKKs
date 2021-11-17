@@ -2,9 +2,10 @@ bekk_mc_eval <- function(object, spec, sample_sizes, iter, nc = 1) {
   UseMethod('bekk_mc_eval')
 }
 
-bekk_mc_eval.bekkFit <- function(object, spec, sample_sizes, iter, nc = 1) {
-    theta <- object$theta
-    N <- ncol(object$C0)
+bekk_mc_eval.bekk <- function(object, spec, sample_sizes, iter, nc = 1) {
+    xx <- process_object(object)
+    theta <- xx$theta
+
     mse <- rep(NA, length(sample_sizes))
     index <- 1
 
@@ -28,11 +29,6 @@ bekk_mc_eval.bekkFit <- function(object, spec, sample_sizes, iter, nc = 1) {
     class(result) <- 'bekkMC'
     return(result)
 }
-
-bekk_mc_eval.bekkSpec <- function(spec, sample_sizes, iter, nc = 1) {
-
-}
-
 
 RMSE <- function(x, theta_true) {
   theta_est <- x$theta
