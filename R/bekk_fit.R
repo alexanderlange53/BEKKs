@@ -55,10 +55,10 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
       theta <- theta[[1]]
     } else if (init_values == 'random') {
       if(is.null(seed)) {
-        seed <- round(runif(nc, 1, 100))
+        seed <- round(runif(1, 1, 100))
       } else {
         set.seed(seed)
-        seed <- round(runif(nc, 1, 100))
+        seed <- round(runif(1, 1, 100))
       }
       cat('Generating starting values \n')
       theta_list <- lapply(seed, random_grid_search_BEKK, r = data)
@@ -182,7 +182,7 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
 
 #' @export
 bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE, N,
-                   seed = NULL, max_iter = 50, crit = 1e-9, nc = 1) {
+                   seed = NULL, max_iter = 50, crit = 1e-9) {
 
   init_values <- spec$init_values
   N <- ncol(data)
@@ -191,12 +191,12 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE, N,
     if (is.null(init_values)) {
       theta <- gridSearch_asymmetricBEKK(data)
       theta <- theta[[1]]
-    } else if (init_values == 'random' && nc>1) {
+    } else if (init_values == 'random') {
       if(is.null(seed) ) {
-        seed <- round(runif(nc, 1, 100))
+        seed <- round(runif(1, 1, 100))
       } else {
         set.seed(seed)
-        seed <- round(runif(nc, 1, 100))
+        seed <- round(runif(1, 1, 100))
       }
 
       cat('Generating starting values \n')
@@ -204,7 +204,7 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE, N,
       max_index <- which.max(sapply(theta_list, '[[', 'best_val'))
       theta <- theta_list[[max_index]]
       theta <- theta[[1]]
-    } else if (init_values == 'random' && nc==1) {
+    } else if (init_values == 'random') {
       if(is.null(seed) ) {
         seed <- round(runif(1, 1, 100))
       } else {
@@ -213,7 +213,7 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE, N,
       }
 
       cat('Generating starting values \n')
-      theta_max <- random_grid_search_BEKK(r=data,seed=seed,nc = nc)
+      theta_max <- random_grid_search_BEKK(r=data,seed=seed,nc = 1)
 
       theta=theta_max$thetaOptim
 
