@@ -20,7 +20,7 @@ Moreover it can be specified whether the model should be estimated allowing for 
 
 \item{signs}{Vector specifying asymmetry.}
 
-\item{Integer}{specifying the dimension of the BEKK model. Only relevant for \link{bekk_sim}.}
+\item{N}{Integer specifying the dimension of the BEKK model. Only relevant for \link{bekk_sim}.}
 }
 \description{
 BEKK specification method

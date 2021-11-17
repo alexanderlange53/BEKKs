@@ -10,8 +10,7 @@ bekk_fit(
   QML_t_ratios = FALSE,
   seed = NULL,
   max_iter = 50,
-  crit = 1e-09,
-  nc = 1
+  crit = 1e-09
 )
 }
 \arguments{
