@@ -11,9 +11,19 @@ Below find a schematic overview of the package functions and methods.
 
 ![](man/figures/flow.png) 
 
-The main function of the package is `bekk_spec()` which determines the behavior of the subsequent methods.
+The main function of the package is `bekk_spec()` which determines the behavior of the subsequent methods with the most important specifications:
 
-    
+```r
+bekk_spec(
+  model = list(
+    type = "bekk", 
+    asymmetric = FALSE
+    )
+)
+```
+
+The model type by default is a symmetric BEKK(1,1) according to Engle and Kroner (1995). Alterntive specifications are the diagonal BEKK (`type = "dbekk"`) and scalar BEKK (`type = "sbekk"`). All types can be specified as either symmetrical or asymmetrical models.     
+
 ## Installation
 
 ```r
@@ -45,10 +55,11 @@ autoplot(StocksBonds  , facet = TRUE) + theme_bw()
 
 ![](man/figures/Data.png)
 
-We estimate the conditional deviations and correlation   processes via the BEKK(1,1) model
+We estimate the conditional deviations and correlation processes via the symmetric BEKK(1,1) model
 
 ```r
-m1 <- bekk(StocksBonds)
+s1 <- bekk_spec()
+m1 <- bekk_fit(s1, StocksBonds)
 summary(m1)
 
 # BEKK estimation results
