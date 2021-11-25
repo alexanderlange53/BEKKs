@@ -1,3 +1,25 @@
+VaR <- function(x) {
+  UseMethod('VaR')
+}
+
+VaR.bekkFit =  function(x, p = 0.95)
+{
+  alpha = p#.setalphaprob(p)
+
+  columns = ncol(x$data)
+  csd <- extract_csd(x)
+  VaR <- matrix(NA, nrow = nrow(x$data), ncol = ncol(x$data))
+
+  for(column in 1:columns) {
+    r = as.vector(na.omit(x$data[,column]))
+    if (!is.numeric(r)) stop("The selected column is not numeric")
+    m2 =  csd[, column] #centeredmoment(r,2)
+    VaR[, column] = - mean(r) - qnorm(alpha)*m2
+  }
+
+  return(VaR)
+}
+
 VaR_BEKK <- function(theta, r, portfolio_weights){
   #compute H
   nc = ncol(r)
