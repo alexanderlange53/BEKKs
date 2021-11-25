@@ -631,7 +631,7 @@ Rcpp::List  bhh_asymm_bekk(arma::mat& r, const arma::mat& theta, int& max_iter, 
 
 
 //[[Rcpp::export]]
-Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc) {
+Rcpp::List random_grid_search_BEKK(arma::mat r) {
   int n =r.n_cols;
   int N =r.n_rows;
   int l=0;

@@ -186,15 +186,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // random_grid_search_BEKK
-Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc);
-RcppExport SEXP _BEKKs_random_grid_search_BEKK(SEXP rSEXP, SEXP seedSEXP, SEXP ncSEXP) {
+Rcpp::List random_grid_search_BEKK(arma::mat r);
+RcppExport SEXP _BEKKs_random_grid_search_BEKK(SEXP rSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat >::type r(rSEXP);
-    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
-    Rcpp::traits::input_parameter< int >::type nc(ncSEXP);
-    rcpp_result_gen = Rcpp::wrap(random_grid_search_BEKK(r, seed, nc));
+    rcpp_result_gen = Rcpp::wrap(random_grid_search_BEKK(r));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -388,7 +386,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BEKKs_score_asymm_bekk", (DL_FUNC) &_BEKKs_score_asymm_bekk, 3},
     {"_BEKKs_bhh_bekk", (DL_FUNC) &_BEKKs_bhh_bekk, 4},
     {"_BEKKs_bhh_asymm_bekk", (DL_FUNC) &_BEKKs_bhh_asymm_bekk, 5},
-    {"_BEKKs_random_grid_search_BEKK", (DL_FUNC) &_BEKKs_random_grid_search_BEKK, 3},
+    {"_BEKKs_random_grid_search_BEKK", (DL_FUNC) &_BEKKs_random_grid_search_BEKK, 1},
     {"_BEKKs_random_grid_search_asymmetric_BEKK", (DL_FUNC) &_BEKKs_random_grid_search_asymmetric_BEKK, 4},
     {"_BEKKs_sigma_bekk", (DL_FUNC) &_BEKKs_sigma_bekk, 4},
     {"_BEKKs_hesse_bekk", (DL_FUNC) &_BEKKs_hesse_bekk, 2},

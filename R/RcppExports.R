@@ -57,8 +57,8 @@ bhh_asymm_bekk <- function(r, theta, max_iter, crit, signs) {
     .Call('_BEKKs_bhh_asymm_bekk', PACKAGE = 'BEKKs', r, theta, max_iter, crit, signs)
 }
 
-random_grid_search_BEKK <- function(r, seed, nc) {
-    .Call('_BEKKs_random_grid_search_BEKK', PACKAGE = 'BEKKs', r, seed, nc)
+random_grid_search_BEKK <- function(r) {
+    .Call('_BEKKs_random_grid_search_BEKK', PACKAGE = 'BEKKs', r)
 }
 
 random_grid_search_asymmetric_BEKK <- function(r, seed, nc, signs) {

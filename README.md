@@ -59,7 +59,7 @@ We estimate the conditional deviations and correlation processes via the symmetr
 
 ```r
 s1 <- bekk_spec()
-m1 <- bekk_fit(s1, StocksBonds)
+m1 <- bekk_fit(s1,  StocksBonds)
 summary(m1)
 
 # BEKK estimation results
