@@ -1,5 +1,5 @@
 #include <RcppArmadillo.h>
-
+#include "IndicatorFunctions.h"
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::plugins(cpp11)]]
 
@@ -64,12 +64,11 @@ arma::mat simulate_bekka_c(arma::vec theta, const int NoObs, const int n, arma::
   arma::mat innovations(n, NoObs, arma::fill::randn);
 
 
-  double exp_indicator_value = 0;
-  for (int i=0; i<NoObs;i++){
-    exp_indicator_value+=indicatorFunction(innovations.row(i),signs);
-  }
-
-  exp_indicator_value=exp_indicator_value/NoObs;
+  // double exp_indicator_value = 0;
+  // for (int i=0; i<NoObs;i++){
+  //   exp_indicator_value+=indicatorFunction(innovations.row(i),signs);
+  // }
+  //exp_indicator_value=exp_indicator_value/NoObs;
 
   arma::mat C_full = C * C.t();
   arma::mat A = arma::reshape(theta.subvec(index, (index + pow(n, 2) - 1)), n, n);
@@ -81,8 +80,8 @@ arma::mat simulate_bekka_c(arma::vec theta, const int NoObs, const int n, arma::
 
 
   // unconditional variance
-  arma::mat Uncond_var = arma::reshape(arma::inv(arma::eye(pow(n, 2), pow(n, 2)) - arma::trans(arma::kron(A, A)) - exp_indicator_value*arma::trans(arma::kron(B, B))- arma::trans(arma::kron(G, G))) * arma::vectorise(C_full), n, n);
-
+  arma::mat Uncond_var = arma::reshape(arma::inv(arma::eye(pow(n, 2), pow(n, 2)) - arma::trans(arma::kron(A, A)) - arma::trans(arma::kron(B, B))/pow(n,2)- arma::trans(arma::kron(G, G))) * arma::vectorise(C_full), n, n);
+  Rcpp::Rcout << indicatorFunction(innovations.col(0).t(),signs);
   arma::mat H = Uncond_var;
   arma::mat h_dec = arma::chol(H).t();
 
@@ -91,6 +90,7 @@ arma::mat simulate_bekka_c(arma::vec theta, const int NoObs, const int n, arma::
 
   for(int i = 1; i < NoObs; i++){
     H = C_full + At * series.col(i-1) * series.col(i-1).t() * A + indicatorFunction(series.col(i-1).t(),signs)*Bt * series.col(i-1) * series.col(i-1).t() * B + Gt * H * G;
+
     h_dec = arma::chol(H).t();
     series.col(i) = h_dec * innovations.col(i);
   }
