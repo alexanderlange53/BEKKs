@@ -1,5 +1,7 @@
 #include <RcppArmadillo.h>
+
 #include "IndicatorFunctions.h"
+
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::plugins(cpp11)]]
 
@@ -81,7 +83,7 @@ arma::mat simulate_bekka_c(arma::vec theta, const int NoObs, const int n, arma::
 
   // unconditional variance
   arma::mat Uncond_var = arma::reshape(arma::inv(arma::eye(pow(n, 2), pow(n, 2)) - arma::trans(arma::kron(A, A)) - arma::trans(arma::kron(B, B))/pow(n,2)- arma::trans(arma::kron(G, G))) * arma::vectorise(C_full), n, n);
-  Rcpp::Rcout << indicatorFunction(innovations.col(0).t(),signs);
+
   arma::mat H = Uncond_var;
   arma::mat h_dec = arma::chol(H).t();
 

@@ -1,5 +1,7 @@
 #include <RcppArmadillo.h>
-//#include "IndicatorFunctions.cpp"
+#include "IndicatorFunctions.h"
+
+
 
 
 // [[Rcpp::depends(RcppArmadillo)]]
