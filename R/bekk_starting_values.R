@@ -54,7 +54,7 @@ gridSearch_BEKK <- function(r) {
 
 }
 
-gridSearch_asymmetricBEKK <- function(r,signs) {
+gridSearch_asymmetricBEKK <- function(r, signs) {
   N  <- ncol(r)
 
   uncond_var <- crossprod(r)/nrow(r)

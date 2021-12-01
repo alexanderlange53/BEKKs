@@ -7,9 +7,22 @@ Modelling conditional volatilities and correlations among multivariate time seri
 
 The package 'BEKKs' contains functions and methods for a careful analysis, estimation and forecasting of financial asset returns dynamics, and the construction and evaluation of financial portfolios. Modelling correlations and covarainces is important to determine portfolios with focus on hedging and asset specialization strategies, as well as to forecast value-at-risk (VaR) thresholds. 
 
-The cornerstone functions to estimate correlation and covaraince processes are
+Below find a schematic overview of the package functions and methods.
 
--   `bekk()` the BEKK(1,1) model by Engle and Kroner (1995).
+![](man/figures/flow.png) 
+
+The main function of the package is `bekk_spec()` which determines the behavior of the subsequent methods with the most important specifications:
+
+```r
+bekk_spec(
+  model = list(
+    type = "bekk", 
+    asymmetric = FALSE
+    )
+)
+```
+
+The model type by default is a symmetric BEKK(1,1) according to Engle and Kroner (1995). Alterntive specifications are the diagonal BEKK (`type = "dbekk"`) and scalar BEKK (`type = "sbekk"`). All types can be specified as either symmetrical or asymmetrical models.     
 
 ## Installation
 
@@ -42,10 +55,11 @@ autoplot(StocksBonds  , facet = TRUE) + theme_bw()
 
 ![](man/figures/Data.png)
 
-We estimate the conditional deviations and correlation processes via the BEKK(1,1) model
+We estimate the conditional deviations and correlation processes via the symmetric BEKK(1,1) model
 
 ```r
-m1 <- bekk(StocksBonds)
+s1 <- bekk_spec()
+m1 <- bekk_fit(s1,  StocksBonds)
 summary(m1)
 
 # BEKK estimation results

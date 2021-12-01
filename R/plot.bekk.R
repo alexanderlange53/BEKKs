@@ -1,8 +1,7 @@
 #' @import ggplot2
-#' @method plot bekk
 #' @export
 
-plot.bekk <- function(x, diagnostic = FALSE, ...){
+plot.bekkFit <- function(x, diagnostic = FALSE, ...){
 
   if (diagnostic == FALSE) {
     trianglePlotGrid <- function(plots){

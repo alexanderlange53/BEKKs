@@ -11,18 +11,6 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// indicatorFunction
-int indicatorFunction(arma::mat r, arma::mat signs);
-RcppExport SEXP _BEKKs_indicatorFunction(SEXP rSEXP, SEXP signsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type r(rSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type signs(signsSEXP);
-    rcpp_result_gen = Rcpp::wrap(indicatorFunction(r, signs));
-    return rcpp_result_gen;
-END_RCPP
-}
 // set_seed
 void set_seed(double seed);
 RcppExport SEXP _BEKKs_set_seed(SEXP seedSEXP) {
@@ -186,15 +174,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // random_grid_search_BEKK
-Rcpp::List random_grid_search_BEKK(arma::mat r, int seed, int nc);
-RcppExport SEXP _BEKKs_random_grid_search_BEKK(SEXP rSEXP, SEXP seedSEXP, SEXP ncSEXP) {
+Rcpp::List random_grid_search_BEKK(arma::mat r);
+RcppExport SEXP _BEKKs_random_grid_search_BEKK(SEXP rSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat >::type r(rSEXP);
-    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
-    Rcpp::traits::input_parameter< int >::type nc(ncSEXP);
-    rcpp_result_gen = Rcpp::wrap(random_grid_search_BEKK(r, seed, nc));
+    rcpp_result_gen = Rcpp::wrap(random_grid_search_BEKK(r));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -223,6 +209,22 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::mat& >::type A(ASEXP);
     Rcpp::traits::input_parameter< arma::mat& >::type G(GSEXP);
     rcpp_result_gen = Rcpp::wrap(sigma_bekk(r, C, A, G));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sigma_bekk_asymm
+Rcpp::List sigma_bekk_asymm(arma::mat& r, arma::mat& C, arma::mat& A, arma::mat& B, arma::mat& G, arma::mat signs);
+RcppExport SEXP _BEKKs_sigma_bekk_asymm(SEXP rSEXP, SEXP CSEXP, SEXP ASEXP, SEXP BSEXP, SEXP GSEXP, SEXP signsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type r(rSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type C(CSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type A(ASEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type B(BSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type G(GSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type signs(signsSEXP);
+    rcpp_result_gen = Rcpp::wrap(sigma_bekk_asymm(r, C, A, B, G, signs));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -272,6 +274,20 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type NoObs(NoObsSEXP);
     Rcpp::traits::input_parameter< const int >::type n(nSEXP);
     rcpp_result_gen = Rcpp::wrap(simulate_bekk_c(theta, NoObs, n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// simulate_bekka_c
+arma::mat simulate_bekka_c(arma::vec theta, const int NoObs, const int n, arma::vec signs);
+RcppExport SEXP _BEKKs_simulate_bekka_c(SEXP thetaSEXP, SEXP NoObsSEXP, SEXP nSEXP, SEXP signsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< const int >::type NoObs(NoObsSEXP);
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type signs(signsSEXP);
+    rcpp_result_gen = Rcpp::wrap(simulate_bekka_c(theta, NoObs, n, signs));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -360,6 +376,80 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// indicatorFunction
+inline int indicatorFunction(arma::mat r, arma::mat signs);
+RcppExport SEXP _BEKKs_indicatorFunction(SEXP rSEXP, SEXP signsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type r(rSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type signs(signsSEXP);
+    rcpp_result_gen = Rcpp::wrap(indicatorFunction(r, signs));
+    return rcpp_result_gen;
+END_RCPP
+}
+// valid_scalar_bekk
+bool valid_scalar_bekk(double a, double b);
+RcppExport SEXP _BEKKs_valid_scalar_bekk(SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< double >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(valid_scalar_bekk(a, b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// loglike_scalar_bekk
+double loglike_scalar_bekk(const arma::vec& theta, const arma::mat& r);
+RcppExport SEXP _BEKKs_loglike_scalar_bekk(SEXP thetaSEXP, SEXP rSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type r(rSEXP);
+    rcpp_result_gen = Rcpp::wrap(loglike_scalar_bekk(theta, r));
+    return rcpp_result_gen;
+END_RCPP
+}
+// score_scalar_bekk
+arma::mat score_scalar_bekk(const arma::mat& theta, arma::mat& r);
+RcppExport SEXP _BEKKs_score_scalar_bekk(SEXP thetaSEXP, SEXP rSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type r(rSEXP);
+    rcpp_result_gen = Rcpp::wrap(score_scalar_bekk(theta, r));
+    return rcpp_result_gen;
+END_RCPP
+}
+// bhh_scalar_bekk
+Rcpp::List bhh_scalar_bekk(arma::mat& r, const arma::mat& theta, int& max_iter, double& crit);
+RcppExport SEXP _BEKKs_bhh_scalar_bekk(SEXP rSEXP, SEXP thetaSEXP, SEXP max_iterSEXP, SEXP critSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type r(rSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< int& >::type max_iter(max_iterSEXP);
+    Rcpp::traits::input_parameter< double& >::type crit(critSEXP);
+    rcpp_result_gen = Rcpp::wrap(bhh_scalar_bekk(r, theta, max_iter, crit));
+    return rcpp_result_gen;
+END_RCPP
+}
+// hesse_scalar_bekk
+arma::mat hesse_scalar_bekk(arma::mat theta, arma::mat r);
+RcppExport SEXP _BEKKs_hesse_scalar_bekk(SEXP thetaSEXP, SEXP rSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type r(rSEXP);
+    rcpp_result_gen = Rcpp::wrap(hesse_scalar_bekk(theta, r));
+    return rcpp_result_gen;
+END_RCPP
+}
 // YLagCr
 arma::mat YLagCr(arma::mat y, int p);
 RcppExport SEXP _BEKKs_YLagCr(SEXP ySEXP, SEXP pSEXP) {
@@ -374,7 +464,6 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_BEKKs_indicatorFunction", (DL_FUNC) &_BEKKs_indicatorFunction, 2},
     {"_BEKKs_set_seed", (DL_FUNC) &_BEKKs_set_seed, 1},
     {"_BEKKs_elimination_mat", (DL_FUNC) &_BEKKs_elimination_mat, 1},
     {"_BEKKs_commutation_mat", (DL_FUNC) &_BEKKs_commutation_mat, 1},
@@ -388,18 +477,26 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BEKKs_score_asymm_bekk", (DL_FUNC) &_BEKKs_score_asymm_bekk, 3},
     {"_BEKKs_bhh_bekk", (DL_FUNC) &_BEKKs_bhh_bekk, 4},
     {"_BEKKs_bhh_asymm_bekk", (DL_FUNC) &_BEKKs_bhh_asymm_bekk, 5},
-    {"_BEKKs_random_grid_search_BEKK", (DL_FUNC) &_BEKKs_random_grid_search_BEKK, 3},
+    {"_BEKKs_random_grid_search_BEKK", (DL_FUNC) &_BEKKs_random_grid_search_BEKK, 1},
     {"_BEKKs_random_grid_search_asymmetric_BEKK", (DL_FUNC) &_BEKKs_random_grid_search_asymmetric_BEKK, 4},
     {"_BEKKs_sigma_bekk", (DL_FUNC) &_BEKKs_sigma_bekk, 4},
+    {"_BEKKs_sigma_bekk_asymm", (DL_FUNC) &_BEKKs_sigma_bekk_asymm, 6},
     {"_BEKKs_hesse_bekk", (DL_FUNC) &_BEKKs_hesse_bekk, 2},
     {"_BEKKs_hesse_asymm_bekk", (DL_FUNC) &_BEKKs_hesse_asymm_bekk, 3},
     {"_BEKKs_eigen_value_decomposition", (DL_FUNC) &_BEKKs_eigen_value_decomposition, 1},
     {"_BEKKs_simulate_bekk_c", (DL_FUNC) &_BEKKs_simulate_bekk_c, 3},
+    {"_BEKKs_simulate_bekka_c", (DL_FUNC) &_BEKKs_simulate_bekka_c, 4},
     {"_BEKKs_SigmaLagCr", (DL_FUNC) &_BEKKs_SigmaLagCr, 5},
     {"_BEKKs_GarchVariance", (DL_FUNC) &_BEKKs_GarchVariance, 6},
     {"_BEKKs_ScoreGarch", (DL_FUNC) &_BEKKs_ScoreGarch, 7},
     {"_BEKKs_LikelihoodGarch", (DL_FUNC) &_BEKKs_LikelihoodGarch, 7},
     {"_BEKKs_BhhhGarch", (DL_FUNC) &_BEKKs_BhhhGarch, 10},
+    {"_BEKKs_indicatorFunction", (DL_FUNC) &_BEKKs_indicatorFunction, 2},
+    {"_BEKKs_valid_scalar_bekk", (DL_FUNC) &_BEKKs_valid_scalar_bekk, 2},
+    {"_BEKKs_loglike_scalar_bekk", (DL_FUNC) &_BEKKs_loglike_scalar_bekk, 2},
+    {"_BEKKs_score_scalar_bekk", (DL_FUNC) &_BEKKs_score_scalar_bekk, 2},
+    {"_BEKKs_bhh_scalar_bekk", (DL_FUNC) &_BEKKs_bhh_scalar_bekk, 4},
+    {"_BEKKs_hesse_scalar_bekk", (DL_FUNC) &_BEKKs_hesse_scalar_bekk, 2},
     {"_BEKKs_YLagCr", (DL_FUNC) &_BEKKs_YLagCr, 2},
     {NULL, NULL, 0}
 };
