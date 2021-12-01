@@ -43,7 +43,7 @@ QML_t_ratios_asymm <- function(theta, r, signs) {
   s1 <- crossprod(s1)
 
   s2 <- hesse_asymm_bekk(theta, r, signs)
-  s2 <- solve(s2) %% s1 %% solve(s2)
+  s2 <- solve(s2) %*% s1 %*% solve(s2)
 
   s2 <- sqrt(abs(diag(s2)))
 

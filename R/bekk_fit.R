@@ -54,14 +54,18 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
       theta <- gridSearch_BEKK(data)
       theta <- theta[[1]]
     } else if (init_values == 'random') {
-      if(is.null(seed)) {
-        seed <- round(runif(1, 1, 100))
-      } else {
-        set.seed(seed)
-        seed <- round(runif(1, 1, 100))
-      }
+      # if(is.null(seed)) {
+      #   seed <- round(runif(1, 1, 100))
+      # } else {
+      #   set.seed(seed)
+      #   seed <- round(runif(1, 1, 100))
+      # }
       cat('Generating starting values \n')
-      theta_list <- lapply(seed, random_grid_search_BEKK, r = data)
+      theta_list <- vector(mode = "list", 100)
+      for (i in 1:100) {
+        theta_list[[i]] <- random_grid_search_BEKK(data)
+      }
+      #theta_list <- lapply(seed, random_grid_search_BEKK, r = data)
       max_index <- which.max(sapply(theta_list, '[[', 'best_val'))
       theta <- theta_list[[max_index]]
       theta <- theta[[1]]
@@ -99,8 +103,7 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
       C0 = c(C0, C[N, N])
 
       theta = c(C0, c(A), c(G))
-
-    }
+     }
   } else {
     if(length(init_values) != 2 * N^2 + N * (N + 1)/2) {
       stop('Number of initial parameter does not match dimension of data.')
@@ -207,7 +210,7 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE, N,
       }
 
       cat('Generating starting values \n')
-      theta_list <- lapply(X=seed, FUN=random_grid_search_BEKK, r = data)
+      theta_list <- lapply(X=seed, FUN=random_grid_search_asymmetric_BEKK, r = data)
       max_index <- which.max(sapply(theta_list, '[[', 'best_val'))
       theta <- theta_list[[max_index]]
       theta <- theta[[1]]
