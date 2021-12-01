@@ -187,9 +187,16 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE, N,
   init_values <- spec$init_values
   N <- ncol(data)
 
+  if(is.null(spec$model$signs)){
+    spec$model$signs = matrix(rep(-1, N), ncol = 1)
+  }
+  if(length(spec$model$signs) != N){
+    stop('Length of "signs" does not match dimension of data.')
+  }
+
   if(!is.numeric(init_values)) {
     if (is.null(init_values)) {
-      theta <- gridSearch_asymmetricBEKK(data)
+      theta <- gridSearch_asymmetricBEKK(data, spec$model$signs)
       theta <- theta[[1]]
     } else if (init_values == 'random') {
       if(is.null(seed) ) {
@@ -264,10 +271,10 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE, N,
 
   theta <- matrix(theta, ncol =1)
 
-  params <- bhh_asymm_bekk(data, theta, max_iter, crit)
+  params <- bhh_asymm_bekk(data, theta, max_iter, crit, spec$model$signs)
 
   if (QML_t_ratios == TRUE) {
-    tratios <- QML_t_ratios(params$theta, data)
+    tratios <- QML_t_ratios_asymm(params$theta, data, spec$model$signs)
     tratios_mat <- coef_mat_asymm(tratios, N)
   } else {
     tratios_mat <- coef_mat_asymm(params$t_val, N)
@@ -275,7 +282,7 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE, N,
 
   param_mat <- coef_mat_asymm(params$theta, N)
 
-  var_process <- sigma_bekk(data, param_mat$c0, param_mat$a, param_mat$g)
+  var_process <- sigma_bekk_asymm(data, param_mat$c0, param_mat$a, param_mat$b, param_mat$g, spec$model$signs)
   sigma_t <- as.data.frame(var_process$sigma_t)
   colnames(sigma_t) <- rep(1, N^2)
 
@@ -294,6 +301,13 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE, N,
     }
   }
 
+  for (i in 1:nrow(sigma_t)) {
+    tm <- matrix(unlist(sigma_t[i,]), N, N, byrow = T)
+    tm2 <- sqrt(solve(diag(diag(tm))))%*%tm%*%sqrt(solve(diag(diag(tm))))
+    diag(tm2) <- sqrt(diag(tm))
+    sigma_t[i,] <- c(tm2)
+  }
+
   elim <- elimination_mat(N)
   sigma_t <- sigma_t[, which(colSums(elim) == 1)]
 
@@ -302,7 +316,7 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE, N,
   }
 
   # Final check if BEKK is valid
-  BEKK_valid <- valid_asymm_bekk(param_mat$c0, param_mat$a, param_mat$b, param_mat$g)
+  BEKK_valid <- valid_asymm_bekk(param_mat$c0, param_mat$a, param_mat$b, param_mat$g, data, spec$model$signs)
 
 
   params$likelihood_iter <- params$likelihood_iter[params$likelihood_iter != 0]

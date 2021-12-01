@@ -65,6 +65,10 @@ sigma_bekk <- function(r, C, A, G) {
     .Call('_BEKKs_sigma_bekk', PACKAGE = 'BEKKs', r, C, A, G)
 }
 
+sigma_bekk_asymm <- function(r, C, A, B, G, signs) {
+    .Call('_BEKKs_sigma_bekk_asymm', PACKAGE = 'BEKKs', r, C, A, B, G, signs)
+}
+
 hesse_bekk <- function(theta, r) {
     .Call('_BEKKs_hesse_bekk', PACKAGE = 'BEKKs', theta, r)
 }

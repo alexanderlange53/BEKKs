@@ -24,6 +24,7 @@ bekk_spec <- function(model = list(type = "bekk", asymmetric = FALSE),
     }
     if(length(init_values) != 3 * N^2 + N * (N + 1)/2 & type == "bekk"  & asymmetric == TRUE) {
       stop('Number of initial parameter does not match dimension of data and model.')
+    }
   }
 
   specification <- list(model = model, init_values = init_values, signs = signs, N = N)
@@ -31,18 +32,17 @@ bekk_spec <- function(model = list(type = "bekk", asymmetric = FALSE),
   class(specification)[2] <- model$type
 
   if (model$asymmetric == TRUE) {
-    if(is.null(model$signs)){
-      model$signs = rep(-1,N)
+
+    if (!is.null(signs)) {
+      signs <- matrix(signs, ncol = 1)
+      if(any(abs(signs) != 1)){
+        stop('Elements of "signs" must be either "1" or "-1".')
+      }
     }
-    if(any(abs(signs)!=1)){
-      stop('Elements of "signs" must be either "1" or "-1".')
-    }
-    if(length(model$signs)!=N){
-      stop('Length of "signs" does not match dimension of data.')
-    }
+
+    specification$model$signs <- signs
     class(specification)[2] <- paste(class(specification)[2], 'a', sep = "")
   }
 
   return(specification)
-}
 }

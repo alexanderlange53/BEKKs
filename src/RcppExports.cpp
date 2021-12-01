@@ -212,6 +212,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// sigma_bekk_asymm
+Rcpp::List sigma_bekk_asymm(arma::mat& r, arma::mat& C, arma::mat& A, arma::mat& B, arma::mat& G, arma::mat signs);
+RcppExport SEXP _BEKKs_sigma_bekk_asymm(SEXP rSEXP, SEXP CSEXP, SEXP ASEXP, SEXP BSEXP, SEXP GSEXP, SEXP signsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type r(rSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type C(CSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type A(ASEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type B(BSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type G(GSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type signs(signsSEXP);
+    rcpp_result_gen = Rcpp::wrap(sigma_bekk_asymm(r, C, A, B, G, signs));
+    return rcpp_result_gen;
+END_RCPP
+}
 // hesse_bekk
 arma::mat hesse_bekk(arma::mat theta, arma::mat r);
 RcppExport SEXP _BEKKs_hesse_bekk(SEXP thetaSEXP, SEXP rSEXP) {
@@ -464,6 +480,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BEKKs_random_grid_search_BEKK", (DL_FUNC) &_BEKKs_random_grid_search_BEKK, 1},
     {"_BEKKs_random_grid_search_asymmetric_BEKK", (DL_FUNC) &_BEKKs_random_grid_search_asymmetric_BEKK, 4},
     {"_BEKKs_sigma_bekk", (DL_FUNC) &_BEKKs_sigma_bekk, 4},
+    {"_BEKKs_sigma_bekk_asymm", (DL_FUNC) &_BEKKs_sigma_bekk_asymm, 6},
     {"_BEKKs_hesse_bekk", (DL_FUNC) &_BEKKs_hesse_bekk, 2},
     {"_BEKKs_hesse_asymm_bekk", (DL_FUNC) &_BEKKs_hesse_asymm_bekk, 3},
     {"_BEKKs_eigen_value_decomposition", (DL_FUNC) &_BEKKs_eigen_value_decomposition, 1},
