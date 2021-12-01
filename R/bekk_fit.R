@@ -214,19 +214,6 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE, N,
       max_index <- which.max(sapply(theta_list, '[[', 'best_val'))
       theta <- theta_list[[max_index]]
       theta <- theta[[1]]
-    } else if (init_values == 'random') {
-      # if(is.null(seed) ) {
-      #   seed <- round(runif(1, 1, 100))
-      # } else {
-      #   set.seed(seed)
-      #   seed <- round(runif(1, 1, 100))
-      # }
-      #
-      # cat('Generating starting values \n')
-      # theta_max <- random_grid_search_BEKK(r=data,seed=seed,nc = 1)
-      #
-      # theta=theta_max$thetaOptim
-
     } else if (init_values == 'simple') {
       uncond_var <- crossprod(data)/nrow(data)
       A <- matrix(0, ncol = N, nrow = N)

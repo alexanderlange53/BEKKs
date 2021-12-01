@@ -9,7 +9,7 @@ bekk_mc_eval <- function(object, spec, sample_sizes, iter, nc = 1) {
     print(paste('Sample size: ', j))
     sim_dat <- vector(mode = "list", iter)
 
-    sim_dat <- mclapply(1:iter, function(x){bekk_sim(object, nobs = j)},  mc.cores = nc)
+    sim_dat <- mclapply(1:iter, function(x){bekk_sim(object, nobs = j)},  mc.cores = 1)
 
     dd <- pblapply(sim_dat, function(x){bekk_fit(spec = spec, data = x)}, cl = nc)
 
