@@ -66,9 +66,9 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
       #   theta_list[[i]] <- random_grid_search_BEKK(data)
       # }
       #theta_list <- lapply(seed, random_grid_search_BEKK, r = data)
-      max_index <- which.max(sapply(theta_list, '[[', 'best_val'))
-      theta <- theta_list[[max_index]]
-      theta <- theta[[1]]
+      # max_index <- which.max(sapply(theta_list, '[[', 'best_val'))
+      # theta <- theta_list[[max_index]]
+      # theta <- theta[[1]]
     } else if (init_values == 'simple') {
       uncond_var <- crossprod(data)/nrow(data)
       A <- matrix(0, ncol = N, nrow = N)
