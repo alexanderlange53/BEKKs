@@ -60,11 +60,11 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
       #   set.seed(seed)
       #   seed <- round(runif(1, 1, 100))
       # }
-      cat('Generating starting values \n')
-      theta_list <- vector(mode = "list", 100)
-      for (i in 1:100) {
-        theta_list[[i]] <- random_grid_search_BEKK(data)
-      }
+      # cat('Generating starting values \n')
+      # theta_list <- vector(mode = "list", 100)
+      # for (i in 1:100) {
+      #   theta_list[[i]] <- random_grid_search_BEKK(data)
+      # }
       #theta_list <- lapply(seed, random_grid_search_BEKK, r = data)
       max_index <- which.max(sapply(theta_list, '[[', 'best_val'))
       theta <- theta_list[[max_index]]

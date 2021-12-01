@@ -5,6 +5,6 @@ test_that("Log-likelihood works with 2-dimensional sample data", {
   theta <- matrix(theta, nrow = 11)
 
 
-  expect_equal(loglike_bekk(theta, data.matrix(BI)), -7596.925)
+  expect_equal(trunc(loglike_bekk(theta, data.matrix(StocksBonds))), -7425)
 })
 

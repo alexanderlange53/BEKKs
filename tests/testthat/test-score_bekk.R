@@ -4,7 +4,7 @@ test_that("score_bekk works with 2-dimensional test data set", {
 
   theta <- matrix(init, nrow = 11)
 
-  score <- score_bekk(theta, data.matrix(BI))
+  score <- score_bekk(theta, data.matrix(StocksBonds))
   score <- sum(score)
-  expect_equal(round(score), -172204)
+  expect_equal(trunc(score), -166954)
 })
