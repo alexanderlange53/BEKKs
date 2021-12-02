@@ -11,7 +11,7 @@ bekk_mc_eval <- function(object, spec, sample_sizes, iter, nc = 1) {
 
     sim_dat <- future_lapply(1:iter, function(x){bekk_sim(object, nobs = j)}, future.seed=TRUE)
 
-    dd <- future_lapply(sim_dat, function(x){bekk_fit(spec = spec, data = x)})
+    dd <- future_lapply(sim_dat, function(x){bekk_fit(spec = spec, data = x)},future.seed=TRUE)
 
     mse[index] <- sum(unlist(lapply(dd, RMSE, theta_true = theta)))/iter
     print(mse[index])

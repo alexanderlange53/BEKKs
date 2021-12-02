@@ -131,6 +131,7 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
 
   param_mat <- coef_mat(params$theta, N)
 
+
   var_process <- sigma_bekk(data, param_mat$c0, param_mat$a, param_mat$g)
   sigma_t <- as.data.frame(var_process$sigma_t)
   colnames(sigma_t) <- rep(1, N^2)
@@ -181,7 +182,9 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
                  log_likelihood = params$likelihood,
                  BEKK_valid = BEKK_valid,
                  sigma_t = sigma_t,
+                 H_t = var_process$sigma_t,
                  e_t = var_process$e_t,
+                 Second_moments_of_residuals = cov(var_process$e_t),
                  iter = params$iter,
                  likelihood_iter = params$likelihood_iter,
                  asymmetric = FALSE,
@@ -329,7 +332,9 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE, N,
                  log_likelihood = params$likelihood,
                  BEKK_valid = BEKK_valid,
                  sigma_t = sigma_t,
+                 H_t = var_process$sigma_t,
                  e_t = var_process$e_t,
+                 Second_moments_of_residuals = cov(var_process$e_t),
                  iter = params$iter,
                  likelihood_iter = params$likelihood_iter,
                  asymmetric = TRUE,
