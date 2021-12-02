@@ -4,7 +4,7 @@
 #' Moreover it can be specified whether the model should be estimated allowing for asymmetric volatility structure.
 #' @param init_values initial values for \href{bekk_fit} during BHHH algorithm. It can be either a numerical vector of suitable dimension, or a character vector i.e. "random" to use a random starting values generator, or
 #'  "simple" for relying on a simple initial values generator based on typical values for BEKK parameter found in the literature. If object from this function is passed to \link{bekk_sim}, init_values are used as parameters for data generating process.
-#' @param signs Vector specifying asymmetry.
+#' @param signs Vector stacking '1s' and '-1s' to specify asymmetry effects to account for. Setting the i-th element of the vector to '1' or '-1'  indicates that the model accounts for additional volatility if the returns of the i-th series are positive ore negative, respectively.
 #' @param N Integer specifying the dimension of the BEKK model. Only relevant for \link{bekk_sim}.
 #'
 #'
