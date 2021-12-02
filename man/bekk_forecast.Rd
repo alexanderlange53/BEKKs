@@ -2,24 +2,24 @@
 % Please edit documentation in R/bekk_forecast.R
 \name{bekk_forecast}
 \alias{bekk_forecast}
-\title{Forecasting conditional volatility with BEKK(1,1) models}
+\title{Forecasting conditional volatilities with BEKK models}
 \usage{
-bekk_forecast(spec, forecast_length = 1)
+bekk_forecast(x, n.ahead = 1)
 }
 \arguments{
-\item{spec}{A fitted bekk model of class bekk from the \link{bekk} function}
+\item{x}{A fitted bekk model of class bekk from the \link{bekk} function}
 
-\item{forecast_length}{Number of periods to forecast conditional volatility. Default is a one-period ahead forecast.}
+\item{n.ahead}{Number of periods to forecast conditional volatility. Default is a one-period ahead forecast.}
 }
 \description{
-Forecasting conditional volatility with BEKK(1,1) models
+Forecasting conditional volatilities with BEKK models
 }
 \examples{
 \donttest{
 
-data(bivariate)
-x1 <- bekk_fit(BI, init_values = NULL,
-QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
+data(StocskBonds)
+obj_spec <- bekk_spec()
+x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 
 summary(x1)
 
