@@ -14,7 +14,7 @@ bekk_fit(
 )
 }
 \arguments{
-\item{spec}{An object of class "bekkSpec" from function \href{bekk_spec()}.}
+\item{spec}{An object of class "bekkSpec" from function \link{bekk_spec}.}
 
 \item{data}{A multivariate data object. Can be a numeric matrix or ts object.}
 
@@ -26,7 +26,7 @@ are exactly calculated via second order derivatives.}
 \item{crit}{Determiens the precision of the BHHH algorithm.}
 }
 \description{
-Method for fitting a variety of BEKK models.
+Method for fitting a variety of N-dimensional BEKK models.
 }
 \details{
 The BEKK optimization routine is based on the Berndt–Hall–Hall–Hausman (BHHH) algorithm and is inspired by the study of Hafner and Herwartz (2008).

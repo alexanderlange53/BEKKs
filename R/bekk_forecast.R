@@ -1,4 +1,4 @@
-#' Forecasting conditional volatility with BEKK(1,1) models
+#' Forecasting conditional volatilities with BEKK models
 #'
 #' @param spec A fitted bekk model of class bekk from the \link{bekk} function
 #' @param forecast_length Number of periods to forecast conditional volatility. Default is a one-period ahead forecast.
@@ -36,10 +36,10 @@ bekk_forecast.bekk <- function(spec, forecast_length = 1) {
   H_t = vector(mode = "list",length=forecast_length+1)
   H_t[[1]] = matrix(xx$H_t[NoBs,],nrow = n, ncol = n)
   current_returns = xx$data[NoBs,]
-  for(i in 1:forecast_length){
-  H_t[[i+1]]=t(xx$C0) %*% xx$C0 + t(xx$A) %*% t(current_returns) %*% current_returns %*% xx$A + t(xx$G) %*% H_t[[i]] %*% xx$G
-  current_returns = t(as.matrix(rnorm(n))) %*% eigen_value_decomposition(H_t[[i+1]])
 
+  for(i in 1:forecast_length){
+    H_t[[i+1]]=t(xx$C0) %*% xx$C0 + t(xx$A) %*% t(current_returns) %*% current_returns %*% xx$A + t(xx$G) %*% H_t[[i]] %*% xx$G
+    current_returns = t(as.matrix(rnorm(n))) %*% eigen_value_decomposition(H_t[[i+1]])
   }
 
   sigma_t = matrix(NA, nrow = forecast_length, ncol = n^2)
