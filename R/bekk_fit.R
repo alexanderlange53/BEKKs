@@ -1,18 +1,25 @@
-#' Estimating BEKK(1, 1) models
+#' Estimating multivariate BEKK-type volatility models
 #'
-#' @param spec object of class "bekkSpec" from function \href{bekk_spec}.
-#' @param data data input
+#' @description Method for fitting a variety of BEKK models.
+#'
+#' @param spec An object of class "bekkSpec" from function \href{bekk_spec()}.
+#' @param data A multivariate data object. Can be a numeric matrix or ts object.
 #' @param QML_t_ratios Logical. If QML_t_ratios = 'TRUE', the t-ratios of the BEKK parameter matrices
 #'                     are exactly calculated via second order derivatives.
-#' @param max_iter maximum number of BHHH algorithm iterations
-#' @param crit determiens the precision of the BHHH algorithm
+#' @param max_iter Maximum number of BHHH algorithm iterations.
+#' @param crit Determiens the precision of the BHHH algorithm.
+#'
+#' @details The BEKK optimization routine is based on the Berndt–Hall–Hall–Hausman (BHHH) algorithm and is inspired by the study of Hafner and Herwartz (2008).
+#' The authors provide analytical formulas for the score and Hessian of several MGARCH models in a QML framework and show that analytical derivations significantly outperform numerical methods.
+#'
+#' @references Hafner and Herwartz (2005). Analytical quasi maximum likelihood inference in multivariate volatility models. Metrika, 67, 219-239.
 #'
 #' @examples
 #' \donttest{
 #'
-#' data(bivariate)
-#' x1 <- bekk_fit(BI, init_values = NULL,
-#' QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
+#' data(StocskBonds)
+#' obj_spec <- bekk_spec()
+#' x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 #'
 #' summary(x1)
 #'
