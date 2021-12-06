@@ -18,7 +18,7 @@
 
 
 bekk_spec <- function(model = list(type = "bekk", asymmetric = FALSE),
-                      init_values = NULL, signs = NULL, N = NULL, compare=FALSE) {
+                      init_values = NULL, nc= 1, signs = NULL, N = NULL, compare=FALSE) {
 
 
   # Checking inputs
@@ -31,7 +31,7 @@ bekk_spec <- function(model = list(type = "bekk", asymmetric = FALSE),
     }
   }
 
-  specification <- list(model = model, init_values = init_values, signs = signs, N = N)
+  specification <- list(model = model, init_values = init_values, signs = signs, N = N, nc=nc)
   class(specification) <- 'bekkSpec'
   class(specification)[2] <- model$type
 
