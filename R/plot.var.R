@@ -3,19 +3,39 @@
 
 plot.var <- function(x, ...) {
 
-  if(is.null(x$portfolio_weights)) {
-    if (inherits(x$bekk$sigma_t, "ts")) {
-      autoplot(x$VaR) + theme_bw() + ylab('VaR')
+  if (any(class(x) == 'bekkFit')) {
+    if(is.null(x$portfolio_weights)) {
+      if (inherits(x$bekk$sigma_t, "ts")) {
+        autoplot(x$VaR) + theme_bw() + ylab('VaR')
+      } else {
+        x$VaR$obs <- 1:nrow(x$VaR)
+        VaR <- melt(x$VaR, id = 'obs')
+        ggplot(VaR) + geom_line(aes(x = obs, y = value)) + theme_bw() + xlab('') + ylab('VaR') + facet_wrap(~variable, scales = 'free_y', ncol = 1)
+      }
     } else {
-      x$VaR$obs <- 1:nrow(x$VaR)
-      VaR <- melt(x$VaR, id = 'obs')
-      ggplot(VaR) + geom_line(aes(x = obs, y = value)) + theme_bw() + xlab('') + ylab('VaR') + facet_wrap(~variable, scales = 'free_y', ncol = 1)
+      if (inherits(x$bekk$sigma_t, "ts")) {
+        autoplot(x$VaR) + theme_bw() + ylab('VaR') + ggtitle('Portfolio VaR')
+      } else {
+        ggplot(x$VaR) + geom_line(aes(x = 1:nrow(x$VaR), y = V1)) + theme_bw() + xlab('') + ylab('VaR') + ggtitle('Portfolio VaR')
+      }
     }
-  } else {
-    if (inherits(x$bekk$sigma_t, "ts")) {
-      autoplot(x$VaR) + theme_bw() + ylab('VaR') + ggtitle('Portfolio VaR')
+  } else if (any(class(x) == 'bekkForecast')) {
+    if(is.null(x$portfolio_weights)) {
+      if (inherits(x$bekk$sigma_t, "ts")) {
+        autoplot(x$VaR) + theme_bw() + ylab('VaR')
+      } else {
+        x$VaR$obs <- 1:nrow(x$VaR)
+        VaR <- melt(x$VaR, id = 'obs')
+        ggplot(VaR) + geom_line(aes(x = obs, y = value)) + theme_bw() + xlab('') + ylab('VaR') + facet_wrap(~variable, scales = 'free_y', ncol = 1)
+      }
     } else {
-      ggplot(x$VaR) + geom_line(aes(x = 1:nrow(x$VaR), y = V1)) + theme_bw() + xlab('') + ylab('VaR') + ggtitle('Portfolio VaR')
+      if (inherits(x$bekk$sigma_t, "ts")) {
+        autoplot(x$VaR) + theme_bw() + ylab('VaR') + ggtitle('Portfolio VaR')
+      } else {
+        ggplot(x$VaR) + geom_line(aes(x = 1:nrow(x$VaR), y = V1)) + theme_bw() + xlab('') + ylab('VaR') + ggtitle('Portfolio VaR')
+      }
     }
   }
+
+
 }

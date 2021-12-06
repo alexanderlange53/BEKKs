@@ -48,7 +48,7 @@ VaR.bekkFit <-  function(x, p = 0.99, portfolio_weights = NULL)
       r = as.vector(na.omit(x$data[,column]))
       if (!is.numeric(r)) stop("The selected column is not numeric")
       m2 =  csd[, column]
-      VaR[, column] = - mean(r) - qnorm(alpha)*m2
+      VaR[, column] = - qnorm(alpha)*m2
       VaR <- as.data.frame(VaR)
 
       for (i in 1:ncol(x$data)) {
@@ -71,6 +71,52 @@ VaR.bekkFit <-  function(x, p = 0.99, portfolio_weights = NULL)
                  p = p,
                  portfolio_weights = portfolio_weights,
                  bekk = x)
-  class(result) <- 'var'
+  class(result) <- c('var', 'bekkFit')
+  return(result)
+}
+
+
+#' @export
+VaR.bekkForecast <-  function(x, p = 0.99, portfolio_weights = NULL)
+{
+  alpha = p
+
+  obj <- x$bekkfit
+  obj$H_t <- rbind(x$bekkfit$H_t, x$H_t_forecast)
+  obj$sigma_t <- rbind(x$bekkfit$sigma_t, x$volatility_forecast)
+
+  if (is.null(portfolio_weights)) {
+    columns = ncol(x$bekkfit$data)
+    csd <- extract_csd(obj)
+    VaR <- matrix(NA, nrow = nrow(x$bekkfit$data) + x$n.ahead, ncol = ncol(x$bekkfit$data))
+
+    for(column in 1:columns) {
+      m2 =  csd[, column]
+      VaR[, column] = - qnorm(alpha)*m2
+      VaR <- as.data.frame(VaR)
+
+      for (i in 1:ncol(x$bekkfit$data)) {
+        colnames(VaR)[i] <- paste('VaR of', colnames(x$bekkfit$data)[i])
+      }
+    }
+  } else {
+    VaR <- matrix(NA, nrow = nrow(x$bekkfit$data) + x$n.ahead, ncol = 1)
+
+    for(i in 1:nrow(obj$H_t)) {
+      VaR[i,] <- -qnorm(alpha)*portfolio_weights%*%eigen_value_decomposition(matrix(obj$H_t[i,], ncol = ncol(x$bekkfit$data)))%*%portfolio_weights
+    }
+    VaR <- as.data.frame(VaR)
+  }
+
+  if (inherits(x$data, "ts")) {
+    VaR <- ts(VaR, start = time(x$bekkfit$data)[1], frequency = frequency(x$bekkfit$data))
+  }
+
+  result <- list(VaR = VaR,
+                 p = p,
+                 portfolio_weights = portfolio_weights,
+                 n.ahead = x$n.ahead,
+                 bekk = x)
+  class(result) <- c('var', 'bekkForecast')
   return(result)
 }

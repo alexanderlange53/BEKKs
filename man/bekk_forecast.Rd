@@ -14,16 +14,3 @@ bekk_forecast(x, n.ahead = 1)
 \description{
 Forecasting conditional volatilities with BEKK models
 }
-\examples{
-\donttest{
-
-data(StocskBonds)
-obj_spec <- bekk_spec()
-x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
-
-summary(x1)
-
-plot(x1)
-
-}
-}

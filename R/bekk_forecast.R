@@ -8,11 +8,9 @@
 #'
 #' data(StocskBonds)
 #' obj_spec <- bekk_spec()
-#' x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
+#' x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)'
 #'
-#' summary(x1)
-#'
-#' plot(x1)
+#' x2 <- bekk_forecast(x1, n.ahead = 1)
 #'
 #' }
 #' @export
@@ -42,7 +40,7 @@ bekk_forecast.bekk <- function(x, n.ahead = 1) {
   }
 
   sigma_t = matrix(NA, nrow = n.ahead, ncol = N^2)
-  for (i in 1: n.ahead){
+  for (i in 1:n.ahead){
       tm2 <- sqrt(solve(diag(diag(H_t[[i]]))))%*%H_t[[i]]%*%sqrt(solve(diag(diag(H_t[[i]]))))
       diag(tm2) <- sqrt(diag(H_t[[i]]))
       sigma_t[i,] <- c(tm2)
@@ -68,12 +66,16 @@ bekk_forecast.bekk <- function(x, n.ahead = 1) {
   elim <- elimination_mat(N)
   sigma_t <- sigma_t[, which(colSums(elim) == 1)]
 
-  #Hier in Zukunft noch VaR Forecasts?
+  H_t_f <- matrix(NA, nrow = n.ahead, ncol = ncol(x$data)^2)
 
-
+  for (i in 1:n.ahead){
+    H_t_f[i, ] <- c(H_t[[i]])
+  }
 
   result <- list(
     volatility_forecast = sigma_t,
+    H_t_forecast = H_t_f,
+    n.ahead = n.ahead,
     bekkfit = x1
   )
   class(result) <- c('bekkForecast', 'bekk')
@@ -120,12 +122,18 @@ bekk_forecast.bekka <- function(x, n.ahead = 1) {
 
   elim <- elimination_mat(N)
   sigma_t <- sigma_t[, which(colSums(elim) == 1)]
-  #Hier in Zukunft noch VaR Forecasts?
 
 
+  H_t_f <- matrix(NA, nrow = n.ahead, ncol = ncol(x$data)^2)
+
+  for (i in 1:n.ahead){
+    H_t_f[i, ] <- c(H_t[[i]])
+  }
 
   result <- list(
     volatility_forecast = sigma_t,
+    H_t_forecast = H_t_f,
+    n.ahead = n.ahead,
     bekkfit = x1
   )
   class(result) <-  c('bekkForecast', 'bekka')
