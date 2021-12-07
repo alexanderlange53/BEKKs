@@ -90,10 +90,12 @@ bekk_forecast.bekka <- function(x, n.ahead = 1) {
   H_t = vector(mode = "list",length=n.ahead+1)
   H_t[[1]] = matrix(x$H_t[NoBs,],nrow = N, ncol = N)
   current_returns = t(x$data[NoBs,])
-
-  for(i in 1:n.ahead){
-    H_t[[i+1]]=t(x$C0) %*% x$C0 + t(x$A) %*% t(current_returns) %*% current_returns %*% x$A + indicatorFunction(as.matrix(current_returns), x$signs) * t(x$B) %*% t(current_returns) %*% current_returns %*% x$B + t(x$G) %*% H_t[[i]] %*% x$G
-    current_returns = t(as.matrix(rnorm(N))) %*% eigen_value_decomposition(H_t[[i+1]])
+  H_t[[2]]=t(x$C0) %*% x$C0 + t(x$A) %*% t(current_returns) %*% current_returns %*% x$A + indicatorFunction(as.matrix(current_returns), x$signs) * t(x$B) %*% t(current_returns) %*% current_returns %*% x$B + t(x$G) %*% H_t[[1]] %*% x$G
+  #Some work left. Expected signs need to be changed 
+  expected_signs=0
+  for(i in 2:n.ahead){
+    H_t[[i+1]]=t(x$C0) %*% x$C0 + t(x$A) %*% H_t[[i+1]]s %*% x$A + expected_signs * t(x$B) %*% H_t[[i+1]] %*% x$B + t(x$G) %*% H_t[[i]] %*% x$G
+  
   }
 
   sigma_t = matrix(NA, nrow = n.ahead, ncol = N^2)
