@@ -30,20 +30,20 @@ bekk_forecast.bekk <- function(x, n.ahead = 1) {
   N <- ncol(x$data)
   NoBs <- nrow(x$data)
   #var_process <- sigma_bekk(xx$data, xx$C0, xx$A, xx$G)
-  H_t = vector(mode = "list",length=n.ahead+1)
-  H_t[[1]] = matrix(x$H_t[NoBs,],nrow = N, ncol = N)
-  current_returns = x$data[NoBs,]
+  H_t <- vector(mode = "list",length = n.ahead+1)
+  H_t[[1]] <- matrix(x$H_t[NoBs,],nrow = N, ncol = N)
+  current_returns <- t(x$data[NoBs,])
 
   for(i in 1:n.ahead){
-    H_t[[i+1]]=t(x$C0) %*% x$C0 + t(x$A) %*% current_returns %*% current_returns %*% x$A + t(x$G) %*% H_t[[i]] %*% x$G
-    current_returns = t(as.matrix(rnorm(N))) %*% eigen_value_decomposition(H_t[[i+1]])
+    H_t[[i+1]] <- t(x$C0) %*% x$C0 + t(x$A) %*% t(current_returns) %*% current_returns %*% x$A + t(x$G) %*% H_t[[i]] %*% x$G
+    current_returns <- t(as.matrix(rnorm(N))) %*% eigen_value_decomposition(H_t[[i+1]])
   }
 
-  sigma_t = matrix(NA, nrow = n.ahead, ncol = N^2)
-  for (i in 1:n.ahead){
+  sigma_t <- matrix(NA, nrow = n.ahead, ncol = N^2)
+  for (i in 2:(n.ahead+1)){
       tm2 <- sqrt(solve(diag(diag(H_t[[i]]))))%*%H_t[[i]]%*%sqrt(solve(diag(diag(H_t[[i]]))))
       diag(tm2) <- sqrt(diag(H_t[[i]]))
-      sigma_t[i,] <- c(tm2)
+      sigma_t[i-1,] <- c(tm2)
   }
 
   colnames(sigma_t) <- rep(1, N^2)
@@ -68,15 +68,15 @@ bekk_forecast.bekk <- function(x, n.ahead = 1) {
 
   H_t_f <- matrix(NA, nrow = n.ahead, ncol = ncol(x$data)^2)
 
-  for (i in 1:n.ahead){
-    H_t_f[i, ] <- c(H_t[[i]])
+  for (i in 2:(n.ahead+1)){
+    H_t_f[i-1, ] <- c(H_t[[i]])
   }
 
   result <- list(
     volatility_forecast = sigma_t,
     H_t_forecast = H_t_f,
     n.ahead = n.ahead,
-    bekkfit = x1
+    bekkfit = x
   )
   class(result) <- c('bekkForecast', 'bekk')
   return(result)
@@ -89,18 +89,18 @@ bekk_forecast.bekka <- function(x, n.ahead = 1) {
   #var_process <- sigma_bekk(xx$data, xx$C0, xx$A, xx$G)
   H_t = vector(mode = "list",length=n.ahead+1)
   H_t[[1]] = matrix(x$H_t[NoBs,],nrow = N, ncol = N)
-  current_returns = x$data[NoBs,]
+  current_returns = t(x$data[NoBs,])
 
   for(i in 1:n.ahead){
-    H_t[[i+1]]=t(x$C0) %*% x$C0 + t(x$A) %*% current_returns %*% current_returns %*% x$A + indicatorFunction(as.matrix(current_returns), x$signs) * t(x$B) %*% t(current_returns) %*% current_returns %*% x$B + t(x$G) %*% H_t[[i]] %*% x$G
+    H_t[[i+1]]=t(x$C0) %*% x$C0 + t(x$A) %*% t(current_returns) %*% current_returns %*% x$A + indicatorFunction(as.matrix(current_returns), x$signs) * t(x$B) %*% t(current_returns) %*% current_returns %*% x$B + t(x$G) %*% H_t[[i]] %*% x$G
     current_returns = t(as.matrix(rnorm(N))) %*% eigen_value_decomposition(H_t[[i+1]])
   }
 
   sigma_t = matrix(NA, nrow = n.ahead, ncol = N^2)
-  for (i in 1: n.ahead){
+  for (i in 1:(n.ahead+1)){
     tm2 <- sqrt(solve(diag(diag(H_t[[i]]))))%*%H_t[[i]]%*%sqrt(solve(diag(diag(H_t[[i]]))))
     diag(tm2) <- sqrt(diag(H_t[[i]]))
-    sigma_t[i,] <- c(tm2)
+    sigma_t[i-1,] <- c(tm2)
   }
 
   colnames(sigma_t) <- rep(1, N^2)
@@ -126,15 +126,15 @@ bekk_forecast.bekka <- function(x, n.ahead = 1) {
 
   H_t_f <- matrix(NA, nrow = n.ahead, ncol = ncol(x$data)^2)
 
-  for (i in 1:n.ahead){
-    H_t_f[i, ] <- c(H_t[[i]])
+  for (i in 1:(n.ahead+1)){
+    H_t_f[i-1, ] <- c(H_t[[i]])
   }
 
   result <- list(
     volatility_forecast = sigma_t,
     H_t_forecast = H_t_f,
     n.ahead = n.ahead,
-    bekkfit = x1
+    bekkfit = x
   )
   class(result) <-  c('bekkForecast', 'bekka')
   return(result)
