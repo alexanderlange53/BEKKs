@@ -36,7 +36,7 @@ bekk_forecast.bekk <- function(x, n.ahead = 1) {
 
   for(i in 1:n.ahead){
     H_t[[i+1]] <- t(x$C0) %*% x$C0 + t(x$A) %*% t(current_returns) %*% current_returns %*% x$A + t(x$G) %*% H_t[[i]] %*% x$G
-    current_returns <- t(as.matrix(rnorm(N))) %*% eigen_value_decomposition(H_t[[i+1]])
+    current_returns <- eigen_value_decomposition(H_t[[i+1]])
   }
 
   sigma_t <- matrix(NA, nrow = n.ahead, ncol = N^2)
