@@ -1,5 +1,6 @@
 #' @import ggplot2
 #' @import From reshape2 melt
+#' @import zoo
 #' @export
 
 plot.var <- function(x, ...) {
@@ -25,10 +26,6 @@ plot.var <- function(x, ...) {
       sample <- x$VaR[1:(nrow(x$VaR)-x$n.ahead),]
       forc <- x$VaR[(nrow(x$VaR)-x$n.ahead+1):nrow(x$VaR),]
 
-      if (inherits(x$bekk$bekkfit$data, "ts")) {
-        autoplot(x$VaR) + theme_bw() + ylab('VaR')
-      } else {
-
         sample$obs <- as.character(1:nrow(sample))
         forc$obs <- as.character((nrow(sample)+1):(nrow(sample)+x$n.ahead))
         sample <- sample[(nrow(sample)-4*x$n.ahead):nrow(sample),]
@@ -41,16 +38,10 @@ plot.var <- function(x, ...) {
         ggplot(VaR, aes(x = obs, y = value, group = type, color = type, linetype = type, shape = type)) + geom_line() + geom_point() + theme_bw() + xlab('') + ylab('VaR') +
           scale_color_manual(values = c('black', 'blue')) + facet_wrap(~variable, scales = 'free_y', ncol = 1) +
           theme(legend.position="bottom", legend.title = element_blank())
-      }
     } else {
       sample <- as.data.frame(x$VaR[1:(nrow(x$VaR)-x$n.ahead),])
       forc <- as.data.frame(x$VaR[(nrow(x$VaR)-x$n.ahead+1):nrow(x$VaR),])
 
-      if (inherits(x$bekk$bekkfit$data, "ts")) {
-
-
-        autoplot(x$VaR) + theme_bw() + ylab('VaR') + ggtitle('Portfolio VaR')
-      } else {
         sample$obs <- as.character(1:nrow(sample))
         forc$obs <- as.character((nrow(sample)+1):(nrow(sample)+x$n.ahead))
         sample <- sample[(nrow(sample)-4*x$n.ahead):nrow(sample),]
@@ -66,7 +57,7 @@ plot.var <- function(x, ...) {
         ggplot(VaR, aes(x = obs, y = value, group = type, color = type, linetype = type, shape = type)) + geom_line() + geom_point() + theme_bw() + xlab('') + ylab('VaR') +
           scale_color_manual(values = c('black', 'blue')) +
           theme(legend.position="bottom", legend.title = element_blank()) + ggtitle('Portfolio VaR')
-      }
+
     }
   }
 
