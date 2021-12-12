@@ -10,7 +10,7 @@
 #' Setting the i-th element of the vector to "1" or "-1" means that the model takes into account additional volatility if the returns of the i-th column in the data matrix are either positive or negative.
 #' If "asymmetric = TRUE", the default is set to "rep(-1, N)" i.e. it is assumed that excess volatility occures for all series if the returns are negative.
 #' @param N Integer specifying the dimension of the BEKK model. Only relevant for \link{bekk_sim}.
-#'
+#' @param compare Boolean specifying if the outcome of an asymmetric model is compared to its symmetric estimation result.
 #'
 #'
 #'
