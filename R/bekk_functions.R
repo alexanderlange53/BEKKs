@@ -5,9 +5,9 @@ process_object <- function(x) {
 process_object.bekkFit <- function(x) {
   theta <- x$theta
   N <- ncol(x$C0)
-
+  signs <- x$signs
   return(list(theta = theta,
-              N = N))
+              N = N, signs=signs))
 }
 
 process_object.bekkSpec <- function(x) {
