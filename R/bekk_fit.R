@@ -124,9 +124,9 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
 
   if (QML_t_ratios == TRUE) {
     tratios <- QML_t_ratios(params$theta, data)
-    tratios_mat <- coef_mat(tratios, N)
+    tratios_mat <- coef_mat(abs(tratios), N)
   } else {
-    tratios_mat <- coef_mat(params$t_val, N)
+    tratios_mat <- coef_mat(abs(params$t_val), N)
   }
 
   param_mat <- coef_mat(params$theta, N)
@@ -280,9 +280,9 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE, N,
 
   if (QML_t_ratios == TRUE) {
     tratios <- QML_t_ratios_asymm(params$theta, data, spec$model$signs)
-    tratios_mat <- coef_mat_asymm(tratios, N)
+    tratios_mat <- coef_mat_asymm(abs(tratios), N)
   } else {
-    tratios_mat <- coef_mat_asymm(params$t_val, N)
+    tratios_mat <- coef_mat_asymm(abs(params$t_val), N)
   }
 
   param_mat <- coef_mat_asymm(params$theta, N)
