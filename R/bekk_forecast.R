@@ -2,6 +2,7 @@
 #'
 #' @param x A fitted bekk model of class bekk from the \link{bekk} function
 #' @param n.ahead Number of periods to forecast conditional volatility. Default is a one-period ahead forecast.
+#' @param KI_niveau Floating point in [0,1] defining the niveau for confidence bands of the conditional volatility forecast. Provided are either 90%, 95% or 99% confidence levels. Default are 95% niveau confidence bands.
 #'
 #' @examples
 #' \donttest{
@@ -14,7 +15,7 @@
 #'
 #' }
 #' @export
-bekk_forecast <- function(x, n.ahead = 1){
+bekk_forecast <- function(x, n.ahead = 1, KI_niveau=0.95){
 
   if (!inherits(x, 'bekkFit')) {
     stop('Please provide and object of class "bekkFit" for "x".')
@@ -26,7 +27,7 @@ bekk_forecast <- function(x, n.ahead = 1){
 }
 
 #' @export
-bekk_forecast.bekk <- function(x, n.ahead = 1) {
+bekk_forecast.bekk <- function(x, n.ahead = 1, KI_niveau=0.95) {
   N <- ncol(x$data)
   NoBs <- nrow(x$data)
   #var_process <- sigma_bekk(xx$data, xx$C0, xx$A, xx$G)
@@ -78,8 +79,17 @@ bekk_forecast.bekk <- function(x, n.ahead = 1) {
   s1_temp = diag(solve(t(score_final) %*% score_final),names=T)
   s1 = sqrt(s1_temp)
 
-  lower_theta = x$theta-1.96*s1
-  upper_theta = x$theta+1.96*s1
+  if(KI_niveau == 0.95){
+  lower_theta = x$theta-1.64*s1
+  upper_theta = x$theta+1.64*s1
+  }
+  else if(KI_niveau == 0.99){
+    lower_theta = x$theta-2.58*s1
+    upper_theta = x$theta+2.58*s1
+  } else{
+    lower_theta = x$theta-1.96*s1
+    upper_theta = x$theta+1.96*s1
+  }
 
   H_t_lower <- vector(mode = "list",length = n.ahead+1)
   H_t_upper <- vector(mode = "list",length = n.ahead+1)
