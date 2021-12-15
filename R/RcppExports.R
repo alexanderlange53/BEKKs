@@ -25,6 +25,10 @@ valid_bekk <- function(C, A, G) {
     .Call('_BEKKs_valid_bekk', PACKAGE = 'BEKKs', C, A, G)
 }
 
+expected_indicator_value <- function(r, signs) {
+    .Call('_BEKKs_expected_indicator_value', PACKAGE = 'BEKKs', r, signs)
+}
+
 valid_asymm_bekk <- function(C, A, B, G, r, signs) {
     .Call('_BEKKs_valid_asymm_bekk', PACKAGE = 'BEKKs', C, A, B, G, r, signs)
 }

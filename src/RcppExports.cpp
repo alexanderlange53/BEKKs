@@ -78,6 +78,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// expected_indicator_value
+double expected_indicator_value(arma::mat r, arma::mat signs);
+RcppExport SEXP _BEKKs_expected_indicator_value(SEXP rSEXP, SEXP signsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type r(rSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type signs(signsSEXP);
+    rcpp_result_gen = Rcpp::wrap(expected_indicator_value(r, signs));
+    return rcpp_result_gen;
+END_RCPP
+}
 // valid_asymm_bekk
 bool valid_asymm_bekk(arma::mat& C, arma::mat& A, arma::mat& B, arma::mat& G, arma::mat r, arma::mat signs);
 RcppExport SEXP _BEKKs_valid_asymm_bekk(SEXP CSEXP, SEXP ASEXP, SEXP BSEXP, SEXP GSEXP, SEXP rSEXP, SEXP signsSEXP) {
@@ -469,6 +481,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BEKKs_duplication_mat", (DL_FUNC) &_BEKKs_duplication_mat, 1},
     {"_BEKKs_inv_gen", (DL_FUNC) &_BEKKs_inv_gen, 1},
     {"_BEKKs_valid_bekk", (DL_FUNC) &_BEKKs_valid_bekk, 3},
+    {"_BEKKs_expected_indicator_value", (DL_FUNC) &_BEKKs_expected_indicator_value, 2},
     {"_BEKKs_valid_asymm_bekk", (DL_FUNC) &_BEKKs_valid_asymm_bekk, 6},
     {"_BEKKs_loglike_bekk", (DL_FUNC) &_BEKKs_loglike_bekk, 2},
     {"_BEKKs_loglike_asymm_bekk", (DL_FUNC) &_BEKKs_loglike_asymm_bekk, 3},
