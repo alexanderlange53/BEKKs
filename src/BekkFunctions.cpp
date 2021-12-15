@@ -117,15 +117,21 @@ bool valid_bekk(arma::mat& C,arma::mat& A,arma::mat& G){
 }
 
 // [[Rcpp::export]]
-bool valid_asymm_bekk(arma::mat& C,arma::mat& A, arma::mat& B ,arma::mat& G, arma::mat r, arma::mat signs){
-  int n =C.n_cols;
+double expected_indicator_value(arma::mat r, arma::mat signs){
   int N =r.n_rows;
   double exp_indicator_value = 0;
   for (int i=0; i<N;i++){
     exp_indicator_value+=indicatorFunction(r.row(i),signs);
   }
-
   exp_indicator_value=exp_indicator_value/N;
+  return exp_indicator_value;
+}
+
+// [[Rcpp::export]]
+bool valid_asymm_bekk(arma::mat& C,arma::mat& A, arma::mat& B ,arma::mat& G, arma::mat r, arma::mat signs){
+  int n =C.n_cols;
+  int N =r.n_rows;
+  double exp_indicator_value = expected_indicator_value(r,signs);
 
   arma::mat prod = kron(A,A)+exp_indicator_value*kron(B,B)+kron(G,G);
 
