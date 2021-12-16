@@ -106,7 +106,7 @@ The summary includes general information on the estimation (see `?bekk_fit`), th
 
 ![](man/figures/est_vola.png)
 
-The estimated conditional covariances can be used, e.g. for risk management to calculate the 99% level VaR according to the Basel regulations. 
+The estimated conditional covariances can be used for risk management purposes, for example, to calculate VaR at the 99% level in accordance with Basel regulations.
 
 ```r
 v1 <- VaR(m1)
