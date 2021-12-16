@@ -22,7 +22,7 @@ bekk_spec(
 )
 ```
 
-The model type by default is a symmetric BEKK(1,1) according to Engle and Kroner (1995). Alterntive specifications are the diagonal BEKK (`type = "dbekk"`) and scalar BEKK (`type = "sbekk"`). All types can be specified as either symmetrical or asymmetrical models.     
+The model type by default is a symmetric BEKK(1,1) according to Engle and Kroner (1995). Alterntive specifications are (forthcoming) the diagonal BEKK (`type = "dbekk"`) and scalar BEKK (`type = "sbekk"`). All types can be specified as either symmetrical or asymmetrical models.     
 
 ## Installation
 
@@ -105,3 +105,21 @@ summary(m1)
 The summary includes general information on the estimation (see `?bekk`), the estimated parameter matrices C, A and G and the corresponding t-values. The estimated volatility and covariance processes can be shown with `plot(m1)`.
 
 ![](man/figures/est_vola.png)
+
+The estimated conditional covariances can be used, e.g. for risk management to calculate the 99% level VaR according to teh Basel regulations. 
+
+```r
+v1 <- VaR(m1)
+plot(v1)
+```
+
+![](man/figures/VaR_in_sample.png)
+
+Alternatively, we can calculate the 99% VaR of a typical portfolio consisting of 30% bonds and 70% stocks:
+
+```r
+portfolio_weights <- c(0.3, 0.7)
+v2 <- VaR(m1, portfolio_weights = portfolio_weights)
+plot(v2)
+```
+![](man/figures/VaR_portfolio3070.png)
