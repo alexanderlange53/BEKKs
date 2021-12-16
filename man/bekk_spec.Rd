@@ -7,6 +7,7 @@
 bekk_spec(
   model = list(type = "bekk", asymmetric = FALSE),
   init_values = NULL,
+  nc = 1,
   signs = NULL,
   N = NULL,
   compare = FALSE
@@ -24,6 +25,8 @@ Setting the i-th element of the vector to "1" or "-1" means that the model takes
 If "asymmetric = TRUE", the default is set to "rep(-1, N)" i.e. it is assumed that excess volatility occures for all series if the returns are negative.}
 
 \item{N}{Integer specifying the dimension of the BEKK model. Only relevant for \link{bekk_sim}.}
+
+\item{compare}{Boolean specifying if the outcome of an asymmetric model is compared to its symmetric estimation result.}
 }
 \description{
 Method for creating a N-dimensional BEKK model specification object prior to fitting and/or simulating.

@@ -4,12 +4,14 @@
 \alias{bekk_forecast}
 \title{Forecasting conditional volatilities with BEKK models}
 \usage{
-bekk_forecast(x, n.ahead = 1)
+bekk_forecast(x, n.ahead = 1, ci = 0.95)
 }
 \arguments{
 \item{x}{A fitted bekk model of class bekk from the \link{bekk} function}
 
 \item{n.ahead}{Number of periods to forecast conditional volatility. Default is a one-period ahead forecast.}
+
+\item{ci}{Floating point in [0,1] defining the niveau for confidence bands of the conditional volatility forecast. Default is 95% niveau confidence bands.}
 }
 \description{
 Forecasting conditional volatilities with BEKK models

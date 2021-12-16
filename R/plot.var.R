@@ -1,5 +1,5 @@
 #' @import ggplot2
-#' @import From reshape2 melt
+#' @import reshape2
 #' @import zoo
 #' @export
 
