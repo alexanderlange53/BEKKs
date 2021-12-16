@@ -1,3 +1,4 @@
+# Funtion to extract conditional standard deviations from bekk_fit object
 extract_csd <- function(x) {
 
   csd <- matrix(NA, nrow = nrow(x$sigma_t), ncol = ncol(x$data))

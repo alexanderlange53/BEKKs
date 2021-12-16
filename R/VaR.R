@@ -99,6 +99,39 @@ VaR.bekkForecast <-  function(x, p = 0.99, portfolio_weights = NULL)
         colnames(VaR)[i] <- paste('VaR of', colnames(x$bekkfit$data)[i])
       }
     }
+
+    # Confidence intervals
+    obj$sigma_t <- rbind(x$bekkfit$sigma_t, x$volatility_lower_conf_band)
+
+    csd_lower <- extract_csd(obj)
+    VaR_lower <- matrix(NA, nrow = nrow(x$bekkfit$data) + x$n.ahead, ncol = ncol(x$bekkfit$data))
+
+    for(column in 1:columns) {
+      m2 =  csd_lower[, column]
+      VaR_lower[, column] = - qnorm(alpha)*m2
+      VaR_lower <- as.data.frame(VaR_lower)
+
+      for (i in 1:ncol(x$bekkfit$data)) {
+        colnames(VaR_lower)[i] <- paste('VaR of', colnames(x$bekkfit$data)[i])
+      }
+    }
+
+    obj$sigma_t <- rbind(x$bekkfit$sigma_t, x$volatility_upper_conf_band)
+
+    csd_upper <- extract_csd(obj)
+    VaR_upper <- matrix(NA, nrow = nrow(x$bekkfit$data) + x$n.ahead, ncol = ncol(x$bekkfit$data))
+
+    for(column in 1:columns) {
+      m2 =  csd_upper[, column]
+      VaR_upper[, column] = - qnorm(alpha)*m2
+      VaR_upper <- as.data.frame(VaR_upper)
+
+      for (i in 1:ncol(x$bekkfit$data)) {
+        colnames(VaR_upper)[i] <- paste('VaR of', colnames(x$bekkfit$data)[i])
+      }
+    }
+
+
   } else {
     VaR <- matrix(NA, nrow = nrow(x$bekkfit$data) + x$n.ahead, ncol = 1)
 
@@ -106,6 +139,19 @@ VaR.bekkForecast <-  function(x, p = 0.99, portfolio_weights = NULL)
       VaR[i,] <- -qnorm(alpha)*portfolio_weights%*%eigen_value_decomposition(matrix(obj$H_t[i,], ncol = ncol(x$bekkfit$data)))%*%portfolio_weights
     }
     VaR <- as.data.frame(VaR)
+
+    # Confidnce intervals
+    VaR_lower <- VaR_upper <- matrix(NA, nrow = nrow(x$bekkfit$data) + x$n.ahead, ncol = 1)
+
+    H_t_lower <- rbind(x$bekkfit$H_t[-nrow(x$bekkfit$H_t),], x$H_t_lower_conf_band)
+    H_t_upper <- rbind(x$bekkfit$H_t[-nrow(x$bekkfit$H_t),], x$H_t_upper_conf_band)
+
+    for(i in 1:nrow(obj$H_t)) {
+      VaR_lower[i,] <- -qnorm(alpha)*portfolio_weights%*%eigen_value_decomposition(matrix(H_t_lower[i,], ncol = ncol(x$bekkfit$data)))%*%portfolio_weights
+      VaR_upper[i,] <- -qnorm(alpha)*portfolio_weights%*%eigen_value_decomposition(matrix(H_t_upper[i,], ncol = ncol(x$bekkfit$data)))%*%portfolio_weights
+    }
+    VaR_lower <- as.data.frame(VaR_lower)
+    VaR_upper <- as.data.frame(VaR_upper)
   }
 
   if (inherits(x$data, "ts")) {
@@ -113,6 +159,8 @@ VaR.bekkForecast <-  function(x, p = 0.99, portfolio_weights = NULL)
   }
 
   result <- list(VaR = VaR,
+                 VaR_lower = VaR_lower,
+                 VaR_upper = VaR_upper,
                  p = p,
                  portfolio_weights = portfolio_weights,
                  n.ahead = x$n.ahead,
