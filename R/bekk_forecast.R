@@ -177,7 +177,7 @@ bekk_forecast.bekka <- function(x, n.ahead = 1, ci = 0.95) {
 
   expected_signs=expected_indicator_value(x$data,x$signs)
   for(i in 2:n.ahead){
-    H_t[[i+1]]=t(x$C0) %*% x$C0 + t(x$A) %*% H_t[[i+1]] %*% x$A + expected_signs * t(x$B) %*% H_t[[i]] %*% x$B + t(x$G) %*% H_t[[i]] %*% x$G
+    H_t[[i+1]]=t(x$C0) %*% x$C0 + t(x$A) %*% H_t[[i]] %*% x$A + expected_signs * t(x$B) %*% H_t[[i]] %*% x$B + t(x$G) %*% H_t[[i]] %*% x$G
 
   }
 
@@ -236,7 +236,7 @@ bekk_forecast.bekka <- function(x, n.ahead = 1, ci = 0.95) {
 
 
   for(i in 1:n.ahead){
-    H_t_lower[[i+1]] <- t(x_lower$C0) %*% x_lower$c0 + t(x_lower$a) %*% t(current_returns) %*% current_returns %*% x_lower$a + expected_signs * t(x_lower$b) %*% H_t_lower[[i]] %*% x_lower$b + t(x_lower$g) %*% H_t[[i]] %*% x_lower$g
+    H_t_lower[[i+1]] <- t(x_lower$c0) %*% x_lower$c0 + t(x_lower$a) %*% t(current_returns) %*% current_returns %*% x_lower$a + expected_signs * t(x_lower$b) %*% H_t_lower[[i]] %*% x_lower$b + t(x_lower$g) %*% H_t[[i]] %*% x_lower$g
     current_returns <- eigen_value_decomposition(H_t_lower[[i+1]])
   }
 
