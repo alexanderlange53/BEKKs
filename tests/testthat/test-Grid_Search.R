@@ -1,4 +1,4 @@
-test_that("Testing GridSearch works with TS_new", {
+test_that("Testing GridSearch works with StocksBonds", {
   set.seed(6723217)
   gs1 <- random_grid_search_BEKK(data.matrix(StocksBonds))
 
