@@ -102,11 +102,11 @@ summary(m1)
 # [2,]   2.154099 409.769546
 ```
 
-The summary includes general information on the estimation (see `?bekk`), the estimated parameter matrices C, A and G and the corresponding t-values. The estimated volatility and covariance processes can be shown with `plot(m1)`.
+The summary includes general information on the estimation (see `?bekk_fit`), the estimated parameter matrices C, A and G and the corresponding t-values. The estimated volatility and covariance processes can be shown with `plot(m1)`.
 
 ![](man/figures/est_vola.png)
 
-The estimated conditional covariances can be used, e.g. for risk management to calculate the 99% level VaR according to teh Basel regulations. 
+The estimated conditional covariances can be used, e.g. for risk management to calculate the 99% level VaR according to the Basel regulations. 
 
 ```r
 v1 <- VaR(m1)
@@ -123,3 +123,13 @@ v2 <- VaR(m1, portfolio_weights = portfolio_weights)
 plot(v2)
 ```
 ![](man/figures/VaR_portfolio3070.png)
+
+To predict the future VaR of the 30/70 portfolio, for example for the next two days, we can use the function `bekk_forceast` and calculate the VaR again.
+
+```r
+f1 <- bekk_forecast(m1, n.ahead = 2)
+
+v3 <- VaR(f1, portfolio_weights = portfolio_weights)
+plot(v3)
+```
+![](man/figures/VaR_portfolio_forecast.png)
