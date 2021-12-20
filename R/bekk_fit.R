@@ -165,6 +165,9 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
   if (inherits(data, "ts")) {
     sigma_t <- ts(sigma_t, start = time(data)[1], frequency = frequency(data))
   }
+  else if(inherits(data, "xts") || inherits(data, "zoo") ){
+    sigma_t <- xts(sigma_t, order.by = time(data))
+  }
 
   # Final check if BEKK is valid
   BEKK_valid <- valid_bekk(param_mat$c0, param_mat$a, param_mat$g)
@@ -318,6 +321,9 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE, N,
 
   if (inherits(data, "ts")) {
     sigma_t <- ts(sigma_t, start = time(data)[1], frequency = frequency(data))
+  }
+  else if(inherits(data, "xts") || inherits(data, "zoo") ){
+    sigma_t <- xts(sigma_t, order.by = time(data))
   }
 
   # Final check if BEKK is valid
