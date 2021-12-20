@@ -29,7 +29,7 @@ plot.bekkFit <- function(x, diagnostic = FALSE, ...){
 
 
 
-    if (inherits(x$sigma_t, "ts")){
+    if (inherits(x$sigma_t, c("ts","zoo","xts")) ){
       plist <- vector(mode = "list", length = ncol(x$sigma_t))
       xxc <- colnames(x$sigma_t)
       for (i in 1:ncol(x$sigma_t)) {
