@@ -35,7 +35,7 @@ The authors provide analytical formulas for the score and Hessian of several MGA
 \examples{
 \donttest{
 
-data(StocskBonds)
+data(StocksBonds)
 obj_spec <- bekk_spec()
 x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 
