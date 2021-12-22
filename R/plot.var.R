@@ -53,15 +53,26 @@ plot.var <- function(x, ...) {
 
       cc <- merge(VaR, cb, all.x = TRUE, all.y = TRUE)
 
-      ggplot(cc, aes(x = obs, y = value)) +
-        geom_line(aes(y = lower, group = type, color = type, linetype = type), na.rm = TRUE) +
-        geom_line(aes(y = upper, group = type, color = type, linetype = type), na.rm = TRUE) +
-        geom_line(aes(group = type, color = type)) +
-        geom_point(aes(shape = type)) +
-        theme_bw() + xlab('') + ylab('VaR') +
-        scale_color_manual(values = c('black', 'blue')) +
-        facet_wrap(~variable, scales = 'free_y', ncol = 1) +
-        theme(legend.position="bottom", legend.title = element_blank())
+      if (x$n.ahead > 1) {
+        ggplot(cc, aes(x = obs, y = value)) +
+          geom_line(aes(y = lower, group = type, color = type, linetype = type), na.rm = TRUE, color = 'red') +
+          geom_line(aes(y = upper, group = type, color = type, linetype = type), na.rm = TRUE, color = 'red') +
+          geom_line(aes(group = type, color = type)) +
+          geom_point(aes(shape = type)) +
+          theme_bw() + xlab('') + ylab('VaR') +
+          scale_color_manual(values = c('black', 'blue')) +
+          facet_wrap(~variable, scales = 'free_y', ncol = 1) +
+          theme(legend.position="bottom", legend.title = element_blank())
+      } else {
+        ggplot(cc, aes(x = obs, y = value)) +
+          geom_line(data = cc[cc$type == 'Sample',], aes(x = obs, y = value, group = type)) +
+          geom_errorbar( aes(ymin=lower, ymax=upper), width=.2, color = 'red') +
+          geom_point(aes(x = obs, y = value, shape = type), size = 2.5) +
+          theme_bw() + xlab('') + ylab('VaR') +
+          scale_color_manual(values = c('black', 'blue')) +
+          facet_wrap(~variable, scales = 'free_y', ncol = 1) +
+          theme(legend.position="bottom", legend.title = element_blank())
+      }
     } else {
       sample <- as.data.frame(x$VaR[1:(nrow(x$VaR)-x$n.ahead),])
       forc <- as.data.frame(x$VaR[(nrow(x$VaR)-x$n.ahead+1):nrow(x$VaR),])
@@ -94,14 +105,25 @@ plot.var <- function(x, ...) {
 
       cc <- merge(VaR, cb, all.x = TRUE, all.y = TRUE)
 
-      ggplot(cc, aes(x = obs, y = value)) +
-        geom_line(aes(y = lower, group = type, linetype = type), color = 'red', na.rm = TRUE) +
-        geom_line(aes(y = upper, group = type, linetype = type), color = 'red', na.rm = TRUE) +
-        geom_line(aes(group = type, color = type)) +
-        geom_point(aes(shape = type)) +
-        theme_bw() + xlab('') + ylab('VaR') +
-        scale_color_manual(values = c('black', 'blue')) +
-        theme(legend.position="bottom", legend.title = element_blank()) + ggtitle('Portfolio VaR')
+      if (x$n.ahead > 1) {
+        ggplot(cc, aes(x = obs, y = value)) +
+          geom_line(aes(y = lower, group = type, linetype = type), color = 'red', na.rm = TRUE) +
+          geom_line(aes(y = upper, group = type, linetype = type), color = 'red', na.rm = TRUE) +
+          geom_line(aes(group = type, color = type)) +
+          geom_point(aes(shape = type)) +
+          theme_bw() + xlab('') + ylab('VaR') +
+          scale_color_manual(values = c('black', 'blue')) +
+          theme(legend.position="bottom", legend.title = element_blank()) + ggtitle('Portfolio VaR')
+      } else {
+        ggplot(cc, aes(x = obs, y = value)) +
+          geom_line(data = cc[cc$type == 'Sample',], aes(x = obs, y = value, group = type)) +
+          geom_errorbar( aes(ymin=lower, ymax=upper), width=.2, color = 'red') +
+          geom_point(aes(x = obs, y = value, shape = type), size = 2.5) +
+          theme_bw() + xlab('') + ylab('VaR') +
+          scale_color_manual(values = c('black', 'blue')) +
+          theme(legend.position="bottom", legend.title = element_blank()) + ggtitle('Portfolio VaR')
+      }
+
 
           }
   }

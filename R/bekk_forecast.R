@@ -33,7 +33,7 @@ bekk_forecast.bekk <- function(x, n.ahead = 1, ci = 0.95) {
   #var_process <- sigma_bekk(xx$data, xx$C0, xx$A, xx$G)
   H_t <- vector(mode = "list",length = n.ahead+1)
   H_t[[1]] <- matrix(x$H_t[NoBs,],nrow = N, ncol = N)
-  current_returns <- t(x$data[NoBs,])
+  current_returns <- matrix(c(x$data[NoBs,]), nrow = 1)
 
   for(i in 1:n.ahead){
     H_t[[i+1]] <- t(x$C0) %*% x$C0 + t(x$A) %*% t(current_returns) %*% current_returns %*% x$A + t(x$G) %*% H_t[[i]] %*% x$G
@@ -89,7 +89,7 @@ bekk_forecast.bekk <- function(x, n.ahead = 1, ci = 0.95) {
   #check if t(x_lower$C0) or x_lower$C0 for sigma_bekk
   H_t_lower[[1]] <- matrix(sigma_bekk(x$data, t(x_lower$c0), x_lower$a, x_lower$g)$sigma_t[NoBs,], nrow = N, ncol = N)
   H_t_upper[[1]] <- matrix(sigma_bekk(x$data,t(x_upper$c0),x_upper$a, x_upper$g)$sigma_t[NoBs,], nrow = N, ncol = N)
-  current_returns <- t(x$data[NoBs,])
+  current_returns <- matrix(c(x$data[NoBs,]), nrow = 1)
 
 
   for(i in 1:n.ahead){
@@ -97,7 +97,7 @@ bekk_forecast.bekk <- function(x, n.ahead = 1, ci = 0.95) {
     current_returns <- eigen_value_decomposition(H_t_lower[[i+1]])
   }
 
-  current_returns <- t(x$data[NoBs,])
+  current_returns <- matrix(c(x$data[NoBs,]), nrow = 1)
 
   for(i in 1:n.ahead){
     H_t_upper[[i+1]] <- t(x_upper$c0) %*% x_upper$c0 + t(x_upper$a) %*% t(current_returns) %*% current_returns %*% x_upper$a + t(x_upper$g) %*% H_t[[i]] %*% x_upper$g
@@ -172,7 +172,8 @@ bekk_forecast.bekka <- function(x, n.ahead = 1, ci = 0.95) {
   #var_process <- sigma_bekk(xx$data, xx$C0, xx$A, xx$G)
   H_t = vector(mode = "list",length=n.ahead+1)
   H_t[[1]] = matrix(x$H_t[NoBs,],nrow = N, ncol = N)
-  current_returns = t(x$data[NoBs,])
+  current_returns <- matrix(c(x$data[NoBs,]), nrow = 1)
+
   H_t[[2]]=t(x$C0) %*% x$C0 + t(x$A) %*% t(current_returns) %*% current_returns %*% x$A + indicatorFunction(as.matrix(current_returns), x$signs) * t(x$B) %*% t(current_returns) %*% current_returns %*% x$B + t(x$G) %*% H_t[[1]] %*% x$G
 
   expected_signs=expected_indicator_value(x$data,x$signs)
@@ -232,7 +233,7 @@ bekk_forecast.bekka <- function(x, n.ahead = 1, ci = 0.95) {
   #check if t(x_lower$C0) or x_lower$C0 for sigma_bekk
   H_t_lower[[1]] <- matrix(sigma_bekk_asymm(x$data, t(x_lower$c0), x_lower$a, x_lower$b, x_lower$g, x$signs)$sigma_t[NoBs,],nrow = N, ncol = N)
   H_t_upper[[1]] <- matrix(sigma_bekk_asymm(x$data, t(x_upper$c0), x_upper$a, x_upper$b, x_upper$g, x$signs)$sigma_t[NoBs,],nrow = N, ncol = N)
-  current_returns <- t(x$data[NoBs,])
+  current_returns <- matrix(c(x$data[NoBs,]), nrow = 1)
 
 
   for(i in 1:n.ahead){
@@ -240,7 +241,7 @@ bekk_forecast.bekka <- function(x, n.ahead = 1, ci = 0.95) {
     current_returns <- eigen_value_decomposition(H_t_lower[[i+1]])
   }
 
-  current_returns <- t(x$data[NoBs,])
+  current_returns <- matrix(c(x$data[NoBs,]), nrow = 1)
 
   for(i in 1:n.ahead){
     H_t_upper[[i+1]] <- t(x_upper$c0) %*% x_upper$c0 + t(x_upper$a) %*% t(current_returns) %*% current_returns %*% x_upper$a + expected_signs * t(x_upper$b) %*% H_t_upper[[i]] %*% x_upper$b + t(x_upper$g) %*% H_t[[i]] %*% x_upper$g

@@ -7,10 +7,10 @@
 bekk_sim(spec, nobs)
 }
 \arguments{
-\item{spec}{A spec object of class bekkSimSpec or a fitted bekk model of class bekk from the \link{bekk} function}
+\item{spec}{A spec object of class "bekkSpec" from the function \link{bekk_spec} or a fitted bekk model of class "bekkFit" from the \link{bekk_fit} function}
 
 \item{nobs}{Number of observations of the simulated sample}
 }
 \description{
-Simulating BEKK models
+Method for simulating a N-dimensional BEKK model.
 }

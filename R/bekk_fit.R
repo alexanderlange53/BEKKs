@@ -3,7 +3,7 @@
 #' @description Method for fitting a variety of N-dimensional BEKK models.
 #'
 #' @param spec An object of class "bekkSpec" from function \link{bekk_spec}.
-#' @param data A multivariate data object. Can be a numeric matrix or ts object.
+#' @param data A multivariate data object. Can be a numeric matrix or ts/xts/zoo object.
 #' @param QML_t_ratios Logical. If QML_t_ratios = 'TRUE', the t-ratios of the BEKK parameter matrices
 #'                     are exactly calculated via second order derivatives.
 #' @param max_iter Maximum number of BHHH algorithm iterations.

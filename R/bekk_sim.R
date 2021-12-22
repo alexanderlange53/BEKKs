@@ -1,6 +1,8 @@
 #' Simulating BEKK models
 #'
-#' @param spec A spec object of class bekkSimSpec or a fitted bekk model of class bekk from the \link{bekk} function
+#' @description Method for simulating a N-dimensional BEKK model.
+#'
+#' @param spec A spec object of class "bekkSpec" from the function \link{bekk_spec} or a fitted bekk model of class "bekkFit" from the \link{bekk_fit} function
 #' @param nobs Number of observations of the simulated sample
 #'
 #'

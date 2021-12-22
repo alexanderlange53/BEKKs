@@ -16,7 +16,7 @@ bekk_fit(
 \arguments{
 \item{spec}{An object of class "bekkSpec" from function \link{bekk_spec}.}
 
-\item{data}{A multivariate data object. Can be a numeric matrix or ts object.}
+\item{data}{A multivariate data object. Can be a numeric matrix or ts/xts/zoo object.}
 
 \item{QML_t_ratios}{Logical. If QML_t_ratios = 'TRUE', the t-ratios of the BEKK parameter matrices
 are exactly calculated via second order derivatives.}
