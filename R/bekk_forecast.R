@@ -150,6 +150,20 @@ bekk_forecast.bekk <- function(x, n.ahead = 1, ci = 0.95) {
     H_t_f_upper[i, ] <- c(H_t_upper[[i]])
   }
 
+  if (inherits(x$data, "ts")) {
+    sigma_t <- ts(sigma_t, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+    sigma_t_lower <- ts(sigma_t_lower, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+    sigma_t_upper <- ts(sigma_t_upper, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+  }
+  else if(inherits(x$data, "xts") || inherits(x$data, "zoo") ){
+    sigma_t <- xts(matrix(sigma_t, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                                   by = periodicity(x$data)$units))
+    sigma_t_lower <- xts(matrix(sigma_t_lower, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                                         by = periodicity(x$data)$units))
+    sigma_t_upper <- xts(matrix(sigma_t_upper, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                                         by = periodicity(x$data)$units))
+  }
+
 
   result <- list(
     volatility_forecast = sigma_t,
@@ -293,6 +307,21 @@ bekk_forecast.bekka <- function(x, n.ahead = 1, ci = 0.95) {
     H_t_f_lower[i, ] <- c(H_t_lower[[i]])
     H_t_f_upper[i, ] <- c(H_t_upper[[i]])
   }
+
+  if (inherits(x$data, "ts")) {
+    sigma_t <- ts(sigma_t, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+    sigma_t_lower <- ts(sigma_t_lower, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+    sigma_t_upper <- ts(sigma_t_upper, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+  }
+  else if(inherits(x$data, "xts") || inherits(x$data, "zoo") ){
+    sigma_t <- xts(matrix(sigma_t, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                                   by = periodicity(x$data)$units))
+    sigma_t_lower <- xts(matrix(sigma_t_lower, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                                               by = periodicity(x$data)$units))
+    sigma_t_upper <- xts(matrix(sigma_t_upper, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                                               by = periodicity(x$data)$units))
+  }
+
 
   result <- list(
     volatility_forecast = sigma_t,
