@@ -12,7 +12,7 @@
 #'  Currently, the BEKK(1,1,1) model of Engle and Kroner (1995)
 #' \deqn{H_t= QQ' + A' r_{t-1} r'_{t-1}A + G' H_{t-1}G }{H[t] = QQ' + A' r[t-1] r'[t-1]A + G' H[t-1]G } and the asymmetric extensions of Kroner and Ng (1998) and Grier et. al. (2004)
 #' \deqn{H_t= QQ' +A'r_{t-1} r'_{t-1}A +B'\gamma_{t-1} \gamma'_{t-1} B+G'H_{t-1}G}
-#' with \deqn{\gamma[t]= r[t] \mathbb{I}\left(r_t <_N 0 \right)} are implemented. cr
+#' with \deqn{\gamma[t]= r[t] \mathbb{I}\left(r_t <_N 0 \right)} are implemented.
 #' @details
 #' The main functions are:
 #' \itemize{
@@ -22,9 +22,9 @@
 #' \item \tabular{ll}{ \code{\link{bekk_forecast}} \tab Forecasts conditional volatility using a \link{bekk_fit} object,}
 #' \item \tabular{ll}{ \code{\link{VaR}} \tab Estimates (portfolio) Value-at-Risk using a fitted BEKK(1,1,1) model,}
 #' }
-#' @references Engle, R. F. and K. F. Kroner (1995). Multivariate simultaneous generalized arch.Econometric Theory 11(1),122–150.
-#' @references Kroner, K. F. and V. K. Ng (1998). Modeling asymmetric comovements of asset returns.Review of FinancialStudies  11(4), 817–44.
-#' @references Grier, K. B., ́Olan T. Henry, N. Olekalns, and K. Shields (2004). The asymmetric effects of uncertainty oninflation and output growth.Journal of Applied Econometrics  19(5), 551–565.
-#'  @useDynLib BEKKs
+#' @references Engle, R. F. and K. F. Kroner (1995). Multivariate simultaneous generalized arch. Econometric Theory 11(1),122–150.
+#' @references Kroner, K. F. and V. K. Ng (1998). Modeling asymmetric comovements of asset returns. Review of FinancialStudies 11(4), 817–44.
+#' @references Grier, K. B., ́Olan T. Henry, N. Olekalns, and K. Shields (2004). The asymmetric effects of uncertainty oninflation and output growth. Journal of Applied Econometrics  19(5), 551–565.
+#' @useDynLib BEKKs
 #' @importFrom Rcpp sourceCpp
 NULL
