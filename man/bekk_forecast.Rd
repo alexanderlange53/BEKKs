@@ -7,7 +7,7 @@
 bekk_forecast(x, n.ahead = 1, ci = 0.95)
 }
 \arguments{
-\item{x}{A fitted bekk model of class bekk from the \link{bekk} function}
+\item{x}{A fitted bekk model of class bekk from the \link{bekk_fit} function}
 
 \item{n.ahead}{Number of periods to forecast conditional volatility. Default is a one-period ahead forecast.}
 
