@@ -18,7 +18,7 @@ Authors@R:
 Maintainer: Alexander Lange <alexander.lange@uni-goettingen.de>
 Description: What the package does (one paragraph).
 Depends: R (>= 3.5.0), expm, gridExtra, grid, ggfortify, parallel
-Imports: Rcpp, expm, reshape2, ggplot2, zoo, xts, mathjaxr  
+Imports: Rcpp, expm, reshape2, ggplot2, xts, mathjaxr  
 LinkingTo: Rcpp, RcppArmadillo
 NeedsCompilation: yes
 SystemRequirements: C++11
