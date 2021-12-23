@@ -6,6 +6,19 @@
 #' @param nobs Number of observations of the simulated sample
 #'
 #'
+#' @examples
+#' \donttest{
+#'
+#' # Simulate a BEKK with estimated parameter
+#' obj_spec <- bekk_spec()
+#' x1 <- bekk_fit(obj_spec, StocksBonds)
+#'
+#' x2 <- bekk_sim(x1, 3000)
+#'
+#' plot(x2)
+#'
+#' }
+#'
 #' @export
 
 bekk_sim <- function(spec, nobs) {

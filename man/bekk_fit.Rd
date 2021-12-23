@@ -36,8 +36,18 @@ The authors provide analytical formulas for the score and Hessian of several MGA
 \donttest{
 
 data(StocksBonds)
+
+# Fitting a symmetric BEKK model
 obj_spec <- bekk_spec()
 x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
+
+summary(x1)
+
+plot(x1)
+
+# Fitting an asymmetric BEKK model
+obj_spec <- bekk_spec(model = list(type = "bekk", asymmetric = TRUE))
+x1 <- bekk_fit(obj_spec, StocksBonds)
 
 summary(x1)
 

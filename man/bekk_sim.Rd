@@ -14,3 +14,17 @@ bekk_sim(spec, nobs)
 \description{
 Method for simulating a N-dimensional BEKK model.
 }
+\examples{
+\donttest{
+
+# Simulate a BEKK with estimated parameter
+obj_spec <- bekk_spec()
+x1 <- bekk_fit(obj_spec, StocksBonds)
+
+x2 <- bekk_sim(x1, 3000)
+
+plot(x2)
+
+}
+
+}
