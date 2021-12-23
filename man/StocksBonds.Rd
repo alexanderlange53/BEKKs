@@ -19,7 +19,7 @@ Bivariate data set consisting of daily S&P 500 bond and MSCI World returns from 
 %%  ~~ If necessary, more details than the __description__ above ~~
 }
 \source{
-%%  ~~ reference to a publication or URL from which the data were obtained ~~
+Yahoo Finance.
 }
 \references{
 %%  ~~ possibly secondary sources and usages ~~
