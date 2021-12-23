@@ -5,11 +5,12 @@
 \alias{BEKKs}
 \title{BEKKs: Volatility modelling}
 \description{
+\loadmathjax
 This package implements estimation, simulation and forecasting techniques for conditional volatility modelling using the BEKK model.
  Currently, the BEKK(1,1,1) model of Engle and Kroner (1995)
-\deqn{H_t= QQ' + A' r_{t-1} r'_{t-1}A + G' H_{t-1}G }{H[t] = QQ' + A' r[t-1] r'[t-1]A + G' H[t-1]G } and the asymmetric extensions of Kroner and Ng (1998) and Grier et. al. (2004)
-\deqn{H_t= QQ' +A'r_{t-1} r'_{t-1}A +B'\gamma_{t-1} \gamma'_{t-1} B+G'H_{t-1}G}
-with \deqn{\gamma[t]= r[t] \mathbb{I}\left(r_t <_N 0 \right)} are implemented.
+\mjdeqn{H_t= CC' + A' r_{t-1} r'_{t-1}A + G' H_{t-1}G }{ASCII representation} and the asymmetric extensions of Kroner and Ng (1998) and Grier et. al. (2004)
+\mjdeqn{H_t= CC' +A'r_{t-1} r'_{t-1}A +B'\gamma_{t-1} \gamma'_{t-1} B+G'H_{t-1}G}{ASCII representation}
+with \mjdeqn{\gamma_t= r_t \mathbb{I}\left(r_t < 0 \right)}{ASCII representation} are implemented.
 }
 \details{
 The main functions are:
