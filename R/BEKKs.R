@@ -18,14 +18,14 @@
 #' The main functions are:
 #' \itemize{
 #' \item \tabular{ll}{ \code{\link{bekk_spec}} \tab Specifies the model type to be estimated,}
-#' \item \tabular{ll}{ \code{\link{bekk_fit}} \tab Estimates a BEKK(1,1,1) model of a given series and specification object \link{bekk_spec} ,}
-#' \item \tabular{ll}{ \code{\link{bekk_sim}} \tab Simulates a BEKK(1,1,1) process using either a \link{bekk_sim} or \link{bekk_spec} object ,}
+#' \item \tabular{ll}{ \code{\link{bekk_fit}} \tab Estimates a BEKK(1,1,1) model of a given series and specification object \link{bekk_spec},}
+#' \item \tabular{ll}{ \code{\link{bekk_sim}} \tab Simulates a BEKK(1,1,1) process using either a \link{bekk_sim} or \link{bekk_spec} object,}
 #' \item \tabular{ll}{ \code{\link{bekk_forecast}} \tab Forecasts conditional volatility using a \link{bekk_fit} object,}
-#' \item \tabular{ll}{ \code{\link{VaR}} \tab Estimates (portfolio) Value-at-Risk using a fitted BEKK(1,1,1) model,}
+#' \item \tabular{ll}{ \code{\link{VaR}} \tab Estimates (portfolio) Value-at-Risk using a fitted BEKK(1,1,1) model.}
 #' }
 #' @references Engle, R. F. and K. F. Kroner (1995). Multivariate simultaneous generalized arch. Econometric Theory 11(1),122–150.
-#' @references Kroner, K. F. and V. K. Ng (1998). Modeling asymmetric comovements of asset returns. Review of FinancialStudies 11(4), 817–44.
-#' @references Grier, K. B., ́Olan T. Henry, N. Olekalns, and K. Shields (2004). The asymmetric effects of uncertainty oninflation and output growth. Journal of Applied Econometrics  19(5), 551–565.
+#' @references Kroner, K. F. and V. K. Ng (1998). Modeling asymmetric comovements of asset returns. Review of Financial Studies 11(4), 817–44.
+#' @references Grier, K. B., Olan T. Henry, N. Olekalns, and K. Shields (2004). The asymmetric effects of uncertainty on inflation and output growth. Journal of Applied Econometrics  19(5), 551–565.
 #' @useDynLib BEKKs
 #' @importFrom Rcpp sourceCpp
 NULL
