@@ -23,10 +23,10 @@ bekk_spec <- function(model = list(type = "bekk", asymmetric = FALSE),
 
   # Checking inputs
   if(!is.null(N) & is.numeric(init_values) ) {
-    if(length(init_values) != 2 * N^2 + N * (N + 1)/2 & type == "bekk"  & asymmetric == FALSE) {
+    if(length(init_values) != 2 * N^2 + N * (N + 1)/2 & model$type == "bekk"  & model$asymmetric == FALSE) {
       stop('Number of initial parameter does not match dimension of data and model.')
     }
-    if(length(init_values) != 3 * N^2 + N * (N + 1)/2 & type == "bekk"  & asymmetric == TRUE) {
+    if(length(init_values) != 3 * N^2 + N * (N + 1)/2 & model$type == "bekk"  & model$asymmetric == TRUE) {
       stop('Number of initial parameter does not match dimension of data and model.')
     }
   }
