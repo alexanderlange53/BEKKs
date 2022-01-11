@@ -52,14 +52,6 @@ test_that("Asymmetric BEKK 2-dims works, ts object and QML_t_ratios = TRUE", {
   expect_lt(sum(c(x1$C0_t, x1$A_t, x1$G_t)), 1086)
 })
 
-test_that("Asymmetric BEKK 3-dims works, xts object and QML_t_ratios = FALSE", {
-  obj_spec <- bekk_spec(model = list(type = "bekk", asymmetric = TRUE))
-  x1 <- bekk_fit(obj_spec, GoldStocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
-
-  expect_equal(round(x1$log_likelihood), 75327)
-  expect_equal(round(sum(x1$theta)),  4)
-  expect_equal(round(sum(c(x1$C0_t, x1$A_t, x1$G_t))), 2384)
-})
 
 test_that("Asymmetric BEKK 3-dims works, xts object and QML_t_ratios = TRUE", {
   obj_spec <- bekk_spec(model = list(type = "bekk", asymmetric = TRUE))
