@@ -47,7 +47,7 @@ arma::mat simulate_bekk_c(arma::vec theta, const int NoObs, const int n){
 }
 
 // [[Rcpp::export]]
-arma::mat simulate_bekka_c(arma::vec theta, const int NoObs, const int n, arma::vec signs){
+arma::mat simulate_bekka_c(arma::vec theta, const int NoObs, const int n, arma::vec signs, double expected_signs){
 
   // Length of each series
   arma::mat series = arma::zeros(n, NoObs);
@@ -81,8 +81,8 @@ arma::mat simulate_bekka_c(arma::vec theta, const int NoObs, const int n, arma::
   arma::mat Gt= G.t();
 
 
-  // unconditional variance
-  arma::mat Uncond_var = arma::reshape(arma::inv(arma::eye(pow(n, 2), pow(n, 2)) - arma::trans(arma::kron(A, A)) - arma::trans(arma::kron(B, B))/pow(n,2)- arma::trans(arma::kron(G, G))) * arma::vectorise(C_full), n, n);
+  // unconditional variance replaced pow(n,2) by n
+  arma::mat Uncond_var = arma::reshape(arma::inv(arma::eye(pow(n, 2), pow(n, 2)) - arma::trans(arma::kron(A, A)) - expected_signs*arma::trans(arma::kron(B, B))- arma::trans(arma::kron(G, G))) * arma::vectorise(C_full), n, n);
 
   arma::mat H = Uncond_var;
   arma::mat h_dec = arma::chol(H).t();

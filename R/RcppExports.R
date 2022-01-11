@@ -33,6 +33,10 @@ valid_asymm_bekk <- function(C, A, B, G, r, signs) {
     .Call('_BEKKs_valid_asymm_bekk', PACKAGE = 'BEKKs', C, A, B, G, r, signs)
 }
 
+valid_asymm_bekk_sim <- function(C, A, B, G, exp_indicator_value, signs) {
+    .Call('_BEKKs_valid_asymm_bekk_sim', PACKAGE = 'BEKKs', C, A, B, G, exp_indicator_value, signs)
+}
+
 loglike_bekk <- function(theta, r) {
     .Call('_BEKKs_loglike_bekk', PACKAGE = 'BEKKs', theta, r)
 }
@@ -89,8 +93,8 @@ simulate_bekk_c <- function(theta, NoObs, n) {
     .Call('_BEKKs_simulate_bekk_c', PACKAGE = 'BEKKs', theta, NoObs, n)
 }
 
-simulate_bekka_c <- function(theta, NoObs, n, signs) {
-    .Call('_BEKKs_simulate_bekka_c', PACKAGE = 'BEKKs', theta, NoObs, n, signs)
+simulate_bekka_c <- function(theta, NoObs, n, signs, expected_signs) {
+    .Call('_BEKKs_simulate_bekka_c', PACKAGE = 'BEKKs', theta, NoObs, n, signs, expected_signs)
 }
 
 indicatorFunction <- function(r, signs) {

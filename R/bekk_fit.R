@@ -143,7 +143,7 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
   param_mat <- coef_mat(params$theta, N)
 
 
-  var_process <- sigma_bekk(data, param_mat$c0, param_mat$a, param_mat$g)
+  var_process <- sigma_bekk(data, t(param_mat$c0), param_mat$a, param_mat$g)
   sigma_t <- as.data.frame(var_process$sigma_t)
   colnames(sigma_t) <- rep(1, N^2)
 
@@ -301,7 +301,7 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE, N,
 
   param_mat <- coef_mat_asymm(params$theta, N)
 
-  var_process <- sigma_bekk_asymm(data, param_mat$c0, param_mat$a, param_mat$b, param_mat$g, spec$model$signs)
+  var_process <- sigma_bekk_asymm(data, t(param_mat$c0), param_mat$a, param_mat$b, param_mat$g, spec$model$signs)
   sigma_t <- as.data.frame(var_process$sigma_t)
   colnames(sigma_t) <- rep(1, N^2)
 
@@ -340,6 +340,7 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE, N,
   # Final check if BEKK is valid
   BEKK_valid <- valid_asymm_bekk(param_mat$c0, param_mat$a, param_mat$b, param_mat$g, data, spec$model$signs)
 
+  expected_signs=expected_indicator_value(data,spec$model$signs)
 
   params$likelihood_iter <- params$likelihood_iter[params$likelihood_iter != 0]
 
@@ -362,6 +363,7 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE, N,
                  iter = params$iter,
                  likelihood_iter = params$likelihood_iter,
                  asymmetric = TRUE,
+                 expected_signs = expected_signs,
                  data = data)
   class(result) <- c('bekkFit', 'bekka')
   return(result)
