@@ -11,14 +11,13 @@ bekk_forecast(x, n.ahead = 1, ci = 0.95)
 
 \item{n.ahead}{Number of periods to forecast conditional volatility. Default is a one-period ahead forecast.}
 
-\item{ci}{Floating point in [0,1] defining the niveau for confidence bands of the conditional volatility forecast. Default is 95% niveau confidence bands.}
+\item{ci}{Floating point in [0,1] defining the niveau for confidence bands of the conditional volatility forecast. Default is 95 per cent niveau confidence bands.}
 }
 \description{
-Forecasting conditional volatilities with BEKK models
+Method for forecasting a N-dimensional BEKK covariances.
 }
 \examples{
-\donttest{
-
+\donttest{#'
 data(StocksBonds)
 obj_spec <- bekk_spec()
 x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
@@ -26,4 +25,5 @@ x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit 
 x2 <- bekk_forecast(x1, n.ahead = 1)
 
 }
+
 }

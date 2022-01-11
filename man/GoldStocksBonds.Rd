@@ -16,7 +16,7 @@ Trivariate data set consisting of daily gold, S&P 500 and U.S. Treasury Bond Fut
     \item{US Treasury Bond Future}{a numeric vector}
   }
 }
-}
+
 \details{
 %%  ~~ If necessary, more details than the __description__ above ~~
 }
