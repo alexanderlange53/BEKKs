@@ -93,26 +93,6 @@ simulate_bekka_c <- function(theta, NoObs, n, signs) {
     .Call('_BEKKs_simulate_bekka_c', PACKAGE = 'BEKKs', theta, NoObs, n, signs)
 }
 
-SigmaLagCr <- function(y, Tob, q, p, ucvar) {
-    .Call('_BEKKs_SigmaLagCr', PACKAGE = 'BEKKs', y, Tob, q, p, ucvar)
-}
-
-GarchVariance <- function(Tob, q, p, ucvar, theta, Z) {
-    .Call('_BEKKs_GarchVariance', PACKAGE = 'BEKKs', Tob, q, p, ucvar, theta, Z)
-}
-
-ScoreGarch <- function(epsilon2, Z, Tob, q, p, theta, ucvar) {
-    .Call('_BEKKs_ScoreGarch', PACKAGE = 'BEKKs', epsilon2, Z, Tob, q, p, theta, ucvar)
-}
-
-LikelihoodGarch <- function(Z, Tob, q, p, theta, epsilon2, ucvar) {
-    .Call('_BEKKs_LikelihoodGarch', PACKAGE = 'BEKKs', Z, Tob, q, p, theta, epsilon2, ucvar)
-}
-
-BhhhGarch <- function(r2, q, p, theta, epsilon2, Z, Tob, max_iter, crit, ucvar) {
-    .Call('_BEKKs_BhhhGarch', PACKAGE = 'BEKKs', r2, q, p, theta, epsilon2, Z, Tob, max_iter, crit, ucvar)
-}
-
 indicatorFunction <- function(r, signs) {
     .Call('_BEKKs_indicatorFunction', PACKAGE = 'BEKKs', r, signs)
 }
