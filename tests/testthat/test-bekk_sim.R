@@ -39,14 +39,14 @@ test_that("Simulating 3 dim symmetric BEKK based on bekk_spec", {
   expect_equal(ncol(x2), 3)
 })
 
-# test_that("Simulating 2 dim asymmetric BEKK based on estimated ts object", {
-#   obj_spec <- bekk_spec(model = list(type = 'bekk', asymmetric = TRUE))
-#   x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
-#
-#   x2 <- bekk_sim(x1, nobs = 100)
-#   expect_equal(nrow(x2), 100)
-#   expect_equal(ncol(x2), 2)
-# })
+test_that("Simulating 2 dim asymmetric BEKK based on estimated ts object", {
+  obj_spec <- bekk_spec(model = list(type = 'bekk', asymmetric = TRUE))
+  x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
+
+  x2 <- bekk_sim(x1, nobs = 100)
+  expect_equal(nrow(x2), 100)
+  expect_equal(ncol(x2), 2)
+})
 
 test_that("Simulating 2 dim asymmetric BEKK based on bekk_spec", {
   obj_spec <- bekk_spec(model = list(type = "bekk", asymmetric = TRUE), N = 2,
