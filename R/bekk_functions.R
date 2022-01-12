@@ -6,8 +6,12 @@ process_object.bekkFit <- function(x) {
   theta <- x$theta
   N <- ncol(x$C0)
   signs <- x$signs
+  BEKK_valid <- x$BEKK_valid
+  expected_signs <- x$expected_signs
+
   return(list(theta = theta,
-              N = N, signs=signs))
+              N = N, signs=signs, expected_signs = expected_signs, BEKK_valid = BEKK_valid
+              ))
 }
 
 process_object.bekkSpec <- function(x) {
@@ -21,8 +25,22 @@ process_object.bekkSpec <- function(x) {
   theta <- x$init_values
   N <- x$N
 
+  if(is.null(x$signs) && x$model$asymmetric == TRUE){
+    signs=as.matrix(rep(-1,N))
+
+  }
+
+  if(x$model$asymmetric == FALSE){
+    par = coef_mat(theta,N)
+    BEKK_valid = valid_bekk(par$c0, par$a, par$g)
+  } else{
+    par = coef_mat_asymm(theta,N)
+    BEKK_valid = valid_asymm_bekk_sim(par$c0, par$a, par$b, par$g, 1/(N^2),signs)
+  }
+
+  expected_signs=1/(N^2)
   return(list(theta = theta,
-              N = N))
+              N = N, signs = signs, expected_signs = expected_signs, BEKK_valid = BEKK_valid))
 }
 
 # Obtaining QML t-ratios

@@ -162,6 +162,41 @@ bool valid_asymm_bekk(arma::mat& C,arma::mat& A, arma::mat& B ,arma::mat& G, arm
   }
 }
 
+
+// [[Rcpp::export]]
+bool valid_asymm_bekk_sim(arma::mat& C,arma::mat& A, arma::mat& B ,arma::mat& G, double exp_indicator_value, arma::mat signs){
+
+
+
+  arma::mat prod = kron(A,A)+exp_indicator_value*kron(B,B)+kron(G,G);
+
+  arma::vec eigvals;
+  eigvals= abs(arma::eig_gen(prod));
+  double max=0;
+  for (int i=0; i< eigvals.n_elem; i++){
+    if(eigvals[i]>max){
+      max=eigvals[i];
+    }
+  }
+
+  if(max >= 1){
+    return false;
+  }
+
+  for (int i=0; i < C.n_cols;i++){
+    if(C(i,i)<=0){
+      return false;
+    }
+  }
+  if(A(0,0)<=0 || B(0,0)<=0 || G(0,0)<=0) {
+    return false;
+  }
+
+  else{
+    return true;
+  }
+}
+
 // [[Rcpp::export]]
 double loglike_bekk(const arma::vec& theta, const arma::mat& r) {
 // Log-Likelihood function
@@ -913,7 +948,7 @@ Rcpp::List sigma_bekk(arma::mat& r, arma::mat& C, arma::mat& A, arma::mat& G) {
 
   et.row(0) <- inv_gen(arma::sqrtmat_sympd(ht)) *  r.row(0).t();
 
-  arma::mat CC  = C * C.t();
+  arma::mat CC  = C.t() * C;
   arma::mat At  = A.t();
   arma::mat Gt  = G.t();
 
@@ -939,8 +974,8 @@ Rcpp::List sigma_bekk_asymm(arma::mat& r, arma::mat& C, arma::mat& A, arma::mat&
   sigma.row(0) = arma::vectorise(ht).t();
 
   et.row(0) <- inv_gen(arma::sqrtmat_sympd(ht)) * r.row(0).t();
-
-  arma::mat CC = C * C.t();
+//changed CC to C.t() * C instead of C * C.t() because C is upper triagular in the inputs
+  arma::mat CC = C.t() * C;
   arma::mat At = A.t();
   arma::mat Bt = B.t();
   arma::mat Gt = G.t();

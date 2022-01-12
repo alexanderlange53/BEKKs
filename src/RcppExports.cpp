@@ -106,6 +106,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// valid_asymm_bekk_sim
+bool valid_asymm_bekk_sim(arma::mat& C, arma::mat& A, arma::mat& B, arma::mat& G, double exp_indicator_value, arma::mat signs);
+RcppExport SEXP _BEKKs_valid_asymm_bekk_sim(SEXP CSEXP, SEXP ASEXP, SEXP BSEXP, SEXP GSEXP, SEXP exp_indicator_valueSEXP, SEXP signsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type C(CSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type A(ASEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type B(BSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type G(GSEXP);
+    Rcpp::traits::input_parameter< double >::type exp_indicator_value(exp_indicator_valueSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type signs(signsSEXP);
+    rcpp_result_gen = Rcpp::wrap(valid_asymm_bekk_sim(C, A, B, G, exp_indicator_value, signs));
+    return rcpp_result_gen;
+END_RCPP
+}
 // loglike_bekk
 double loglike_bekk(const arma::vec& theta, const arma::mat& r);
 RcppExport SEXP _BEKKs_loglike_bekk(SEXP thetaSEXP, SEXP rSEXP) {
@@ -289,8 +305,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // simulate_bekka_c
-arma::mat simulate_bekka_c(arma::vec theta, const int NoObs, const int n, arma::vec signs);
-RcppExport SEXP _BEKKs_simulate_bekka_c(SEXP thetaSEXP, SEXP NoObsSEXP, SEXP nSEXP, SEXP signsSEXP) {
+arma::mat simulate_bekka_c(arma::vec theta, const int NoObs, const int n, arma::vec signs, double expected_signs);
+RcppExport SEXP _BEKKs_simulate_bekka_c(SEXP thetaSEXP, SEXP NoObsSEXP, SEXP nSEXP, SEXP signsSEXP, SEXP expected_signsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -298,7 +314,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type NoObs(NoObsSEXP);
     Rcpp::traits::input_parameter< const int >::type n(nSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type signs(signsSEXP);
-    rcpp_result_gen = Rcpp::wrap(simulate_bekka_c(theta, NoObs, n, signs));
+    Rcpp::traits::input_parameter< double >::type expected_signs(expected_signsSEXP);
+    rcpp_result_gen = Rcpp::wrap(simulate_bekka_c(theta, NoObs, n, signs, expected_signs));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -398,6 +415,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BEKKs_valid_bekk", (DL_FUNC) &_BEKKs_valid_bekk, 3},
     {"_BEKKs_expected_indicator_value", (DL_FUNC) &_BEKKs_expected_indicator_value, 2},
     {"_BEKKs_valid_asymm_bekk", (DL_FUNC) &_BEKKs_valid_asymm_bekk, 6},
+    {"_BEKKs_valid_asymm_bekk_sim", (DL_FUNC) &_BEKKs_valid_asymm_bekk_sim, 6},
     {"_BEKKs_loglike_bekk", (DL_FUNC) &_BEKKs_loglike_bekk, 2},
     {"_BEKKs_loglike_asymm_bekk", (DL_FUNC) &_BEKKs_loglike_asymm_bekk, 3},
     {"_BEKKs_score_bekk", (DL_FUNC) &_BEKKs_score_bekk, 2},
@@ -412,7 +430,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BEKKs_hesse_asymm_bekk", (DL_FUNC) &_BEKKs_hesse_asymm_bekk, 3},
     {"_BEKKs_eigen_value_decomposition", (DL_FUNC) &_BEKKs_eigen_value_decomposition, 1},
     {"_BEKKs_simulate_bekk_c", (DL_FUNC) &_BEKKs_simulate_bekk_c, 3},
-    {"_BEKKs_simulate_bekka_c", (DL_FUNC) &_BEKKs_simulate_bekka_c, 4},
+    {"_BEKKs_simulate_bekka_c", (DL_FUNC) &_BEKKs_simulate_bekka_c, 5},
     {"_BEKKs_indicatorFunction", (DL_FUNC) &_BEKKs_indicatorFunction, 2},
     {"_BEKKs_valid_scalar_bekk", (DL_FUNC) &_BEKKs_valid_scalar_bekk, 2},
     {"_BEKKs_loglike_scalar_bekk", (DL_FUNC) &_BEKKs_loglike_scalar_bekk, 2},
