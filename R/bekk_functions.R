@@ -28,6 +28,8 @@ process_object.bekkSpec <- function(x) {
   if(is.null(x$signs) && x$model$asymmetric == TRUE){
     signs=as.matrix(rep(-1,N))
 
+  }else{
+    signs=x$signs
   }
 
   if(x$model$asymmetric == FALSE){
