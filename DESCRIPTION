@@ -1,13 +1,10 @@
 Package: BEKKs
 Title: Conditional volatility modelling
 Version: 0.0.0.9000
-Author: Markus Fülle [aut, cre],
-        Helmut Herwartz [aut],
-        Alexander Lange [aut, cre],
 Authors@R: 
     c(person(given = "Markus",
            family = "Fülle",
-           role = c("aut", "cre"),
+           role = c("aut"),
            email = "fuelle@uni-goettingen.de"),
       person("Helmut", "Herwartz", 
            role = c("aut"), 
@@ -15,14 +12,13 @@ Authors@R:
       person("Alexander", "Lange", 
           role = c("aut", "cre"),
           email = "alexander.lange@uni-goettingen.de"))
-Maintainer: Alexander Lange <alexander.lange@uni-goettingen.de>
 Description: What the package does (one paragraph).
-Depends: R (>= 3.5.0), expm, gridExtra, grid, ggfortify, parallel, xts
-Imports: Rcpp, expm, reshape2, ggplot2, mathjaxr  
+Depends: R (>= 3.5.0)
+Imports: Rcpp, expm, reshape2, ggplot2, mathjaxr, gridExtra, grid, ggfortify, parallel, xts, stats, future   
 LinkingTo: Rcpp, RcppArmadillo
 NeedsCompilation: yes
 SystemRequirements: C++11
-License: MIT + file LICENSE
+License: MIT + file LICENSE           
 Encoding: UTF-8
 LazyData: true
 Suggests: 

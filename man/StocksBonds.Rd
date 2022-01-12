@@ -15,14 +15,8 @@ Bivariate data set consisting of daily S&P 500 bond and MSCI World returns from 
     \item{MSCI World}{a numeric vector}
   }
 }
-\details{
-%%  ~~ If necessary, more details than the __description__ above ~~
-}
 \source{
 Yahoo Finance.
-}
-\references{
-%%  ~~ possibly secondary sources and usages ~~
 }
 \examples{
 data(StocksBonds)

@@ -17,14 +17,8 @@ Trivariate data set consisting of daily gold, S&P 500 and U.S. Treasury Bond Fut
   }
 }
 
-\details{
-%%  ~~ If necessary, more details than the __description__ above ~~
-}
 \source{
 Yahoo Finance.
-}
-\references{
-%%  ~~ possibly secondary sources and usages ~~
 }
 \examples{
 data(GoldStocksBonds)

@@ -208,7 +208,7 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
 }
 
 #' @export
-bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE, N,
+bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE,
                    seed = NULL, max_iter = 50, crit = 1e-9) {
 
   init_values <- spec$init_values

@@ -1,6 +1,5 @@
 #' @import ggplot2
 #' @import reshape2
-#' @import zoo
 #' @export
 
 plot.var <- function(x, ...) {
