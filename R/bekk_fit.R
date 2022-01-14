@@ -7,7 +7,7 @@
 #' @param QML_t_ratios Logical. If QML_t_ratios = 'TRUE', the t-ratios of the BEKK parameter matrices
 #'                     are exactly calculated via second order derivatives.
 #' @param max_iter Maximum number of BHHH algorithm iterations.
-#' @param crit Determiens the precision of the BHHH algorithm.
+#' @param crit Determines the precision of the BHHH algorithm.
 #'
 #' @details The BEKK optimization routine is based on the Berndt–Hall–Hall–Hausman (BHHH) algorithm and is inspired by the study of Hafner and Herwartz (2008).
 #' The authors provide analytical formulas for the score and Hessian of several MGARCH models in a QML framework and show that analytical derivations significantly outperform numerical methods.
