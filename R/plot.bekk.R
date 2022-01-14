@@ -1,4 +1,5 @@
 #' @import ggplot2
+#' @import grid
 #' @export
 
 plot.bekkFit <- function(x, diagnostic = FALSE, ...){

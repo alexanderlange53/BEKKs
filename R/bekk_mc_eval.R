@@ -1,3 +1,5 @@
+#' @import future
+
 bekk_mc_eval <- function(object, spec, sample_sizes, iter, nc = 1) {
   xx <- process_object(object)
   theta <- xx$theta
