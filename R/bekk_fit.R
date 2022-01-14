@@ -40,7 +40,7 @@
 #' @export
 
 bekk_fit <- function(spec, data, QML_t_ratios = FALSE,
-                     seed = NULL, max_iter = 50, crit = 1e-9){
+                     max_iter = 50, crit = 1e-9){
 
   if (!inherits(spec, 'bekkSpec')) {
     stop('Please provide and object of class "bekkSpec" for spec.')
@@ -62,7 +62,7 @@ bekk_fit <- function(spec, data, QML_t_ratios = FALSE,
 
 #' @export
 bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
-                          seed = NULL, max_iter = 50, crit = 1e-9) {
+                          max_iter = 50, crit = 1e-9) {
 
   init_values <- spec$init_values
   N <- ncol(data)
@@ -72,20 +72,9 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
       theta <- gridSearch_BEKK(data)
       theta <- theta[[1]]
     } else if (init_values == 'random') {
-      if(is.null(seed)) {
-        seed <- round(runif(1, 1, 100))
-      } else {
-        set.seed(seed)
-        seed <- round(runif(1, 1, 100))
-      }
       cat('Generating starting values \n')
-      theta_list <- vector(mode = "list", 100)
-      for (i in 1:100) {
-        theta_list[[i]] <- random_grid_search_BEKK(data)
-      }
-      theta_list <- lapply(seed, random_grid_search_BEKK, r = data)
-      max_index <- which.max(sapply(theta_list, '[[', 'best_val'))
-      theta <- theta_list[[max_index]]
+
+      theta <- random_grid_search_BEKK(data)
       theta <- theta[[1]]
     } else if (init_values == 'simple') {
       uncond_var <- crossprod(data)/nrow(data)
@@ -209,10 +198,9 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
 
 #' @export
 bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE,
-                   seed = NULL, max_iter = 50, crit = 1e-9) {
+                   max_iter = 50, crit = 1e-9) {
 
   init_values <- spec$init_values
-  nc = spec$nc
   N <- ncol(data)
 
   if(is.null(spec$model$signs)){
@@ -227,22 +215,9 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE,
       theta <- gridSearch_asymmetricBEKK(data, spec$model$signs)
       theta <- theta[[1]]
     } else if (init_values == 'random') {
-      if(is.null(seed) ) {
-        #set.seed(1337)
-        #seed <- round(runif(nc, 1, 100))
-        nc=rep(nc,nc)
-      } else {
-        #set.seed(seed)
-        #seed <- round(runif(nc, 1, 100))
-        nc=rep(nc,nc)
-      }
 
       cat('Generating starting values \n')
-      # theta_list <- pblapply(X = nc, FUN=random_grid_search_asymmetric_BEKK, signs = spec$model$signs, r = data)
-      # max_index <- which.max(sapply(theta_list, '[[', 'best_val'))
-      # theta <- theta_list[[max_index]]
-      # theta <- theta[[1]]
-      theta=random_grid_search_asymmetric_BEKK(data,nc,spec$model$signs)[[1]]
+      theta = random_grid_search_asymmetric_BEKK(data, nc = 1, spec$model$signs)[[1]]
     } else if (init_values == 'simple') {
       uncond_var <- crossprod(data)/nrow(data)
       A <- matrix(0, ncol = N, nrow = N)
