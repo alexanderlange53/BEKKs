@@ -791,7 +791,7 @@ Rcpp::List random_grid_search_BEKK(arma::mat r) {
 
 
 //[[Rcpp::export]]
-Rcpp::List random_grid_search_asymmetric_BEKK(arma::mat r, int nc, arma::mat signs) {
+Rcpp::List random_grid_search_asymmetric_BEKK(arma::mat r, arma::mat signs) {
   int n =r.n_cols;
   int N =r.n_rows;
   int l=0;
@@ -861,7 +861,7 @@ Rcpp::List random_grid_search_asymmetric_BEKK(arma::mat r, int nc, arma::mat sig
   //set the seed
 
   // Generating random values for A, B, C and G
-  while(l<10000/log(2+nc) && m<=17){
+  while(l<8000 && m<=17){
     int counter= 0;
     int diagonal_elements = n;
     int diagonal_counter = 0;
@@ -923,7 +923,7 @@ Rcpp::List random_grid_search_asymmetric_BEKK(arma::mat r, int nc, arma::mat sig
         theta_mu=thetaOptim;
 
       }
-      if(l>(2000/log(2+nc)) || m>=5){
+      if(l>1500 || m>=5){
         theta_mu=thetaOptim;
       }
     }

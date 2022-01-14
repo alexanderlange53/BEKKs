@@ -218,7 +218,7 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE,
     } else if (init_values == 'random') {
 
       cat('Generating starting values \n')
-      theta = random_grid_search_asymmetric_BEKK(data, nc = 1, spec$model$signs)[[1]]
+      theta = random_grid_search_asymmetric_BEKK(data, spec$model$signs)[[1]]
     } else if (init_values == 'simple') {
       uncond_var <- crossprod(data)/nrow(data)
       A <- matrix(0, ncol = N, nrow = N)
