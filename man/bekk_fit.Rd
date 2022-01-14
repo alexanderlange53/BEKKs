@@ -49,5 +49,5 @@ plot(x1)
 }
 }
 \references{
-Hafner and Herwartz (2005). Analytical quasi maximum likelihood inference in multivariate volatility models. Metrika, 67, 219-239.
+Hafner and Herwartz (2008). Analytical quasi maximum likelihood inference in multivariate volatility models. Metrika, 67, 219-239.
 }
