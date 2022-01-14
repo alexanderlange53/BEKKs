@@ -38,4 +38,5 @@ x4 <- VaR(x1, portfolio_weights = portfolio_weights)
 plot(x4)
 
 }
+
 }
