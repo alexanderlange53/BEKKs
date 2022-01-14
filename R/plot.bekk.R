@@ -1,8 +1,12 @@
 #' @import ggplot2
 #' @import grid
+#' @import gridExtra
 #' @export
 
 plot.bekkFit <- function(x, diagnostic = FALSE, ...){
+
+  V1 <- NULL
+  l <- NULL
 
   if (diagnostic == FALSE) {
     trianglePlotGrid <- function(plots){

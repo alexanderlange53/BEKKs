@@ -5,6 +5,12 @@
 
 plot.var <- function(x, ...) {
 
+  obs <- NULL
+  V1 <- NULL
+  lower <- NULL
+  type <- NULL
+  upper <- NULL
+
   if (any(class(x) == 'bekkFit')) {
     if(is.null(x$portfolio_weights)) {
       if (inherits(x$bekk$data, "ts")) {

@@ -12,7 +12,7 @@
 #' @details The BEKK optimization routine is based on the Berndt–Hall–Hall–Hausman (BHHH) algorithm and is inspired by the study of Hafner and Herwartz (2008).
 #' The authors provide analytical formulas for the score and Hessian of several MGARCH models in a QML framework and show that analytical derivations significantly outperform numerical methods.
 #'
-#' @references Hafner and Herwartz (2005). Analytical quasi maximum likelihood inference in multivariate volatility models. Metrika, 67, 219-239.
+#' @references Hafner and Herwartz (2008). Analytical quasi maximum likelihood inference in multivariate volatility models. Metrika, 67, 219-239.
 #'
 #' @examples
 #' \donttest{

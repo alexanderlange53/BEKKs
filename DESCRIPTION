@@ -1,6 +1,6 @@
 Package: BEKKs
-Title: Conditional volatility modelling
-Version: 0.0.0.9000
+Title: Multivariate conditional volatility modelling and forecasting
+Version: 1.0.0
 Authors@R: 
     c(person(given = "Markus",
            family = "Fülle",
@@ -12,9 +12,9 @@ Authors@R:
       person("Alexander", "Lange", 
           role = c("aut", "cre"),
           email = "alexander.lange@uni-goettingen.de"))
-Description: What the package does (one paragraph).
+Description: Methods and tools for estimating, simulating and forecasting BEKK models based on the fast BHHH algorithm described in Hafner and Herwartz (2008) <doi:10.1007/s00184-007-0130-y>. 
 Depends: R (>= 3.5.0)
-Imports: Rcpp, expm, reshape2, ggplot2, mathjaxr, gridExtra, grid, ggfortify, parallel, xts, stats, future, forecast   
+Imports: Rcpp, expm, reshape2, ggplot2, mathjaxr, gridExtra, grid, ggfortify, parallel, xts, stats, future, forecast, future.apply   
 LinkingTo: Rcpp, RcppArmadillo
 NeedsCompilation: yes
 SystemRequirements: C++11
