@@ -7,7 +7,6 @@
 bekk_spec(
   model = list(type = "bekk", asymmetric = FALSE),
   init_values = NULL,
-  nc = 1,
   signs = NULL,
   N = NULL,
   compare = FALSE

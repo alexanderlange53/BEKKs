@@ -28,6 +28,9 @@
 #' plot(x4)
 #'
 #' }
+#'
+#' @import xts
+#' @import stats
 #' @export
 
 VaR <- function(x, p = 0.99, portfolio_weights = NULL) {

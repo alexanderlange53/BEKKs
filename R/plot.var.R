@@ -1,4 +1,5 @@
 #' @import ggplot2
+#' @import ggfortify
 #' @import reshape2
 #' @export
 

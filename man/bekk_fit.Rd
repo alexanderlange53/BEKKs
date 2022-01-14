@@ -4,14 +4,7 @@
 \alias{bekk_fit}
 \title{Estimating multivariate BEKK-type volatility models}
 \usage{
-bekk_fit(
-  spec,
-  data,
-  QML_t_ratios = FALSE,
-  seed = NULL,
-  max_iter = 50,
-  crit = 1e-09
-)
+bekk_fit(spec, data, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-09)
 }
 \arguments{
 \item{spec}{An object of class "bekkSpec" from function \link{bekk_spec}.}
