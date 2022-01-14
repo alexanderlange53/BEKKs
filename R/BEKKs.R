@@ -7,6 +7,8 @@
 #' \item Helmut Herwartz \email{hherwartz@uni-goettingen.de}
 #' \item Alexander Lange \email{alexander.lange@uni-goettingen.de}
 #' }
+#'
+#' @import mathjaxr
 #' @description
 #' \loadmathjax
 #' This package implements estimation, simulation and forecasting techniques for conditional volatility modelling using the BEKK model.
