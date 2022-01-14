@@ -16,7 +16,7 @@ are exactly calculated via second order derivatives.}
 
 \item{max_iter}{Maximum number of BHHH algorithm iterations.}
 
-\item{crit}{Determiens the precision of the BHHH algorithm.}
+\item{crit}{Determines the precision of the BHHH algorithm.}
 }
 \description{
 Method for fitting a variety of N-dimensional BEKK models.

@@ -5,7 +5,7 @@ Modelling conditional volatilities and correlations among multivariate time seri
 
 ## Overview
 
-The package 'BEKKs' contains functions and methods for a careful analysis, estimation and forecasting of financial asset returns dynamics, and the construction and evaluation of financial portfolios. Modelling correlations and covarainces is important to determine portfolios with focus on hedging and asset specialization strategies, as well as to forecast value-at-risk (VaR) thresholds. 
+The package 'BEKKs' contains functions and methods for a careful analysis, estimation and forecasting of financial asset returns dynamics, and the construction and evaluation of financial portfolios. Modelling correlations and covariances is important to determine portfolios with focus on hedging and asset specialization strategies, as well as to forecast value-at-risk (VaR) thresholds. 
 
 Below find a schematic overview of the package functions and methods.
 
@@ -22,7 +22,7 @@ bekk_spec(
 )
 ```
 
-The model type by default is a symmetric BEKK(1,1) according to Engle and Kroner (1995). Alterntive specifications are (forthcoming) the diagonal BEKK (`type = "dbekk"`) and scalar BEKK (`type = "sbekk"`). All types can be specified as either symmetrical or asymmetrical models.     
+The model type by default is a symmetric BEKK(1,1) according to Engle and Kroner (1995). Alternative specifications are (forthcoming) the diagonal BEKK (`type = "dbekk"`) and scalar BEKK (`type = "sbekk"`). All types can be specified as either symmetrical or asymmetrical models.     
 
 ## Installation
 
