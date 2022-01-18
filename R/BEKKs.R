@@ -7,13 +7,15 @@
 #' \item Helmut Herwartz \email{hherwartz@uni-goettingen.de}
 #' \item Alexander Lange \email{alexander.lange@uni-goettingen.de}
 #' }
+#'
+#' @import mathjaxr
 #' @description
 #' \loadmathjax
 #' This package implements estimation, simulation and forecasting techniques for conditional volatility modelling using the BEKK model.
 #'  Currently, the BEKK(1,1,1) model of Engle and Kroner (1995)
-#' \mjdeqn{H_t= CC' + A' r_{t-1} r'_{t-1}A + G' H_{t-1}G }{ASCII representation} and the asymmetric extensions of Kroner and Ng (1998) and Grier et. al. (2004)
-#' \mjdeqn{H_t= CC' +A'r_{t-1} r'_{t-1}A +B'\gamma_{t-1} \gamma'_{t-1} B+G'H_{t-1}G}{ASCII representation}
-#' with \mjdeqn{\gamma_t= r_t \mathbb{I}\left(r_t < 0 \right)}{ASCII representation} are implemented.
+#' \mjdeqn{H_t = CC' + A' r_{t-1} r'_{t-1}A + G' H_{t-1}G }{ASCII representation} and the asymmetric extensions of Kroner and Ng (1998) and Grier et. al. (2004)
+#' \mjdeqn{H_t = CC' +A'r_{t-1} r'_{t-1}A +B'\gamma_{t-1} \gamma'_{t-1} B+G'H_{t-1}G}{ASCII representation}
+#' with \mjdeqn{\gamma_t = r_t I\left(r_t < 0 \right)}{ASCII representation} are implemented.
 #' @details
 #' The main functions are:
 #' \itemize{
