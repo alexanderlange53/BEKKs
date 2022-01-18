@@ -11,7 +11,8 @@ bekk_forecast(x, n.ahead = 1, ci = 0.95)
 
 \item{n.ahead}{Number of periods to forecast conditional volatility. Default is a one-period ahead forecast.}
 
-\item{ci}{Floating point in [0,1] defining the niveau for confidence bands of the conditional volatility forecast. Default is 95 per cent niveau confidence bands.}
+\item{ci}{Floating point in [0,1] defining the niveau for confidence bands of the conditional volatility forecast. Default is 95 per cent niveau confidence bands.
+\value{Returns an object of class "bekkForecast" containing the conditional volatility forecasts and respective confindence bands. }}
 }
 \description{
 Method for forecasting a N-dimensional BEKK covariances.

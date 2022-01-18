@@ -5,7 +5,7 @@
 #' @param x An object of class "bekkFit" from the function \link{bekk_fit} or an object of class "bekkForecast" from the function \link{bekk_forecast}.
 #' @param p A numerical value that determines the confidence level. The default value is set at 0.99 in accordance with the Basel Regulation.
 #' @param portfolio_weights A vector determining the portfolio weights to calculate the portfolio VaR. If set to "NULL", the univariate VaR for each series are calculated.
-#'
+#' \value{Returns an object of class "var" containing the VaR forecast and respective confidence bands.}
 #' @examples
 #' \donttest{
 #'

@@ -5,7 +5,7 @@
 #' @param x A fitted bekk model of class bekk from the \link{bekk_fit} function
 #' @param n.ahead Number of periods to forecast conditional volatility. Default is a one-period ahead forecast.
 #' @param ci Floating point in [0,1] defining the niveau for confidence bands of the conditional volatility forecast. Default is 95 per cent niveau confidence bands.
-#'
+#' \value{Returns an object of class "bekkForecast" containing the conditional volatility forecasts and respective confindence bands. }
 #' @examples
 #' \donttest{#'
 #' data(StocksBonds)

@@ -25,7 +25,8 @@ If "asymmetric = TRUE", the default is set to "rep(-1, N)" i.e. it is assumed th
 
 \item{N}{Integer specifying the dimension of the BEKK model. Only relevant for \link{bekk_sim}.}
 
-\item{compare}{Boolean specifying if the outcome of an asymmetric model is compared to its symmetric estimation result.}
+\item{compare}{Boolean specifying if the outcome of an asymmetric model is compared to its symmetric estimation result.
+\value{Returns an object of class "bekkSpec" containing the specifications of the model to be estimated.}}
 }
 \description{
 Method for creating a N-dimensional BEKK model specification object prior to fitting and/or simulating.
