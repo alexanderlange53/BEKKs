@@ -1,5 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.travis\.yml$
 ^Documentation$
 ^LICENSE\.md$
+^README\.md$
 ^CRAN-RELEASE$
