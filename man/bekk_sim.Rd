@@ -9,9 +9,10 @@ bekk_sim(spec, nobs)
 \arguments{
 \item{spec}{A spec object of class "bekkSpec" from the function \link{bekk_spec} or a fitted bekk model of class "bekkFit" from the \link{bekk_fit} function}
 
-\item{nobs}{Number of observations of the simulated sample
-
-\value{Returns a simulated time series using the parameters of passed "bekkSpec" or "bekkFit" object.}}
+\item{nobs}{Number of observations of the simulated sample}
+}
+\value{
+Returns a simulated time series S3 class object using the parameters of passed "bekkSpec" or "bekkFit".
 }
 \description{
 Method for simulating a N-dimensional BEKK model.

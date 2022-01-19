@@ -11,8 +11,10 @@ VaR(x, p = 0.99, portfolio_weights = NULL)
 
 \item{p}{A numerical value that determines the confidence level. The default value is set at 0.99 in accordance with the Basel Regulation.}
 
-\item{portfolio_weights}{A vector determining the portfolio weights to calculate the portfolio VaR. If set to "NULL", the univariate VaR for each series are calculated.
-\value{Returns an object of class "var" containing the VaR forecast and respective confidence bands.}}
+\item{portfolio_weights}{A vector determining the portfolio weights to calculate the portfolio VaR. If set to "NULL", the univariate VaR for each series are calculated.}
+}
+\value{
+Returns a S3 class "var" object containing the VaR forecast and respective confidence bands.
 }
 \description{
 Method for calculating VaR from estimated covariance processes (\link{bekk_fit}) or predicted covariances (\link{bekk_forecast}).

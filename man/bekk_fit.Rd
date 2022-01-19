@@ -16,8 +16,10 @@ are exactly calculated via second order derivatives.}
 
 \item{max_iter}{Maximum number of BHHH algorithm iterations.}
 
-\item{crit}{Determines the precision of the BHHH algorithm.
-\value{Returns an object of class "bekkFit" containing the estimated parameters, t-values, volatility process of the model defined by the BEKK_spec object.}}
+\item{crit}{Determines the precision of the BHHH algorithm.}
+}
+\value{
+Returns a S3 class "bekkFit" object containing the estimated parameters, t-values, volatility process of the model defined by the BEKK_spec object.
 }
 \description{
 Method for fitting a variety of N-dimensional BEKK models.

@@ -11,7 +11,7 @@
 #' If "asymmetric = TRUE", the default is set to "rep(-1, N)" i.e. it is assumed that excess volatility occurs for all series if the returns are negative.
 #' @param N Integer specifying the dimension of the BEKK model. Only relevant for \link{bekk_sim}.
 #' @param compare Boolean specifying if the outcome of an asymmetric model is compared to its symmetric estimation result.
-#' \value{Returns a S3 class "bekkSpec"  object containing the specifications of the model to be estimated.}
+#' @return Returns a S3 class "bekkSpec"  object containing the specifications of the model to be estimated.
 #'
 #'
 #' @export

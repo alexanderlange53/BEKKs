@@ -5,7 +5,7 @@
 #' @param spec A spec object of class "bekkSpec" from the function \link{bekk_spec} or a fitted bekk model of class "bekkFit" from the \link{bekk_fit} function
 #' @param nobs Number of observations of the simulated sample
 #'
-#'\value{Returns a simulated time series S3 class object using the parameters of passed "bekkSpec" or "bekkFit".}
+#' @return Returns a simulated time series S3 class object using the parameters of passed "bekkSpec" or "bekkFit".
 #'
 #' @examples
 #' \donttest{
