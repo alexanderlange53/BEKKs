@@ -1,6 +1,6 @@
 BEKKs
 =====
-[![Build Status](https://travis-ci.org/alexanderlange53/BEKKs.svg?branch=master)](https://travis-ci.org/alexanderlange53/BEKKs)
+[![Build Status](https://travis-ci.com/alexanderlange53/BEKKs.svg?branch=master)](https://travis-ci.com/alexanderlange53/BEKKs)
 
 Modelling conditional volatilities and correlations among multivariate time series in R
 
