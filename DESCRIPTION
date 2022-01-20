@@ -12,7 +12,7 @@ Authors@R:
       person("Alexander", "Lange", 
           role = c("aut", "cre"),
           email = "alexander.lange@uni-goettingen.de"))
-Description: Methods and tools for estimating, simulating and forecasting BEKK models based on the fast BHHH algorithm described in Hafner and Herwartz (2008) <doi:10.1007/s00184-007-0130-y>. 
+Description: Methods and tools for estimating, simulating and forecasting of so-called BEKK-models (named after Baba, Engle, Kraft and Kroner, 1990) based on the fast Berndt–Hall–Hall–Hausman (BHHH) algorithm described in Hafner and Herwartz (2008) <doi:10.1007/s00184-007-0130-y>. 
 Depends: R (>= 3.5.0)
 Imports: Rcpp, expm, reshape2, ggplot2, mathjaxr, gridExtra, grid, ggfortify, parallel, xts, stats, future, forecast, future.apply   
 LinkingTo: Rcpp, RcppArmadillo
