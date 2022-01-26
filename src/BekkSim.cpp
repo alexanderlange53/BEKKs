@@ -1,6 +1,6 @@
 #include <RcppArmadillo.h>
 
-#include "IndicatorFunctions.h"
+ #include "IndicatorFunctions.h"
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::plugins(cpp11)]]

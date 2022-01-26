@@ -31,7 +31,7 @@ double loglike_scalar_bekk(const arma::vec& theta, const arma::mat& r) {
   int n = r.n_cols;
   // Length of each series
   int NoOBs = r.n_rows;
-  int numb_of_vars = 2;
+
   double a = theta[0];
   double b = theta[1];
 
@@ -213,9 +213,9 @@ Rcpp::List  bhh_scalar_bekk(arma::mat& r, const arma::mat& theta, int& max_iter,
 // [[Rcpp::export]]
 arma::mat hesse_scalar_bekk(arma::mat theta, arma::mat r){
   int n = r.n_rows;
-  int N = r.n_cols;
-  int N2 = pow(N,2);
-  int NoOfVars_C =2;
+  //int N = r.n_cols;
+  //int N2 = pow(N,2);
+  //int NoOfVars_C =2;
 
 
   // Partial derivatives for initial period t = 1
