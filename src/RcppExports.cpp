@@ -319,7 +319,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // indicatorFunction
-inline int indicatorFunction(arma::mat r, arma::mat signs);
+int indicatorFunction(arma::mat r, arma::mat signs);
 RcppExport SEXP _BEKKs_indicatorFunction(SEXP rSEXP, SEXP signsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

@@ -130,7 +130,7 @@ double expected_indicator_value(arma::mat r, arma::mat signs){
 // [[Rcpp::export]]
 bool valid_asymm_bekk(arma::mat& C,arma::mat& A, arma::mat& B ,arma::mat& G, arma::mat r, arma::mat signs){
   int n =C.n_cols;
-  int N =r.n_rows;
+  //int N =r.n_rows;
   double exp_indicator_value = expected_indicator_value(r,signs);
 
   arma::mat prod = kron(A,A)+exp_indicator_value*kron(B,B)+kron(G,G);
@@ -946,7 +946,7 @@ Rcpp::List sigma_bekk(arma::mat& r, arma::mat& C, arma::mat& A, arma::mat& G) {
   arma::mat ht = r.t() * r / r.n_rows;
   sigma.row(0) = arma::vectorise(ht).t();
 
-  et.row(0) <- inv_gen(arma::sqrtmat_sympd(ht)) *  r.row(0).t();
+  //et.row(0) <- inv_gen(arma::sqrtmat_sympd(ht)) *  r.row(0).t();
 
   arma::mat CC  = C.t() * C;
   arma::mat At  = A.t();
@@ -973,7 +973,7 @@ Rcpp::List sigma_bekk_asymm(arma::mat& r, arma::mat& C, arma::mat& A, arma::mat&
   arma::mat ht = r.t() * r / r.n_rows;
   sigma.row(0) = arma::vectorise(ht).t();
 
-  et.row(0) <- inv_gen(arma::sqrtmat_sympd(ht)) * r.row(0).t();
+  //et.row(0) <- inv_gen(arma::sqrtmat_sympd(ht)) * r.row(0).t();
 //changed CC to C.t() * C instead of C * C.t() because C is upper triagular in the inputs
   arma::mat CC = C.t() * C;
   arma::mat At = A.t();
@@ -1110,13 +1110,13 @@ arma::mat hesse_bekk(arma::mat theta, arma::mat r){
 
               dHdada =C3* (arma::kron(arma::reshape(arma::eye(N,N),N2,1),arma::kron(r.row(i-1).t()*r.row(i-1),arma::eye(N,N)))*K_commutation)+arma::kron(arma::eye(N2,N2),t_kron_g)*dHdada;
               dHdadg = arma::kron(dHda.t(), arma::eye(N2,N2))*C1*(kron_comm_cgt + arma::kron(arma::reshape(gt,N2,1),K_commutation))+(arma::kron(arma::eye(N2,N2),arma::kron(g,gt).t()))*dHdadg;
-              dHdadc = dHdadc; // Always zero (row may be deleted later on)
+              //dHdadc = dHdadc; // Always zero (row may be deleted later on)
 
               dHdgda = C3*(arma::kron(arma::reshape(arma::eye(N,N),N2,1),arma::kron(arma::eye(N,N),gt)*dHda ))+(arma::kron(arma::eye(N2,N2),t_kron_g))*dHdgda;
               dHdgdg = C3*(arma::kron(arma::reshape(arma::eye(N,N),N2,1),arma::kron(ht,arma::eye(N,N))*K_commutation+arma::kron(arma::eye(N,N),gt)*dHdg ))+arma::kron(dHdg.t(),arma::eye(N2,N2))*C1*(kron_comm_cgt+arma::kron(arma::reshape(gt,N2,1),K_commutation))+arma::kron(arma::eye(N2,N2),t_kron_g)*dHdgdg;
               dHdgdc = C3*arma::kron(arma::reshape(arma::eye(N,N),N2,1),arma::kron(arma::eye(N,N),gt)*dHdc)+arma::kron(arma::eye(N2,N2),t_kron_g)*dHdgdc;
 
-              dHdcda = dHdcda;// Always zero (row may be deleted later on)
+              //dHdcda = dHdcda;// Always zero (row may be deleted later on)
               dHdcdg = arma::kron(dHdc.t(),arma::eye(N2,N2))*C1*(kron_comm_cgt+arma::kron(arma::reshape(gt,N2,1),K_commutation))+arma::kron(arma::eye(NoOfVars_C,NoOfVars_C),t_kron_g)*dHdcdg;
               dHdcdc = 2*arma::kron(L_elimination,D_duplication*D_gen_inv)*C1*arma::kron(arma::eye(N2,N2),arma::reshape(arma::eye(N,N),N2,1))*L_elimination.t()+arma::kron(arma::eye(NoOfVars_C,NoOfVars_C),t_kron_g)*dHdcdc;
 
@@ -1324,21 +1324,21 @@ arma::mat hesse_asymm_bekk(arma::mat theta, arma::mat r, arma::mat& signs){
 
     dHdada =C3* (arma::kron(arma::reshape(arma::eye(N,N),N2,1),arma::kron(r.row(i-1).t()*r.row(i-1),arma::eye(N,N)))*K_commutation)+arma::kron(arma::eye(N2,N2),t_kron_g)*dHdada;
     dHdadg = arma::kron(dHda.t(), arma::eye(N2,N2))*C1*(kron_comm_cgt + arma::kron(arma::reshape(gt,N2,1),K_commutation))+(arma::kron(arma::eye(N2,N2),arma::kron(g,gt).t()))*dHdadg;
-    dHdadc = dHdadc; // Always zero (row may be deleted later on)
-    dHdadb = dHdadb; // Always zero (row may be deleted later on)
+    //dHdadc = dHdadc; // Always zero (row may be deleted later on)
+    //dHdadb = dHdadb; // Always zero (row may be deleted later on)
 
     dHdbdb = indicatorFunction(r.row(i-1),signs)*C3* (arma::kron(arma::reshape(arma::eye(N,N),N2,1),arma::kron(r.row(i-1).t()*r.row(i-1),arma::eye(N,N)))*K_commutation)+arma::kron(arma::eye(N2,N2),t_kron_g)*dHdbdb;
     dHdbdg = arma::kron(dHdb.t(), arma::eye(N2,N2))*C1*(kron_comm_cgt + arma::kron(arma::reshape(gt,N2,1),K_commutation))+(arma::kron(arma::eye(N2,N2),arma::kron(g,gt).t()))*dHdbdg;
-    dHdbdc = dHdbdc; // Always zero (row may be deleted later on)
-    dHdbda = dHdbda; // Always zero (row may be deleted later on)
+    //dHdbdc = dHdbdc; // Always zero (row may be deleted later on)
+    //dHdbda = dHdbda; // Always zero (row may be deleted later on)
 
     dHdgda = C3*(arma::kron(arma::reshape(arma::eye(N,N),N2,1),arma::kron(arma::eye(N,N),gt)*dHda ))+(arma::kron(arma::eye(N2,N2),t_kron_g))*dHdgda;
     dHdgdb = C3*(arma::kron(arma::reshape(arma::eye(N,N),N2,1),arma::kron(arma::eye(N,N),gt)*dHdb ))+(arma::kron(arma::eye(N2,N2),t_kron_g))*dHdgdb;
     dHdgdg = C3*(arma::kron(arma::reshape(arma::eye(N,N),N2,1),arma::kron(ht,arma::eye(N,N))*K_commutation+arma::kron(arma::eye(N,N),gt)*dHdg ))+arma::kron(dHdg.t(),arma::eye(N2,N2))*C1*(kron_comm_cgt+arma::kron(arma::reshape(gt,N2,1),K_commutation))+arma::kron(arma::eye(N2,N2),t_kron_g)*dHdgdg;
     dHdgdc = C3*arma::kron(arma::reshape(arma::eye(N,N),N2,1),arma::kron(arma::eye(N,N),gt)*dHdc)+arma::kron(arma::eye(N2,N2),t_kron_g)*dHdgdc;
 
-    dHdcda = dHdcda;// Always zero (row may be deleted later on)
-    dHdcdb = dHdcdb;// Always zero (row may be deleted later on)
+    //dHdcda = dHdcda;// Always zero (row may be deleted later on)
+    //dHdcdb = dHdcdb;// Always zero (row may be deleted later on)
     dHdcdg = arma::kron(dHdc.t(),arma::eye(N2,N2))*C1*(kron_comm_cgt+arma::kron(arma::reshape(gt,N2,1),K_commutation))+arma::kron(arma::eye(NoOfVars_C,NoOfVars_C),t_kron_g)*dHdcdg;
     dHdcdc = 2*arma::kron(L_elimination,D_duplication*D_gen_inv)*C1*arma::kron(arma::eye(N2,N2),arma::reshape(arma::eye(N,N),N2,1))*L_elimination.t()+arma::kron(arma::eye(NoOfVars_C,NoOfVars_C),t_kron_g)*dHdcdc;
 
