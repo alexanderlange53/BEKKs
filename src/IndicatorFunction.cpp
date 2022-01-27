@@ -2,8 +2,6 @@
 
 #include "IndicatorFunctions.h"
 
-//' @export
-
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::plugins(cpp11)]]
