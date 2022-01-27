@@ -97,9 +97,6 @@ simulate_bekka_c <- function(theta, NoObs, n, signs, expected_signs) {
     .Call('_BEKKs_simulate_bekka_c', PACKAGE = 'BEKKs', theta, NoObs, n, signs, expected_signs)
 }
 
-#' @export
-NULL
-
 indicatorFunction <- function(r, signs) {
     .Call('_BEKKs_indicatorFunction', PACKAGE = 'BEKKs', r, signs)
 }
