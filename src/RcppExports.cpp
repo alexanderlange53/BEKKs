@@ -11,6 +11,17 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// diag_selection_mat
+arma::mat diag_selection_mat(const int& n);
+RcppExport SEXP _BEKKs_diag_selection_mat(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int& >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(diag_selection_mat(n));
+    return rcpp_result_gen;
+END_RCPP
+}
 // set_seed
 void set_seed(double seed);
 RcppExport SEXP _BEKKs_set_seed(SEXP seedSEXP) {
@@ -156,6 +167,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::mat& >::type theta(thetaSEXP);
     Rcpp::traits::input_parameter< arma::mat& >::type r(rSEXP);
     rcpp_result_gen = Rcpp::wrap(score_bekk(theta, r));
+    return rcpp_result_gen;
+END_RCPP
+}
+// score_dbekk
+arma::mat score_dbekk(const arma::mat& theta, arma::mat& r);
+RcppExport SEXP _BEKKs_score_dbekk(SEXP thetaSEXP, SEXP rSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type r(rSEXP);
+    rcpp_result_gen = Rcpp::wrap(score_dbekk(theta, r));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -406,6 +429,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_BEKKs_diag_selection_mat", (DL_FUNC) &_BEKKs_diag_selection_mat, 1},
     {"_BEKKs_set_seed", (DL_FUNC) &_BEKKs_set_seed, 1},
     {"_BEKKs_elimination_mat", (DL_FUNC) &_BEKKs_elimination_mat, 1},
     {"_BEKKs_commutation_mat", (DL_FUNC) &_BEKKs_commutation_mat, 1},
@@ -418,6 +442,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BEKKs_loglike_bekk", (DL_FUNC) &_BEKKs_loglike_bekk, 2},
     {"_BEKKs_loglike_asymm_bekk", (DL_FUNC) &_BEKKs_loglike_asymm_bekk, 3},
     {"_BEKKs_score_bekk", (DL_FUNC) &_BEKKs_score_bekk, 2},
+    {"_BEKKs_score_dbekk", (DL_FUNC) &_BEKKs_score_dbekk, 2},
     {"_BEKKs_score_asymm_bekk", (DL_FUNC) &_BEKKs_score_asymm_bekk, 3},
     {"_BEKKs_bhh_bekk", (DL_FUNC) &_BEKKs_bhh_bekk, 4},
     {"_BEKKs_bhh_asymm_bekk", (DL_FUNC) &_BEKKs_bhh_asymm_bekk, 5},
