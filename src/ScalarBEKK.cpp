@@ -51,13 +51,23 @@ double loglike_scalar_bekk(const arma::vec& theta, const arma::mat& r) {
   int n = r.n_cols;
   // Length of each series
   int NoOBs = r.n_rows;
+  int NofVarsC = theta.n_rows -2;
+  double a = theta[NofVarsC];
+  double b = theta[NofVarsC+1];
+  arma::mat C = arma::zeros(n, n);
 
-  double a = theta[0];
-  double b = theta[1];
+  int index = 0;
 
+  for(int i = 0; i < n; i++){
+    for (int j = i; j < n; j++) {
+      C(j, i) = theta(index);
+      index += 1;
+    }
+  }
+  arma::mat CC  = C * C.t();
 
   // check constraints
-  if (valid_scalar_bekk(a,b) == false) {
+  if (valid_scalar_bekk(C,a,b) == false) {
     return -1e25;
   }
 
@@ -68,7 +78,7 @@ double loglike_scalar_bekk(const arma::vec& theta, const arma::mat& r) {
 
   double llv = arma::as_scalar(log(arma::det(H)) + r.row(0) * arma::inv(H) * r.row(0).t());
   for (int i = 1; i < NoOBs; i++) {
-    H = (1-a-b)*sample_covariance + a * r.row(i - 1).t() * r.row(i - 1)  + b * H ;
+    H = CC + a * r.row(i - 1).t() * r.row(i - 1)  + b * H ;
     llv += arma::as_scalar(log(arma::det(H)) + r.row(i) * arma::inv(H) * r.row(i).t());
   }
 
@@ -541,3 +551,59 @@ arma::mat hesse_scalar_abekk(arma::mat theta, arma::mat r, arma::mat signs){
   return hessian*(-1);
 
 }
+
+
+
+
+// [[Rcpp::export]]
+Rcpp::List sigma_bekk(arma::mat& r,double a, double b) {
+  // Computation of second order moment time paths and GARCH innovations
+  int N = r.n_cols;
+  int N2 = pow(N, 2);
+
+  arma::mat sigma = arma::zeros(r.n_rows, N2);
+  arma::mat et = arma::zeros(r.n_rows, N);
+  arma::mat omega = r.t() * r / r.n_rows;
+  arma::mat ht = omega;
+  sigma.row(0) = arma::vectorise(ht).t();
+
+  //et.row(0) <- inv_gen(arma::sqrtmat_sympd(ht)) *  r.row(0).t();
+
+
+
+  for (int i = 1; i < r.n_rows; i++) {
+    ht = (1-a-b) * omega + a * r.row(i - 1).t() * r.row(i - 1)  + b*ht;
+    sigma.row(i) = arma::vectorise(ht).t();
+    et.row(i) = (inv_gen(arma::chol(ht).t()) *  r.row(i).t()).t();
+  }
+
+  return Rcpp::List::create(Rcpp::Named("sigma_t")= sigma,
+                            Rcpp::Named("e_t") = et);
+}
+
+// [[Rcpp::export]]
+Rcpp::List sigma_bekk_asymm(arma::mat& r, double a, double b, double c, arma::mat signs) {
+  // Computation of second order moment time paths and GARCH innovations
+  int N = r.n_cols;
+  int N2 = pow(N, 2);
+
+  arma::mat sigma = arma::zeros(r.n_rows, N2);
+  arma::mat et = arma::zeros(r.n_rows, N);
+  arma::mat omega = r.t() * r / r.n_rows;
+  arma::mat ht = omega;
+  sigma.row(0) = arma::vectorise(ht).t();
+  double exp_signs = expected_indicator_value(r, signs);
+
+  //et.row(0) <- inv_gen(arma::sqrtmat_sympd(ht)) * r.row(0).t();
+  //changed CC to C.t() * C instead of C * C.t() because C is upper triagular in the inputs
+
+  for (int i = 1; i < r.n_rows; i++) {
+    ht = (1-a-b-c*exp_signs) + (a+indicatorFunction(r.row(i-1),signs)*c) * r.row(i - 1).t() * r.row(i - 1)+ b * Gt * ht;
+    sigma.row(i) = arma::vectorise(ht).t();
+    et.row(i) = (inv_gen(arma::chol(ht).t()) * r.row(i).t()).t();
+  }
+
+  return Rcpp::List::create(Rcpp::Named("sigma_t")= sigma,
+                            Rcpp::Named("e_t") = et);
+}
+
