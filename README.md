@@ -1,6 +1,5 @@
 BEKKs
 =====
-[![Build Status](https://travis-ci.com/alexanderlange53/BEKKs.svg?branch=master)](https://travis-ci.com/github/alexanderlange53/BEKKs)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/BEKKs)](https://cran.r-project.org/package=BEKKs) 
 [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/grand-total/BEKKs)](https://cran.r-project.org/package=BEKKs)
 
