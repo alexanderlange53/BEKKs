@@ -25,9 +25,10 @@ bekk_virf <- function(fit ,time = 1, q, periods = 10){
 #' @export
 bekk_virf.bekk <- function(fit, time, q) {
 
-  init_values <- spec$init_values
-  N <- ncol(fit$data)
 
+  N <- ncol(fit$data)
+  q_len <- length(q)
+  H <- fit$H_t[[time]]
   #get quantiles of returns
   residuals = fit$resiudals
 
