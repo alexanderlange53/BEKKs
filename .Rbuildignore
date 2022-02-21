@@ -5,3 +5,4 @@
 ^README\.md$
 ^CRAN-RELEASE$
 ^CRAN-SUBMISSION$
+^\.github$
