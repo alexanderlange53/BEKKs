@@ -305,6 +305,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// virf_bekka
+arma::mat virf_bekka(arma::mat& H_t, arma::mat& A, arma::mat& B, arma::mat& G, arma::mat& signs, double& expected_signs, arma::mat& shocks, int& periods);
+RcppExport SEXP _BEKKs_virf_bekka(SEXP H_tSEXP, SEXP ASEXP, SEXP BSEXP, SEXP GSEXP, SEXP signsSEXP, SEXP expected_signsSEXP, SEXP shocksSEXP, SEXP periodsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type H_t(H_tSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type A(ASEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type B(BSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type G(GSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type signs(signsSEXP);
+    Rcpp::traits::input_parameter< double& >::type expected_signs(expected_signsSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type shocks(shocksSEXP);
+    Rcpp::traits::input_parameter< int& >::type periods(periodsSEXP);
+    rcpp_result_gen = Rcpp::wrap(virf_bekka(H_t, A, B, G, signs, expected_signs, shocks, periods));
+    return rcpp_result_gen;
+END_RCPP
+}
 // simulate_bekk_c
 arma::mat simulate_bekk_c(arma::vec theta, const int NoObs, const int n);
 RcppExport SEXP _BEKKs_simulate_bekk_c(SEXP thetaSEXP, SEXP NoObsSEXP, SEXP nSEXP) {
@@ -444,6 +462,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BEKKs_hesse_asymm_bekk", (DL_FUNC) &_BEKKs_hesse_asymm_bekk, 3},
     {"_BEKKs_eigen_value_decomposition", (DL_FUNC) &_BEKKs_eigen_value_decomposition, 1},
     {"_BEKKs_virf_bekk", (DL_FUNC) &_BEKKs_virf_bekk, 5},
+    {"_BEKKs_virf_bekka", (DL_FUNC) &_BEKKs_virf_bekka, 8},
     {"_BEKKs_simulate_bekk_c", (DL_FUNC) &_BEKKs_simulate_bekk_c, 3},
     {"_BEKKs_simulate_bekka_c", (DL_FUNC) &_BEKKs_simulate_bekka_c, 5},
     {"_BEKKs_indicatorFunction", (DL_FUNC) &_BEKKs_indicatorFunction, 2},
