@@ -62,6 +62,17 @@ virf.bekk <- function(fit, time = 1, q = 0.05, index_series=1, periods = 10) {
   }
 
   VIRF = virf_bekk(H, fit$A, fit$G, matrix(shocks,ncol=N, nrow = 1), periods)
+  dupl <- duplication_mat(N)
+  elim <- elimination_mat(N)
+
+  # for (i in 1:nrow(VIRF)) {
+  #   tm <- matrix((dupl%*%VIRF[i,]), N, N, byrow = T)
+  #   tm2 <- sqrt(solve(diag(abs(diag(tm)))))%*%tm%*%sqrt(solve(diag(abs(diag(tm)))))
+  #   diag(tm2) <- sqrt(abs(diag(tm)))%*%solve(diag(abs(diag(tm))))%*%diag(diag(tm))
+  #   VIRF[i,] <- elim%*%c(tm2)
+  # }
+
+
 
 
   VIRF <- as.data.frame(VIRF)
