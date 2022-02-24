@@ -5,32 +5,20 @@ diag_selection_mat <- function(n) {
     .Call('_BEKKs_diag_selection_mat', PACKAGE = 'BEKKs', n)
 }
 
+cut_mat_symmetric <- function(n) {
+    .Call('_BEKKs_cut_mat_symmetric', PACKAGE = 'BEKKs', n)
+}
+
+cut_mat_asymmetric <- function(n) {
+    .Call('_BEKKs_cut_mat_asymmetric', PACKAGE = 'BEKKs', n)
+}
+
 set_seed <- function(seed) {
     invisible(.Call('_BEKKs_set_seed', PACKAGE = 'BEKKs', seed))
 }
 
-elimination_mat <- function(n) {
-    .Call('_BEKKs_elimination_mat', PACKAGE = 'BEKKs', n)
-}
-
-commutation_mat <- function(n) {
-    .Call('_BEKKs_commutation_mat', PACKAGE = 'BEKKs', n)
-}
-
-duplication_mat <- function(n) {
-    .Call('_BEKKs_duplication_mat', PACKAGE = 'BEKKs', n)
-}
-
-inv_gen <- function(m) {
-    .Call('_BEKKs_inv_gen', PACKAGE = 'BEKKs', m)
-}
-
 valid_bekk <- function(C, A, G) {
     .Call('_BEKKs_valid_bekk', PACKAGE = 'BEKKs', C, A, G)
-}
-
-expected_indicator_value <- function(r, signs) {
-    .Call('_BEKKs_expected_indicator_value', PACKAGE = 'BEKKs', r, signs)
 }
 
 valid_asymm_bekk <- function(C, A, B, G, r, signs) {
@@ -49,6 +37,14 @@ loglike_asymm_bekk <- function(theta, r, signs) {
     .Call('_BEKKs_loglike_asymm_bekk', PACKAGE = 'BEKKs', theta, r, signs)
 }
 
+loglike_dbekk <- function(theta, r) {
+    .Call('_BEKKs_loglike_dbekk', PACKAGE = 'BEKKs', theta, r)
+}
+
+loglike_asymm_dbekk <- function(theta, r, signs) {
+    .Call('_BEKKs_loglike_asymm_dbekk', PACKAGE = 'BEKKs', theta, r, signs)
+}
+
 score_bekk <- function(theta, r) {
     .Call('_BEKKs_score_bekk', PACKAGE = 'BEKKs', theta, r)
 }
@@ -61,12 +57,24 @@ score_asymm_bekk <- function(theta, r, signs) {
     .Call('_BEKKs_score_asymm_bekk', PACKAGE = 'BEKKs', theta, r, signs)
 }
 
+score_asymm_dbekk <- function(theta, r, signs) {
+    .Call('_BEKKs_score_asymm_dbekk', PACKAGE = 'BEKKs', theta, r, signs)
+}
+
 bhh_bekk <- function(r, theta, max_iter, crit) {
     .Call('_BEKKs_bhh_bekk', PACKAGE = 'BEKKs', r, theta, max_iter, crit)
 }
 
 bhh_asymm_bekk <- function(r, theta, max_iter, crit, signs) {
     .Call('_BEKKs_bhh_asymm_bekk', PACKAGE = 'BEKKs', r, theta, max_iter, crit, signs)
+}
+
+bhh_dbekk <- function(r, theta, max_iter, crit) {
+    .Call('_BEKKs_bhh_dbekk', PACKAGE = 'BEKKs', r, theta, max_iter, crit)
+}
+
+bhh_asymm_dbekk <- function(r, theta, max_iter, crit, signs) {
+    .Call('_BEKKs_bhh_asymm_dbekk', PACKAGE = 'BEKKs', r, theta, max_iter, crit, signs)
 }
 
 random_grid_search_BEKK <- function(r) {
@@ -89,8 +97,16 @@ hesse_bekk <- function(theta, r) {
     .Call('_BEKKs_hesse_bekk', PACKAGE = 'BEKKs', theta, r)
 }
 
+hesse_dbekk <- function(theta, r) {
+    .Call('_BEKKs_hesse_dbekk', PACKAGE = 'BEKKs', theta, r)
+}
+
 hesse_asymm_bekk <- function(theta, r, signs) {
     .Call('_BEKKs_hesse_asymm_bekk', PACKAGE = 'BEKKs', theta, r, signs)
+}
+
+hesse_asymm_dbekk <- function(theta, r, signs) {
+    .Call('_BEKKs_hesse_asymm_dbekk', PACKAGE = 'BEKKs', theta, r, signs)
 }
 
 eigen_value_decomposition <- function(A) {
@@ -105,20 +121,68 @@ simulate_bekka_c <- function(theta, NoObs, n, signs, expected_signs) {
     .Call('_BEKKs_simulate_bekka_c', PACKAGE = 'BEKKs', theta, NoObs, n, signs, expected_signs)
 }
 
+simulate_dbekk_c <- function(theta, NoObs, N) {
+    .Call('_BEKKs_simulate_dbekk_c', PACKAGE = 'BEKKs', theta, NoObs, N)
+}
+
+simulate_dbekka_c <- function(theta, NoObs, N, signs, expected_signs) {
+    .Call('_BEKKs_simulate_dbekka_c', PACKAGE = 'BEKKs', theta, NoObs, N, signs, expected_signs)
+}
+
+simulate_sbekk_c <- function(theta, NoObs, N) {
+    .Call('_BEKKs_simulate_sbekk_c', PACKAGE = 'BEKKs', theta, NoObs, N)
+}
+
+simulate_sbekka_c <- function(theta, NoObs, N, signs, expected_signs) {
+    .Call('_BEKKs_simulate_sbekka_c', PACKAGE = 'BEKKs', theta, NoObs, N, signs, expected_signs)
+}
+
 indicatorFunction <- function(r, signs) {
     .Call('_BEKKs_indicatorFunction', PACKAGE = 'BEKKs', r, signs)
 }
 
-valid_scalar_bekk <- function(a, b) {
-    .Call('_BEKKs_valid_scalar_bekk', PACKAGE = 'BEKKs', a, b)
+expected_indicator_value <- function(r, signs) {
+    .Call('_BEKKs_expected_indicator_value', PACKAGE = 'BEKKs', r, signs)
+}
+
+elimination_mat <- function(n) {
+    .Call('_BEKKs_elimination_mat', PACKAGE = 'BEKKs', n)
+}
+
+commutation_mat <- function(n) {
+    .Call('_BEKKs_commutation_mat', PACKAGE = 'BEKKs', n)
+}
+
+duplication_mat <- function(n) {
+    .Call('_BEKKs_duplication_mat', PACKAGE = 'BEKKs', n)
+}
+
+inv_gen <- function(m) {
+    .Call('_BEKKs_inv_gen', PACKAGE = 'BEKKs', m)
+}
+
+valid_scalar_bekk <- function(C, a, g) {
+    .Call('_BEKKs_valid_scalar_bekk', PACKAGE = 'BEKKs', C, a, g)
+}
+
+valid_scalar_abekk <- function(C, a, b, g, r, signs) {
+    .Call('_BEKKs_valid_scalar_abekk', PACKAGE = 'BEKKs', C, a, b, g, r, signs)
 }
 
 loglike_scalar_bekk <- function(theta, r) {
     .Call('_BEKKs_loglike_scalar_bekk', PACKAGE = 'BEKKs', theta, r)
 }
 
+loglike_scalar_abekk <- function(theta, r, signs) {
+    .Call('_BEKKs_loglike_scalar_abekk', PACKAGE = 'BEKKs', theta, r, signs)
+}
+
 score_scalar_bekk <- function(theta, r) {
     .Call('_BEKKs_score_scalar_bekk', PACKAGE = 'BEKKs', theta, r)
+}
+
+score_scalar_abekk <- function(theta, r, signs) {
+    .Call('_BEKKs_score_scalar_abekk', PACKAGE = 'BEKKs', theta, r, signs)
 }
 
 bhh_scalar_bekk <- function(r, theta, max_iter, crit) {
@@ -127,6 +191,18 @@ bhh_scalar_bekk <- function(r, theta, max_iter, crit) {
 
 hesse_scalar_bekk <- function(theta, r) {
     .Call('_BEKKs_hesse_scalar_bekk', PACKAGE = 'BEKKs', theta, r)
+}
+
+hesse_scalar_abekk <- function(theta, r, signs) {
+    .Call('_BEKKs_hesse_scalar_abekk', PACKAGE = 'BEKKs', theta, r, signs)
+}
+
+sigma_sbekk <- function(r, C, a, g) {
+    .Call('_BEKKs_sigma_sbekk', PACKAGE = 'BEKKs', r, C, a, g)
+}
+
+sigma_sbekk_asymm <- function(r, C, a, b, g, signs) {
+    .Call('_BEKKs_sigma_sbekk_asymm', PACKAGE = 'BEKKs', r, C, a, b, g, signs)
 }
 
 YLagCr <- function(y, p) {
