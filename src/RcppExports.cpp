@@ -280,6 +280,29 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// random_grid_search_dBEKK
+Rcpp::List random_grid_search_dBEKK(arma::mat r);
+RcppExport SEXP _BEKKs_random_grid_search_dBEKK(SEXP rSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type r(rSEXP);
+    rcpp_result_gen = Rcpp::wrap(random_grid_search_dBEKK(r));
+    return rcpp_result_gen;
+END_RCPP
+}
+// random_grid_search_asymmetric_dBEKK
+Rcpp::List random_grid_search_asymmetric_dBEKK(arma::mat r, arma::mat signs);
+RcppExport SEXP _BEKKs_random_grid_search_asymmetric_dBEKK(SEXP rSEXP, SEXP signsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type r(rSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type signs(signsSEXP);
+    rcpp_result_gen = Rcpp::wrap(random_grid_search_asymmetric_dBEKK(r, signs));
+    return rcpp_result_gen;
+END_RCPP
+}
 // sigma_bekk
 Rcpp::List sigma_bekk(arma::mat& r, arma::mat& C, arma::mat& A, arma::mat& G);
 RcppExport SEXP _BEKKs_sigma_bekk(SEXP rSEXP, SEXP CSEXP, SEXP ASEXP, SEXP GSEXP) {
@@ -537,7 +560,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // valid_scalar_abekk
-bool valid_scalar_abekk(arma::mat C, double a, double b, double g, arma::mat& r, arma::mat& signs);
+bool valid_scalar_abekk(arma::mat C, double a, double b, double g, arma::mat r, arma::mat signs);
 RcppExport SEXP _BEKKs_valid_scalar_abekk(SEXP CSEXP, SEXP aSEXP, SEXP bSEXP, SEXP gSEXP, SEXP rSEXP, SEXP signsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -546,8 +569,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type a(aSEXP);
     Rcpp::traits::input_parameter< double >::type b(bSEXP);
     Rcpp::traits::input_parameter< double >::type g(gSEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type r(rSEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type signs(signsSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type r(rSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type signs(signsSEXP);
     rcpp_result_gen = Rcpp::wrap(valid_scalar_abekk(C, a, b, g, r, signs));
     return rcpp_result_gen;
 END_RCPP
@@ -671,6 +694,29 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// random_grid_search_sBEKK
+Rcpp::List random_grid_search_sBEKK(arma::mat r);
+RcppExport SEXP _BEKKs_random_grid_search_sBEKK(SEXP rSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type r(rSEXP);
+    rcpp_result_gen = Rcpp::wrap(random_grid_search_sBEKK(r));
+    return rcpp_result_gen;
+END_RCPP
+}
+// random_grid_search_asymmetric_sBEKK
+Rcpp::List random_grid_search_asymmetric_sBEKK(arma::mat r, arma::mat signs);
+RcppExport SEXP _BEKKs_random_grid_search_asymmetric_sBEKK(SEXP rSEXP, SEXP signsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type r(rSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type signs(signsSEXP);
+    rcpp_result_gen = Rcpp::wrap(random_grid_search_asymmetric_sBEKK(r, signs));
+    return rcpp_result_gen;
+END_RCPP
+}
 // YLagCr
 arma::mat YLagCr(arma::mat y, int p);
 RcppExport SEXP _BEKKs_YLagCr(SEXP ySEXP, SEXP pSEXP) {
@@ -706,6 +752,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BEKKs_bhh_asymm_dbekk", (DL_FUNC) &_BEKKs_bhh_asymm_dbekk, 5},
     {"_BEKKs_random_grid_search_BEKK", (DL_FUNC) &_BEKKs_random_grid_search_BEKK, 1},
     {"_BEKKs_random_grid_search_asymmetric_BEKK", (DL_FUNC) &_BEKKs_random_grid_search_asymmetric_BEKK, 2},
+    {"_BEKKs_random_grid_search_dBEKK", (DL_FUNC) &_BEKKs_random_grid_search_dBEKK, 1},
+    {"_BEKKs_random_grid_search_asymmetric_dBEKK", (DL_FUNC) &_BEKKs_random_grid_search_asymmetric_dBEKK, 2},
     {"_BEKKs_sigma_bekk", (DL_FUNC) &_BEKKs_sigma_bekk, 4},
     {"_BEKKs_sigma_bekk_asymm", (DL_FUNC) &_BEKKs_sigma_bekk_asymm, 6},
     {"_BEKKs_hesse_bekk", (DL_FUNC) &_BEKKs_hesse_bekk, 2},
@@ -736,6 +784,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BEKKs_hesse_scalar_abekk", (DL_FUNC) &_BEKKs_hesse_scalar_abekk, 3},
     {"_BEKKs_sigma_sbekk", (DL_FUNC) &_BEKKs_sigma_sbekk, 4},
     {"_BEKKs_sigma_sbekk_asymm", (DL_FUNC) &_BEKKs_sigma_sbekk_asymm, 6},
+    {"_BEKKs_random_grid_search_sBEKK", (DL_FUNC) &_BEKKs_random_grid_search_sBEKK, 1},
+    {"_BEKKs_random_grid_search_asymmetric_sBEKK", (DL_FUNC) &_BEKKs_random_grid_search_asymmetric_sBEKK, 2},
     {"_BEKKs_YLagCr", (DL_FUNC) &_BEKKs_YLagCr, 2},
     {NULL, NULL, 0}
 };

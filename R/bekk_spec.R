@@ -2,7 +2,7 @@
 #'
 #' @description Method for creating a N-dimensional BEKK model specification object prior to fitting and/or simulating.
 #'
-#' @param model A list containing the model type specification: Currently implemented is only "bekk" ("dbekk" and "sbekk" are forthcoming).
+#' @param model A list containing the model type specification: Either "bekk" "dbekk" or "sbekk".
 #' Moreover it can be specified whether the model should be estimated allowing for asymmetric volatility structure.
 #' @param init_values initial values for \link{bekk_fit} during BHHH algorithm. It can be either a numerical vector of suitable dimension, or a character vector i.e. "random" to use a random starting value generator (set a seed in advance for reproducible results), or
 #'  "simple" for relying on a simple initial values generator based on typical values for BEKK parameter found in the literature. If the object from this function is passed to \link{bekk_sim}, "init_values" are used as parameters for data generating process.

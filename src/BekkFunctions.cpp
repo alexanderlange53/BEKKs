@@ -1404,6 +1404,257 @@ Rcpp::List random_grid_search_asymmetric_BEKK(arma::mat r, arma::mat signs) {
 }
 
 
+//[[Rcpp::export]]
+Rcpp::List random_grid_search_dBEKK(arma::mat r) {
+  int n =r.n_cols;
+  int N =r.n_rows;
+  int l=0;
+  int m=0;
+
+
+  arma::mat C = arma::zeros(n,n);
+  arma::mat A = arma::zeros(n,n);
+  arma::mat G = arma::zeros(n,n);
+
+  int numb_of_vars=2*n+n*(n+1)/2;
+
+  arma::vec theta = arma::zeros(numb_of_vars,1);
+  arma::vec thetaOptim=theta;
+  arma::vec theta_mu = theta;
+  //arma::vec theta_mu=theta;
+  int counter= 0;
+  int diagonal_elements = n;
+  int diagonal_counter = 0;
+  arma::mat uncond_var = r* r.t()/N;
+  //set the initial expected values of the parameters
+  for (int j=0; j < (n*(n+1)/2);j++){
+
+    if(j == counter){
+      theta_mu[j]=  0.05*uncond_var(j,j);
+      counter+=diagonal_elements;
+      diagonal_elements--;
+    }
+
+  }
+
+
+  for (int j=(n*(n+1)/2); j < (numb_of_vars-n);j++){
+
+      theta_mu[j]=0.3;
+
+  }
+  for (int j=n+(n*(n+1)/2); j < (numb_of_vars-2*n);j++){
+
+    theta_mu[j]=0.9;
+
+  }
+
+
+
+
+
+  double best_val = loglike_bekk(theta_mu,r);
+  thetaOptim=theta_mu;
+  //set the seed
+
+  // Generating random values for A, B, C and G
+  while(l<10000 && m<=17){
+    int counter= 0;
+    int diagonal_elements = n;
+    int diagonal_counter = 0;
+
+    for (int j=0; j < (n*(n+1)/2);j++){
+
+      if(j == counter){
+        theta[j]=  theta_mu[j]+arma::randn()*0.001;
+        counter+=diagonal_elements;
+        diagonal_elements--;
+      }
+      else{
+        theta[j]=arma::randn()*0.00001+theta_mu[j];
+
+      }
+    }
+    for (int j=n*(n+1)/2; j< numb_of_vars; j++){
+        theta[j]= arma::randn()*0.01+theta_mu[j];
+    }
+
+
+    //arma::mat C = arma::zeros(n,n);
+    int  index=0;
+    for(int j=0; j <n; j++){
+      for (int k = j;k < n; k++) {
+        C(k,j)=theta[index];
+        index++;
+      }
+    }
+
+    A = arma::diagmat(theta.rows((n * (n+1)/2), n+ (n * (n + 1)/2) - 1));
+    G = arma::diagmat(theta.rows(n + (n * (n + 1)/2), 2*n+ (n * (n + 1)/2) - 1));
+
+    if(valid_bekk(C,A,G)){
+      l++;
+      double llv=loglike_bekk(theta,r);
+
+      if(llv>best_val){
+
+        m++;
+        best_val=llv;
+        thetaOptim=theta;
+        theta_mu=thetaOptim;
+
+      }
+      if(l>2000 || m>=5){
+        theta_mu=thetaOptim;
+      }
+    }
+
+  }
+  return Rcpp::List::create(Rcpp::Named("thetaOptim") = thetaOptim,
+                            Rcpp::Named("best_val") = best_val);
+
+}
+
+
+//[[Rcpp::export]]
+Rcpp::List random_grid_search_asymmetric_dBEKK(arma::mat r, arma::mat signs) {
+  int n =r.n_cols;
+  int N =r.n_rows;
+  int l=0;
+  int m=0;
+
+
+  arma::mat C = arma::zeros(n,n);
+  arma::mat A = arma::zeros(n,n);
+  arma::mat B = arma::zeros(n,n);
+  arma::mat G = arma::zeros(n,n);
+
+  int numb_of_vars=3*n+n*(n+1)/2;
+
+  arma::vec theta = arma::zeros(numb_of_vars,1);
+  arma::vec thetaOptim=theta;
+  arma::vec theta_mu = theta;
+  //arma::vec theta_mu=theta;
+  int counter= 0;
+  int diagonal_elements = n;
+  int diagonal_counter = 0;
+  arma::mat uncond_var = r* r.t()/N;
+  //set the initial expected values of the parameters
+  for (int j=0; j < (n*(n+1)/2);j++){
+
+    if(j == counter){
+      theta_mu[j]=  0.05*uncond_var(j,j);
+      counter+=diagonal_elements;
+      diagonal_elements--;
+    }
+
+  }
+
+  for (int j=(n*(n+1)/2); j < (numb_of_vars-2*n);j++){
+
+      theta_mu[j]=0.2;
+  }
+
+  for (int j=(n*(n+1)/2); j < (numb_of_vars-2*n*n);j++){
+    if(j == (n*(n+1)/2+diagonal_counter*(n+1))){
+      diagonal_counter++;
+      theta_mu[j+n*n]=0.3;
+    }
+    else{
+      theta_mu[j+n*n]=0.001;
+    }
+  }
+  diagonal_counter=0;
+  for (int j=(n*(n+1)/2); j < (numb_of_vars-2*n*n);j++){
+    if(j == (n*(n+1)/2+diagonal_counter*(n+1))){
+      diagonal_counter++;
+      theta_mu[j+n*n*2]=0.92;
+    }
+    else{
+      theta_mu[j+n*n*2]=0.001;
+    }
+  }
+
+
+  double best_val = loglike_asymm_bekk(theta_mu,r,signs);
+  thetaOptim=theta_mu;
+  //set the seed
+
+  // Generating random values for A, B, C and G
+  while(l<8000 && m<=17){
+    int counter= 0;
+    int diagonal_elements = n;
+    int diagonal_counter = 0;
+
+    for (int j=0; j < (n*(n+1)/2);j++){
+
+      if(j == counter){
+        theta[j]=  theta_mu[j]+arma::randn()*0.001;
+        counter+=diagonal_elements;
+        diagonal_elements--;
+      }
+      else{
+        theta[j]=arma::randn()*0.00001+theta_mu[j];
+
+      }
+    }
+    diagonal_counter=0;
+    for (int j=(n*(n+1)/2); j < numb_of_vars;j++){
+      if(j == (n*(n+1)/2+diagonal_counter*(n+1)) && j< ((n*(n+1)/2) +n*n)){
+        diagonal_counter++;
+        theta[j]= arma::randn()*0.0001+theta_mu[j];
+      }
+      else if(j == (n*(n+1)/2+n*n+(diagonal_counter-n)*(n+1)) && j>=(n*(n+1)/2+n*n) && j<((n*(n+1)/2) +2*n*n)){
+        diagonal_counter++;
+        theta[j]= arma::randn()*0.01+theta_mu[j];
+      }
+      else if(j == (n*(n+1)/2+2*n*n+(diagonal_counter-2*n)*(n+1)) && j>=(n*(n+1)/2+2*n*n)){
+        diagonal_counter++;
+        theta[j]= arma::randn()*0.0001+theta_mu[j];
+      }
+      else{
+        theta[j]=arma::randn()*0.00001+theta_mu[j];
+      }
+    }
+
+
+    //arma::mat C = arma::zeros(n,n);
+    int  index=0;
+    for(int j=0; j <n; j++){
+      for (int k = j;k < n; k++) {
+        C(k,j)=theta[index];
+        index++;
+      }
+    }
+
+    A = arma::diagmat(theta.rows((n * (n+1)/2), n+ (n * (n + 1)/2) - 1));
+    B = arma::diagmat(theta.rows(n + (n * (n + 1)/2), 2*n+ (n * (n + 1)/2) - 1));
+    G = arma::diagmat(theta.rows(2*n + (n * (n + 1)/2), 3*n+ (n * (n + 1)/2) - 1));
+
+    if(valid_asymm_bekk(C,A,B,G,r,signs)){
+      l++;
+      double llv=loglike_asymm_bekk(theta,r,signs);
+
+      if(llv>best_val){
+
+        m++;
+        best_val=llv;
+        thetaOptim=theta;
+        theta_mu=thetaOptim;
+
+      }
+      if(l>1500 || m>=5){
+        theta_mu=thetaOptim;
+      }
+    }
+
+  }
+  return Rcpp::List::create(Rcpp::Named("thetaOptim") = thetaOptim,
+                            Rcpp::Named("best_val") = best_val);
+
+}
+
+
 // [[Rcpp::export]]
 Rcpp::List sigma_bekk(arma::mat& r, arma::mat& C, arma::mat& A, arma::mat& G) {
 // Computation of second order moment time paths and GARCH innovations

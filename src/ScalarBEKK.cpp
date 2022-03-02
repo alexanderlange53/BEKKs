@@ -36,9 +36,9 @@ bool valid_scalar_bekk(arma::mat C, double a, double g){
 }
 
 // [[Rcpp::export]]
-bool valid_scalar_abekk(arma::mat C, double a, double b, double g, arma::mat& r, arma::mat& signs){
+bool valid_scalar_abekk(arma::mat C, double a, double b, double g, arma::mat r, arma::mat signs){
   double exp_indicator_value = expected_indicator_value(r,signs);
-  double sum=a+g+expected_indicator_value*b;
+  double sum=a+g+b*exp_indicator_value;
   if(sum >= 1){
     return false;
   }
@@ -191,12 +191,12 @@ arma::mat score_scalar_bekk(const arma::mat& theta, arma::mat& r) {
 
   arma::mat dHdc = 2 * D_duplication * D_gen_inv * arma::kron(C, arma::eye(N, N)) * L_elimination.t();
 
-  arma::mat dHda = arma::zeros(1, N2);
+  arma::mat dHda = arma::zeros(N2, 1);
 
-  arma::mat dHdg = arma::zeros(1, N2);
+  arma::mat dHdg = arma::zeros(N2, 1);
 
   arma::mat dHdtheta = arma::join_horiz(dHdc, dHda, dHdg).t();
-
+  Rcpp::Rcout << dHdtheta;
   arma::mat ht_sqrt_inv = arma::inv(ht);
   for (int k = 0; k < theta.n_rows; k++) {
 
@@ -217,11 +217,11 @@ arma::mat score_scalar_bekk(const arma::mat& theta, arma::mat& r) {
 
 
 
-    dHda = arma::reshape( r.row(i-1).t() * r.row(i-1),1,N2) + g * dHda;
+    dHda = arma::reshape( r.row(i-1).t() * r.row(i-1),N2,1) + g * dHda;
 
     //dHda =  arma::kron(arma::eye(N, N),at*r.row(i-1).t() *r.row(i-1)) + arma::kron(at * r.row(i-1).t() *r.row(i-1), arma::eye(N, N)) * commutation_mat(N)+ GGt * dHda;
 
-    dHdg = arma::reshape(ht,1,N2) + g * dHdg;
+    dHdg = arma::reshape(ht,N2,1) + g * dHdg;
 
     //dHdg = arma::kron(arma::eye(N, N),gt*ht) + arma::kron(gt * ht , arma::eye(N, N)) * commutation_mat(N) + GGt * dHdg;
 
@@ -290,9 +290,9 @@ arma::mat score_scalar_abekk(const arma::mat& theta, arma::mat& r, arma::mat& si
 
   arma::mat dHdc = 2 * D_duplication * D_gen_inv * arma::kron(C, arma::eye(N, N)) * L_elimination.t();
 
-  arma::mat dHda = arma::zeros(1, N2);
-  arma::mat dHdb = arma::zeros(1, N2);
-  arma::mat dHdg = arma::zeros(1, N2);
+  arma::mat dHda = arma::zeros(N2, 1);
+  arma::mat dHdb = arma::zeros(N2, 1);
+  arma::mat dHdg = arma::zeros(N2, 1);
 
   arma::mat dHdtheta = arma::join_horiz(dHdc, dHda, dHdg).t();
 
@@ -316,10 +316,10 @@ arma::mat score_scalar_abekk(const arma::mat& theta, arma::mat& r, arma::mat& si
 
 
 
-    dHda = arma::reshape( r.row(i-1).t() * r.row(i-1),1,N2) + g * dHda;
-    dHdb = indicatorFunction(r.row(i - 1),signs)*arma::reshape( r.row(i-1).t() * r.row(i-1),1,N2) + g * dHdb;
+    dHda = arma::reshape( r.row(i-1).t() * r.row(i-1),N2, 1) + g * dHda;
+    dHdb = indicatorFunction(r.row(i - 1),signs)*arma::reshape( r.row(i-1).t() * r.row(i-1),N2, 1) + g * dHdb;
 
-    dHdg = arma::reshape(ht,1,N2) + g * dHdg;
+    dHdg = arma::reshape(ht,N2, 1) + g * dHdg;
 
     arma::mat dHdtheta = arma::join_horiz(dHdc, dHda, dHdg).t();
 
@@ -461,8 +461,8 @@ arma::mat hesse_scalar_bekk(arma::mat theta, arma::mat r){
   // Partial derivatives for initial period t = 1
   arma::mat ht = r.t() * r / r.n_rows;
 
-  arma::mat dHda = arma::zeros(1, N2);
-  arma::mat dHdg = arma::zeros(1, N2);
+  arma::mat dHda = arma::zeros(N2, 1);
+  arma::mat dHdg = arma::zeros(N2, 1);
   arma::mat dHdc = 2 * D_duplication * D_gen_inv * arma::kron(C, arma::eye(N,N)) * L_elimination.t();
 
   arma::mat dHdtheta = arma::join_horiz(dHdc, dHda, dHdg).t();
@@ -472,25 +472,28 @@ arma::mat hesse_scalar_bekk(arma::mat theta, arma::mat r){
   arma::mat hessian = arma::zeros(theta.n_rows,theta.n_rows);
 
   //Second derivatives for t=1
-  arma::mat dHdada = arma::zeros(1, N2);
-  arma::mat dHdadc = arma::zeros(NoOfVars_C, N2);
-  arma::mat dHdadg = arma::zeros(1, N2);
+  arma::mat dHdada = arma::zeros(N2, 1);
+  arma::mat dHdadc = arma::zeros(N2, NoOfVars_C);
+  arma::mat dHdadg = arma::zeros(N2, 1);
 
-  arma::mat dHdgdg = arma::zeros(1, N2);
-  arma::mat dHdgdc = arma::zeros(NoOfVars_C,N2);
-  arma::mat dHdgda = arma::zeros(1, N2);
+  arma::mat dHdgdg = arma::zeros(N2, 1);
+  arma::mat dHdgdc = arma::zeros(N2, NoOfVars_C);
+  arma::mat dHdgda = arma::zeros(N2, 1);
 
   arma::mat dHdcdc = 2*arma::kron(L_elimination,D_duplication*D_gen_inv)*C1*arma::kron(arma::eye(N2,N2),arma::reshape(arma::eye(N,N),N2,1))*L_elimination.t();
-  arma::mat dHdcda = arma::zeros(NoOfVars_C,N2);
-  arma::mat dHdcdg = arma::zeros(NoOfVars_C,N2);
+
+  arma::mat dHdcda = arma::zeros(NoOfVars_C*N2,1);
+  arma::mat dHdcdg = arma::zeros(NoOfVars_C*N2,1);
 
 
   arma::mat dHHdc=arma::join_horiz(dHdcdc,dHdcda,dHdcdg);
+
   arma::mat dHHda=arma::join_horiz(dHdadc,dHdada,dHdadg);
+
   arma::mat dHHdg=arma::join_horiz(dHdgdc,dHdgda,dHdgdg);
 
-  arma::mat dHHdtheta=arma::join_vert(dHHdc,dHHda,dHHdg);
 
+  arma::mat dHHdtheta=arma::join_vert(dHHdc,dHHda,dHHdg);
 
   arma::mat matt= arma::zeros(theta.n_rows,N2);
   matt(0,0)=1;
@@ -541,17 +544,19 @@ arma::mat hesse_scalar_bekk(arma::mat theta, arma::mat r){
 
     dHdgda = dHdadg;
     dHdgdg = 2 * dHdg + g * dHdgdg;
-    dHdgdc = dHdc + g * dHdgdc;
+
     //dHdcda = dHdcda;// Always zero (row may be deleted later on)
     dHdcdc = 2*arma::kron(L_elimination,D_duplication*D_gen_inv)*C1*arma::kron(arma::eye(N2,N2),arma::reshape(arma::eye(N,N),N2,1))*L_elimination.t()+g*dHdcdc;
-    dHdcdg = dHdgdc;
 
+    dHdcdg = arma::vectorise(dHdc)  + g*dHdcdg ;
+
+    dHdgdc = arma::reshape(dHdcdg,N2, NoOfVars_C);
 
     dHdc = 2 * D_duplication * D_gen_inv * arma::kron(C, arma::eye(N, N)) * L_elimination.t() + g * dHdc;
 
-    dHda = arma::reshape( r.row(i-1).t() * r.row(i-1),1,N2) + g * dHda;
+    dHda = arma::reshape( r.row(i-1).t() * r.row(i-1),N2, 1) + g * dHda;
 
-    dHdg = arma::reshape(ht,1,N2) + g * dHdg;
+    dHdg = arma::reshape(ht,N2, 1) + g * dHdg;
 
 
     //update h
@@ -568,6 +573,7 @@ arma::mat hesse_scalar_bekk(arma::mat theta, arma::mat r){
     arma::mat dHHdc=arma::join_horiz(dHdcdc,dHdcda,dHdcdg);
     arma::mat dHHda=arma::join_horiz(dHdadc,dHdada,dHdadg);
     arma::mat dHHdg=arma::join_horiz(dHdgdc,dHdgda,dHdgdg);
+
     arma::mat dHHdtheta=arma::join_vert(dHHdc,dHHda,dHHdg);
 
 
@@ -663,9 +669,9 @@ arma::mat hesse_scalar_abekk(arma::mat theta, arma::mat r, arma::mat signs){
   // Partial derivatives for initial period t = 1
   arma::mat ht = r.t() * r / r.n_rows;
 
-  arma::mat dHda = arma::zeros(1, N2);
-  arma::mat dHdb = arma::zeros(1, N2);
-  arma::mat dHdg = arma::zeros(1, N2);
+  arma::mat dHda = arma::zeros(N2, 1);
+  arma::mat dHdb = arma::zeros(N2, 1);
+  arma::mat dHdg = arma::zeros(N2, 1);
   arma::mat dHdc = 2 * D_duplication * D_gen_inv * arma::kron(C, arma::eye(N,N)) * L_elimination.t();
 
   arma::mat dHdtheta = arma::join_horiz(dHdc, dHda, dHdc, dHdg).t();
@@ -675,25 +681,25 @@ arma::mat hesse_scalar_abekk(arma::mat theta, arma::mat r, arma::mat signs){
   arma::mat hessian = arma::zeros(theta.n_rows,theta.n_rows);
 
   //Second derivatives for t=1
-  arma::mat dHdada = arma::zeros(1, N2);
-  arma::mat dHdadb = arma::zeros(1, N2);
-  arma::mat dHdadc = arma::zeros(NoOfVars_C, N2);
-  arma::mat dHdadg = arma::zeros(1, N2);
+  arma::mat dHdada = arma::zeros(N2, 1);
+  arma::mat dHdadb = arma::zeros(N2, 1);
+  arma::mat dHdadc = arma::zeros(N2, NoOfVars_C);
+  arma::mat dHdadg = arma::zeros(N2, 1);
 
-  arma::mat dHdbda = arma::zeros(1, N2);
-  arma::mat dHdbdb = arma::zeros(1, N2);
-  arma::mat dHdbdc = arma::zeros(NoOfVars_C, N2);
-  arma::mat dHdbdg = arma::zeros(1, N2);
+  arma::mat dHdbda = arma::zeros(N2, 1);
+  arma::mat dHdbdb = arma::zeros(N2, 1);
+  arma::mat dHdbdc = arma::zeros(N2, NoOfVars_C);
+  arma::mat dHdbdg = arma::zeros(N2, 1);
 
-  arma::mat dHdgdg = arma::zeros(1, N2);
-  arma::mat dHdgdc = arma::zeros(NoOfVars_C,N2);
-  arma::mat dHdgda = arma::zeros(1, N2);
-  arma::mat dHdgdb = arma::zeros(1, N2);
+  arma::mat dHdgdg = arma::zeros(N2, 1);
+  arma::mat dHdgdc = arma::zeros(N2, NoOfVars_C);
+  arma::mat dHdgda = arma::zeros(N2, 1);
+  arma::mat dHdgdb = arma::zeros(N2, 1);
 
   arma::mat dHdcdc = 2*arma::kron(L_elimination,D_duplication*D_gen_inv)*C1*arma::kron(arma::eye(N2,N2),arma::reshape(arma::eye(N,N),N2,1))*L_elimination.t();
-  arma::mat dHdcda = arma::zeros(NoOfVars_C,N2);
-  arma::mat dHdcdb = arma::zeros(NoOfVars_C,N2);
-  arma::mat dHdcdg = arma::zeros(NoOfVars_C,N2);
+  arma::mat dHdcda = arma::zeros(NoOfVars_C*N2,1);
+  arma::mat dHdcdb = arma::zeros(NoOfVars_C*N2,1);
+  arma::mat dHdcdg = arma::zeros(NoOfVars_C*N2,1);
 
 
   arma::mat dHHdc=arma::join_horiz(dHdcdc,dHdcda,dHdcdb,dHdcdg);
@@ -747,27 +753,44 @@ arma::mat hesse_scalar_abekk(arma::mat theta, arma::mat r, arma::mat signs){
 
   for (int i=1; i<n;i++){
 
-    dHdada = g * dHdada;
-    dHdadg = g * dHdadg + dHda;
-
     dHdbdg = g * dHdbdg + dHdb;
     dHdgdb = dHdbdg;
+
+    dHdada = g * dHdada;
+    dHdadg = g * dHdadg + dHda;
     //dHdadc = dHdadc; // Always zero (row may be deleted later on)
 
     dHdgda = dHdadg;
     dHdgdg = 2 * dHdg + g * dHdgdg;
-    dHdgdc = dHdc + g * dHdgdc;
+
     //dHdcda = dHdcda;// Always zero (row may be deleted later on)
     dHdcdc = 2*arma::kron(L_elimination,D_duplication*D_gen_inv)*C1*arma::kron(arma::eye(N2,N2),arma::reshape(arma::eye(N,N),N2,1))*L_elimination.t()+g*dHdcdc;
-    dHdcdg = dHdgdc;
 
+    dHdcdg = arma::vectorise(dHdc)  + g*dHdcdg ;
+
+    dHdgdc = arma::reshape(dHdcdg,N2, NoOfVars_C);
 
     dHdc = 2 * D_duplication * D_gen_inv * arma::kron(C, arma::eye(N, N)) * L_elimination.t() + g * dHdc;
 
-    dHda = arma::reshape( r.row(i-1).t() * r.row(i-1),1,N2) + g * dHda;
-    dHdb = indicatorFunction(r.row(i-1),signs) * arma::reshape( r.row(i-1).t() * r.row(i-1),1,N2) + g * dHdb;
+    dHda = arma::reshape( r.row(i-1).t() * r.row(i-1),N2, 1) + g * dHda;
+    dHdb = indicatorFunction(r.row(i-1),signs) * arma::reshape( r.row(i-1).t() * r.row(i-1),N2, 1) + g * dHdb;
 
-    dHdg = arma::reshape(ht,1,N2) + g * dHdg;
+    dHdg = arma::reshape(ht,N2, 1) + g * dHdg;
+
+
+
+
+
+    //dHdadc = dHdadc; // Always zero (row may be deleted later on)
+
+
+
+    //dHdcda = dHdcda;// Always zero (row may be deleted later on)
+
+
+
+
+
 
 
     //update h
@@ -890,5 +913,221 @@ Rcpp::List sigma_sbekk_asymm(arma::mat& r, arma::mat& C, double a, double b, dou
 
   return Rcpp::List::create(Rcpp::Named("sigma_t")= sigma,
                             Rcpp::Named("e_t") = et);
+}
+
+//[[Rcpp::export]]
+Rcpp::List random_grid_search_sBEKK(arma::mat r) {
+  int n =r.n_cols;
+  int N =r.n_rows;
+  int l=0;
+  int m=0;
+
+
+  arma::mat C = arma::zeros(n,n);
+  double a;
+  double g;
+
+  int numb_of_vars=2+n*(n+1)/2;
+
+  arma::vec theta = arma::zeros(numb_of_vars,1);
+  arma::vec thetaOptim=theta;
+  arma::vec theta_mu = theta;
+  //arma::vec theta_mu=theta;
+  int counter= 0;
+  int diagonal_elements = n;
+  int diagonal_counter = 0;
+  arma::mat uncond_var = r* r.t()/N;
+  //set the initial expected values of the parameters
+  for (int j=0; j < (n*(n+1)/2);j++){
+
+    if(j == counter){
+      theta_mu[j]=  0.05*uncond_var(j,j);
+      counter+=diagonal_elements;
+      diagonal_elements--;
+    }
+
+  }
+  diagonal_counter=0;
+
+  theta_mu[numb_of_vars-2]=0.2;
+  theta_mu[numb_of_vars-1]=0.7;
+
+
+
+  double best_val = loglike_scalar_bekk(theta_mu,r);
+  thetaOptim=theta_mu;
+  //set the seed
+
+  // Generating random values for A, B, C and G
+  while(l<3000 && m<=17){
+    int counter= 0;
+    int diagonal_elements = n;
+    int diagonal_counter = 0;
+
+    for (int j=0; j < (n*(n+1)/2);j++){
+
+      if(j == counter){
+        theta[j]=  theta_mu[j]+arma::randn()*0.001;
+        counter+=diagonal_elements;
+        diagonal_elements--;
+      }
+      else{
+        theta[j]=arma::randn()*0.00001+theta_mu[j];
+
+      }
+    }
+
+        theta[numb_of_vars-2]= arma::randn()*0.01+theta_mu[numb_of_vars-2];
+
+        theta[numb_of_vars-1]=arma::randn()*0.01+theta_mu[numb_of_vars-1];
+
+
+
+
+    //arma::mat C = arma::zeros(n,n);
+    int  index=0;
+    for(int j=0; j <n; j++){
+      for (int k = j;k < n; k++) {
+        C(k,j)=theta[index];
+        index++;
+      }
+    }
+
+    a = theta[numb_of_vars-2];
+    g = theta[numb_of_vars-1];
+
+    if(valid_scalar_bekk(C,a,g)){
+      l++;
+      double llv=loglike_scalar_bekk(theta,r);
+
+      if(llv>best_val){
+
+        m++;
+        best_val=llv;
+        thetaOptim=theta;
+        theta_mu=thetaOptim;
+
+      }
+      if(l>1000 || m>=5){
+        theta_mu=thetaOptim;
+      }
+    }
+
+  }
+  return Rcpp::List::create(Rcpp::Named("thetaOptim") = thetaOptim,
+                            Rcpp::Named("best_val") = best_val);
+
+}
+
+
+//[[Rcpp::export]]
+Rcpp::List random_grid_search_asymmetric_sBEKK(arma::mat r, arma::mat signs) {
+  int n =r.n_cols;
+  int N =r.n_rows;
+  int l=0;
+  int m=0;
+
+
+  arma::mat C = arma::zeros(n,n);
+  double a;
+  double b;
+  double g;
+
+  int numb_of_vars=3+n*(n+1)/2;
+
+  arma::vec theta = arma::zeros(numb_of_vars,1);
+  arma::vec thetaOptim=theta;
+  arma::vec theta_mu = theta;
+  //arma::vec theta_mu=theta;
+  int counter= 0;
+  int diagonal_elements = n;
+  int diagonal_counter = 0;
+  arma::mat uncond_var = r* r.t()/N;
+  //set the initial expected values of the parameters
+  for (int j=0; j < (n*(n+1)/2);j++){
+
+    if(j == counter){
+      theta_mu[j]=  0.05*uncond_var(j,j);
+      counter+=diagonal_elements;
+      diagonal_elements--;
+    }
+
+  }
+
+      theta_mu[numb_of_vars-3]=0.1;
+
+
+      theta_mu[numb_of_vars-2]=0.1;
+
+      theta_mu[numb_of_vars-1]=0.7;
+
+
+
+  double best_val = loglike_scalar_abekk(theta_mu,r,signs);
+  thetaOptim=theta_mu;
+  //set the seed
+
+  // Generating random values for A, B, C and G
+  while(l<4000 && m<=17){
+    int counter= 0;
+    int diagonal_elements = n;
+    int diagonal_counter = 0;
+
+    for (int j=0; j < (n*(n+1)/2);j++){
+
+      if(j == counter){
+        theta[j]=  theta_mu[j]+arma::randn()*0.001;
+        counter+=diagonal_elements;
+        diagonal_elements--;
+      }
+      else{
+        theta[j]=arma::randn()*0.00001+theta_mu[j];
+
+      }
+    }
+
+        theta[numb_of_vars-3]= arma::randn()*0.01+theta_mu[numb_of_vars-3];
+
+        theta[numb_of_vars-2]= arma::randn()*0.01+theta_mu[numb_of_vars-2];
+
+        theta[numb_of_vars-1]=arma::randn()*0.01+theta_mu[numb_of_vars-1];
+
+
+
+
+    //arma::mat C = arma::zeros(n,n);
+    int  index=0;
+    for(int j=0; j <n; j++){
+      for (int k = j;k < n; k++) {
+        C(k,j)=theta[index];
+        index++;
+      }
+    }
+
+    a = theta[numb_of_vars-3];
+    b = theta[numb_of_vars-2];
+    g = theta[numb_of_vars-1];
+
+    if(valid_scalar_abekk(C,a,b,g,r,signs)){
+      l++;
+      double llv=loglike_scalar_abekk(theta,r,signs);
+
+      if(llv>best_val){
+
+        m++;
+        best_val=llv;
+        thetaOptim=theta;
+        theta_mu=thetaOptim;
+
+      }
+      if(l>1500 || m>=5){
+        theta_mu=thetaOptim;
+      }
+    }
+
+  }
+  return Rcpp::List::create(Rcpp::Named("thetaOptim") = thetaOptim,
+                            Rcpp::Named("best_val") = best_val);
+
 }
 

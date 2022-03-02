@@ -85,6 +85,14 @@ random_grid_search_asymmetric_BEKK <- function(r, signs) {
     .Call('_BEKKs_random_grid_search_asymmetric_BEKK', PACKAGE = 'BEKKs', r, signs)
 }
 
+random_grid_search_dBEKK <- function(r) {
+    .Call('_BEKKs_random_grid_search_dBEKK', PACKAGE = 'BEKKs', r)
+}
+
+random_grid_search_asymmetric_dBEKK <- function(r, signs) {
+    .Call('_BEKKs_random_grid_search_asymmetric_dBEKK', PACKAGE = 'BEKKs', r, signs)
+}
+
 sigma_bekk <- function(r, C, A, G) {
     .Call('_BEKKs_sigma_bekk', PACKAGE = 'BEKKs', r, C, A, G)
 }
@@ -203,6 +211,14 @@ sigma_sbekk <- function(r, C, a, g) {
 
 sigma_sbekk_asymm <- function(r, C, a, b, g, signs) {
     .Call('_BEKKs_sigma_sbekk_asymm', PACKAGE = 'BEKKs', r, C, a, b, g, signs)
+}
+
+random_grid_search_sBEKK <- function(r) {
+    .Call('_BEKKs_random_grid_search_sBEKK', PACKAGE = 'BEKKs', r)
+}
+
+random_grid_search_asymmetric_sBEKK <- function(r, signs) {
+    .Call('_BEKKs_random_grid_search_asymmetric_sBEKK', PACKAGE = 'BEKKs', r, signs)
 }
 
 YLagCr <- function(y, p) {
