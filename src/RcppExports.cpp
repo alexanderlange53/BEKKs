@@ -639,6 +639,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// bhh_scalar_bekka
+Rcpp::List bhh_scalar_bekka(arma::mat& r, const arma::mat& theta, int& max_iter, double& crit, arma::mat& signs);
+RcppExport SEXP _BEKKs_bhh_scalar_bekka(SEXP rSEXP, SEXP thetaSEXP, SEXP max_iterSEXP, SEXP critSEXP, SEXP signsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type r(rSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< int& >::type max_iter(max_iterSEXP);
+    Rcpp::traits::input_parameter< double& >::type crit(critSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type signs(signsSEXP);
+    rcpp_result_gen = Rcpp::wrap(bhh_scalar_bekka(r, theta, max_iter, crit, signs));
+    return rcpp_result_gen;
+END_RCPP
+}
 // hesse_scalar_bekk
 arma::mat hesse_scalar_bekk(arma::mat theta, arma::mat r);
 RcppExport SEXP _BEKKs_hesse_scalar_bekk(SEXP thetaSEXP, SEXP rSEXP) {
@@ -780,6 +795,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BEKKs_score_scalar_bekk", (DL_FUNC) &_BEKKs_score_scalar_bekk, 2},
     {"_BEKKs_score_scalar_abekk", (DL_FUNC) &_BEKKs_score_scalar_abekk, 3},
     {"_BEKKs_bhh_scalar_bekk", (DL_FUNC) &_BEKKs_bhh_scalar_bekk, 4},
+    {"_BEKKs_bhh_scalar_bekka", (DL_FUNC) &_BEKKs_bhh_scalar_bekka, 5},
     {"_BEKKs_hesse_scalar_bekk", (DL_FUNC) &_BEKKs_hesse_scalar_bekk, 2},
     {"_BEKKs_hesse_scalar_abekk", (DL_FUNC) &_BEKKs_hesse_scalar_abekk, 3},
     {"_BEKKs_sigma_sbekk", (DL_FUNC) &_BEKKs_sigma_sbekk, 4},

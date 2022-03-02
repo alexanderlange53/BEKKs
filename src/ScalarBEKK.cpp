@@ -196,7 +196,7 @@ arma::mat score_scalar_bekk(const arma::mat& theta, arma::mat& r) {
   arma::mat dHdg = arma::zeros(N2, 1);
 
   arma::mat dHdtheta = arma::join_horiz(dHdc, dHda, dHdg).t();
-  Rcpp::Rcout << dHdtheta;
+
   arma::mat ht_sqrt_inv = arma::inv(ht);
   for (int k = 0; k < theta.n_rows; k++) {
 
@@ -294,7 +294,7 @@ arma::mat score_scalar_abekk(const arma::mat& theta, arma::mat& r, arma::mat& si
   arma::mat dHdb = arma::zeros(N2, 1);
   arma::mat dHdg = arma::zeros(N2, 1);
 
-  arma::mat dHdtheta = arma::join_horiz(dHdc, dHda, dHdg).t();
+  arma::mat dHdtheta = arma::join_horiz(dHdc, dHda, dHdb, dHdg).t();
 
   arma::mat ht_sqrt_inv = arma::inv(ht);
   for (int k = 0; k < theta.n_rows; k++) {
@@ -321,7 +321,7 @@ arma::mat score_scalar_abekk(const arma::mat& theta, arma::mat& r, arma::mat& si
 
     dHdg = arma::reshape(ht,N2, 1) + g * dHdg;
 
-    arma::mat dHdtheta = arma::join_horiz(dHdc, dHda, dHdg).t();
+    arma::mat dHdtheta = arma::join_horiz(dHdc, dHda, dHdb, dHdg).t();
 
     ht = CC + (a+b*indicatorFunction(r.row(i - 1),signs)) * r.row(i - 1).t() * r.row(i - 1)  + g * ht ;
 
@@ -415,6 +415,89 @@ Rcpp::List  bhh_scalar_bekk(arma::mat& r, const arma::mat& theta, int& max_iter,
 
   double likelihood_final = loglike_scalar_bekk(theta_candidate, r);
   arma::mat score_final = score_scalar_bekk(theta_candidate, r);
+  arma::mat s1_temp = arma::diagmat(arma::inv(score_final.t() * score_final));
+  arma::mat s1 = arma::sqrt(s1_temp.diag());
+
+  arma::mat t_val = theta_candidate/s1;
+  return Rcpp::List::create(Rcpp::Named("theta") = theta_candidate,
+                            Rcpp::Named("t_val") = t_val,
+                            Rcpp::Named("likelihood") = likelihood_final,
+                            Rcpp::Named("iter") = count_loop,
+                            Rcpp::Named("likelihood_iter") = lik_all);
+}
+
+// [[Rcpp::export]]
+Rcpp::List  bhh_scalar_bekka(arma::mat& r, const arma::mat& theta, int& max_iter, double& crit, arma::mat& signs) {
+
+  arma::vec steps = {9.9,9,8,7,6,5,4,3,2,1,0.5,0.25,0.1,0.01,0.005,
+                     0.001,0.0005,0.0001,0.00005,0.00001,0};
+  double step = 0.1;
+  int count_loop = 0;
+  arma::mat theta_candidate = theta;
+  int exit_loop = 0;
+  arma::vec lik_all(max_iter+1, arma::fill::zeros);
+  lik_all(0) = loglike_scalar_abekk(theta, r, signs);
+
+
+  while (count_loop < max_iter && exit_loop == 0) {
+    arma::mat theta_loop = theta_candidate;
+    arma::mat theta_temp = arma::zeros(theta_loop.n_rows, steps.n_elem);
+
+    arma::mat score_function = score_scalar_abekk(theta_loop, r, signs);
+    arma::mat outer_score = score_function.t() * score_function;
+
+    arma::mat outer_score_inv = arma::inv(outer_score);
+    arma::mat score_function_sum = arma::sum(score_function);
+
+    double lik = loglike_scalar_abekk(theta_loop, r, signs);
+
+    for (int i = 0; i < steps.n_elem; i++) {
+      arma::vec temp = theta_candidate + step * steps(i) * outer_score_inv * score_function_sum.t();
+      theta_temp.col(i) = temp;
+    }
+
+
+    arma::vec likelihood_candidates(steps.n_elem, arma::fill::zeros);
+    likelihood_candidates(steps.n_elem - 1) = lik;
+
+    int  j = steps.n_elem - 2;
+    int exit_inner = 0;
+    while (j >= 0 && exit_inner == 0) {
+      likelihood_candidates(j) = loglike_scalar_abekk(theta_temp.col(j), r, signs);
+      //if (likelihood_candidates(j+1) > likelihood_candidates(j)) {
+      //  exit_inner = 1;
+      //}
+      j -= 1;
+    }
+
+    //return likelihood_candidates;
+
+    //int max_index = arma::index_max(likelihood_candidates.subvec(j, (steps.n_elem -1))) + j;
+    int max_index = arma::index_max(likelihood_candidates);
+    //return max_index;
+    double likelihood_best = likelihood_candidates(max_index);
+
+    // exit criterion strange
+    //if (pow(likelihood_best - likelihood_candidates(steps.n_elem -1), 2)/abs(likelihood_candidates(steps.n_elem -1)) < crit) {
+    //  exit_loop = 1;
+    //}
+    if (likelihood_best < lik_all(count_loop)) {
+      exit_loop = 1;
+      count_loop += 1;
+    } else if (pow(likelihood_best - likelihood_candidates(steps.n_elem -1), 2)/abs(likelihood_candidates(steps.n_elem -1)) < crit) {// if (pow(likelihood_best - lik_all(count_loop), 2)/abs(lik_all(count_loop)) < crit) {
+      exit_loop = 1;
+      count_loop += 1;
+      theta_candidate = theta_temp.col(max_index);
+      lik_all(count_loop) = likelihood_candidates(steps.n_elem -1);
+    } else {
+      theta_candidate = theta_temp.col(max_index);
+      count_loop += 1;
+      lik_all(count_loop) = likelihood_candidates(steps.n_elem -1);
+    }
+  }
+
+  double likelihood_final = loglike_scalar_abekk(theta_candidate, r, signs);
+  arma::mat score_final = score_scalar_abekk(theta_candidate, r, signs);
   arma::mat s1_temp = arma::diagmat(arma::inv(score_final.t() * score_final));
   arma::mat s1 = arma::sqrt(s1_temp.diag());
 

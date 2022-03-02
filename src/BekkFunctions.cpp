@@ -533,7 +533,7 @@ arma::mat score_dbekk(const arma::mat& theta, arma::mat& r) {
 
 
   arma::mat dHdtheta = arma::join_horiz(dHdc, dHda*DM, dHdg*DM).t();
-  Rcpp::Rcout << dHdc;
+ Rcpp::Rcout << dHdtheta;
   //arma::mat ht_sqrt_inv = arma::inv(arma::real(arma::sqrtmat(ht)));
   arma::mat ht_sqrt_inv = inv_gen(ht);
   //arma::vec et = ht_sqrt_inv * r.row(0).t();
@@ -543,6 +543,7 @@ arma::mat score_dbekk(const arma::mat& theta, arma::mat& r) {
   for (int k = 0; k < theta.n_rows; k++) {
 
     arma::mat dh = arma::reshape(dHdtheta.row(k), N, N);
+    Rcpp::Rcout << dh;
     //Rcpp::Rcout << ht_sqrt_inv;
     //arma::mat mat_temp = ht_sqrt_inv * dh * ht_sqrt_inv * (arma::eye(N, N) - et * et.t());
     arma::mat mat_temp = dh * ht_sqrt_inv - r.row(0).t() * r.row(0) * ht_sqrt_inv * dh * ht_sqrt_inv;

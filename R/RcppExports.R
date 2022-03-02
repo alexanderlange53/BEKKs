@@ -197,6 +197,10 @@ bhh_scalar_bekk <- function(r, theta, max_iter, crit) {
     .Call('_BEKKs_bhh_scalar_bekk', PACKAGE = 'BEKKs', r, theta, max_iter, crit)
 }
 
+bhh_scalar_bekka <- function(r, theta, max_iter, crit, signs) {
+    .Call('_BEKKs_bhh_scalar_bekka', PACKAGE = 'BEKKs', r, theta, max_iter, crit, signs)
+}
+
 hesse_scalar_bekk <- function(theta, r) {
     .Call('_BEKKs_hesse_scalar_bekk', PACKAGE = 'BEKKs', theta, r)
 }

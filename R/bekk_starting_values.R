@@ -219,7 +219,7 @@ gridSearch_asymmetricdBEKK <- function(r, signs) {
 
 gridSearch_sBEKK <- function(r) {
   N  <- ncol(r)
-
+  C <- matrix(0, ncol = N, nrow = N)
   uncond_var <- crossprod(r)/nrow(r)
 
 
@@ -252,7 +252,7 @@ gridSearch_sBEKK <- function(r) {
 
 
   th0 = c(C0, a, g)
-  lik = loglike_sbekk(th0, r)
+  lik = loglike_scalar_bekk(th0, r)
 
   return(list(th0, lik))
 
@@ -260,7 +260,7 @@ gridSearch_sBEKK <- function(r) {
 
 gridSearch_asymmetricsBEKK <- function(r, signs) {
   N  <- ncol(r)
-
+  C <- matrix(0, ncol = N, nrow = N)
   uncond_var <- crossprod(r)/nrow(r)
 
   #th0=numeric(2*n^2+n*(n+1)/2)
@@ -295,7 +295,7 @@ gridSearch_asymmetricsBEKK <- function(r, signs) {
 
 
   th0 = c(C0, a, b, g)
-  lik = loglike_asymm_sbekk(th0, r, signs)
+  lik = loglike_scalar_abekk(th0, r, signs)
 
   return(list(th0, lik))
 

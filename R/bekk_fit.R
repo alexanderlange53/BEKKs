@@ -355,12 +355,12 @@ bekk_fit.dbekk <- function(spec, data, QML_t_ratios = FALSE,
 
   if(!is.numeric(init_values)) {
     if (is.null(init_values)) {
-      theta <- gridSearch_BEKK(data)
+      theta <- gridSearch_dBEKK(data)
       theta <- theta[[1]]
     } else if (init_values == 'random') {
       cat('Generating starting values \n')
 
-      theta <- random_grid_search_BEKK(data)
+      theta <- random_grid_search_dBEKK(data)
       theta <- theta[[1]]
     }
   } else {
@@ -384,7 +384,7 @@ bekk_fit.dbekk <- function(spec, data, QML_t_ratios = FALSE,
   param_mat <- coef_mat_diagonal(params$theta, N)
 
 
-  var_process <- sigma_dbekk(data, t(param_mat$c0), param_mat$a, param_mat$g)
+  var_process <- sigma_bekk(data, t(param_mat$c0), param_mat$a, param_mat$g)
   sigma_t <- as.data.frame(var_process$sigma_t)
   colnames(sigma_t) <- rep(1, N^2)
 
@@ -422,7 +422,7 @@ bekk_fit.dbekk <- function(spec, data, QML_t_ratios = FALSE,
   }
 
   # Final check if BEKK is valid
-  BEKK_valid <- valid_dbekk(param_mat$c0, param_mat$a, param_mat$g)
+  BEKK_valid <- valid_bekk(param_mat$c0, param_mat$a, param_mat$g)
 
 
   params$likelihood_iter <- params$likelihood_iter[params$likelihood_iter != 0]
@@ -480,7 +480,7 @@ bekk_fit.dbekka <- function(spec, data, QML_t_ratios = FALSE,
 
   theta <- matrix(theta, ncol =1)
 
-  params <- bhh_asymm_dbekka(data, theta, max_iter, crit, spec$model$signs)
+  params <- bhh_asymm_dbekk(data, theta, max_iter, crit, spec$model$signs)
 
   if (QML_t_ratios == TRUE) {
     tratios <- QML_t_ratios_dbekka(params$theta, data, spec$model$signs)
@@ -491,7 +491,7 @@ bekk_fit.dbekka <- function(spec, data, QML_t_ratios = FALSE,
 
   param_mat <- coef_mat_asymm_diagonal(params$theta, N)
 
-  var_process <- sigma_dbekk_asymm(data, t(param_mat$c0), param_mat$a, param_mat$b, param_mat$g, spec$model$signs)
+  var_process <- sigma_bekk_asymm(data, t(param_mat$c0), param_mat$a, param_mat$b, param_mat$g, spec$model$signs)
   sigma_t <- as.data.frame(var_process$sigma_t)
   colnames(sigma_t) <- rep(1, N^2)
 
@@ -528,7 +528,7 @@ bekk_fit.dbekka <- function(spec, data, QML_t_ratios = FALSE,
   }
 
   # Final check if BEKK is valid
-  BEKK_valid <- valid_asymm_dbekk(param_mat$c0, param_mat$a, param_mat$b, param_mat$g, data, spec$model$signs)
+  BEKK_valid <- valid_asymm_bekk(param_mat$c0, param_mat$a, param_mat$b, param_mat$g, data, spec$model$signs)
 
   expected_signs=expected_indicator_value(data,spec$model$signs)
 
@@ -585,7 +585,7 @@ bekk_fit.sbekk <- function(spec, data, QML_t_ratios = FALSE,
 
   theta <- matrix(theta, ncol =1)
 
-  params <- bhh_sbekk(data, theta, max_iter, crit)
+  params <- bhh_scalar_bekk(data, theta, max_iter, crit)
 
   if (QML_t_ratios == TRUE) {
     tratios <- QML_t_ratios_sbekk(params$theta, data)
@@ -635,7 +635,7 @@ bekk_fit.sbekk <- function(spec, data, QML_t_ratios = FALSE,
   }
 
   # Final check if BEKK is valid
-  BEKK_valid <- valid_sbekk(param_mat$c0, param_mat$a, param_mat$g)
+  BEKK_valid <- valid_scalar_bekk(param_mat$c0, param_mat$a, param_mat$g)
 
 
   params$likelihood_iter <- params$likelihood_iter[params$likelihood_iter != 0]
@@ -693,7 +693,7 @@ bekk_fit.sbekka <- function(spec, data, QML_t_ratios = FALSE,
 
   theta <- matrix(theta, ncol =1)
 
-  params <- bhh_asymm_sbekka(data, theta, max_iter, crit, spec$model$signs)
+  params <- bhh_scalar_bekka(data, theta, max_iter, crit, spec$model$signs)
 
   if (QML_t_ratios == TRUE) {
     tratios <- QML_t_ratios_sbekk_asymm(params$theta, data, spec$model$signs)
