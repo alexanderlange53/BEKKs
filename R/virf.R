@@ -56,12 +56,12 @@ virf.bekk <- function(fit, time = 1, q = 0.05, index_series=1, periods = 10) {
     if(i==index_series){
       shocks[index_series] = sapply(q,FUN=quantile,x=as.matrix(residuals[,index_series]))
     }else{
-      shocks[i] = sapply(0.5,FUN=quantile,x=as.matrix(residuals[,i]))
+      shocks[i] = sapply(0.5,FUN=quantile,x=as.matrix(residuals[,i])) * 0
 
     }
   }
 
-  VIRF = virf_bekk(H, fit$A, fit$G, matrix(shocks,ncol=N, nrow = 1), periods)
+  VIRF = virf_bekk(H, t(fit$C0) ,fit$A, fit$G, matrix(shocks,ncol=N, nrow = 1), periods)
   dupl <- duplication_mat(N)
   elim <- elimination_mat(N)
 
@@ -112,7 +112,7 @@ virf.bekka <- function(fit, time = 1, q = 0.05, index_series=1, periods = 10) {
 
 
 
-  VIRF =  virf_bekka(H_t, fit$A, fit$B, fit$G, fit$signs, fit$expected_signs, shocks, periods)
+  VIRF =  virf_bekka(H_t, t(fit$C0), fit$A, fit$B, fit$G, fit$signs, fit$expected_signs, shocks, periods)
 
 
   VIRF <- as.data.frame(VIRF)

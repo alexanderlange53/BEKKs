@@ -1430,7 +1430,7 @@ arma::mat eigen_value_decomposition(arma::mat& A){
 }
 
 // [[Rcpp::export]]
-arma::mat virf_bekk(arma::mat& H_t,arma::mat& A, arma::mat& G, arma::mat& shocks, int& periods){
+arma::mat virf_bekk(arma::mat& H_t, arma::mat& C, arma::mat& A, arma::mat& G, arma::mat& shocks, int& periods){
   int N = A.n_rows;
 
   arma::mat virf = arma::zeros(periods, N*(N+1)/2);
@@ -1443,7 +1443,7 @@ arma::mat virf_bekk(arma::mat& H_t,arma::mat& A, arma::mat& G, arma::mat& shocks
   arma::mat G_virf = L_elimination * kron(G,G) * L_elimination.t();
 
   for (int i=0; i < periods; i++){
-    arma::mat virf_temp = arma::powmat(A_virf+G_virf, i) * A_virf * D_gen_inv * kron(B_t, B_t) * D_duplication * L_elimination * arma::vectorise((shocks.row(0).t() * shocks.row(0)-arma::eye(N,N)));
+    arma::mat virf_temp =  L_elimination* arma::vectorise( C * C.t()) + arma::powmat(A_virf+G_virf, i) * A_virf * D_gen_inv * kron(B_t, B_t) * D_duplication * L_elimination * arma::vectorise((shocks.row(0).t() * shocks.row(0)-arma::eye(N,N)));
     virf.row(i) = virf_temp.t();
   }
     return virf;
@@ -1451,7 +1451,7 @@ arma::mat virf_bekk(arma::mat& H_t,arma::mat& A, arma::mat& G, arma::mat& shocks
 
 
 // [[Rcpp::export]]
-arma::mat virf_bekka(arma::mat& H_t,arma::mat& A, arma::mat& B, arma::mat& G, arma::mat& signs, double& expected_signs, arma::mat& shocks, int& periods){
+arma::mat virf_bekka(arma::mat& H_t, arma::mat& C, arma::mat& A, arma::mat& B, arma::mat& G, arma::mat& signs, double& expected_signs, arma::mat& shocks, int& periods){
   int N = A.n_rows;
 
   arma::mat virf = arma::zeros(periods, N*(N+1)/2);
@@ -1466,7 +1466,7 @@ arma::mat virf_bekka(arma::mat& H_t,arma::mat& A, arma::mat& B, arma::mat& G, ar
   arma::mat G_virf = L_elimination * kron(G,G) * L_elimination.t();
 
   for (int i=0; i < periods; i++){
-    arma::mat virf_temp = arma::powmat(A_virf+expected_signs*B_virf+G_virf, i) * (A_virf+indicatorFunction(r,signs)*B_virf) * D_gen_inv * kron(B_t, B_t) * D_duplication * L_elimination * arma::vectorise((shocks.row(0).t() * shocks.row(0)-arma::eye(N,N)));
+    arma::mat virf_temp =  L_elimination* arma::vectorise( C * C.t()) + arma::powmat(A_virf+expected_signs*B_virf+G_virf, i) * (A_virf+indicatorFunction(r,signs)*B_virf) * D_gen_inv * kron(B_t, B_t) * D_duplication * L_elimination * arma::vectorise((shocks.row(0).t() * shocks.row(0)-arma::eye(N,N)));
     virf.row(i) = virf_temp.t();
   }
   return virf;
