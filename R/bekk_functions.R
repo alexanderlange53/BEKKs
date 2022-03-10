@@ -82,7 +82,7 @@ QML_t_ratios_dbekk <- function(theta, r) {
   return(abs(theta/s2))
 }
 
-QML_t_ratios_dbekk_asymm <- function(theta, r, signs) {
+QML_t_ratios_dbekka <- function(theta, r, signs) {
   s1 <- score_asymm_dbekk(theta, r, signs)
   s1 <- crossprod(s1)
 

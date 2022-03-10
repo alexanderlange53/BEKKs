@@ -10,7 +10,7 @@
 
 
 // [[Rcpp::export]]
-bool valid_scalar_bekk(arma::mat C, double a, double g){
+bool valid_sbekk(arma::mat C, double a, double g){
   double sum=a+g;
   if(sum >= 1){
     return false;
@@ -36,7 +36,7 @@ bool valid_scalar_bekk(arma::mat C, double a, double g){
 }
 
 // [[Rcpp::export]]
-bool valid_scalar_abekk(arma::mat C, double a, double b, double g, arma::mat r, arma::mat signs){
+bool valid_asymm_sbekk(arma::mat C, double a, double b, double g, arma::mat r, arma::mat signs){
   double exp_indicator_value = expected_indicator_value(r,signs);
   double sum=a+g+b*exp_indicator_value;
   if(sum >= 1){
@@ -59,7 +59,7 @@ bool valid_scalar_abekk(arma::mat C, double a, double b, double g, arma::mat r, 
 
 
 // [[Rcpp::export]]
-double loglike_scalar_bekk(const arma::vec& theta, const arma::mat& r) {
+double loglike_sbekk(const arma::vec& theta, const arma::mat& r) {
   // Log-Likelihood function
 
   // convert to matrices
@@ -82,7 +82,7 @@ double loglike_scalar_bekk(const arma::vec& theta, const arma::mat& r) {
   arma::mat CC  = C * C.t();
 
   // check constraints
-  if (valid_scalar_bekk(C,a,g) == false) {
+  if (valid_sbekk(C,a,g) == false) {
     return -1e25;
   }
 
@@ -102,7 +102,7 @@ double loglike_scalar_bekk(const arma::vec& theta, const arma::mat& r) {
 }
 
 // [[Rcpp::export]]
-double loglike_scalar_abekk(const arma::vec& theta, const arma::mat& r, arma::mat& signs) {
+double loglike_asymm_sbekk(const arma::vec& theta, const arma::mat& r, arma::mat& signs) {
   // Log-Likelihood function
 
   // convert to matrices
@@ -131,7 +131,7 @@ double loglike_scalar_abekk(const arma::vec& theta, const arma::mat& r, arma::ma
   double expected_indicator = expected_indicator_value(r, signs);
 
   // check constraints
-  if (valid_scalar_abekk(C,a,b,g,r,signs) == false) {
+  if (valid_asymm_sbekk(C,a,b,g,r,signs) == false) {
     return -1e25;
   }
 
@@ -152,7 +152,7 @@ double loglike_scalar_abekk(const arma::vec& theta, const arma::mat& r, arma::ma
 
 
 // [[Rcpp::export]]
-arma::mat score_scalar_bekk(const arma::mat& theta, arma::mat& r) {
+arma::mat score_sbekk(const arma::mat& theta, arma::mat& r) {
 
   int N = r.n_cols;
   int N2 = pow(N, 2);
@@ -248,7 +248,7 @@ arma::mat score_scalar_bekk(const arma::mat& theta, arma::mat& r) {
 }
 
 // [[Rcpp::export]]
-arma::mat score_scalar_abekk(const arma::mat& theta, arma::mat& r, arma::mat& signs) {
+arma::mat score_asymm_sbekk(const arma::mat& theta, arma::mat& r, arma::mat& signs) {
 
   arma::mat gradients = arma::zeros(r.n_rows, theta.n_rows);
   double expected_indicator = expected_indicator_value(r, signs);
@@ -344,7 +344,7 @@ arma::mat score_scalar_abekk(const arma::mat& theta, arma::mat& r, arma::mat& si
 }
 
 // [[Rcpp::export]]
-Rcpp::List  bhh_scalar_bekk(arma::mat& r, const arma::mat& theta, int& max_iter, double& crit) {
+Rcpp::List  bhh_sbekk(arma::mat& r, const arma::mat& theta, int& max_iter, double& crit) {
 
   arma::vec steps = {9.9,9,8,7,6,5,4,3,2,1,0.5,0.25,0.1,0.01,0.005,
                      0.001,0.0005,0.0001,0.00005,0.00001,0};
@@ -353,20 +353,20 @@ Rcpp::List  bhh_scalar_bekk(arma::mat& r, const arma::mat& theta, int& max_iter,
   arma::mat theta_candidate = theta;
   int exit_loop = 0;
   arma::vec lik_all(max_iter+1, arma::fill::zeros);
-  lik_all(0) = loglike_scalar_bekk(theta, r);
+  lik_all(0) = loglike_sbekk(theta, r);
 
 
   while (count_loop < max_iter && exit_loop == 0) {
     arma::mat theta_loop = theta_candidate;
     arma::mat theta_temp = arma::zeros(theta_loop.n_rows, steps.n_elem);
 
-    arma::mat score_function = score_scalar_bekk(theta_loop, r);
+    arma::mat score_function = score_sbekk(theta_loop, r);
     arma::mat outer_score = score_function.t() * score_function;
 
     arma::mat outer_score_inv = arma::inv(outer_score);
     arma::mat score_function_sum = arma::sum(score_function);
 
-    double lik = loglike_scalar_bekk(theta_loop, r);
+    double lik = loglike_sbekk(theta_loop, r);
 
     for (int i = 0; i < steps.n_elem; i++) {
       arma::vec temp = theta_candidate + step * steps(i) * outer_score_inv * score_function_sum.t();
@@ -380,7 +380,7 @@ Rcpp::List  bhh_scalar_bekk(arma::mat& r, const arma::mat& theta, int& max_iter,
     int  j = steps.n_elem - 2;
     int exit_inner = 0;
     while (j >= 0 && exit_inner == 0) {
-      likelihood_candidates(j) = loglike_scalar_bekk(theta_temp.col(j), r);
+      likelihood_candidates(j) = loglike_sbekk(theta_temp.col(j), r);
       //if (likelihood_candidates(j+1) > likelihood_candidates(j)) {
       //  exit_inner = 1;
       //}
@@ -413,8 +413,8 @@ Rcpp::List  bhh_scalar_bekk(arma::mat& r, const arma::mat& theta, int& max_iter,
     }
   }
 
-  double likelihood_final = loglike_scalar_bekk(theta_candidate, r);
-  arma::mat score_final = score_scalar_bekk(theta_candidate, r);
+  double likelihood_final = loglike_sbekk(theta_candidate, r);
+  arma::mat score_final = score_sbekk(theta_candidate, r);
   arma::mat s1_temp = arma::diagmat(arma::inv(score_final.t() * score_final));
   arma::mat s1 = arma::sqrt(s1_temp.diag());
 
@@ -427,7 +427,7 @@ Rcpp::List  bhh_scalar_bekk(arma::mat& r, const arma::mat& theta, int& max_iter,
 }
 
 // [[Rcpp::export]]
-Rcpp::List  bhh_scalar_bekka(arma::mat& r, const arma::mat& theta, int& max_iter, double& crit, arma::mat& signs) {
+Rcpp::List  bhh_asymm_sbekk(arma::mat& r, const arma::mat& theta, int& max_iter, double& crit, arma::mat& signs) {
 
   arma::vec steps = {9.9,9,8,7,6,5,4,3,2,1,0.5,0.25,0.1,0.01,0.005,
                      0.001,0.0005,0.0001,0.00005,0.00001,0};
@@ -436,20 +436,20 @@ Rcpp::List  bhh_scalar_bekka(arma::mat& r, const arma::mat& theta, int& max_iter
   arma::mat theta_candidate = theta;
   int exit_loop = 0;
   arma::vec lik_all(max_iter+1, arma::fill::zeros);
-  lik_all(0) = loglike_scalar_abekk(theta, r, signs);
+  lik_all(0) = loglike_asymm_sbekk(theta, r, signs);
 
 
   while (count_loop < max_iter && exit_loop == 0) {
     arma::mat theta_loop = theta_candidate;
     arma::mat theta_temp = arma::zeros(theta_loop.n_rows, steps.n_elem);
 
-    arma::mat score_function = score_scalar_abekk(theta_loop, r, signs);
+    arma::mat score_function = score_asymm_sbekk(theta_loop, r, signs);
     arma::mat outer_score = score_function.t() * score_function;
 
     arma::mat outer_score_inv = arma::inv(outer_score);
     arma::mat score_function_sum = arma::sum(score_function);
 
-    double lik = loglike_scalar_abekk(theta_loop, r, signs);
+    double lik = loglike_asymm_sbekk(theta_loop, r, signs);
 
     for (int i = 0; i < steps.n_elem; i++) {
       arma::vec temp = theta_candidate + step * steps(i) * outer_score_inv * score_function_sum.t();
@@ -463,7 +463,7 @@ Rcpp::List  bhh_scalar_bekka(arma::mat& r, const arma::mat& theta, int& max_iter
     int  j = steps.n_elem - 2;
     int exit_inner = 0;
     while (j >= 0 && exit_inner == 0) {
-      likelihood_candidates(j) = loglike_scalar_abekk(theta_temp.col(j), r, signs);
+      likelihood_candidates(j) = loglike_asymm_sbekk(theta_temp.col(j), r, signs);
       //if (likelihood_candidates(j+1) > likelihood_candidates(j)) {
       //  exit_inner = 1;
       //}
@@ -496,8 +496,8 @@ Rcpp::List  bhh_scalar_bekka(arma::mat& r, const arma::mat& theta, int& max_iter
     }
   }
 
-  double likelihood_final = loglike_scalar_abekk(theta_candidate, r, signs);
-  arma::mat score_final = score_scalar_abekk(theta_candidate, r, signs);
+  double likelihood_final = loglike_asymm_sbekk(theta_candidate, r, signs);
+  arma::mat score_final = score_asymm_sbekk(theta_candidate, r, signs);
   arma::mat s1_temp = arma::diagmat(arma::inv(score_final.t() * score_final));
   arma::mat s1 = arma::sqrt(s1_temp.diag());
 
@@ -510,7 +510,7 @@ Rcpp::List  bhh_scalar_bekka(arma::mat& r, const arma::mat& theta, int& max_iter
 }
 
 // [[Rcpp::export]]
-arma::mat hesse_scalar_bekk(arma::mat theta, arma::mat r){
+arma::mat hesse_sbekk(arma::mat theta, arma::mat r){
   int n = r.n_rows;
   int N = r.n_cols;
   int N2 = pow(N,2);
@@ -711,7 +711,7 @@ arma::mat hesse_scalar_bekk(arma::mat theta, arma::mat r){
 }
 
 // [[Rcpp::export]]
-arma::mat hesse_scalar_abekk(arma::mat theta, arma::mat r, arma::mat signs){
+arma::mat hesse_asymm_sbekk(arma::mat theta, arma::mat r, arma::mat signs){
   //int N = r.n_cols;
   //int N2 = pow(N,2);
   //int NoOfVars_C =2;
@@ -1037,7 +1037,7 @@ Rcpp::List random_grid_search_sBEKK(arma::mat r) {
 
 
 
-  double best_val = loglike_scalar_bekk(theta_mu,r);
+  double best_val = loglike_sbekk(theta_mu,r);
   thetaOptim=theta_mu;
   //set the seed
 
@@ -1060,9 +1060,9 @@ Rcpp::List random_grid_search_sBEKK(arma::mat r) {
       }
     }
 
-        theta[numb_of_vars-2]= arma::randn()*0.01+theta_mu[numb_of_vars-2];
+        theta[numb_of_vars-2]= arma::randn()*0.03+theta_mu[numb_of_vars-2];
 
-        theta[numb_of_vars-1]=arma::randn()*0.01+theta_mu[numb_of_vars-1];
+        theta[numb_of_vars-1]=arma::randn()*0.03+theta_mu[numb_of_vars-1];
 
 
 
@@ -1079,9 +1079,9 @@ Rcpp::List random_grid_search_sBEKK(arma::mat r) {
     a = theta[numb_of_vars-2];
     g = theta[numb_of_vars-1];
 
-    if(valid_scalar_bekk(C,a,g)){
+    if(valid_sbekk(C,a,g)){
       l++;
-      double llv=loglike_scalar_bekk(theta,r);
+      double llv=loglike_sbekk(theta,r);
 
       if(llv>best_val){
 
@@ -1091,7 +1091,7 @@ Rcpp::List random_grid_search_sBEKK(arma::mat r) {
         theta_mu=thetaOptim;
 
       }
-      if(l>1000 || m>=5){
+      if(l>500 || m>=5){
         theta_mu=thetaOptim;
       }
     }
@@ -1146,7 +1146,7 @@ Rcpp::List random_grid_search_asymmetric_sBEKK(arma::mat r, arma::mat signs) {
 
 
 
-  double best_val = loglike_scalar_abekk(theta_mu,r,signs);
+  double best_val = loglike_asymm_sbekk(theta_mu,r,signs);
   thetaOptim=theta_mu;
   //set the seed
 
@@ -1169,11 +1169,11 @@ Rcpp::List random_grid_search_asymmetric_sBEKK(arma::mat r, arma::mat signs) {
       }
     }
 
-        theta[numb_of_vars-3]= arma::randn()*0.01+theta_mu[numb_of_vars-3];
+        theta[numb_of_vars-3]= arma::randn()*0.03+theta_mu[numb_of_vars-3];
 
-        theta[numb_of_vars-2]= arma::randn()*0.01+theta_mu[numb_of_vars-2];
+        theta[numb_of_vars-2]= arma::randn()*0.03+theta_mu[numb_of_vars-2];
 
-        theta[numb_of_vars-1]=arma::randn()*0.01+theta_mu[numb_of_vars-1];
+        theta[numb_of_vars-1]=arma::randn()*0.03+theta_mu[numb_of_vars-1];
 
 
 
@@ -1191,9 +1191,9 @@ Rcpp::List random_grid_search_asymmetric_sBEKK(arma::mat r, arma::mat signs) {
     b = theta[numb_of_vars-2];
     g = theta[numb_of_vars-1];
 
-    if(valid_scalar_abekk(C,a,b,g,r,signs)){
+    if(valid_asymm_sbekk(C,a,b,g,r,signs)){
       l++;
-      double llv=loglike_scalar_abekk(theta,r,signs);
+      double llv=loglike_asymm_sbekk(theta,r,signs);
 
       if(llv>best_val){
 
@@ -1203,7 +1203,7 @@ Rcpp::List random_grid_search_asymmetric_sBEKK(arma::mat r, arma::mat signs) {
         theta_mu=thetaOptim;
 
       }
-      if(l>1500 || m>=5){
+      if(l>100 || m>=5){
         theta_mu=thetaOptim;
       }
     }

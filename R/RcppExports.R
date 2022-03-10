@@ -169,44 +169,44 @@ inv_gen <- function(m) {
     .Call('_BEKKs_inv_gen', PACKAGE = 'BEKKs', m)
 }
 
-valid_scalar_bekk <- function(C, a, g) {
-    .Call('_BEKKs_valid_scalar_bekk', PACKAGE = 'BEKKs', C, a, g)
+valid_sbekk <- function(C, a, g) {
+    .Call('_BEKKs_valid_sbekk', PACKAGE = 'BEKKs', C, a, g)
 }
 
-valid_scalar_abekk <- function(C, a, b, g, r, signs) {
-    .Call('_BEKKs_valid_scalar_abekk', PACKAGE = 'BEKKs', C, a, b, g, r, signs)
+valid_asymm_sbekk <- function(C, a, b, g, r, signs) {
+    .Call('_BEKKs_valid_asymm_sbekk', PACKAGE = 'BEKKs', C, a, b, g, r, signs)
 }
 
-loglike_scalar_bekk <- function(theta, r) {
-    .Call('_BEKKs_loglike_scalar_bekk', PACKAGE = 'BEKKs', theta, r)
+loglike_sbekk <- function(theta, r) {
+    .Call('_BEKKs_loglike_sbekk', PACKAGE = 'BEKKs', theta, r)
 }
 
-loglike_scalar_abekk <- function(theta, r, signs) {
-    .Call('_BEKKs_loglike_scalar_abekk', PACKAGE = 'BEKKs', theta, r, signs)
+loglike_asymm_sbekk <- function(theta, r, signs) {
+    .Call('_BEKKs_loglike_asymm_sbekk', PACKAGE = 'BEKKs', theta, r, signs)
 }
 
-score_scalar_bekk <- function(theta, r) {
-    .Call('_BEKKs_score_scalar_bekk', PACKAGE = 'BEKKs', theta, r)
+score_sbekk <- function(theta, r) {
+    .Call('_BEKKs_score_sbekk', PACKAGE = 'BEKKs', theta, r)
 }
 
-score_scalar_abekk <- function(theta, r, signs) {
-    .Call('_BEKKs_score_scalar_abekk', PACKAGE = 'BEKKs', theta, r, signs)
+score_asymm_sbekk <- function(theta, r, signs) {
+    .Call('_BEKKs_score_asymm_sbekk', PACKAGE = 'BEKKs', theta, r, signs)
 }
 
-bhh_scalar_bekk <- function(r, theta, max_iter, crit) {
-    .Call('_BEKKs_bhh_scalar_bekk', PACKAGE = 'BEKKs', r, theta, max_iter, crit)
+bhh_sbekk <- function(r, theta, max_iter, crit) {
+    .Call('_BEKKs_bhh_sbekk', PACKAGE = 'BEKKs', r, theta, max_iter, crit)
 }
 
-bhh_scalar_bekka <- function(r, theta, max_iter, crit, signs) {
-    .Call('_BEKKs_bhh_scalar_bekka', PACKAGE = 'BEKKs', r, theta, max_iter, crit, signs)
+bhh_asymm_sbekk <- function(r, theta, max_iter, crit, signs) {
+    .Call('_BEKKs_bhh_asymm_sbekk', PACKAGE = 'BEKKs', r, theta, max_iter, crit, signs)
 }
 
-hesse_scalar_bekk <- function(theta, r) {
-    .Call('_BEKKs_hesse_scalar_bekk', PACKAGE = 'BEKKs', theta, r)
+hesse_sbekk <- function(theta, r) {
+    .Call('_BEKKs_hesse_sbekk', PACKAGE = 'BEKKs', theta, r)
 }
 
-hesse_scalar_abekk <- function(theta, r, signs) {
-    .Call('_BEKKs_hesse_scalar_abekk', PACKAGE = 'BEKKs', theta, r, signs)
+hesse_asymm_sbekk <- function(theta, r, signs) {
+    .Call('_BEKKs_hesse_asymm_sbekk', PACKAGE = 'BEKKs', theta, r, signs)
 }
 
 sigma_sbekk <- function(r, C, a, g) {

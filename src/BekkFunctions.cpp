@@ -533,7 +533,7 @@ arma::mat score_dbekk(const arma::mat& theta, arma::mat& r) {
 
 
   arma::mat dHdtheta = arma::join_horiz(dHdc, dHda*DM, dHdg*DM).t();
- Rcpp::Rcout << dHdtheta;
+
   //arma::mat ht_sqrt_inv = arma::inv(arma::real(arma::sqrtmat(ht)));
   arma::mat ht_sqrt_inv = inv_gen(ht);
   //arma::vec et = ht_sqrt_inv * r.row(0).t();
@@ -543,7 +543,7 @@ arma::mat score_dbekk(const arma::mat& theta, arma::mat& r) {
   for (int k = 0; k < theta.n_rows; k++) {
 
     arma::mat dh = arma::reshape(dHdtheta.row(k), N, N);
-    Rcpp::Rcout << dh;
+
     //Rcpp::Rcout << ht_sqrt_inv;
     //arma::mat mat_temp = ht_sqrt_inv * dh * ht_sqrt_inv * (arma::eye(N, N) - et * et.t());
     arma::mat mat_temp = dh * ht_sqrt_inv - r.row(0).t() * r.row(0) * ht_sqrt_inv * dh * ht_sqrt_inv;
@@ -1444,7 +1444,7 @@ Rcpp::List random_grid_search_dBEKK(arma::mat r) {
       theta_mu[j]=0.3;
 
   }
-  for (int j=n+(n*(n+1)/2); j < (numb_of_vars-2*n);j++){
+  for (int j=n+(n*(n+1)/2); j < numb_of_vars;j++){
 
     theta_mu[j]=0.9;
 
@@ -1454,7 +1454,7 @@ Rcpp::List random_grid_search_dBEKK(arma::mat r) {
 
 
 
-  double best_val = loglike_bekk(theta_mu,r);
+  double best_val = loglike_dbekk(theta_mu,r);
   thetaOptim=theta_mu;
   //set the seed
 
@@ -1477,7 +1477,7 @@ Rcpp::List random_grid_search_dBEKK(arma::mat r) {
       }
     }
     for (int j=n*(n+1)/2; j< numb_of_vars; j++){
-        theta[j]= arma::randn()*0.01+theta_mu[j];
+        theta[j]= arma::randn()*0.03+theta_mu[j];
     }
 
 
@@ -1490,12 +1490,12 @@ Rcpp::List random_grid_search_dBEKK(arma::mat r) {
       }
     }
 
-    A = arma::diagmat(theta.rows((n * (n+1)/2), n+ (n * (n + 1)/2) - 1));
+    A = arma::diagmat(theta.rows((n * (n+1)/2), n + (n * (n + 1)/2) - 1));
     G = arma::diagmat(theta.rows(n + (n * (n + 1)/2), 2*n+ (n * (n + 1)/2) - 1));
 
     if(valid_bekk(C,A,G)){
       l++;
-      double llv=loglike_bekk(theta,r);
+      double llv=loglike_dbekk(theta,r);
 
       if(llv>best_val){
 
@@ -1551,33 +1551,20 @@ Rcpp::List random_grid_search_asymmetric_dBEKK(arma::mat r, arma::mat signs) {
 
   }
 
-  for (int j=(n*(n+1)/2); j < (numb_of_vars-2*n);j++){
+  for (int j=(n*(n+1)/2); j < (numb_of_vars-n);j++){
 
       theta_mu[j]=0.2;
   }
 
-  for (int j=(n*(n+1)/2); j < (numb_of_vars-2*n*n);j++){
-    if(j == (n*(n+1)/2+diagonal_counter*(n+1))){
-      diagonal_counter++;
-      theta_mu[j+n*n]=0.3;
-    }
-    else{
-      theta_mu[j+n*n]=0.001;
-    }
-  }
-  diagonal_counter=0;
-  for (int j=(n*(n+1)/2); j < (numb_of_vars-2*n*n);j++){
-    if(j == (n*(n+1)/2+diagonal_counter*(n+1))){
-      diagonal_counter++;
-      theta_mu[j+n*n*2]=0.92;
-    }
-    else{
-      theta_mu[j+n*n*2]=0.001;
-    }
+
+
+  for (int j=((n*(n+1)/2)+2*n); j < numb_of_vars;j++){
+
+    theta_mu[j]=0.9;
   }
 
 
-  double best_val = loglike_asymm_bekk(theta_mu,r,signs);
+  double best_val = loglike_asymm_dbekk(theta_mu,r,signs);
   thetaOptim=theta_mu;
   //set the seed
 
@@ -1599,23 +1586,11 @@ Rcpp::List random_grid_search_asymmetric_dBEKK(arma::mat r, arma::mat signs) {
 
       }
     }
-    diagonal_counter=0;
+
     for (int j=(n*(n+1)/2); j < numb_of_vars;j++){
-      if(j == (n*(n+1)/2+diagonal_counter*(n+1)) && j< ((n*(n+1)/2) +n*n)){
-        diagonal_counter++;
-        theta[j]= arma::randn()*0.0001+theta_mu[j];
-      }
-      else if(j == (n*(n+1)/2+n*n+(diagonal_counter-n)*(n+1)) && j>=(n*(n+1)/2+n*n) && j<((n*(n+1)/2) +2*n*n)){
-        diagonal_counter++;
-        theta[j]= arma::randn()*0.01+theta_mu[j];
-      }
-      else if(j == (n*(n+1)/2+2*n*n+(diagonal_counter-2*n)*(n+1)) && j>=(n*(n+1)/2+2*n*n)){
-        diagonal_counter++;
-        theta[j]= arma::randn()*0.0001+theta_mu[j];
-      }
-      else{
-        theta[j]=arma::randn()*0.00001+theta_mu[j];
-      }
+
+      theta[j]= arma::randn()*0.03+theta_mu[j];
+
     }
 
 
@@ -1634,7 +1609,7 @@ Rcpp::List random_grid_search_asymmetric_dBEKK(arma::mat r, arma::mat signs) {
 
     if(valid_asymm_bekk(C,A,B,G,r,signs)){
       l++;
-      double llv=loglike_asymm_bekk(theta,r,signs);
+      double llv=loglike_asymm_dbekk(theta,r,signs);
 
       if(llv>best_val){
 

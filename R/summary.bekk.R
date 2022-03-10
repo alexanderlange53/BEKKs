@@ -151,7 +151,7 @@ summary.sbekk <- function(object, ...) {
 }
 
 #' @export
-summary.bekka <- function(object, ...) {
+summary.sbekka <- function(object, ...) {
   bekkObject <- object
   cat(paste("\n", "Asymmetric scalar BEKK estimation results", "\n", sep = ""))
   underScore <- paste(rep("-", nchar("Asymmetric scalar BEKK estimation results")), collapse = "")

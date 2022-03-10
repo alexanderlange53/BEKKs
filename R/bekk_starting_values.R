@@ -252,7 +252,7 @@ gridSearch_sBEKK <- function(r) {
 
 
   th0 = c(C0, a, g)
-  lik = loglike_scalar_bekk(th0, r)
+  lik = loglike_sbekk(th0, r)
 
   return(list(th0, lik))
 
@@ -295,7 +295,7 @@ gridSearch_asymmetricsBEKK <- function(r, signs) {
 
 
   th0 = c(C0, a, b, g)
-  lik = loglike_scalar_abekk(th0, r, signs)
+  lik = loglike_asymm_sbekk(th0, r, signs)
 
   return(list(th0, lik))
 

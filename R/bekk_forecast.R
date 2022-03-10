@@ -701,7 +701,7 @@ bekk_forecast.sbekk <- function(x, n.ahead = 1, ci = 0.95) {
 
   # Generating confidence intervals
 
-  score_final = score_scalar_bekk(x$theta, x$data)
+  score_final = score_sbekk(x$theta, x$data)
   s1_temp = diag(solve(t(score_final) %*% score_final),names=T)
   s1 = sqrt(s1_temp)
 
@@ -859,7 +859,7 @@ bekk_forecast.sbekka <- function(x, n.ahead = 1, ci = 0.95) {
 
   #95% confidence interval
 
-  score_final = score_scalar_abekk(x$theta, x$data, x$signs)
+  score_final = score_asymm_sbekk(x$theta, x$data, x$signs)
   s1_temp = diag(solve(t(score_final) %*% score_final),names=T)
   s1 = sqrt(s1_temp)
 
