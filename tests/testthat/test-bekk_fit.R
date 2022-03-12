@@ -90,8 +90,8 @@ test_that("Symmetric sBEKK 3-dims works, xts object and QML_t_ratios = TRUE", {
   obj_spec <- bekk_spec(model = list(type = "sbekk", asymmetric = F))
   x1 <- bekk_fit(obj_spec, GoldStocksBonds, QML_t_ratios = TRUE, max_iter = 50, crit = 1e-9)
 
-  expect_equal(round(x1$log_likelihood), 75130)
-  expect_equal(round(sum(x1$theta)),  4)
+  expect_equal(round(x1$log_likelihood), 74997)
+  expect_equal(round(sum(x1$theta)),  1)
   expect_lt(sum(c(x1$C0_t, x1$A_t, x1$G_t)), 399.75)
 })
 
