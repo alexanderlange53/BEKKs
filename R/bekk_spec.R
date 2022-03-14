@@ -2,7 +2,7 @@
 #'
 #' @description Method for creating a N-dimensional BEKK model specification object prior to fitting and/or simulating.
 #'
-#' @param model A list containing the model type specification: Currently implemented is only "bekk" ("dbekk" and "sbekk" are forthcoming).
+#' @param model A list containing the model type specification: Either "bekk" "dbekk" or "sbekk".
 #' Moreover it can be specified whether the model should be estimated allowing for asymmetric volatility structure.
 #' @param init_values initial values for \link{bekk_fit} during BHHH algorithm. It can be either a numerical vector of suitable dimension, or a character vector i.e. "random" to use a random starting value generator (set a seed in advance for reproducible results), or
 #'  "simple" for relying on a simple initial values generator based on typical values for BEKK parameter found in the literature. If the object from this function is passed to \link{bekk_sim}, "init_values" are used as parameters for data generating process.
@@ -20,7 +20,10 @@
 bekk_spec <- function(model = list(type = "bekk", asymmetric = FALSE),
                       init_values = NULL, signs = NULL, N = NULL, compare=FALSE) {
 
+  if(!is.logical(model$asymmetric) || is.null(model$asymmetric)){
+    stop('Please specify whether the model to be estimated is asymmetric or not.')
 
+  }
   # Checking inputs
   if(!is.null(N) & is.numeric(init_values) ) {
     if(nrow(init_values) != 2 * N^2 + N * (N + 1)/2 & model$type == "bekk"  & model$asymmetric == FALSE) {

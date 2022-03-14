@@ -23,6 +23,12 @@
 #' @export
 
 bekk_sim <- function(spec, nobs) {
+  if(is.null(nobs) || !is.numeric(nobs) || nobs < 1){
+    stop("Please provide an integer specifying the number of observations")
+  }
+  if(!inherits(spec,c("bekkSpec", "bekkFit"))){
+    stop("Please provide an object of class bekk_fit or 'bekk_spec'.")
+  }
   UseMethod('bekk_sim')
 }
 
@@ -52,6 +58,65 @@ bekk_sim.bekka <- function(spec, nobs) {
   }
   #expected_signs
   sim_dat <- simulate_bekka_c(c(xx$theta), nobs, xx$N, xx$signs, xx$expected_signs)
+
+  return(ts(sim_dat))
+}
+
+
+#' @export
+bekk_sim.dbekk <- function(spec, nobs) {
+
+  xx <- process_object(spec)
+  par <- coef_mat_diagonal(xx$theta,xx$N)
+  if(xx$BEKK_valid==FALSE){
+    stop("Please provide a stationary BEKK model")
+
+  }
+
+  sim_dat <- simulate_dbekk_c(c(xx$theta), nobs, xx$N)
+
+  return(ts(sim_dat))
+}
+
+#' @export
+bekk_sim.dbekka <- function(spec, nobs) {
+
+  xx <- process_object(spec)
+  par <- coef_mat_asymm_diagonal(xx$theta,xx$N)
+  if(xx$BEKK_valid==FALSE){
+    stop("Please provide a stationary BEKK model")
+  }
+  #expected_signs
+  sim_dat <- simulate_dbekka_c(c(xx$theta), nobs, xx$N, xx$signs, xx$expected_signs)
+
+  return(ts(sim_dat))
+}
+
+
+#' @export
+bekk_sim.sbekk <- function(spec, nobs) {
+
+  xx <- process_object(spec)
+  par <- coef_mat_scalar(xx$theta,xx$N)
+  if(xx$BEKK_valid==FALSE){
+    stop("Please provide a stationary BEKK model")
+  }
+
+  sim_dat <- simulate_sbekk_c(c(xx$theta), nobs, xx$N)
+
+  return(ts(sim_dat))
+}
+
+#' @export
+bekk_sim.sbekka <- function(spec, nobs) {
+
+  xx <- process_object(spec)
+  par <- coef_mat_asymm_scalar(xx$theta,xx$N)
+  if(xx$BEKK_valid==FALSE){
+    stop("Please provide a stationary BEKK model")
+      }
+  #expected_signs
+  sim_dat <- simulate_sbekka_c(c(xx$theta), nobs, xx$N, xx$signs, xx$expected_signs)
 
   return(ts(sim_dat))
 }

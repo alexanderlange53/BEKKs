@@ -58,3 +58,126 @@ summary.bekka <- function(object, ...) {
   cat("\nG \n")
   print(bekkObject$G_t)
 }
+
+#' @export
+
+summary.dbekk <- function(object, ...) {
+  bekkObject <- object
+  cat(paste("\n", "Diagonal BEKK estimation results", "\n", sep = ""))
+  underScore <- paste(rep("-", nchar("Diagonal BEKK estimation results")), collapse = "")
+  cat(underScore)
+  cat("\nLog-likelihood: ")
+  cat(bekkObject$log_likelihood)
+  cat("\nDiagonal BEKK model stationary: ")
+  cat(bekkObject$BEKK_valid)
+  cat("\nNumber of BHHH iterations: ")
+  cat(bekkObject$iter)
+  cat("\nEstimated paramater matrices: \n")
+  cat("\nC \n")
+  print(bekkObject$C0)
+  cat("\nA \n")
+  print(bekkObject$A)
+  cat("\nG \n")
+  print(bekkObject$G)
+  cat("\nt-values of paramater matrices: \n")
+  cat("\nC \n")
+  print(bekkObject$C0_t)
+  cat("\nA \n")
+  print(bekkObject$A_t)
+  cat("\nG \n")
+  print(bekkObject$G_t)
+}
+
+#' @export
+summary.dbekka <- function(object, ...) {
+  bekkObject <- object
+  cat(paste("\n", "Asymmetric diagonal BEKK estimation results", "\n", sep = ""))
+  underScore <- paste(rep("-", nchar("Asymmetric diagonal BEKK estimation results")), collapse = "")
+  cat(underScore)
+  cat("\nLog-likelihood: ")
+  cat(bekkObject$log_likelihood)
+  cat("\nDiagonal BEKK model stationary: ")
+  cat(bekkObject$BEKK_valid)
+  cat("\nNumber of BHHH iterations: ")
+  cat(bekkObject$iter)
+  cat("\nEstimated paramater matrices: \n")
+  cat("\nC \n")
+  print(bekkObject$C0)
+  cat("\nA \n")
+  print(bekkObject$A)
+  cat("\nB \n")
+  print(bekkObject$B)
+  cat("\nG \n")
+  print(bekkObject$G)
+  cat("\nt-values of paramater matrices: \n")
+  cat("\nC \n")
+  print(bekkObject$C0_t)
+  cat("\nA \n")
+  print(bekkObject$A_t)
+  cat("\nB \n")
+  print(bekkObject$B_t)
+  cat("\nG \n")
+  print(bekkObject$G_t)
+}
+
+
+#' @export
+
+summary.sbekk <- function(object, ...) {
+  bekkObject <- object
+  cat(paste("\n", "Scalar BEKK estimation results", "\n", sep = ""))
+  underScore <- paste(rep("-", nchar("Scalar BEKK estimation results")), collapse = "")
+  cat(underScore)
+  cat("\nLog-likelihood: ")
+  cat(bekkObject$log_likelihood)
+  cat("\nScalar BEKK model stationary: ")
+  cat(bekkObject$BEKK_valid)
+  cat("\nNumber of BHHH iterations: ")
+  cat(bekkObject$iter)
+  cat("\nEstimated paramater matrices: \n")
+  cat("\nC \n")
+  print(bekkObject$C0)
+  cat("\na \n")
+  print(bekkObject$a)
+  cat("\ng \n")
+  print(bekkObject$g)
+  cat("\nt-values of paramater matrices: \n")
+  cat("\nC \n")
+  print(bekkObject$C0_t)
+  cat("\na \n")
+  print(bekkObject$a_t)
+  cat("\ng \n")
+  print(bekkObject$g_t)
+}
+
+#' @export
+summary.sbekka <- function(object, ...) {
+  bekkObject <- object
+  cat(paste("\n", "Asymmetric scalar BEKK estimation results", "\n", sep = ""))
+  underScore <- paste(rep("-", nchar("Asymmetric scalar BEKK estimation results")), collapse = "")
+  cat(underScore)
+  cat("\nLog-likelihood: ")
+  cat(bekkObject$log_likelihood)
+  cat("\nScalar BEKK model stationary: ")
+  cat(bekkObject$BEKK_valid)
+  cat("\nNumber of BHHH iterations: ")
+  cat(bekkObject$iter)
+  cat("\nEstimated paramater matrices: \n")
+  cat("\nC \n")
+  print(bekkObject$C0)
+  cat("\na \n")
+  print(bekkObject$a)
+  cat("\nb \n")
+  print(bekkObject$b)
+  cat("\ng \n")
+  print(bekkObject$g)
+  cat("\nt-values of paramater matrices: \n")
+  cat("\nC \n")
+  print(bekkObject$C0_t)
+  cat("\na \n")
+  print(bekkObject$a_t)
+  cat("\nb \n")
+  print(bekkObject$b_t)
+  cat("\ng \n")
+  print(bekkObject$g_t)
+}
