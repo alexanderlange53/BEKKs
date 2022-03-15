@@ -12,10 +12,14 @@
 #' @description
 #' \loadmathjax
 #' This package implements estimation, simulation and forecasting techniques for conditional volatility modelling using the BEKK model.
-#'  Currently, the BEKK(1,1,1) model of Engle and Kroner (1995)
-#' \mjdeqn{H_t = CC' + A' r_{t-1} r'_{t-1}A + G' H_{t-1}G }{ASCII representation} and the asymmetric extensions of Kroner and Ng (1998) and Grier et. al. (2004)
+#'  The full BEKK(1,1,1) model of Engle and Kroner (1995)
+#' \mjdeqn{H_t = CC' + A' r_{t-1} r'_{t-1}A + G' H_{t-1}G }{ASCII representation},  the asymmetric extensions of Kroner and Ng (1998) and Grier et. al. (2004)
 #' \mjdeqn{H_t = CC' +A'r_{t-1} r'_{t-1}A +B'\gamma_{t-1} \gamma'_{t-1} B+G'H_{t-1}G}{ASCII representation}
 #' with \mjdeqn{\gamma_t = r_t I\left(r_t < 0 \right)}{ASCII representation} are implemented.
+#' Moreover, the diagonal BEKK, where the parameter matrices A, B and G are reduced to diagonal matrices and
+#' the scalar BEKK model of Ding and Engle (2001)
+#' \mjdeqn{H_t = CC' + a r_{t-1} r'_{t-1} + g H_{t-1},}{ASCII representation}
+#' where a and g are scalar parameters are implemented to allow faster but less flexible estimation in higher dimensions.
 #' @details
 #' The main functions are:
 #' \itemize{
@@ -27,6 +31,7 @@
 #' }
 #' @references Engle, R. F. and K. F. Kroner (1995). Multivariate simultaneous generalized arch. Econometric Theory 11(1),122–150.
 #' @references Kroner, K. F. and V. K. Ng (1998). Modeling asymmetric comovements of asset returns. Review of Financial Studies 11(4), 817–44.
+#' @references Ding, Zhuanxin and Engle, Robert F (2001). Large scale conditional covariance matrix modeling, estimation and testing. NYU working paper No. Fin-01-029.
 #' @references Grier, K. B., Olan T. Henry, N. Olekalns, and K. Shields (2004). The asymmetric effects of uncertainty on inflation and output growth. Journal of Applied Econometrics  19(5), 551–565.
 #' @useDynLib BEKKs
 #' @importFrom Rcpp sourceCpp
