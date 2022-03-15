@@ -36,6 +36,23 @@
 #'
 #' plot(x1)
 #'
+#' # Fitting a symmetric diagonal BEKK model
+#' obj_spec <- bekk_spec(model = list(type = "dbekk", asymmetric = FALSE))
+#' x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
+#'
+#' summary(x1)
+#'
+#' plot(x1)
+#'
+#'
+#' # Fitting a symmetric scalar BEKK model
+#' obj_spec <- bekk_spec(model = list(type = "sbekk", asymmetric = FALSE))
+#' x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
+#'
+#' summary(x1)
+#'
+#' plot(x1)
+#'
 #' }
 #' @import xts
 #' @import stats

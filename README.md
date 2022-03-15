@@ -24,7 +24,7 @@ bekk_spec(
 )
 ```
 
-The model type by default is a symmetric BEKK(1,1) according to Engle and Kroner (1995). Alternative specifications are (forthcoming) the diagonal BEKK (`type = "dbekk"`) and scalar BEKK (`type = "sbekk"`). All types can be specified as either symmetrical or asymmetrical models.     
+The model type by default is a symmetric BEKK(1,1) according to Engle and Kroner (1995). Alternative specifications are the diagonal BEKK (`type = "dbekk"`) and scalar BEKK (`type = "sbekk"`). All types can be specified as either symmetrical or asymmetrical models.     
 
 ## Installation
 
