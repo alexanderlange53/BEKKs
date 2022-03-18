@@ -194,6 +194,9 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
 
   params$likelihood_iter <- params$likelihood_iter[params$likelihood_iter != 0]
 
+  aic <- 2 * 2 * N^2 + N * (N + 1)/2 - 2 * params$likelihood
+  bic <- N^2 + N * (N + 1)/2 * log(nrow(data)) - 2 * params$likelihood
+
   result <- list(C0 =  param_mat$c0,
                  A = param_mat$a,
                  G = param_mat$g,
@@ -202,6 +205,8 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
                  G_t = tratios_mat$g,
                  theta = params$theta,
                  log_likelihood = params$likelihood,
+                 AIC = aic,
+                 BIC = bic,
                  BEKK_valid = BEKK_valid,
                  sigma_t = sigma_t,
                  H_t = var_process$sigma_t,
@@ -338,6 +343,9 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE,
 
   params$likelihood_iter <- params$likelihood_iter[params$likelihood_iter != 0]
 
+  aic <- 2 * 3 * N^2 + N * (N + 1)/2 - 2 * params$likelihood
+  bic <- 3 * N^2 + N * (N + 1)/2 * log(nrow(data)) - 2 * params$likelihood
+
   result <- list(C0 =  param_mat$c0,
                  A = param_mat$a,
                  B = param_mat$b,
@@ -349,6 +357,8 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE,
                  theta = params$theta,
                  signs = spec$model$signs,
                  log_likelihood = params$likelihood,
+                 AIC = aic,
+                 BIC = bic,
                  BEKK_valid = BEKK_valid,
                  sigma_t = sigma_t,
                  H_t = var_process$sigma_t,
@@ -444,6 +454,9 @@ bekk_fit.dbekk <- function(spec, data, QML_t_ratios = FALSE,
 
   params$likelihood_iter <- params$likelihood_iter[params$likelihood_iter != 0]
 
+  aic <- 2 * 2 * N + N * (N + 1)/2 - 2 * params$likelihood
+  bic <- 2 * N + N * (N + 1)/2 * log(nrow(data)) - 2 * params$likelihood
+
   result <- list(C0 =  param_mat$c0,
                  A = param_mat$a,
                  G = param_mat$g,
@@ -452,6 +465,8 @@ bekk_fit.dbekk <- function(spec, data, QML_t_ratios = FALSE,
                  G_t = tratios_mat$g,
                  theta = params$theta,
                  log_likelihood = params$likelihood,
+                 AIC = aic,
+                 BIC = bic,
                  BEKK_valid = BEKK_valid,
                  sigma_t = sigma_t,
                  H_t = var_process$sigma_t,
@@ -551,6 +566,9 @@ bekk_fit.dbekka <- function(spec, data, QML_t_ratios = FALSE,
 
   params$likelihood_iter <- params$likelihood_iter[params$likelihood_iter != 0]
 
+  aic <- 2 * 3 * N + N * (N + 1)/2 - 2 * params$likelihood
+  bic <- 3 * N + N * (N + 1)/2 * log(nrow(data)) - 2 * params$likelihood
+
   result <- list(C0 =  param_mat$c0,
                  A = param_mat$a,
                  B = param_mat$b,
@@ -562,6 +580,8 @@ bekk_fit.dbekka <- function(spec, data, QML_t_ratios = FALSE,
                  theta = params$theta,
                  signs = spec$model$signs,
                  log_likelihood = params$likelihood,
+                 AIC = aic,
+                 BIC = bic,
                  BEKK_valid = BEKK_valid,
                  sigma_t = sigma_t,
                  H_t = var_process$sigma_t,
@@ -657,6 +677,9 @@ bekk_fit.sbekk <- function(spec, data, QML_t_ratios = FALSE,
 
   params$likelihood_iter <- params$likelihood_iter[params$likelihood_iter != 0]
 
+  aic <- 2 * 2  + N * (N + 1)/2 - 2 * params$likelihood
+  bic <- 2  + N * (N + 1)/2 * log(nrow(data)) - 2 * params$likelihood
+
   result <- list(C0 =  param_mat$c0,
                  a = param_mat$a,
                  g = param_mat$g,
@@ -665,6 +688,8 @@ bekk_fit.sbekk <- function(spec, data, QML_t_ratios = FALSE,
                  g_t = tratios_mat$g,
                  theta = params$theta,
                  log_likelihood = params$likelihood,
+                 AIC = aic,
+                 BIC = bic,
                  BEKK_valid = BEKK_valid,
                  sigma_t = sigma_t,
                  H_t = var_process$sigma_t,
@@ -764,6 +789,9 @@ bekk_fit.sbekka <- function(spec, data, QML_t_ratios = FALSE,
 
   params$likelihood_iter <- params$likelihood_iter[params$likelihood_iter != 0]
 
+  aic <- 2 * 3 + N * (N + 1)/2 - 2 * params$likelihood
+  bic <- 3 + N * (N + 1)/2 * log(nrow(data)) - 2 * params$likelihood
+
   result <- list(C0 =  param_mat$c0,
                  a = param_mat$a,
                  b = param_mat$b,
@@ -775,6 +803,8 @@ bekk_fit.sbekka <- function(spec, data, QML_t_ratios = FALSE,
                  theta = params$theta,
                  signs = spec$model$signs,
                  log_likelihood = params$likelihood,
+                 AIC = aic,
+                 BIC = bic,
                  BEKK_valid = BEKK_valid,
                  sigma_t = sigma_t,
                  H_t = var_process$sigma_t,
