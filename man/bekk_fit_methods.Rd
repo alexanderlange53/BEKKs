@@ -2,16 +2,28 @@
 % Please edit documentation in R/bekk_fit_methods.R
 \name{logLik.bekkFit}
 \alias{logLik.bekkFit}
+\alias{AIC.bekkFit}
+\alias{BIC.bekkFit}
+\alias{print.bekkFit}
+\alias{residuals.bekkFit}
 \title{bekkFit method}
 \usage{
 \method{logLik}{bekkFit}(x, ....)
+
+\method{AIC}{bekkFit}(x, ..., k = 2)
+
+\method{BIC}{bekkFit}(x, ...)
+
+\method{print}{bekkFit}(object, ...)
+
+\method{residuals}{bekkFit}(x, ...)
 }
 \arguments{
 \item{x}{An object of class "bekkFit" from function \link{bekk_fit}.}
 
-\item{k}{Numeric value, the penalty per parameter to be used; the default k = 2 is the classical AIC.}
-
 \item{...}{Further arguments to be passed to and from other methods.}
+
+\item{k}{Numeric value, the penalty per parameter to be used; the default k = 2 is the classical AIC.}
 }
 \description{
 Generic 'bekkFit' methods. More details on 'bekkFit' are described in \link{bekk_fit}

@@ -20,6 +20,7 @@
 #' @import xts
 #' @import stats
 
+#' @rdname bekk_fit_methods
 #' @export
 logLik.bekkFit <- function(x, ....) {
 
@@ -40,6 +41,7 @@ logLik.bekkFit <- function(x, ....) {
   return(logl)
 }
 
+#' @rdname bekk_fit_methods
 #' @export
 AIC.bekkFit <- function(x, ..., k = 2) {
 
@@ -72,6 +74,7 @@ AIC.bekkFit <- function(x, ..., k = 2) {
   return(aic)
 }
 
+#' @rdname bekk_fit_methods
 #' @export
 BIC.bekkFit <- function(x, ...) {
 
@@ -104,6 +107,7 @@ BIC.bekkFit <- function(x, ...) {
   return(bic)
 }
 
+#' @rdname bekk_fit_methods
 #' @export
 print.bekkFit <- function(object,...){
   bekkObject <- object
@@ -141,6 +145,7 @@ print.bekkFit <- function(object,...){
   cat(bekkObject$BIC)
 }
 
+#' @rdname bekk_fit_methods
 #' @export
 residuals.bekkFit <- function(x, ...) {
   x$e_t
