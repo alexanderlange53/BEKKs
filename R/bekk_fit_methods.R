@@ -2,7 +2,7 @@
 #'
 #' @description Generic 'bekkFit' methods. More details on 'bekkFit' are described in \link{bekk_fit}
 #'
-#' @param x An object of class "bekkFit" from function \link{bekk_fit}.
+#' @param object An object of class "bekkFit" from function \link{bekk_fit}.
 #' @param k Numeric value, the penalty per parameter to be used; the default k = 2 is the classical AIC.
 #' @param ...	Further arguments to be passed to and from other methods.
 #'
@@ -22,7 +22,9 @@
 
 #' @rdname bekk_fit_methods
 #' @export
-logLik.bekkFit <- function(x, ....) {
+logLik.bekkFit <- function(object, ....) {
+
+  x <- object
 
   if (any(class(x) == 'bekk')) {
     logl <- loglike_bekk(x$theta, x$data)
@@ -43,7 +45,9 @@ logLik.bekkFit <- function(x, ....) {
 
 #' @rdname bekk_fit_methods
 #' @export
-AIC.bekkFit <- function(x, ..., k = 2) {
+AIC.bekkFit <- function(object, ..., k = 2) {
+
+  x <- object
 
   AICinner <- function(e) {
     N <- ncol(e$data)
@@ -76,7 +80,9 @@ AIC.bekkFit <- function(x, ..., k = 2) {
 
 #' @rdname bekk_fit_methods
 #' @export
-BIC.bekkFit <- function(x, ...) {
+BIC.bekkFit <- function(object, ...) {
+
+  x <- object
 
   BICinner <- function(e) {
     N <- ncol(e$data)
@@ -109,8 +115,8 @@ BIC.bekkFit <- function(x, ...) {
 
 #' @rdname bekk_fit_methods
 #' @export
-print.bekkFit <- function(x,...){
-  bekkObject <- x
+print.bekkFit <- function(object,...){
+  bekkObject <- object
 
   if (any(class(bekkObject) == 'bekk')) {
     cat(paste("\n", "BEKK estimation results", "\n", sep = ""))
@@ -147,6 +153,6 @@ print.bekkFit <- function(x,...){
 
 #' @rdname bekk_fit_methods
 #' @export
-residuals.bekkFit <- function(x, ...) {
-  x$e_t
+residuals.bekkFit <- function(object, ...) {
+  object$e_t
 }
