@@ -32,6 +32,18 @@ bekk_spec <- function(model = list(type = "bekk", asymmetric = FALSE),
     if(nrow(init_values) != 3 * N^2 + N * (N + 1)/2 & model$type == "bekk"  & model$asymmetric == TRUE) {
       stop('Number of initial parameter does not match dimension of data and model.')
     }
+    if(nrow(init_values) != 2 * N + N * (N + 1)/2 & model$type == "dbekk"  & model$asymmetric == FALSE) {
+      stop('Number of initial parameter does not match dimension of data and model.')
+    }
+    if(nrow(init_values) != 3 * N + N * (N + 1)/2 & model$type == "dbekk"  & model$asymmetric == TRUE) {
+      stop('Number of initial parameter does not match dimension of data and model.')
+    }
+    if(nrow(init_values) != 2 + N * (N + 1)/2 & model$type == "sbekk"  & model$asymmetric == FALSE) {
+      stop('Number of initial parameter does not match dimension of data and model.')
+    }
+    if(nrow(init_values) != 3 + N * (N + 1)/2 & model$type == "sbekk"  & model$asymmetric == TRUE) {
+      stop('Number of initial parameter does not match dimension of data and model.')
+    }
   }
 
   specification <- list(model = model, init_values = init_values, signs = signs, N = N)
