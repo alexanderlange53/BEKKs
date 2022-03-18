@@ -8,18 +8,18 @@
 \alias{residuals.bekkFit}
 \title{bekkFit method}
 \usage{
-\method{logLik}{bekkFit}(x, ....)
+\method{logLik}{bekkFit}(object, ....)
 
-\method{AIC}{bekkFit}(x, ..., k = 2)
+\method{AIC}{bekkFit}(object, ..., k = 2)
 
-\method{BIC}{bekkFit}(x, ...)
+\method{BIC}{bekkFit}(object, ...)
 
-\method{print}{bekkFit}(x, ...)
+\method{print}{bekkFit}(object, ...)
 
-\method{residuals}{bekkFit}(x, ...)
+\method{residuals}{bekkFit}(object, ...)
 }
 \arguments{
-\item{x}{An object of class "bekkFit" from function \link{bekk_fit}.}
+\item{object}{An object of class "bekkFit" from function \link{bekk_fit}.}
 
 \item{...}{Further arguments to be passed to and from other methods.}
 
