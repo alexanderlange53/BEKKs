@@ -42,19 +42,31 @@ logLik.bekkFit <- function(x, ....) {
 
 #' @export
 AIC.bekkFit <- function(x, ..., k = 2) {
-  N <- ncol(x$data)
-  if (any(class(x) == 'bekk')) {
-    aic <- k * 2 * N^2 + N * (N + 1)/2 - 2 * logLik(x)
-  } else if (any(class(x) == 'bekka')) {
-    aic <- k * 3 * N^2 + N * (N + 1)/2 - 2 * logLik(x)
-  } else if (any(class(x) == 'sbekk')) {
-    aic <- k * 2  + N * (N + 1)/2 - 2 * logLik(x)
-  } else if (any(class(x) == 'sbekka')) {
-    aic <- k * 3 + N * (N + 1)/2 - 2 * logLik(x)
-  }else if (any(class(x) == 'dbekk')) {
-    aic <- k * 2  + N * (N + 1)/2 - 2 * logLik(x)
-  } else if (any(class(x) == 'dbekka')) {
-    aic <- k * 3 + N * (N + 1)/2 - 2 * logLik(x)
+
+  AICinner <- function(e) {
+    N <- ncol(e$data)
+    if (any(class(e) == 'bekk')) {
+      aic <- k * 2 * N^2 + N * (N + 1)/2 - 2 * logLik(e)
+    } else if (any(class(e) == 'bekka')) {
+      aic <- k * 3 * N^2 + N * (N + 1)/2 - 2 * logLik(e)
+    } else if (any(class(e) == 'sbekk')) {
+      aic <- k * 2  + N * (N + 1)/2 - 2 * logLik(e)
+    } else if (any(class(e) == 'sbekka')) {
+      aic <- k * 3 + N * (N + 1)/2 - 2 * logLik(e)
+    }else if (any(class(e) == 'dbekk')) {
+      aic <- k * 2  + N * (N + 1)/2 - 2 * logLik(e)
+    } else if (any(class(e) == 'dbekka')) {
+      aic <- k * 3 + N * (N + 1)/2 - 2 * logLik(e)
+    }
+    return(aic)
+  }
+
+  if(!missing(...)) {# several objects: produce data.frame
+    lls <- sapply(list(x, ...), AICinner)
+    vals <- sapply(list(x, ...), function(e1){length(e1$theta)})
+    aic <- data.frame(df = vals, AIC = lls)
+  } else {
+    aic <- AICinner(x)
   }
 
   return(aic)
@@ -62,21 +74,74 @@ AIC.bekkFit <- function(x, ..., k = 2) {
 
 #' @export
 BIC.bekkFit <- function(x, ...) {
-  N <- ncol(x$data)
-  if (any(class(x) == 'bekk')) {
-    bic <- N^2 + N * (N + 1)/2 * log(nrow(x$data)) - 2 * logLik(x)
-  } else if (any(class(x) == 'bekka')) {
-    bic <- 3 * N^2 + N * (N + 1)/2 * log(nrow(x$data)) - 2 * logLik(x)
-  } else if (any(class(x) == 'sbekk')) {
-    bic <- 2 + N * (N + 1)/2 * log(nrow(x$data)) - 2 * logLik(x)
-  } else if (any(class(x) == 'sbekka')) {
-    bic <- 3 + N * (N + 1)/2 * log(nrow(x$data)) - 2 * logLik(x)
-  } else if (any(class(x) == 'dbekk')) {
-    bic <- 2 * N + N * (N + 1)/2 * log(nrow(x$data)) - 2 * logLik(x)
-  } else if (any(class(x) == 'dbekka')) {
-    bic <- 3 * N + N * (N + 1)/2 * log(nrow(x$data)) - 2 * logLik(x)
+
+  BICinner <- function(e) {
+    N <- ncol(e$data)
+    if (any(class(e) == 'bekk')) {
+      bic <- N^2 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)
+    } else if (any(class(e) == 'bekka')) {
+      bic <- 3 * N^2 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)
+    } else if (any(class(e) == 'sbekk')) {
+      bic <- 2 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)
+    } else if (any(class(e) == 'sbekka')) {
+      bic <- 3 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)
+    } else if (any(class(e) == 'dbekk')) {
+      bic <- 2 * N + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)
+    } else if (any(class(e) == 'dbekka')) {
+      bic <- 3 * N + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)
+    }
+    return(bic)
   }
 
+  if(!missing(...)) {# several objects: produce data.frame
+    lls <- sapply(list(x, ...), BICinner)
+    vals <- sapply(list(x, ...), function(e1){length(e1$theta)})
+    bic <- data.frame(df = vals, BIC = lls)
+  } else {
+    bic <- BICinner(x)
+  }
 
   return(bic)
+}
+
+#' @export
+print.bekkFit <- function(object,...){
+  bekkObject <- object
+
+  if (any(class(bekkObject) == 'bekk')) {
+    cat(paste("\n", "BEKK estimation results", "\n", sep = ""))
+    underScore <- paste(rep("-", nchar("BEKK estimation results")), collapse = "")
+  } else if (any(class(bekkObject) == 'bekka')) {
+    cat(paste("\n", "Asymmetric BEKK estimation results", "\n", sep = ""))
+    underScore <- paste(rep("-", nchar("Asymmetric BEKK estimation results")), collapse = "")
+  } else if (any(class(bekkObject) == 'dbekk')) {
+    cat(paste("\n", "Diagonal BEKK estimation results", "\n", sep = ""))
+    underScore <- paste(rep("-", nchar("Diagonal BEKK estimation results")), collapse = "")
+  } else if (any(class(bekkObject) == 'dbekka')) {
+    cat(paste("\n", "Asymmetric diagonal BEKK estimation results", "\n", sep = ""))
+    underScore <- paste(rep("-", nchar("Asymmetric diagonal BEKK estimation results")), collapse = "")
+  } else if (any(class(bekkObject) == 'sbekk')) {
+    cat(paste("\n", "Scalar BEKK estimation results", "\n", sep = ""))
+    underScore <- paste(rep("-", nchar("Scalar BEKK estimation results")), collapse = "")
+  } else if (any(class(bekkObject) == 'sbekka')) {
+    cat(paste("\n", "Asymmetric scalar BEKK estimation results", "\n", sep = ""))
+    underScore <- paste(rep("-", nchar("Asymmetric scalar BEKK estimation results")), collapse = "")
+  }
+
+  cat(underScore)
+  cat("\nLog-likelihood: ")
+  cat(bekkObject$log_likelihood)
+  cat("\nBEKK model stationary: ")
+  cat(bekkObject$BEKK_valid)
+  cat("\nNumber of BHHH iterations: ")
+  cat(bekkObject$iter)
+  cat("\nAIC: ")
+  cat(bekkObject$AIC)
+  cat("\nBIC: ")
+  cat(bekkObject$BIC)
+}
+
+#' @export
+residuals.bekkFit <- function(x, ...) {
+  x$e_t
 }
