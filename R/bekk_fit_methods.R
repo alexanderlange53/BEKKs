@@ -109,8 +109,8 @@ BIC.bekkFit <- function(x, ...) {
 
 #' @rdname bekk_fit_methods
 #' @export
-print.bekkFit <- function(object,...){
-  bekkObject <- object
+print.bekkFit <- function(x,...){
+  bekkObject <- x
 
   if (any(class(bekkObject) == 'bekk')) {
     cat(paste("\n", "BEKK estimation results", "\n", sep = ""))

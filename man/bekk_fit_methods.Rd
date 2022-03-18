@@ -14,7 +14,7 @@
 
 \method{BIC}{bekkFit}(x, ...)
 
-\method{print}{bekkFit}(object, ...)
+\method{print}{bekkFit}(x, ...)
 
 \method{residuals}{bekkFit}(x, ...)
 }
