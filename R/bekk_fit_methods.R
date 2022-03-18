@@ -2,7 +2,7 @@
 #'
 #' @description Generic 'bekkFit' methods. More details on 'bekkFit' are described in \link{bekk_fit}
 #'
-#' @param object An object of class "bekkFit" from function \link{bekk_fit}.
+#' @param x, object An object of class "bekkFit" from function \link{bekk_fit}.
 #' @param k Numeric value, the penalty per parameter to be used; the default k = 2 is the classical AIC.
 #' @param ...	Further arguments to be passed to and from other methods.
 #'
@@ -22,7 +22,7 @@
 
 #' @rdname bekk_fit_methods
 #' @export
-logLik.bekkFit <- function(object, ....) {
+logLik.bekkFit <- function(object, ...) {
 
   x <- object
 
@@ -115,8 +115,8 @@ BIC.bekkFit <- function(object, ...) {
 
 #' @rdname bekk_fit_methods
 #' @export
-print.bekkFit <- function(object,...){
-  bekkObject <- object
+print.bekkFit <- function(x,...){
+  bekkObject <- x
 
   if (any(class(bekkObject) == 'bekk')) {
     cat(paste("\n", "BEKK estimation results", "\n", sep = ""))
