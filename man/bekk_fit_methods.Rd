@@ -19,11 +19,13 @@
 \method{residuals}{bekkFit}(object, ...)
 }
 \arguments{
+\item{object}{An object of class "bekkFit" from function \link{bekk_fit}.}
+
 \item{...}{Further arguments to be passed to and from other methods.}
 
 \item{k}{Numeric value, the penalty per parameter to be used; the default k = 2 is the classical AIC.}
 
-\item{x, }{object An object of class "bekkFit" from function \link{bekk_fit}.}
+\item{x}{An object of class "bekkFit" from function \link{bekk_fit}.}
 }
 \description{
 Generic 'bekkFit' methods. More details on 'bekkFit' are described in \link{bekk_fit}

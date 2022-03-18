@@ -2,7 +2,8 @@
 #'
 #' @description Generic 'bekkFit' methods. More details on 'bekkFit' are described in \link{bekk_fit}
 #'
-#' @param x, object An object of class "bekkFit" from function \link{bekk_fit}.
+#' @param x An object of class "bekkFit" from function \link{bekk_fit}.
+#' @param object An object of class "bekkFit" from function \link{bekk_fit}.
 #' @param k Numeric value, the penalty per parameter to be used; the default k = 2 is the classical AIC.
 #' @param ...	Further arguments to be passed to and from other methods.
 #'
