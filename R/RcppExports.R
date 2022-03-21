@@ -173,56 +173,28 @@ valid_sbekk <- function(C, a, g) {
     .Call('_BEKKs_valid_sbekk', PACKAGE = 'BEKKs', C, a, g)
 }
 
-valid_asymm_sbekk <- function(C, a, b, g, r, signs) {
-    .Call('_BEKKs_valid_asymm_sbekk', PACKAGE = 'BEKKs', C, a, b, g, r, signs)
-}
-
 loglike_sbekk <- function(theta, r) {
     .Call('_BEKKs_loglike_sbekk', PACKAGE = 'BEKKs', theta, r)
-}
-
-loglike_asymm_sbekk <- function(theta, r, signs) {
-    .Call('_BEKKs_loglike_asymm_sbekk', PACKAGE = 'BEKKs', theta, r, signs)
 }
 
 score_sbekk <- function(theta, r) {
     .Call('_BEKKs_score_sbekk', PACKAGE = 'BEKKs', theta, r)
 }
 
-score_asymm_sbekk <- function(theta, r, signs) {
-    .Call('_BEKKs_score_asymm_sbekk', PACKAGE = 'BEKKs', theta, r, signs)
-}
-
 bhh_sbekk <- function(r, theta, max_iter, crit) {
     .Call('_BEKKs_bhh_sbekk', PACKAGE = 'BEKKs', r, theta, max_iter, crit)
-}
-
-bhh_asymm_sbekk <- function(r, theta, max_iter, crit, signs) {
-    .Call('_BEKKs_bhh_asymm_sbekk', PACKAGE = 'BEKKs', r, theta, max_iter, crit, signs)
 }
 
 hesse_sbekk <- function(theta, r) {
     .Call('_BEKKs_hesse_sbekk', PACKAGE = 'BEKKs', theta, r)
 }
 
-hesse_asymm_sbekk <- function(theta, r, signs) {
-    .Call('_BEKKs_hesse_asymm_sbekk', PACKAGE = 'BEKKs', theta, r, signs)
-}
-
 sigma_sbekk <- function(r, C, a, g) {
     .Call('_BEKKs_sigma_sbekk', PACKAGE = 'BEKKs', r, C, a, g)
 }
 
-sigma_sbekk_asymm <- function(r, C, a, b, g, signs) {
-    .Call('_BEKKs_sigma_sbekk_asymm', PACKAGE = 'BEKKs', r, C, a, b, g, signs)
-}
-
 random_grid_search_sBEKK <- function(r) {
     .Call('_BEKKs_random_grid_search_sBEKK', PACKAGE = 'BEKKs', r)
-}
-
-random_grid_search_asymmetric_sBEKK <- function(r, signs) {
-    .Call('_BEKKs_random_grid_search_asymmetric_sBEKK', PACKAGE = 'BEKKs', r, signs)
 }
 
 YLagCr <- function(y, p) {

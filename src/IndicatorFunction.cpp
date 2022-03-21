@@ -7,27 +7,30 @@
 // [[Rcpp::plugins(cpp11)]]
 
 // [[Rcpp::export]]
-int indicatorFunction(arma::mat r, arma::mat signs){
+arma::mat indicatorFunction(arma::mat r, arma::mat signs){
   r = r.t();
-
-  int indicator = 1;
+  arma::mat indicator = r;
+  //int indicator = 1;
   int n = r.n_rows;
   for (int i = 0; i<n; i++){
     if(arma::as_scalar(signs.row(i)) * arma::as_scalar(r.row(i)) < 0){
-      indicator = 0;
+      indicator[i] = 0;
     }
   }
   return indicator;
 }
 
 // [[Rcpp::export]]
-double expected_indicator_value(arma::mat r, arma::mat signs){
+arma::mat expected_indicator_value(arma::mat r, arma::mat signs){
   int N =r.n_rows;
-  double exp_indicator_value = 0;
+  int n =r.n_cols;
+  arma::mat S2 = r.t() * r / N;
+
+  arma::mat S1 = arma::zeros(n,n);
   for (int i=0; i<N;i++){
-    exp_indicator_value+=indicatorFunction(r.row(i),signs);
+    S1+=indicatorFunction(r.row(i),signs)*indicatorFunction(r.row(i),signs).t();
   }
-  exp_indicator_value=exp_indicator_value/N;
+  arma::mat exp_indicator_value=(S1/N)/S2;
   return exp_indicator_value;
 }
 

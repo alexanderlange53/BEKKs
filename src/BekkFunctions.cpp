@@ -132,9 +132,9 @@ bool valid_bekk(arma::mat& C,arma::mat& A,arma::mat& G){
 bool valid_asymm_bekk(arma::mat& C,arma::mat& A, arma::mat& B ,arma::mat& G, arma::mat r, arma::mat signs){
   int n =C.n_cols;
   //int N =r.n_rows;
-  double exp_indicator_value = expected_indicator_value(r,signs);
+  arma::mat exp_indicator_value = expected_indicator_value(r,signs);
 
-  arma::mat prod = kron(A,A)+exp_indicator_value*kron(B,B)+kron(G,G);
+  arma::mat prod = kron(A,A)+kron(B,B)*arma::diagmat(arma::vectorise(exp_indicator_value))+kron(G,G);
 
   arma::vec eigvals;
   eigvals= abs(arma::eig_gen(prod));
@@ -285,7 +285,8 @@ double loglike_asymm_bekk(const arma::vec& theta, const arma::mat& r, arma::mat&
 
   double llv = arma::as_scalar(log(arma::det(H)) + r.row(0) * inv_gen(H) * r.row(0).t());
   for (int i = 1; i < NoOBs; i++) {
-    H = CC + At * r.row(i - 1).t() * r.row(i - 1) * A + indicatorFunction(r.row(i - 1), signs) * Bt * r.row(i - 1).t() * r.row(i - 1) * B + Gt * H * G;
+    arma::mat eta = indicatorFunction(r.row(i - 1), signs) % r.row(i - 1).t();
+    H = CC + At * r.row(i - 1).t() * r.row(i - 1) * A +  Bt * eta * eta.t() * B + Gt * H * G;
     llv += arma::as_scalar(log(arma::det(H)) + r.row(i) * inv_gen(H) * r.row(i).t());
   }
 
@@ -656,12 +657,14 @@ arma::mat score_asymm_bekk(const arma::mat& theta, arma::mat& r, arma::mat& sign
   // Partial derivatives for period t >= 2
   arma::mat GGt = arma::kron(g, g).t();
   for (int i = 1; i < r.n_rows; i++) {
+
+    arma::mat eta = indicatorFunction(r.row(i - 1), signs) % r.row(i - 1).t();
     dHdc = 2 * D_duplication * D_gen_inv * arma::kron(c0.t(), arma::eye(N, N)) * L_elimination.t() + GGt * dHdc;
 
 
 
     dHda = 2 * D_duplication * D_gen_inv * arma::kron(arma::eye(N, N), at * r.row(i-1).t() * r.row(i-1)) + GGt * dHda;
-    dHdb = indicatorFunction(r.row(i-1),signs) *  2 * D_duplication * D_gen_inv * arma::kron(arma::eye(N, N), bt * r.row(i-1).t() * r.row(i-1)) + GGt * dHdb;
+    dHdb = 2 * D_duplication * D_gen_inv * arma::kron(arma::eye(N, N), bt * eta * eta.t()) + GGt * dHdb;
 
     //dHda =  arma::kron(arma::eye(N, N),at*r.row(i-1).t() *r.row(i-1)) + arma::kron(at * r.row(i-1).t() *r.row(i-1), arma::eye(N, N)) * commutation_mat(N)+ GGt * dHda;
 
@@ -671,7 +674,7 @@ arma::mat score_asymm_bekk(const arma::mat& theta, arma::mat& r, arma::mat& sign
 
     arma::mat dHdtheta = arma::join_horiz(dHdc, dHda,dHdb, dHdg).t();
 
-    ht = c_full + a.t() * r.row(i-1).t() * r.row(i-1) * a +indicatorFunction(r.row(i-1),signs)*b.t() * r.row(i-1).t() * r.row(i-1) * b+ g.t() * ht * g;
+    ht = c_full + a.t() * r.row(i-1).t() * r.row(i-1) * a + b.t() *eta * eta.t() * b+ g.t() * ht * g;
 
     //ht_sqrt_inv = arma::inv(arma::real(arma::sqrtmat(ht)));
     arma::mat ht_sqrt_inv = inv_gen(ht);
@@ -1677,7 +1680,8 @@ Rcpp::List sigma_bekk_asymm(arma::mat& r, arma::mat& C, arma::mat& A, arma::mat&
   arma::mat Gt = G.t();
 
   for (int i = 1; i < r.n_rows; i++) {
-    ht = CC + At * r.row(i - 1).t() * r.row(i - 1) * A + indicatorFunction(r.row(i-1),signs)* Bt * r.row(i - 1).t() * r.row(i - 1) * B + Gt * ht * G;
+    arma::mat eta = indicatorFunction(r.row(i - 1), signs) % r.row(i - 1).t();
+    ht = CC + At * r.row(i - 1).t() * r.row(i - 1) * A +  Bt * eta * eta.t() * B + Gt * ht * G;
     sigma.row(i) = arma::vectorise(ht).t();
     et.row(i) = (inv_gen(arma::chol(ht).t()) * r.row(i).t()).t();
   }

@@ -4,10 +4,10 @@
 #define IndicatorFunctions_H
 
 
-int indicatorFunction(arma::mat r, arma::mat signs);
+arma::mat indicatorFunction(arma::mat r, arma::mat signs);
 
 
-double expected_indicator_value(arma::mat r, arma::mat signs);
+arma::mat expected_indicator_value(arma::mat r, arma::mat signs);
 
 
 arma::mat elimination_mat(const int& n);
