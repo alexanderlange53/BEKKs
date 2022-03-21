@@ -1443,7 +1443,9 @@ arma::mat virf_bekk(arma::mat& H_t, arma::mat& C, arma::mat& A, arma::mat& G, ar
   arma::mat G_virf = L_elimination * kron(G,G) * L_elimination.t();
 
   for (int i=0; i < periods; i++){
-    arma::mat virf_temp =  L_elimination* arma::vectorise( C * C.t()) + arma::powmat(A_virf+G_virf, i) * A_virf * D_gen_inv * kron(B_t, B_t) * D_duplication * L_elimination * arma::vectorise((shocks.row(0).t() * shocks.row(0)-arma::eye(N,N)));
+    //arma::mat virf_temp =  L_elimination* arma::vectorise( C * C.t()) + arma::powmat(A_virf+G_virf, i) * A_virf * D_gen_inv * kron(B_t, B_t) * D_duplication * L_elimination * arma::vectorise((shocks.row(0).t() * shocks.row(0)-arma::eye(N,N)));
+    arma::mat virf_temp =  arma::powmat(A_virf+G_virf, i) * A_virf * D_gen_inv * kron(B_t, B_t) * D_duplication * L_elimination * arma::vectorise((shocks.row(0).t() * shocks.row(0)-arma::eye(N,N)));
+
     virf.row(i) = virf_temp.t();
   }
     return virf;

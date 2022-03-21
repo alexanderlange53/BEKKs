@@ -42,9 +42,9 @@ plot.virf <- function(x, ...){
         xx1 <- data.frame(x$VIRF[,i])
         colnames(xx1) <- 'V1'
         if (grepl('correlation', xxc[i])) {
-          plist[[i]] <- ggplot(xx1, aes(x = 1:nrow(x$VIRF), y = V1)) + geom_line() + theme_bw()+ xlab('') + ylab('') + ylim(-1,1) + geom_hline(yintercept = 0, col = 'red')
+          plist[[i]] <- ggplot(xx1, aes(x = 1:nrow(x$VIRF), y = V1)) + geom_line() + theme_bw()+ xlab('') + ylab('') + geom_hline(yintercept = 0, col = 'red')
         } else {
-          plist[[i]] <- ggplot(xx1, aes(x = 1:nrow(x$VIRF), y = V1)) + geom_line() + theme_bw()+ xlab('') + ylab('')
+          plist[[i]] <- ggplot(xx1, aes(x = 1:nrow(x$VIRF), y = V1)) + geom_line() + theme_bw()+ xlab('') + ylab('') + geom_hline(yintercept = 0, col = 'red')
         }
       }
 

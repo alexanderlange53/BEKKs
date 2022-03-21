@@ -5,20 +5,20 @@
 #' @param fit An object of class "bekkfit" from function \link{bekk_fit}.
 #' @param time Time instace to calculate VIRFs for.
 #' @param q A vector specifying the quantiles to be considered for a shock on which basis the VIRFs are generated.
-#' @param periods An integer defining the number periods for which the VIRFs are generated.
+#' @param n.ahead An integer defining the number periods for which the VIRFs are generated.
 #' @return  Returns an object of class "bekkVIRF".
 #'
 #' @import xts
 #' @import stats
 #' @export
 
-virf <- function(fit ,time = 1, q = 0.05, index_series = 1, periods = 10){
+virf <- function(fit ,time = 1, q = 0.05, index_series = 1, n.ahead = 10){
 
   if (!inherits(fit, 'bekkFit')) {
     stop('Please provide and object of class "bekkFit" for fit')
   }
 
-  if(!( periods%%1==0) || periods < 1){
+  if(!( n.ahead%%1==0) || n.ahead < 1){
     stop('Please provide a posive integer for periods')
   }
 
@@ -42,7 +42,7 @@ virf <- function(fit ,time = 1, q = 0.05, index_series = 1, periods = 10){
 }
 
 #' @export
-virf.bekk <- function(fit, time = 1, q = 0.05, index_series=1, periods = 10) {
+virf.bekk <- function(fit, time = 1, q = 0.05, index_series=1, n.ahead = 10) {
 
   N <- ncol(fit$data)
   data <- fit$data
@@ -61,7 +61,7 @@ virf.bekk <- function(fit, time = 1, q = 0.05, index_series=1, periods = 10) {
     }
   }
 
-  VIRF = virf_bekk(H, t(fit$C0) ,fit$A, fit$G, matrix(shocks,ncol=N, nrow = 1), periods)
+  VIRF = virf_bekk(H, t(fit$C0) ,fit$A, fit$G, matrix(shocks,ncol=N, nrow = 1), n.ahead)
   dupl <- duplication_mat(N)
   elim <- elimination_mat(N)
 
@@ -92,7 +92,7 @@ virf.bekk <- function(fit, time = 1, q = 0.05, index_series=1, periods = 10) {
   return(result)
 }
 
-virf.bekka <- function(fit, time = 1, q = 0.05, index_series=1, periods = 10) {
+virf.bekka <- function(fit, time = 1, q = 0.05, index_series=1, n.ahead = 10) {
 
   N <- ncol(fit$data)
   H <- matrix(fit$H_t[time,],N,N)
@@ -112,7 +112,7 @@ virf.bekka <- function(fit, time = 1, q = 0.05, index_series=1, periods = 10) {
 
 
 
-  VIRF =  virf_bekka(H_t, t(fit$C0), fit$A, fit$B, fit$G, fit$signs, fit$expected_signs, shocks, periods)
+  VIRF =  virf_bekka(H_t, t(fit$C0), fit$A, fit$B, fit$G, fit$signs, fit$expected_signs, shocks, n.ahead)
 
 
   VIRF <- as.data.frame(VIRF)
