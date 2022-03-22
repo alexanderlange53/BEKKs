@@ -119,37 +119,40 @@ BIC.bekkFit <- function(object, ...) {
 print.bekkFit <- function(x,...){
   bekkObject <- x
 
-  if (any(class(bekkObject) == 'bekk')) {
-    cat(paste("\n", "BEKK estimation results", "\n", sep = ""))
-    underScore <- paste(rep("-", nchar("BEKK estimation results")), collapse = "")
-  } else if (any(class(bekkObject) == 'bekka')) {
-    cat(paste("\n", "Asymmetric BEKK estimation results", "\n", sep = ""))
-    underScore <- paste(rep("-", nchar("Asymmetric BEKK estimation results")), collapse = "")
-  } else if (any(class(bekkObject) == 'dbekk')) {
-    cat(paste("\n", "Diagonal BEKK estimation results", "\n", sep = ""))
-    underScore <- paste(rep("-", nchar("Diagonal BEKK estimation results")), collapse = "")
-  } else if (any(class(bekkObject) == 'dbekka')) {
-    cat(paste("\n", "Asymmetric diagonal BEKK estimation results", "\n", sep = ""))
-    underScore <- paste(rep("-", nchar("Asymmetric diagonal BEKK estimation results")), collapse = "")
-  } else if (any(class(bekkObject) == 'sbekk')) {
-    cat(paste("\n", "Scalar BEKK estimation results", "\n", sep = ""))
-    underScore <- paste(rep("-", nchar("Scalar BEKK estimation results")), collapse = "")
-  } else if (any(class(bekkObject) == 'sbekka')) {
-    cat(paste("\n", "Asymmetric scalar BEKK estimation results", "\n", sep = ""))
-    underScore <- paste(rep("-", nchar("Asymmetric scalar BEKK estimation results")), collapse = "")
-  }
+  if (all(class(bekkObject) != 'var')) {
+    if (any(class(bekkObject) == 'bekk')) {
+      cat(paste("\n", "BEKK estimation results", "\n", sep = ""))
+      underScore <- paste(rep("-", nchar("BEKK estimation results")), collapse = "")
+    } else if (any(class(bekkObject) == 'bekka')) {
+      cat(paste("\n", "Asymmetric BEKK estimation results", "\n", sep = ""))
+      underScore <- paste(rep("-", nchar("Asymmetric BEKK estimation results")), collapse = "")
+    } else if (any(class(bekkObject) == 'dbekk')) {
+      cat(paste("\n", "Diagonal BEKK estimation results", "\n", sep = ""))
+      underScore <- paste(rep("-", nchar("Diagonal BEKK estimation results")), collapse = "")
+    } else if (any(class(bekkObject) == 'dbekka')) {
+      cat(paste("\n", "Asymmetric diagonal BEKK estimation results", "\n", sep = ""))
+      underScore <- paste(rep("-", nchar("Asymmetric diagonal BEKK estimation results")), collapse = "")
+    } else if (any(class(bekkObject) == 'sbekk')) {
+      cat(paste("\n", "Scalar BEKK estimation results", "\n", sep = ""))
+      underScore <- paste(rep("-", nchar("Scalar BEKK estimation results")), collapse = "")
+    } else if (any(class(bekkObject) == 'sbekka')) {
+      cat(paste("\n", "Asymmetric scalar BEKK estimation results", "\n", sep = ""))
+      underScore <- paste(rep("-", nchar("Asymmetric scalar BEKK estimation results")), collapse = "")
+    }
 
-  cat(underScore)
-  cat("\nLog-likelihood: ")
-  cat(bekkObject$log_likelihood)
-  cat("\nBEKK model stationary: ")
-  cat(bekkObject$BEKK_valid)
-  cat("\nNumber of BHHH iterations: ")
-  cat(bekkObject$iter)
-  cat("\nAIC: ")
-  cat(bekkObject$AIC)
-  cat("\nBIC: ")
-  cat(bekkObject$BIC)
+    cat(underScore)
+    cat("\nLog-likelihood: ")
+    cat(bekkObject$log_likelihood)
+    cat("\nBEKK model stationary: ")
+    cat(bekkObject$BEKK_valid)
+    cat("\nNumber of BHHH iterations: ")
+    cat(bekkObject$iter)
+    cat("\nAIC: ")
+    cat(bekkObject$AIC)
+    cat("\nBIC: ")
+    cat(bekkObject$BIC)
+  }
+  bekkObject
 }
 
 #' @rdname bekk_fit_methods
