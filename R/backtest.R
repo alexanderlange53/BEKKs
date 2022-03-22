@@ -35,7 +35,7 @@
 #' @import stats
 #' @export
 
-backtest<- function(x, data=NULL, window_length = 250, p = 0.99, portfolio_weights = NULL, reestimate = T) {
+backtest<- function(x, data=NULL, window_length = 250, p = 0.99, portfolio_weights = NULL,  n.ahead = 1) {
   UseMethod('backtest')
 }
 
