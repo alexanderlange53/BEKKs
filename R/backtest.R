@@ -33,6 +33,7 @@
 #'
 #' @import xts
 #' @import stats
+#' @import GAS
 #' @export
 
 backtest<- function(x, data=NULL, window_length = 250, p = 0.99, portfolio_weights = NULL,  n.ahead = 1) {
@@ -59,16 +60,19 @@ backtest.bekkFit <-  function(x, data=NULL, window_length = 250, p = 0.95, portf
     fit <- bekk_fit(spec, data[i:(window_length-1+i),])
     forecast <- bekk_forecast(fit, n.ahead = n.ahead)
     var[i] = VaR(forecast, p = p, portfolio_weights = c(portfolio_weights))$VaR[(window_length+1),]
-    if(var[i]> out_sample_returns[i,]){
+    if(var[i] > out_sample_returns[i,]){
       hit_rate = hit_rate + 1
     }
 
   }
   hit_rate = hit_rate/length(out_sample_returns)
+  backtests = BacktestVaR(out_sample_returns, var, alpha = 1- p)
+
   result=list(
     var,
     out_sample_returns,
-    hit_rate
+    hit_rate,
+    backtests
   )
   class(result) <- c('backtest', 'bekkFit')
   return(result)
