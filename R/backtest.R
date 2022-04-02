@@ -36,12 +36,12 @@
 #' @import GAS
 #' @export
 
-backtest<- function(x, data=NULL, window_length = 500, p = 0.95, portfolio_weights = NULL,  n.ahead = 1) {
-  UseMethod('backtest')
+Backtest<- function(x, data=NULL, window_length = 500, p = 0.95, portfolio_weights = NULL,  n.ahead = 1) {
+  UseMethod('Backtest')
 }
 
 #' @export
-backtest.bekkFit <-  function(x, data=NULL, window_length = 500, p = 0.95, portfolio_weights = NULL, n.ahead = 1)
+Backtest.bekkFit <-  function(x, data=NULL, window_length = 500, p = 0.95, portfolio_weights = NULL, n.ahead = 1)
 {
   data <- x$data
   n <- nrow(data)
@@ -99,7 +99,7 @@ backtest.bekkFit <-  function(x, data=NULL, window_length = 500, p = 0.95, portf
       spec = x$spec
       fit <- bekk_fit(spec, data[i:(window_length-1+i),])
       forecast <- bekk_forecast(fit, n.ahead = n.ahead, ci = 0.5)
-      VaR[i,] = as.matrix(VaR(forecast, p = p, portfolio_weights = portfolio_weights)$VaR[(window_length+1),])
+      VaR[i:(i+n.ahead-1),] = as.matrix(VaR(forecast, p = p, portfolio_weights = portfolio_weights)$VaR[(window_length+1):(window_length+n.ahead),])
 
         if(VaR[i,] > out_sample_returns[i,]){
           hit_rate= hit_rate  + 1

@@ -3,7 +3,7 @@
 #' @import reshape2
 #' @export
 
-plot.backtest <- function(x) {
+plot.backtest <- function(x, ...) {
 
   obs <- NULL
   V1 <- NULL
