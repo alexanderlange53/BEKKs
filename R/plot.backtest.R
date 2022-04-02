@@ -11,7 +11,7 @@ plot.backtest <- function(x, ...) {
   type <- NULL
   upper <- NULL
 
-  if (any(class(x) == 'bekkFit')) {
+
     if(is.null(x$portfolio_weights)) {
       if (inherits(x$bekk$data, "ts")) {
         autoplot(x$VaR) + theme_bw() + ylab('VaR')
@@ -22,12 +22,12 @@ plot.backtest <- function(x, ...) {
       }
     } else {
       if (inherits(x$bekk$data, "ts")) {
-        autoplot(x$VaR) + theme_bw() + ylab('VaR') + ggtitle('Portfolio VaR')
+        ggplot(x$VaR) + theme_bw() + ylab('VaR') + ggtitle('Portfolio VaR')
       } else {
         ggplot(x$VaR) + geom_line(aes(x = 1:nrow(x$VaR), y = V1)) + theme_bw() + xlab('') + ylab('VaR') + ggtitle('Portfolio VaR')
       }
     }
-  }
+
 
 
 }

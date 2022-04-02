@@ -36,45 +36,89 @@
 #' @import GAS
 #' @export
 
-backtest<- function(x, data=NULL, window_length = 250, p = 0.99, portfolio_weights = NULL,  n.ahead = 1) {
+backtest<- function(x, data=NULL, window_length = 500, p = 0.95, portfolio_weights = NULL,  n.ahead = 1) {
   UseMethod('backtest')
 }
 
 #' @export
-backtest.bekkFit <-  function(x, data=NULL, window_length = 250, p = 0.95, portfolio_weights = NULL, n.ahead = 1)
+backtest.bekkFit <-  function(x, data=NULL, window_length = 500, p = 0.95, portfolio_weights = NULL, n.ahead = 1)
 {
   data <- x$data
   n <- nrow(data)
   N <- ncol(data)
+  n_out = n - window_length
 
-  var <- numeric(n-window_length)
-  hit_rate = 0
-  portfolio_weights = matrix(portfolio_weights, ncol = N, nrow = 1)
-  out_sample_returns <-  x$data[(window_length+1):n,] %*% t(portfolio_weights)
 
+
+
+
+  #portfolio_weights = matrix(portfolio_weights, ncol = N, nrow = 1)
+  #out_sample_returns <-  x$data[(window_length+1):n,] %*% t(portfolio_weights)
+  if(window_length < 500){
+    stop("The supplied window_length must be larger than 500.")
+  }
  if(window_length >= n){
    stop("The supplied window_length exeeds the length of the data.")
  }
-  for(i in 1:(n-window_length)){
-    spec = bekk_spec()
-    fit <- bekk_fit(spec, data[i:(window_length-1+i),])
-    forecast <- bekk_forecast(fit, n.ahead = n.ahead)
-    var[i] = VaR(forecast, p = p, portfolio_weights = c(portfolio_weights))$VaR[(window_length+1),]
-    if(var[i] > out_sample_returns[i,]){
-      hit_rate = hit_rate + 1
-    }
 
+  if (is.null(portfolio_weights)) {
+    hit_rate = numeric(N)
+    out_sample_returns <-  x$data[(window_length+1):n,]
+
+    VaR <- matrix(NA, nrow = n_out, ncol = N)
+
+    for(i in 1:n_out){
+      spec = bekk_spec()
+      fit <- bekk_fit(spec, data[i:(window_length-1+i),])
+      forecast <- bekk_forecast(fit, n.ahead = n.ahead, ci = 0.5)
+      VaR[i,] = as.matrix(VaR(forecast, p = p, portfolio_weights = portfolio_weights)$VaR[(window_length+1),])
+      for(j in 1:N){
+        if(VaR[i,j] > out_sample_returns[i,j]){
+          hit_rate[j] = hit_rate[j]  + 1
+      }
+
+      }
+
+    }
+    hit_rate = hit_rate/n_out
+
+    for (i in 1:N) {
+      colnames(VaR)[i] <- paste('VaR of', colnames(x$data)[i])
+    }
+  } else {
+    hit_rate = 0
+    VaR <- matrix(NA, nrow = nrow(x$data), ncol = 1)
+    for(i in 1:n_out){
+      spec = bekk_spec()
+      fit <- bekk_fit(spec, data[i:(window_length-1+i),])
+      forecast <- bekk_forecast(fit, n.ahead = n.ahead, ci = 0.5)
+      VaR[i,] = as.matrix(VaR(forecast, p = p, portfolio_weights = portfolio_weights)$VaR[(window_length+1),])
+      for(j in 1:N){
+        if(VaR[i,j] > out_sample_returns[i,j]){
+          hit_rate[j] = hit_rate[j]  + 1
+        }
+
+      }
+
+    }
+    hit_rate = hit_rate/n_out
+    VaR <- as.data.frame(VaR)
   }
-  hit_rate = hit_rate/length(out_sample_returns)
-  backtests = BacktestVaR(out_sample_returns, var, alpha = 1- p)
+
+  if (inherits(x$data, "ts")) {
+    VaR <- ts(VaR, start = time(x$data)[1], frequency = frequency(x$data))
+  }
+
+  backtests = suppressWarnings(BacktestVaR(out_sample_returns, VaR, alpha = 1- p))
 
   result=list(
-    var,
-    out_sample_returns,
-    hit_rate,
-    backtests
+    VaR = VaR,
+    out_sample_returns = out_sample_returns,
+    hit_rate = hit_rate,
+    backtests = backtests,
+    portfolio_weights = portfolio_weights
   )
-  class(result) <- c('backtest', 'bekkFit')
+  class(result) <- c('backtest')
   return(result)
 }
 
