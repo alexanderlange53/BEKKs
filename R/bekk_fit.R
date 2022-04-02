@@ -210,7 +210,8 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
                  iter = params$iter,
                  likelihood_iter = params$likelihood_iter,
                  asymmetric = FALSE,
-                 data = data)
+                 data = data,
+                 spec = spec)
   class(result) <- c('bekkFit', 'bekk')
 
   result$AIC <- AIC(result)
@@ -362,7 +363,8 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE,
                  likelihood_iter = params$likelihood_iter,
                  asymmetric = TRUE,
                  expected_signs = expected_signs,
-                 data = data)
+                 data = data,
+                 spec = spec)
   class(result) <- c('bekkFit', 'bekka')
 
   result$AIC <- AIC(result)
@@ -468,7 +470,8 @@ bekk_fit.dbekk <- function(spec, data, QML_t_ratios = FALSE,
                  iter = params$iter,
                  likelihood_iter = params$likelihood_iter,
                  asymmetric = FALSE,
-                 data = data)
+                 data = data,
+                 spec = spec)
   class(result) <- c('bekkFit', 'dbekk')
 
   result$AIC <- AIC(result)
@@ -583,7 +586,8 @@ bekk_fit.dbekka <- function(spec, data, QML_t_ratios = FALSE,
                  likelihood_iter = params$likelihood_iter,
                  asymmetric = TRUE,
                  expected_signs = expected_signs,
-                 data = data)
+                 data = data,
+                 spec = spec)
   class(result) <- c('bekkFit', 'dbekka')
 
   result$AIC <- AIC(result)
@@ -689,7 +693,8 @@ bekk_fit.sbekk <- function(spec, data, QML_t_ratios = FALSE,
                  iter = params$iter,
                  likelihood_iter = params$likelihood_iter,
                  asymmetric = FALSE,
-                 data = data)
+                 data = data,
+                 spec = spec)
   class(result) <- c('bekkFit', 'sbekk')
 
   result$AIC <- AIC(result)
@@ -804,7 +809,8 @@ bekk_fit.sbekka <- function(spec, data, QML_t_ratios = FALSE,
                  likelihood_iter = params$likelihood_iter,
                  asymmetric = TRUE,
                  expected_signs = expected_signs,
-                 data = data)
+                 data = data,
+                 spec = spec)
   class(result) <- c('bekkFit', 'sbekka')
 
   result$AIC <- AIC(result)

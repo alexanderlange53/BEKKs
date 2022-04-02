@@ -96,7 +96,7 @@ backtest.bekkFit <-  function(x, data=NULL, window_length = 500, p = 0.95, portf
 
     VaR <- matrix(NA, nrow = n_out, ncol = 1)
     for(i in 1:n_out){
-      spec = bekk_spec()
+      spec = x$spec
       fit <- bekk_fit(spec, data[i:(window_length-1+i),])
       forecast <- bekk_forecast(fit, n.ahead = n.ahead, ci = 0.5)
       VaR[i,] = as.matrix(VaR(forecast, p = p, portfolio_weights = portfolio_weights)$VaR[(window_length+1),])
@@ -110,9 +110,11 @@ backtest.bekkFit <-  function(x, data=NULL, window_length = 500, p = 0.95, portf
     backtests= suppressWarnings(BacktestVaR(out_sample_returns, VaR, alpha = 1- p))
     VaR <- as.data.frame(VaR)
   }
+  out_sample_returns = as.data.frame(out_sample_returns)
 
   if (inherits(x$data, "ts")) {
     VaR <- ts(VaR, start = time(x$data)[1], frequency = frequency(x$data))
+    out_sample_returns <- ts(out_sample_returns, start = time(x$data)[1], frequency = frequency(x$data))
   }
 
 
