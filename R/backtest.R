@@ -81,27 +81,33 @@ backtest.bekkFit <-  function(x, data=NULL, window_length = 500, p = 0.95, portf
 
     }
     hit_rate = hit_rate/n_out
+    backtests = list()
 
+
+
+    VaR <- as.data.frame(VaR)
     for (i in 1:N) {
+      backtests[[i]] = suppressWarnings(BacktestVaR(out_sample_returns[,i], VaR[,i], alpha = 1- p))
       colnames(VaR)[i] <- paste('VaR of', colnames(x$data)[i])
     }
   } else {
+    out_sample_returns = x$data[(window_length+1):n,] %*% matrix(portfolio_weights, ncol = 1, nrow = N)
     hit_rate = 0
-    VaR <- matrix(NA, nrow = nrow(x$data), ncol = 1)
+
+    VaR <- matrix(NA, nrow = n_out, ncol = 1)
     for(i in 1:n_out){
       spec = bekk_spec()
       fit <- bekk_fit(spec, data[i:(window_length-1+i),])
       forecast <- bekk_forecast(fit, n.ahead = n.ahead, ci = 0.5)
       VaR[i,] = as.matrix(VaR(forecast, p = p, portfolio_weights = portfolio_weights)$VaR[(window_length+1),])
-      for(j in 1:N){
-        if(VaR[i,j] > out_sample_returns[i,j]){
-          hit_rate[j] = hit_rate[j]  + 1
-        }
 
+        if(VaR[i,] > out_sample_returns[i,]){
+          hit_rate= hit_rate  + 1
       }
 
     }
     hit_rate = hit_rate/n_out
+    backtests= suppressWarnings(BacktestVaR(out_sample_returns, VaR, alpha = 1- p))
     VaR <- as.data.frame(VaR)
   }
 
@@ -109,7 +115,6 @@ backtest.bekkFit <-  function(x, data=NULL, window_length = 500, p = 0.95, portf
     VaR <- ts(VaR, start = time(x$data)[1], frequency = frequency(x$data))
   }
 
-  backtests = suppressWarnings(BacktestVaR(out_sample_returns, VaR, alpha = 1- p))
 
   result=list(
     VaR = VaR,

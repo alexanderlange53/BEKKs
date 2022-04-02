@@ -7,8 +7,8 @@
 backtest(
   x,
   data = NULL,
-  window_length = 250,
-  p = 0.99,
+  window_length = 500,
+  p = 0.95,
   portfolio_weights = NULL,
   n.ahead = 1
 )
