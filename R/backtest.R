@@ -125,7 +125,7 @@ backtest.bekkFit <-  function(x, data=NULL, window_length = 500, p = 0.95, portf
     backtests = backtests,
     portfolio_weights = portfolio_weights
   )
-  class(result) <- c('backtest')
+  class(result) <- c('backtest', 'bekkFit')
   return(result)
 }
 
