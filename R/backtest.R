@@ -67,17 +67,22 @@ Backtest.bekkFit <-  function(x, data=NULL, window_length = 500, p = 0.95, portf
 
     VaR <- matrix(NA, nrow = n_out, ncol = N)
 
-    for(i in 1:n_out){
+    i = 1
+    while(i <= n_out){
       spec = bekk_spec()
       fit <- bekk_fit(spec, data[i:(window_length-1+i),])
       forecast <- bekk_forecast(fit, n.ahead = n.ahead, ci = 0.5)
-      VaR[i,] = as.matrix(VaR(forecast, p = p, portfolio_weights = portfolio_weights)$VaR[(window_length+1),])
+      VaR[i:(i+n.ahead-1),] = as.matrix(VaR(forecast, p = p, portfolio_weights = portfolio_weights)$VaR[(window_length+1):(window_length+n.ahead),])
+
+
       for(j in 1:N){
-        if(VaR[i,j] > out_sample_returns[i,j]){
-          hit_rate[j] = hit_rate[j]  + 1
+      hit_rate[j]= hit_rate[j]  + sum(VaR[i:(i+n.ahead-1),j] > out_sample_returns[i:(i+n.ahead-1),j])
       }
 
+      if(n.ahead > 1 && i >= (n_out-n.ahead)){
+        n.ahead = 1
       }
+      i = i + n.ahead
 
     }
     hit_rate = hit_rate/n_out
@@ -95,15 +100,23 @@ Backtest.bekkFit <-  function(x, data=NULL, window_length = 500, p = 0.95, portf
     hit_rate = 0
 
     VaR <- matrix(NA, nrow = n_out, ncol = 1)
-    for(i in 1:n_out){
+    i = 1
+    while(i <= n_out){
+
+      print(i)
       spec = x$spec
       fit <- bekk_fit(spec, data[i:(window_length-1+i),])
       forecast <- bekk_forecast(fit, n.ahead = n.ahead, ci = 0.5)
       VaR[i:(i+n.ahead-1),] = as.matrix(VaR(forecast, p = p, portfolio_weights = portfolio_weights)$VaR[(window_length+1):(window_length+n.ahead),])
 
-        if(VaR[i,] > out_sample_returns[i,]){
-          hit_rate= hit_rate  + 1
-      }
+
+      hit_rate= hit_rate  + sum(VaR[i:(i+n.ahead-1),] > out_sample_returns[i:(i+n.ahead-1),])
+
+
+     if(n.ahead > 1 && i >= (n_out-n.ahead)){
+        n.ahead = 1
+     }
+       i = i + n.ahead
 
     }
     hit_rate = hit_rate/n_out
