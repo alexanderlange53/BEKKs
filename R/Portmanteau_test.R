@@ -14,6 +14,7 @@
 
 #' @import xts
 #' @import stats
+#' @import ks
 #' @export
 portmanteau.test <- function(x, lags = 5){
   if(!is.numeric(lags)){
@@ -26,6 +27,14 @@ portmanteau.test.bekkFit <- function(x, lags = 5){
   e <- x$e_t
   n <- nrow(e)
   N <- ncol(e)
+  #e <- matrix(e, nrow = n, ncol = N)
+  e2 <- matrix(NA,nrow = n, ncol = N*(N+1)/2)
+
+  for(i in 1:n){
+    e2[i,] <- vech(crossprod(t(e[i,]),e[i,]))
+  }
+  e=e2
+
   c_hat <- function(j){
         c= t(e[(j+1):n,]) %*% e[1:(n-j),]
         return(c/n)
@@ -42,12 +51,12 @@ portmanteau.test.bekkFit <- function(x, lags = 5){
     return(q)
   }
   p_val_q <- function(c, lgs){
-    return(pchisq(c, df=(lgs*(N*(N+1)/2))^2))
+    return(1-pchisq(c, df=(lgs)*(N^2)))
   }
 
   summary_res <- function(lgs){
     t_stat = Q(lgs)
-    return(c(lgs, t_stat, (lgs*(N*(N+1)/2))^2, p_val_q(t_stat,lgs)))
+    return(c(lgs, t_stat, lgs*(N^2), p_val_q(t_stat,lgs)))
   }
 
 
