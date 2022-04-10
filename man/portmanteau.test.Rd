@@ -2,7 +2,7 @@
 % Please edit documentation in R/Portmanteau_test.R
 \name{portmanteau.test}
 \alias{portmanteau.test}
-\title{Performing a Portmanteau test checking for remaining correlation in the estimated BEKK residuals.}
+\title{Performing a Portmanteau test checking for remaining correlation in the empirical co-variances of the estimated BEKK residuals.}
 \usage{
 portmanteau.test(x, lags = 5)
 }
@@ -15,7 +15,7 @@ portmanteau.test(x, lags = 5)
 Returns a matrix containing the p-values and test statistics.
 }
 \description{
-Method for a Portmanteau test.
+Method for a Portmanteau test of the null hypothesis of no remaining correlation in the co-variances of the estimated BEKK residuals.
 }
 \details{
 Here, the multivariate Portmanteau test of Hosking (1980) is implemented.

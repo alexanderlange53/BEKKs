@@ -1,7 +1,7 @@
 
-#' Performing a Portmanteau test checking for remaining correlation in the estimated BEKK residuals.
+#' Performing a Portmanteau test checking for remaining correlation in the empirical co-variances of the estimated BEKK residuals.
 #'
-#' @description Method for a Portmanteau test.
+#' @description Method for a Portmanteau test of the null hypothesis of no remaining correlation in the co-variances of the estimated BEKK residuals.
 #'
 #' @param x An object of class "bekkFit" from function \link{bekk_fit}.
 #' @param lags Either an integer vector or scalar defining the lag length
