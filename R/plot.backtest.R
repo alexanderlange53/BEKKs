@@ -1,7 +1,6 @@
 #' @import ggplot2
 #' @import ggfortify
 #' @import reshape2
-#' @import patchwork
 #' @export
 
 plot.backtest <- function(x, ...) {
