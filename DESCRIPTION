@@ -14,18 +14,13 @@ Authors@R:
           email = "alexander.lange@uni-goettingen.de"))
 Description: Methods and tools for estimating, simulating and forecasting of so-called BEKK-models (named after Baba, Engle, Kraft and Kroner) based on the fast Berndt–Hall–Hall–Hausman (BHHH) algorithm described in Hafner and Herwartz (2008) <doi:10.1007/s00184-007-0130-y>. 
 Depends: R (>= 3.5.0)
-<<<<<<< HEAD
-Imports: Rcpp, expm, reshape2, ggplot2, mathjaxr, gridExtra, grid, ggfortify, parallel, xts, stats, future, forecast, future.apply, ks  
-=======
-Imports: Rcpp, expm, reshape2, ggplot2, mathjaxr, gridExtra, grid, ggfortify, parallel, xts, stats, future, forecast, future.apply, GAS   
->>>>>>> backtesting
+Imports: Rcpp, expm, reshape2, ggplot2, mathjaxr, gridExtra, grid, ggfortify, parallel, xts, stats, future, forecast, future.apply, GAS, ks 
 LinkingTo: Rcpp, RcppArmadillo
 NeedsCompilation: yes
 SystemRequirements: C++11
 License: MIT + file LICENSE           
 Encoding: UTF-8
 LazyData: true
-Suggests: 
-    testthat (>= 2.1.0)
+Suggests:    testthat (>= 2.1.0)
 RdMacros: mathjaxr    
 RoxygenNote: 7.1.2
