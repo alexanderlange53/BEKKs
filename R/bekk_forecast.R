@@ -89,6 +89,9 @@ bekk_forecast.bekk <- function(x, n.ahead = 1, ci = 0.95) {
   H_t_upper <- vector(mode = "list",length = n.ahead+1)
   x_lower <- coef_mat(lower_theta, N)
   x_upper <- coef_mat(upper_theta, N)
+  if(!any(c(valid_bekk(x_lower$c0,x_lower$a,x_lower$g), valid_bekk(x_upper$c0,x_upper$a,x_upper$g)))){
+    stop("Lower and/or upper CI are not leading to a stationary BEKK model. Please decrease the cofidence level ci.")
+  }
   #check if t(x_lower$C0) or x_lower$C0 for sigma_bekk
   H_t_lower[[1]] <- matrix(sigma_bekk(x$data, t(x_lower$c0), x_lower$a, x_lower$g)$sigma_t[NoBs,], nrow = N, ncol = N)
   H_t_upper[[1]] <- matrix(sigma_bekk(x$data,t(x_upper$c0),x_upper$a, x_upper$g)$sigma_t[NoBs,], nrow = N, ncol = N)
