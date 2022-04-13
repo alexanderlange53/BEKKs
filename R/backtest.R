@@ -1,9 +1,8 @@
 #' Backtesting via Value-at-Risk (VaR)
 #'
-#' @description Method for calculating VaR from estimated covariance processes (\link{bekk_fit}) or predicted covariances (\link{bekk_forecast}).
+#' @description Method for calculating VaR from estimated covariance processes (\link{bekk_fit}).
 #'
-#' @param x An object of class "bekkFit" from the function \link{bekk_fit} or an object of class "bekkSpec".
-#' @param data A time series if x is of class "bekkSpec".
+#' @param x An object of class "bekkFit" from the function \link{bekk_fit}.
 #' @param window_length An integer specifying the length of the rolling window.
 #' @param p A numerical value that determines the confidence level. The default value is set at 0.99 in accordance with the Basel Regulation.
 #' @param portfolio_weights A vector determining the portfolio weights to calculate the portfolio VaR. If set to "NULL", the univariate VaR for each series are calculated.
@@ -15,19 +14,9 @@
 #' obj_spec <- bekk_spec()
 #' x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 #'
-#' # single VaRs of series
-#' x2 <- VaR(x1)
+#' # backtesting
+#' x2 <- backtest(x1)
 #' plot(x2)
-#'
-#' # VaR of equally-weighted portfolio
-#' portfolio_weights <- c(0.5, 0.5)
-#' x3 <- VaR(x1, portfolio_weights = portfolio_weights)
-#' plot(x3)
-#'
-#' # VaR of traditional 30/70 weighted bond and stock portfolio
-#' portfolio_weights <- c(0.3, 0.7)
-#' x4 <- VaR(x1, portfolio_weights = portfolio_weights)
-#' plot(x4)
 #'
 #' }
 #'
@@ -36,12 +25,12 @@
 #' @import GAS
 #' @export
 
-Backtest<- function(x, data=NULL, window_length = 500, p = 0.95, portfolio_weights = NULL,  n.ahead = 1) {
-  UseMethod('Backtest')
+backtest<- function(x, window_length = 500, p = 0.95, portfolio_weights = NULL,  n.ahead = 1) {
+  UseMethod('backtest')
 }
 
 #' @export
-Backtest.bekkFit <-  function(x, data=NULL, window_length = 500, p = 0.95, portfolio_weights = NULL, n.ahead = 1)
+backtest.bekkFit <-  function(x, window_length = 500, p = 0.95, portfolio_weights = NULL, n.ahead = 1)
 {
   data <- x$data
   n <- nrow(data)
@@ -103,7 +92,6 @@ Backtest.bekkFit <-  function(x, data=NULL, window_length = 500, p = 0.95, portf
     i = 1
     while(i <= n_out){
 
-      print(i)
       spec = x$spec
       fit <- bekk_fit(spec, data[i:(window_length-1+i),])
       forecast <- bekk_forecast(fit, n.ahead = n.ahead, ci = 0.5)
@@ -126,9 +114,14 @@ Backtest.bekkFit <-  function(x, data=NULL, window_length = 500, p = 0.95, portf
   out_sample_returns = as.data.frame(out_sample_returns)
 
   if (inherits(x$data, "ts")) {
-    VaR <- ts(VaR, start = time(x$data)[1], frequency = frequency(x$data))
+    VaR <- ts(VaR, start = time(x$data)[window_length+1], frequency = frequency(x$data))
     out_sample_returns <- ts(out_sample_returns, start = time(x$data)[1], frequency = frequency(x$data))
+  }else if(inherits(x$data, "xts") || inherits(x$data, "zoo") ){
+    VaR <- xts(VaR, order.by = time(x$data[(window_length+1):n,]))
+    out_sample_returns <- xts(out_sample_returns, order.by = time(x$data[(window_length+1):n,]))
+
   }
+
 
 
   result=list(

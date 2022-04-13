@@ -68,7 +68,9 @@ VaR.bekkFit <-  function(x, p = 0.99, portfolio_weights = NULL)
 
   if (inherits(x$data, "ts")) {
     VaR <- ts(VaR, start = time(x$data)[1], frequency = frequency(x$data))
-  }
+  }else if(inherits(x$data, "xts") || inherits(x$data, "zoo") ){
+    VaR <- xts(VaR, order.by = time(x$data[1:nrow(x$data),]))
+      }
 
   result <- list(VaR = VaR,
                  p = p,
@@ -104,6 +106,8 @@ VaR.bekkForecast <-  function(x, p = 0.99, portfolio_weights = NULL)
     }
 
     # Confidence intervals
+
+    colnames(x$volatility_lower_conf_band) = colnames(x$volatility_forecast)
     obj$sigma_t <- rbind(x$bekkfit$sigma_t, x$volatility_lower_conf_band)
 
     csd_lower <- extract_csd(obj)
@@ -118,7 +122,7 @@ VaR.bekkForecast <-  function(x, p = 0.99, portfolio_weights = NULL)
         colnames(VaR_lower)[i] <- paste('VaR of', colnames(x$bekkfit$data)[i])
       }
     }
-
+    colnames(x$volatility_upper_conf_band) = colnames(x$volatility_forecast)
     obj$sigma_t <- rbind(x$bekkfit$sigma_t, x$volatility_upper_conf_band)
 
     csd_upper <- extract_csd(obj)
@@ -143,7 +147,7 @@ VaR.bekkForecast <-  function(x, p = 0.99, portfolio_weights = NULL)
     }
     VaR <- as.data.frame(VaR)
 
-    # Confidnce intervals
+    # Confidence intervals
     VaR_lower <- VaR_upper <- matrix(NA, nrow = nrow(x$bekkfit$data) + x$n.ahead, ncol = 1)
 
     H_t_lower <- rbind(x$bekkfit$H_t[-nrow(x$bekkfit$H_t),], x$H_t_lower_conf_band)
@@ -159,6 +163,8 @@ VaR.bekkForecast <-  function(x, p = 0.99, portfolio_weights = NULL)
 
   if (inherits(x$data, "ts")) {
     VaR <- ts(VaR, start = time(x$bekkfit$data)[1], frequency = frequency(x$bekkfit$data))
+  }  else if(inherits(x$data, "xts") || inherits(x$data, "zoo") ){
+    VaR <- xts(VaR, order.by = time(x$data[1:nrow(x$data),]))
   }
 
   result <- list(VaR = VaR,
