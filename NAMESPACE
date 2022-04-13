@@ -38,14 +38,11 @@ export(bekk_fit)
 export(bekk_forecast)
 export(bekk_sim)
 export(bekk_spec)
-<<<<<<< HEAD
 export(portmanteau.test)
-=======
 export(plot.backtest)
 export(plot.bekkFit)
 export(plot.var)
 import(GAS)
->>>>>>> backtesting
 import(future)
 import(future.apply)
 import(ggfortify)
