@@ -2,7 +2,6 @@
 #' @import ggfortify
 #' @import reshape2
 #' @export
-
 plot.backtest <- function(x, ...) {
 
   obs <- NULL
@@ -11,7 +10,22 @@ plot.backtest <- function(x, ...) {
 
 
     if(is.null(x$portfolio_weights)) {
-      if (inherits(x$VaR, c("ts","xts","zoo"))) {
+      if (inherits(x$VaR, c("ts"))) {
+        colnames(x$VaR) = colnames(x$out_sample_returns)
+
+        t_series <- as.data.frame(x$VaR)
+        t_series$ts_time <- my(time(x$VaR))
+        t_series <- melt(t_series, id ="ts_time")
+
+        out_sample_returns <- as.data.frame(x$out_sample_returns)
+        out_sample_returns$ts_time <- time(x$out_sample_returns)
+        out_sample_returns <- melt(out_sample_returns, id ="ts_time")
+
+        ggplot(t_series) + geom_line(aes(x = ts_time, y = value, colour = "Estimated VaR")) + geom_point(data = out_sample_returns, mapping = aes(x = ts_time, y = value, colour = "Returns"),  show.legend = TRUE) + theme_bw() + xlab('') + ylab('Returns/VaR') +  scale_color_manual(values = c('black', 'blue'), "") +
+        facet_wrap(~variable, scales = 'free_y', ncol = 1)
+
+
+      }else if (inherits(x$VaR, c("xts","zoo"))) {
         names(x$VaR) = names(x$out_sample_returns)
 
         t_series <- as.data.frame(x$VaR)

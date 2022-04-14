@@ -15,7 +15,7 @@
 #' x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 #'
 #' # backtesting
-#' x2 <- backtest(x1)
+#' x2 <- backtest(x1, window_length=6000)
 #' plot(x2)
 #'
 #' }
@@ -115,7 +115,7 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.95, portfolio_weight
 
   if (inherits(x$data, "ts")) {
     VaR <- ts(VaR, start = time(x$data)[window_length+1], frequency = frequency(x$data))
-    out_sample_returns <- ts(out_sample_returns, start = time(x$data)[1], frequency = frequency(x$data))
+    out_sample_returns <- ts(out_sample_returns, start = time(x$data)[(window_length+1)], frequency = frequency(x$data))
   }else if(inherits(x$data, "xts") || inherits(x$data, "zoo") ){
     VaR <- xts(VaR, order.by = time(x$data[(window_length+1):n,]))
     out_sample_returns <- xts(out_sample_returns, order.by = time(x$data[(window_length+1):n,]))
