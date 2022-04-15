@@ -20,9 +20,11 @@ backtest(
 \item{p}{A numerical value that determines the confidence level. The default value is set at 0.99 in accordance with the Basel Regulation.}
 
 \item{portfolio_weights}{A vector determining the portfolio weights to calculate the portfolio VaR. If set to "NULL", the univariate VaR for each series are calculated.}
+
+\item{n.ahead}{Number of periods to forecast conditional volatility. Default is a one-period ahead forecast.}
 }
 \value{
-Returns a S3 class "var" object containing the VaR forecast and respective confidence bands.
+Returns a S3 class "backtest" object containing the VaR forecast, out-of-sample returns and backtest statistics according to the R-package "GAS". conf
 }
 \description{
 Method for calculating VaR from estimated covariance processes (\link{bekk_fit}).

@@ -1,3 +1,9 @@
+#' backtest method
+#'
+#' @description Generic 'backtest' method. More details on 'backtest' are described in \link{backtest}
+#'
+#' @param x An object of class "backtest" from function \link{backtest}.
+#' @param ...	Further arguments to be passed to and from other methods.
 #' @import ggplot2
 #' @import ggfortify
 #' @import reshape2
@@ -6,7 +12,8 @@ plot.backtest <- function(x, ...) {
 
   obs <- NULL
   type <- NULL
-
+  time <- NULL
+  V1 <- NULL
 
 
     if(is.null(x$portfolio_weights)) {
@@ -14,14 +21,14 @@ plot.backtest <- function(x, ...) {
         colnames(x$VaR) = colnames(x$out_sample_returns)
 
         t_series <- as.data.frame(x$VaR)
-        t_series$ts_time <- my(time(x$VaR))
-        t_series <- melt(t_series, id ="ts_time")
+        t_series$time <- time(x$VaR)
+        t_series <- melt(t_series, id ="time")
 
         out_sample_returns <- as.data.frame(x$out_sample_returns)
-        out_sample_returns$ts_time <- time(x$out_sample_returns)
-        out_sample_returns <- melt(out_sample_returns, id ="ts_time")
+        out_sample_returns$time <- time(x$out_sample_returns)
+        out_sample_returns <- melt(out_sample_returns, id ="time")
 
-        ggplot(t_series) + geom_line(aes(x = ts_time, y = value, colour = "Estimated VaR")) + geom_point(data = out_sample_returns, mapping = aes(x = ts_time, y = value, colour = "Returns"),  show.legend = TRUE) + theme_bw() + xlab('') + ylab('Returns/VaR') +  scale_color_manual(values = c('black', 'blue'), "") +
+        ggplot(t_series) + geom_line(aes(x = time, y = value, colour = "Estimated VaR")) + geom_point(data = out_sample_returns, mapping = aes(x = time, y = value, colour = "Returns"),  show.legend = TRUE) + theme_bw() + xlab('') + ylab('Returns/VaR') +  scale_color_manual(values = c('black', 'blue'), "") +
         facet_wrap(~variable, scales = 'free_y', ncol = 1)
 
 
@@ -54,7 +61,8 @@ plot.backtest <- function(x, ...) {
           facet_wrap(~variable, scales = 'free_y', ncol = 1)
     }
       }else {
-      if (inherits(x$VaR, c("ts","xts","zoo"))) {
+      if (inherits(x$VaR, c("xts","zoo"))) {
+
         ggplot(data=x$VaR) + geom_line(x$VaR , mapping = aes(x = time(x$VaR), y = V1, colour="Estimated VaR")) + geom_point(data=x$out_sample_returns, mapping = aes(x = time(x$VaR), y = V1, colour="Returns")) + theme_bw() + xlab("") + ylab('Portfolio returns/VaR') + ggtitle('Portfolio Backtest')+ scale_color_manual(values = c('blue', 'black'), "")
       } else {
         ggplot(x$VaR) + geom_line(aes(x = 1:nrow(x$VaR), y = V1, colour="Estimated VaR")) + geom_point(data = x$out_sample_returns,

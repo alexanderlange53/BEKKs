@@ -6,7 +6,8 @@
 #' @param window_length An integer specifying the length of the rolling window.
 #' @param p A numerical value that determines the confidence level. The default value is set at 0.99 in accordance with the Basel Regulation.
 #' @param portfolio_weights A vector determining the portfolio weights to calculate the portfolio VaR. If set to "NULL", the univariate VaR for each series are calculated.
-#' @return  Returns a S3 class "var" object containing the VaR forecast and respective confidence bands.
+#' @param n.ahead Number of periods to forecast conditional volatility. Default is a one-period ahead forecast.
+#' @return  Returns a S3 class "backtest" object containing the VaR forecast, out-of-sample returns and backtest statistics according to the R-package "GAS". conf
 #' @examples
 #' \donttest{
 #'
@@ -22,7 +23,8 @@
 #'
 #' @import xts
 #' @import stats
-#' @import GAS
+#' @importFrom GAS BacktestVaR
+#' @importFrom lubridate date_decimal
 #' @export
 
 backtest<- function(x, window_length = 500, p = 0.95, portfolio_weights = NULL,  n.ahead = 1) {
@@ -108,14 +110,14 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.95, portfolio_weight
 
     }
     hit_rate = hit_rate/n_out
-    backtests= suppressWarnings(BacktestVaR(out_sample_returns, VaR, alpha = 1- p))
+    backtests= suppressWarnings(GAS::BacktestVaR(out_sample_returns, VaR, alpha = 1- p))
     VaR <- as.data.frame(VaR)
   }
   out_sample_returns = as.data.frame(out_sample_returns)
 
   if (inherits(x$data, "ts")) {
-    VaR <- ts(VaR, start = time(x$data)[window_length+1], frequency = frequency(x$data))
-    out_sample_returns <- ts(out_sample_returns, start = time(x$data)[(window_length+1)], frequency = frequency(x$data))
+    VaR <- xts(VaR, order.by = date_decimal(time(x$data[(window_length+1):n,])))
+    out_sample_returns <- xts(out_sample_returns, order.by = date_decimal(time(x$data[(window_length+1):n,])))
   }else if(inherits(x$data, "xts") || inherits(x$data, "zoo") ){
     VaR <- xts(VaR, order.by = time(x$data[(window_length+1):n,]))
     out_sample_returns <- xts(out_sample_returns, order.by = time(x$data[(window_length+1):n,]))
