@@ -4,7 +4,7 @@
 #' @description Method for a Portmanteau test of the null hypothesis of no remaining correlation in the co-variances of the estimated BEKK residuals.
 #'
 #' @param x An object of class "bekkFit" from function \link{bekk_fit}.
-#' @param lags Either an integer vector or scalar defining the lag length
+#' @param lags Either an integer vector or scalar defining the lag length.
 #' @return  Returns a matrix containing the p-values and test statistics.
 #'
 #' @details Here, the multivariate Portmanteau test of Hosking (1980) is implemented.
@@ -23,6 +23,7 @@ portmanteau.test <- function(x, lags = 5){
   UseMethod("portmanteau.test")
 }
 
+#' @export
 portmanteau.test.bekkFit <- function(x, lags = 5){
   e <- x$e_t
   n <- nrow(e)
@@ -31,7 +32,7 @@ portmanteau.test.bekkFit <- function(x, lags = 5){
   e2 <- matrix(NA,nrow = n, ncol = N*(N+1)/2)
 
   for(i in 1:n){
-    e2[i,] <- vech(crossprod(t(e[i,]),e[i,]))
+    e2[i,] <- ks::vech(crossprod(t(e[i,]),e[i,]))
   }
   e=e2
 
@@ -63,5 +64,7 @@ portmanteau.test.bekkFit <- function(x, lags = 5){
   res = t(sapply(lags,FUN=summary_res))
   dimnames(res) <- list(rep("", length(lags)),c("lags","statistic","df","p-value"))
   cat(paste("\n", "Portmanteau Test", "\n", sep = ""))
+  underScore <- paste(rep("-", nchar("Portmanteau Test")), collapse = "")
+  cat(underScore, "\n")
   return(res)
 }

@@ -216,6 +216,7 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
 
   result$AIC <- AIC(result)
   result$BIC <- BIC(result)
+  invisible(capture.output(result$Portmanteau.test <- portmanteau.test(result, lags = c(5,15,30))))
 
   return(result)
 }
@@ -369,6 +370,7 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE,
 
   result$AIC <- AIC(result)
   result$BIC <- BIC(result)
+  invisible(capture.output(result$Portmanteau.test <- portmanteau.test(result, lags = c(5,15,30))))
 
   return(result)
 }
@@ -476,6 +478,7 @@ bekk_fit.dbekk <- function(spec, data, QML_t_ratios = FALSE,
 
   result$AIC <- AIC(result)
   result$BIC <- BIC(result)
+  invisible(capture.output(result$Portmanteau.test <- portmanteau.test(result, lags = c(5,15,30))))
 
   return(result)
 }
@@ -592,6 +595,7 @@ bekk_fit.dbekka <- function(spec, data, QML_t_ratios = FALSE,
 
   result$AIC <- AIC(result)
   result$BIC <- BIC(result)
+  invisible(capture.output(result$Portmanteau.test <- portmanteau.test(result, lags = c(5,15,30))))
 
   return(result)
 }
@@ -699,6 +703,7 @@ bekk_fit.sbekk <- function(spec, data, QML_t_ratios = FALSE,
 
   result$AIC <- AIC(result)
   result$BIC <- BIC(result)
+  invisible(capture.output(result$Portmanteau.test <- portmanteau.test(result, lags = c(5,15,30))))
 
   return(result)
 }
@@ -815,6 +820,7 @@ bekk_fit.sbekka <- function(spec, data, QML_t_ratios = FALSE,
 
   result$AIC <- AIC(result)
   result$BIC <- BIC(result)
+  invisible(capture.output(result$Portmanteau.test <- portmanteau.test(result, lags = c(5,15,30))))
 
   return(result)
 }

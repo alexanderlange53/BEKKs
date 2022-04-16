@@ -52,6 +52,9 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.95, portfolio_weight
    stop("The supplied window_length exeeds the length of the data.")
  }
 
+  if((n-window_length) < n.ahead){
+    stop("The supplied 'n.ahead' exceeds the forecasting horizon.")
+  }
   if (is.null(portfolio_weights)) {
     hit_rate = numeric(N)
     out_sample_returns <-  x$data[(window_length+1):n,]

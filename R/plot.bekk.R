@@ -39,9 +39,9 @@ plot.bekkFit <- function(x, diagnostic = FALSE, ...){
       xxc <- colnames(x$sigma_t)
       for (i in 1:ncol(x$sigma_t)) {
         if (grepl('correlation', xxc[i])) {
-          plist[[i]] <- suppressMessages(autoplot(x$sigma_t[,i]) + theme_bw() + ylim(-1,1) + geom_hline(yintercept = 0, col = 'red'))
+          plist[[i]] <- suppressMessages(autoplot(x$sigma_t[,i]) + theme_bw() + ylab("") + ylim(-1,1) + geom_hline(yintercept = 0, col = 'red'))
         } else {
-          plist[[i]] <- autoplot(x$sigma_t[,i]) + theme_bw()
+          plist[[i]] <- autoplot(x$sigma_t[,i]) + theme_bw() + ylab("")
         }
       }
     } else {
