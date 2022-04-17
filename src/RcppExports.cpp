@@ -291,18 +291,30 @@ BEGIN_RCPP
 END_RCPP
 }
 // virf_bekk
-arma::mat virf_bekk(arma::mat& H_t, arma::mat& C, arma::mat& A, arma::mat& G, arma::mat& shocks, int& periods);
-RcppExport SEXP _BEKKs_virf_bekk(SEXP H_tSEXP, SEXP CSEXP, SEXP ASEXP, SEXP GSEXP, SEXP shocksSEXP, SEXP periodsSEXP) {
+arma::mat virf_bekk(arma::mat& H_t, arma::vec& theta, arma::mat& shocks, int& periods);
+RcppExport SEXP _BEKKs_virf_bekk(SEXP H_tSEXP, SEXP thetaSEXP, SEXP shocksSEXP, SEXP periodsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat& >::type H_t(H_tSEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type C(CSEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type A(ASEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type G(GSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type theta(thetaSEXP);
     Rcpp::traits::input_parameter< arma::mat& >::type shocks(shocksSEXP);
     Rcpp::traits::input_parameter< int& >::type periods(periodsSEXP);
-    rcpp_result_gen = Rcpp::wrap(virf_bekk(H_t, C, A, G, shocks, periods));
+    rcpp_result_gen = Rcpp::wrap(virf_bekk(H_t, theta, shocks, periods));
+    return rcpp_result_gen;
+END_RCPP
+}
+// virf_sbekk
+arma::mat virf_sbekk(arma::mat& H_t, arma::vec& theta, arma::mat& shocks, int& periods);
+RcppExport SEXP _BEKKs_virf_sbekk(SEXP H_tSEXP, SEXP thetaSEXP, SEXP shocksSEXP, SEXP periodsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type H_t(H_tSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type shocks(shocksSEXP);
+    Rcpp::traits::input_parameter< int& >::type periods(periodsSEXP);
+    rcpp_result_gen = Rcpp::wrap(virf_sbekk(H_t, theta, shocks, periods));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -463,7 +475,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BEKKs_hesse_bekk", (DL_FUNC) &_BEKKs_hesse_bekk, 2},
     {"_BEKKs_hesse_asymm_bekk", (DL_FUNC) &_BEKKs_hesse_asymm_bekk, 3},
     {"_BEKKs_eigen_value_decomposition", (DL_FUNC) &_BEKKs_eigen_value_decomposition, 1},
-    {"_BEKKs_virf_bekk", (DL_FUNC) &_BEKKs_virf_bekk, 6},
+    {"_BEKKs_virf_bekk", (DL_FUNC) &_BEKKs_virf_bekk, 4},
+    {"_BEKKs_virf_sbekk", (DL_FUNC) &_BEKKs_virf_sbekk, 4},
     {"_BEKKs_virf_bekka", (DL_FUNC) &_BEKKs_virf_bekka, 9},
     {"_BEKKs_simulate_bekk_c", (DL_FUNC) &_BEKKs_simulate_bekk_c, 3},
     {"_BEKKs_simulate_bekka_c", (DL_FUNC) &_BEKKs_simulate_bekka_c, 5},

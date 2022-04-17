@@ -89,8 +89,12 @@ eigen_value_decomposition <- function(A) {
     .Call('_BEKKs_eigen_value_decomposition', PACKAGE = 'BEKKs', A)
 }
 
-virf_bekk <- function(H_t, C, A, G, shocks, periods) {
-    .Call('_BEKKs_virf_bekk', PACKAGE = 'BEKKs', H_t, C, A, G, shocks, periods)
+virf_bekk <- function(H_t, theta, shocks, periods) {
+    .Call('_BEKKs_virf_bekk', PACKAGE = 'BEKKs', H_t, theta, shocks, periods)
+}
+
+virf_sbekk <- function(H_t, theta, shocks, periods) {
+    .Call('_BEKKs_virf_sbekk', PACKAGE = 'BEKKs', H_t, theta, shocks, periods)
 }
 
 virf_bekka <- function(H_t, C, A, B, G, signs, expected_signs, shocks, periods) {
