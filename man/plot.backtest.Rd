@@ -6,11 +6,6 @@
 \usage{
 \method{plot}{backtest}(x, ...)
 }
-\arguments{
-\item{x}{An object of class "backtest" from function \link{backtest}.}
-
-\item{...}{Further arguments to be passed to and from other methods.}
-}
 \description{
-Generic 'backtest' method. More details on 'backtest' are described in \link{backtest}
+backtest method
 }

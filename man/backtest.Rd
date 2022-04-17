@@ -37,7 +37,7 @@ obj_spec <- bekk_spec()
 x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 
 # backtesting
-x2 <- backtest(x1, window_length=6000)
+x2 <- backtest(x1, window_length =4000)
 plot(x2)
 
 }

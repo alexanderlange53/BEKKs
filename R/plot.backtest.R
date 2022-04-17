@@ -1,9 +1,4 @@
 #' backtest method
-#'
-#' @description Generic 'backtest' method. More details on 'backtest' are described in \link{backtest}
-#'
-#' @param x An object of class "backtest" from function \link{backtest}.
-#' @param ...	Further arguments to be passed to and from other methods.
 #' @import ggplot2
 #' @import ggfortify
 #' @import reshape2

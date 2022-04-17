@@ -9,7 +9,7 @@
 #'
 #' @details Here, the multivariate Portmanteau test of Hosking (1980) is implemented.
 #'
-#' @references  J. R. M. Hosking (1980) The Multivariate Portmanteau Statistic, Journal of the American Statistical Association, 75:371, 602-608, DOI: 10.1080/01621459.1980.10477520
+#' @references  J. R. M. Hosking (1980). The Multivariate Portmanteau Statistic, Journal of the American Statistical Association, 75:371, 602-608.
 
 
 #' @import xts
