@@ -23,8 +23,9 @@ plot.backtest <- function(x, ...) {
         out_sample_returns$time <- time(x$out_sample_returns)
         out_sample_returns <- melt(out_sample_returns, id ="time")
 
-        ggplot(t_series) + geom_line(aes(x = time, y = value, colour = "Estimated VaR")) + geom_point(data = out_sample_returns, mapping = aes(x = time, y = value, colour = "Returns"),  show.legend = TRUE) + theme_bw() + xlab('') + ylab('Returns/VaR') +  scale_color_manual(values = c('black', 'blue'), "") +
-        facet_wrap(~variable, scales = 'free_y', ncol = 1)
+        ggplot(t_series) + geom_point(data = out_sample_returns, mapping = aes(x = time, y = value, colour = "Returns"),  show.legend = TRUE) + theme_bw() + xlab('') + ylab('Returns/VaR') +
+          geom_line(aes(x = time, y = value, colour = "Estimated VaR")) + scale_color_manual(values = c('black', 'blue'), "") +
+          facet_wrap(~variable, scales = 'free_y', ncol = 1)
 
 
       }else if (inherits(x$VaR, c("xts","zoo"))) {
@@ -39,7 +40,8 @@ plot.backtest <- function(x, ...) {
         out_sample_returns <- melt(out_sample_returns, id ="time")
 
 
-        ggplot(t_series) + geom_line(aes(x = time, y = value, colour = "Estimated VaR")) + geom_point(data = out_sample_returns, mapping = aes(x = time, y = value, colour = "Returns"),  show.legend = TRUE) + theme_bw() + xlab('') + ylab('Returns/VaR') +  scale_color_manual(values = c('black', 'blue'), "") +
+        ggplot(t_series) + geom_point(data = out_sample_returns, mapping = aes(x = time, y = value, colour = "Returns"),  show.legend = TRUE) + theme_bw() + xlab('') + ylab('Returns/VaR') +
+          geom_line(aes(x = time, y = value, colour = "Estimated VaR")) + scale_color_manual(values = c('black', 'blue'), "") +
           facet_wrap(~variable, scales = 'free_y', ncol = 1)
 
         } else {
@@ -52,16 +54,19 @@ plot.backtest <- function(x, ...) {
         out_sample_returns <- melt(x$out_sample_returns, id = 'obs')
 
 
-        ggplot(VaR) + geom_line(aes(x = obs, y = value, colour = "Estimated VaR")) + geom_point(data = out_sample_returns, mapping = aes(x = obs, y = value, colour = "Returns"),  show.legend = TRUE) + theme_bw() + xlab('') + ylab('VaR') +  scale_color_manual(values = c('black', 'blue'), "") +
+        ggplot(VaR) + geom_point(data = out_sample_returns, mapping = aes(x = obs, y = value, colour = "Returns"),  show.legend = TRUE) + theme_bw() + xlab('') + ylab('VaR') +
+          geom_line(aes(x = obs, y = value, colour = "Estimated VaR")) + scale_color_manual(values = c('black', 'blue'), "") +
           facet_wrap(~variable, scales = 'free_y', ncol = 1)
     }
       }else {
       if (inherits(x$VaR, c("xts","zoo"))) {
 
-        ggplot(data=x$VaR) + geom_line(x$VaR , mapping = aes(x = time(x$VaR), y = V1, colour="Estimated VaR")) + geom_point(data=x$out_sample_returns, mapping = aes(x = time(x$VaR), y = V1, colour="Returns")) + theme_bw() + xlab("") + ylab('Portfolio returns/VaR') + ggtitle('Portfolio Backtest')+ scale_color_manual(values = c('blue', 'black'), "")
+        ggplot(data=x$VaR) + geom_point(data=x$out_sample_returns, mapping = aes(x = time(x$VaR), y = V1, colour="Returns")) +
+          geom_line(x$VaR , mapping = aes(x = time(x$VaR), y = V1, colour="Estimated VaR")) + theme_bw() + xlab("") + ylab('Portfolio returns/VaR') + ggtitle('Portfolio Backtest')+ scale_color_manual(values = c('blue', 'black'), "")
       } else {
-        ggplot(x$VaR) + geom_line(aes(x = 1:nrow(x$VaR), y = V1, colour="Estimated VaR")) + geom_point(data = x$out_sample_returns,
-                                                                              mapping = aes(x = 1:nrow(x$VaR), y = V1, colour="Returns")) + theme_bw() + xlab('') + ylab('Returns/VaR') + ggtitle('Portfolio Backtest')+ scale_color_manual(values = c('blue', 'black'), "")
+        ggplot(x$VaR) + geom_point(data = x$out_sample_returns,
+                                                                              mapping = aes(x = 1:nrow(x$VaR), y = V1, colour="Returns")) + theme_bw() + xlab('') + ylab('Returns/VaR') +
+        geom_line(aes(x = 1:nrow(x$VaR), y = V1, colour="Estimated VaR")) + ggtitle('Portfolio Backtest')+ scale_color_manual(values = c('blue', 'black'), "")
 
       }
     }
