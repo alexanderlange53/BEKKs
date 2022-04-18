@@ -56,6 +56,7 @@
 #' }
 #' @import xts
 #' @import stats
+#' @import utils
 #' @export
 
 bekk_fit <- function(spec, data, QML_t_ratios = FALSE,

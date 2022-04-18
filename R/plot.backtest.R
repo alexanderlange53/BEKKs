@@ -1,8 +1,8 @@
-#' backtest method
 #' @import ggplot2
 #' @import ggfortify
 #' @import reshape2
 #' @export
+#'
 plot.backtest <- function(x, ...) {
 
   obs <- NULL
