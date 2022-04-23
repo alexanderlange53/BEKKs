@@ -45,6 +45,9 @@ plot.backtest <- function(x, ...) {
           facet_wrap(~variable, scales = 'free_y', ncol = 1)
 
         } else {
+
+        names(x$VaR) = names(x$out_sample_returns)
+
         x$VaR$obs <- 1:nrow(x$VaR)
         VaR <- melt(x$VaR, id = 'obs')
         x$out_sample_returns$obs <- 1:nrow(x$out_sample_returns)
