@@ -73,10 +73,11 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.95, portfolio_weight
       hit_rate[j]= hit_rate[j]  + sum(VaR[i:(i+n.ahead-1),j] > out_sample_returns[i:(i+n.ahead-1),j])
       }
 
+
+      i = i + n.ahead
       if(n.ahead > 1 && i >= (n_out-n.ahead)){
         n.ahead = 1
       }
-      i = i + n.ahead
 
     }
     hit_rate = hit_rate/n_out
