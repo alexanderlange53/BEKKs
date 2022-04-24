@@ -108,11 +108,11 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.95, portfolio_weight
       hit_rate= hit_rate  + sum(VaR[i:(i+n.ahead-1),] > out_sample_returns[i:(i+n.ahead-1),])
 
 
-     if(n.ahead > 1 && i >= (n_out-n.ahead)){
-        n.ahead = 1
-     }
-       i = i + n.ahead
 
+       i = i + n.ahead
+       if(n.ahead > 1 && i >= (n_out-n.ahead)){
+         n.ahead = 1
+       }
     }
     hit_rate = hit_rate/n_out
     backtests= suppressWarnings(GAS::BacktestVaR(out_sample_returns, VaR, alpha = 1- p))
