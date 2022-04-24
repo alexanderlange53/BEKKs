@@ -78,6 +78,7 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.95, portfolio_weight
       if(n.ahead > 1 && i >= (n_out-n.ahead)){
         n.ahead = 1
       }
+      print(i)
 
     }
     hit_rate = hit_rate/n_out

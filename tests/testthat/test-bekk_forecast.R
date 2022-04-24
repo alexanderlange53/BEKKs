@@ -128,3 +128,20 @@ test_that("Symmetric BEKK 3-dims works, xts object and QML_t_ratios = FALSE, n.a
   expect_equal(round(sum(x2$volatility_lower_conf_band), 2), 1.04)
   expect_equal(round(sum(x2$volatility_upper_conf_band), 2), 1.45)
 })
+
+
+
+test_that("Symmetric scalar BEKK 2-dims works, ts object and QML_t_ratios = FALSE, n.ahead = 1", {
+  obj_spec <- bekk_spec(model = list(type="sbekk", asymmetric =F))
+  x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
+
+  x2 <- bekk_forecast(x1, n.ahead = 10)
+
+  expect_equal(round(as.numeric(x2$volatility_forecast[1,1]), 2), 0.19)
+  expect_equal(round(as.numeric(x2$volatility_forecast[2,2]), 2), -0.1)
+  expect_equal(round(as.numeric(x2$volatility_forecast[2,3]), 2), 0.64)
+
+  expect_equal(round(sum(x2$H_t_forecast), 2), 4.28)
+  expect_equal(round(sum(x2$volatility_lower_conf_band), 2), 7.38)
+  expect_equal(round(sum(x2$volatility_upper_conf_band), 2), 7.49)
+})

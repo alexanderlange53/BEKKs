@@ -665,7 +665,7 @@ bekk_forecast.sbekk <- function(x, n.ahead = 1, ci = 0.95) {
   current_returns <- matrix(c(x$data[NoBs,]), nrow = 1)
 
   for(i in 1:n.ahead){
-    H_t[[i+1]] <- t(x$C0) %*% x$C0 + x$a * t(current_returns) %*% current_returns+ x$G * H_t[[i]]
+    H_t[[i+1]] <- t(x$C0) %*% x$C0 + x$a * t(current_returns) %*% current_returns+ x$g * H_t[[i]]
     current_returns <- eigen_value_decomposition(H_t[[i+1]])
   }
 
