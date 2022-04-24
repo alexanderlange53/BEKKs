@@ -7,7 +7,7 @@
 backtest(
   x,
   window_length = 500,
-  p = 0.95,
+  p = 0.99,
   portfolio_weights = NULL,
   n.ahead = 1
 )
@@ -37,7 +37,7 @@ obj_spec <- bekk_spec()
 x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 
 # backtesting
-x2 <- backtest(x1, window_length = 6000, n.ahead=20)
+x2 <- backtest(x1, window_length = 6000)
 plot(x2)
 
 }
