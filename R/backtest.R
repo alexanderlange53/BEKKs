@@ -16,9 +16,14 @@
 #' x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 #'
 #' # backtesting
-#' x2 <- backtest(x1, window_length = 6000, n.ahead=20)
+#' x2 <- backtest(x1, window_length = 6000, n.ahead=1)
 #' plot(x2)
-#'
+#'# backtesting using 5 day-ahead forecasts
+#' x3 <- backtest(x1, window_length = 6000, n.ahead=5)
+#' plot(x3)
+#' # backtesting using 20 day-ahead forecasts and portfolio
+#' x4 <- backtest(x1, window_length = 6000, portfolio_weights = c(0.5,0.5), n.ahead=20)
+#' plot(x4)
 #' }
 #'
 #' @import xts
@@ -78,7 +83,7 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.95, portfolio_weight
       if(n.ahead > 1 && i >= (n_out-n.ahead)){
         n.ahead = 1
       }
-      print(i)
+
 
     }
     hit_rate = hit_rate/n_out
@@ -136,7 +141,10 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.95, portfolio_weight
     out_sample_returns = out_sample_returns,
     hit_rate = hit_rate,
     backtests = backtests,
-    portfolio_weights = portfolio_weights
+    portfolio_weights = portfolio_weights,
+    bekkFit = x,
+    p = p,
+    window_length = window_length
   )
   class(result) <- c('backtest')
   return(result)
