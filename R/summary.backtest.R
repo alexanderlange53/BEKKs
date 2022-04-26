@@ -82,7 +82,8 @@ summary.backtest <- function(object, ...) {
 }
 
 #' @export
-print.backtest <- function(object,...){
+print.backtest <- function(x,...){
+  object <- x
   bekkObject <- object$bekkFit
   if (any(class(bekkObject) == 'bekk')) {
     cat(paste("\n", "BEKK backtesting results", "\n", sep = ""))

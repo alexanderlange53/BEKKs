@@ -18,7 +18,7 @@
 #' # backtesting
 #' x2 <- backtest(x1, window_length = 6000, n.ahead=1)
 #' plot(x2)
-#'# backtesting using 5 day-ahead forecasts
+#' # backtesting using 5 day-ahead forecasts
 #' x3 <- backtest(x1, window_length = 6000, n.ahead=5)
 #' plot(x3)
 #' # backtesting using 20 day-ahead forecasts and portfolio
