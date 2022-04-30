@@ -29,10 +29,8 @@
 #'
 #' @import xts
 #' @import stats
-#' @importFrom future makeClusterPSOCK
-#' @importFrom future.apply future_lapply
 #' @importFrom GAS BacktestVaR
-#' @importFrom lubridate date_decimal
+#' @import lubridate
 #' @export
 
 backtest<- function(x, window_length = 500, p = 0.99, portfolio_weights = NULL,  n.ahead = 1, nc = 1) {
@@ -152,7 +150,7 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.99, portfolio_weight
   #   backtests= suppressWarnings(GAS::BacktestVaR(out_sample_returns, VaR, alpha = 1- p))
   #   VaR <- as.data.frame(VaR)
   # }
-  out_sample_returns = as.data.frame(out_sample_returns)
+
 
     OoS_indices <- seq(1,(n_out), n.ahead)
     wrapper <- function(i) {
@@ -181,13 +179,16 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.99, portfolio_weight
     hit_rate = hit_rate/n_out
     backtests= suppressWarnings(GAS::BacktestVaR(out_sample_returns, VaR, alpha = 1- p))
 
-    colnames(x$VaR)<- "Portfolio"
-    colnames(x$out_sample_returns)<- "Portfolio"
+    out_sample_returns = as.data.frame(out_sample_returns)
+
+    VaR = as.data.frame(VaR)
+    colnames(VaR)<- "Portfolio"
+    colnames(out_sample_returns)<- "Portfolio"
 }
 
   if (inherits(x$data, "ts")) {
-    VaR <- xts(VaR, order.by = date_decimal(time(x$data)[(window_length+1):n]))
-    out_sample_returns <- xts(out_sample_returns, order.by = date_decimal(time(x$data)[(window_length+1):n]))
+    VaR <- xts(VaR, order.by =  lubridate::as_date(lubridate::date_decimal(time(x$data)[(window_length+1):n])))
+    out_sample_returns <- xts(out_sample_returns, order.by = lubridate::as_date(lubridate::date_decimal(time(x$data)[(window_length+1):n])))
   }else if(inherits(x$data, "xts") || inherits(x$data, "zoo") ){
     VaR <- xts(VaR, order.by = time(x$data[(window_length+1):n,]))
     out_sample_returns <- xts(out_sample_returns, order.by = time(x$data[(window_length+1):n,]))
