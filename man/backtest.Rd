@@ -9,7 +9,8 @@ backtest(
   window_length = 500,
   p = 0.99,
   portfolio_weights = NULL,
-  n.ahead = 1
+  n.ahead = 1,
+  nc = 1
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ backtest(
 \item{portfolio_weights}{A vector determining the portfolio weights to calculate the portfolio VaR. If set to "NULL", the univariate VaR for each series are calculated.}
 
 \item{n.ahead}{Number of periods to forecast conditional volatility. Default is a one-period ahead forecast.}
+
+\item{nc}{Number of cores to be used for parallel computation.}
 }
 \value{
 Returns a S3 class "backtest" object containing the VaR forecast, out-of-sample returns and backtest statistics according to the R-package "GAS". conf
