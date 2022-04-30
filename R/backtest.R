@@ -17,18 +17,19 @@
 #' x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 #'
 #' # backtesting
-#' x2 <- backtest(x1, window_length = 6000, n.ahead=1)
+#' x2 <- backtest(x1, window_length = 6000, n.ahead = 1, nc = 1)
 #' plot(x2)
 #' # backtesting using 5 day-ahead forecasts
-#' x3 <- backtest(x1, window_length = 6000, n.ahead=5)
+#' x3 <- backtest(x1, window_length = 6000, n.ahead = 5, nc = 1)
 #' plot(x3)
 #' # backtesting using 20 day-ahead forecasts and portfolio
-#' x4 <- backtest(x1, window_length = 6000, portfolio_weights = c(0.5,0.5), n.ahead=20)
+#' x4 <- backtest(x1, window_length = 6000, portfolio_weights = c(0.5,0.5), n.ahead = 20, nc = 1)
 #' plot(x4)
 #' }
 #'
 #' @import xts
 #' @import stats
+#' @import future
 #' @import future.apply
 #' @importFrom GAS BacktestVaR
 #' @importFrom lubridate date_decimal
@@ -48,9 +49,6 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.99, portfolio_weight
 
 
 
-
-
-  #portfolio_weights = matrix(portfolio_weights, ncol = N, nrow = 1)
   #out_sample_returns <-  x$data[(window_length+1):n,] %*% t(portfolio_weights)
   if(window_length < 500){
     stop("The supplied window_length must be larger than 500.")
@@ -69,6 +67,7 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.99, portfolio_weight
     #VaR <- matrix(NA, nrow = n_out, ncol = N)
 
     OoS_indices <- seq(1,n_out, n.ahead)
+
     wrapper <- function(i) {
       if(n.ahead > 1 && i > (n_out-n.ahead)){
         n.ahead = n_out-i+1
@@ -103,11 +102,11 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.99, portfolio_weight
     #
     # }
 
-    future::plan(future::multicore(workers = nc))
-
+    #future::plan(future::multicore(workers = n_cores))
+    cl = future::makeClusterPSOCK(nc)
     VaR = future.apply::future_lapply(X=OoS_indices, FUN=wrapper)
 
-
+    parallel::stopCluster(cl)
     VaR = do.call(rbind,VaR)
 
 
@@ -169,10 +168,11 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.99, portfolio_weight
 
 
     }
-    future::plan(future::multicore(workers = nc))
+    #future::plan(future::multicore(workers = n_cores))
 
+    cl = future::makeClusterPSOCK(nc)
     VaR = future.apply::future_lapply(X=OoS_indices, FUN=wrapper)
-
+    parallel::stopCluster(cl)
 
     VaR = do.call(rbind,VaR)
 

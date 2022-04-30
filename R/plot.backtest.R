@@ -9,6 +9,7 @@ plot.backtest <- function(x, ...) {
   type <- NULL
   time <- NULL
   V1 <- NULL
+  Portfolio <- NULL
 
 
     if(is.null(x$portfolio_weights)) {

@@ -40,13 +40,13 @@ obj_spec <- bekk_spec()
 x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 
 # backtesting
-x2 <- backtest(x1, window_length = 6000, n.ahead=1)
+x2 <- backtest(x1, window_length = 6000, n.ahead = 1, nc = 1)
 plot(x2)
 # backtesting using 5 day-ahead forecasts
-x3 <- backtest(x1, window_length = 6000, n.ahead=5)
+x3 <- backtest(x1, window_length = 6000, n.ahead = 5, nc = 1)
 plot(x3)
 # backtesting using 20 day-ahead forecasts and portfolio
-x4 <- backtest(x1, window_length = 6000, portfolio_weights = c(0.5,0.5), n.ahead=20)
+x4 <- backtest(x1, window_length = 6000, portfolio_weights = c(0.5,0.5), n.ahead = 20, nc = 1)
 plot(x4)
 }
 
