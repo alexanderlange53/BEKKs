@@ -34,8 +34,8 @@ summary.backtest <- function(object, ...) {
     colnames(res_Kupiec)=c("")
     colnames(res_Christoffesen)=c("")
     row.names(res_hit)=c("")
-    row.names(res_Kupiec)=c("Test", "p-value")
-    row.names(res_Christoffesen)=c("Test", "p-value")
+    row.names(res_Kupiec)=c("Test:", "p-value:")
+    row.names(res_Christoffesen)=c("Test:", "p-value:")
 
       res_Kupiec[,1]=object$backtests$LRuc
       res_Christoffesen[,1]=object$backtests$LRcc
@@ -60,8 +60,8 @@ summary.backtest <- function(object, ...) {
     colnames(res_Kupiec)=colnames(res_hit)
     colnames(res_Christoffesen)=colnames(res_hit)
     row.names(res_hit)=c("")
-    row.names(res_Kupiec)=c("Test", "p-value")
-    row.names(res_Christoffesen)=c("Test", "p-value")
+    row.names(res_Kupiec)=c("Test:", "p-value:")
+    row.names(res_Christoffesen)=c("Test:", "p-value:")
     for(i in 1:ncol(object$VaR)){
       res_Kupiec[,i]=object$backtests[[i]]$LRuc
       res_Christoffesen[,i]=object$backtests[[i]]$LRcc

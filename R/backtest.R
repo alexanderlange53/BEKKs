@@ -37,7 +37,7 @@ backtest<- function(x, window_length = 500, p = 0.99, portfolio_weights = NULL, 
 }
 
 #' @export
-backtest.bekkFit <-  function(x, window_length = 500, p = 0.95, portfolio_weights = NULL, n.ahead = 1)
+backtest.bekkFit <-  function(x, window_length = 500, p = 0.99, portfolio_weights = NULL, n.ahead = 1)
 {
   data <- x$data
   n <- nrow(data)
