@@ -29,8 +29,8 @@
 #'
 #' @import xts
 #' @import stats
-#' @import future
-#' @import future.apply
+#' @importFrom future makeClusterPSOCK
+#' @importFrom future.apply future_lapply
 #' @importFrom GAS BacktestVaR
 #' @importFrom lubridate date_decimal
 #' @export
