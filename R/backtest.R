@@ -29,6 +29,7 @@
 #'
 #' @import xts
 #' @import stats
+#' @import pbapply
 #' @importFrom GAS BacktestVaR
 #' @import lubridate
 #' @export
