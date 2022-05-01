@@ -101,8 +101,11 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.99, portfolio_weight
     # }
 
     #future::plan(future::multicore(workers = n_cores))
-    cl = future::makeClusterPSOCK(nc)
-    VaR = future.apply::future_lapply(X=OoS_indices, FUN=wrapper)
+    # cl = future::makeClusterPSOCK(nc)
+    # VaR = future.apply::future_lapply(X=OoS_indices, FUN=wrapper)
+    #
+    cl = parallel::makeCluster(nc)
+    VaR = pbapply::pblapply(X=OoS_indices, FUN=wrapper, cl = cl)
 
     parallel::stopCluster(cl)
     VaR = do.call(rbind,VaR)
@@ -168,8 +171,10 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.99, portfolio_weight
     }
     #future::plan(future::multicore(workers = n_cores))
 
-    cl = future::makeClusterPSOCK(nc)
-    VaR = future.apply::future_lapply(X=OoS_indices, FUN=wrapper)
+    # cl = future::makeClusterPSOCK(nc)
+    # VaR = future.apply::future_lapply(X=OoS_indices, FUN=wrapper)
+    cl = parallel::makeCluster(nc)
+    VaR = pbapply::pblapply(X=OoS_indices, FUN=wrapper, cl = cl)
     parallel::stopCluster(cl)
 
     VaR = do.call(rbind,VaR)
