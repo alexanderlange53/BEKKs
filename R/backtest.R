@@ -71,7 +71,7 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.99, portfolio_weight
       if(n.ahead > 1 && i > (n_out-n.ahead)){
         n.ahead = n_out-i+1
       }
-      spec = bekk_spec()
+      spec = x$spec
       fit <- bekk_fit(spec, data[i:(window_length-1+i),])
       forecast <- bekk_forecast(fit, n.ahead = n.ahead, ci = 0.5)
       #VaR[i:(i+n.ahead-1),] = as.matrix(VaR(forecast, p = p, portfolio_weights = portfolio_weights)$VaR[(window_length+1):(window_length+n.ahead),])
@@ -161,7 +161,7 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.99, portfolio_weight
       if(n.ahead > 1 && i > (n_out-n.ahead)){
         n.ahead = n_out-i+1
       }
-      spec = bekk_spec()
+      spec = x$spec
       fit <- bekk_fit(spec, data[i:(window_length-1+i),])
       forecast <- bekk_forecast(fit, n.ahead = n.ahead, ci = 0.5)
 

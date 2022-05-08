@@ -61,7 +61,7 @@ VaR.bekkFit <-  function(x, p = 0.99, portfolio_weights = NULL)
   } else {
     VaR <- matrix(NA, nrow = nrow(x$data), ncol = 1)
     for(i in 1:nrow(x$H_t)) {
-      VaR[i,] <- -qnorm(alpha)*portfolio_weights%*%eigen_value_decomposition(matrix(x$H_t[i,], ncol = ncol(x$data)))%*%portfolio_weights
+      VaR[i,] <- -qnorm(alpha)*sqrt(portfolio_weights%*%matrix(x$H_t[i,], ncol = ncol(x$data))%*%portfolio_weights)
     }
     VaR <- as.data.frame(VaR)
   }
@@ -143,7 +143,7 @@ VaR.bekkForecast <-  function(x, p = 0.99, portfolio_weights = NULL)
     VaR <- matrix(NA, nrow = nrow(x$bekkfit$data) + x$n.ahead, ncol = 1)
 
     for(i in 1:nrow(obj$H_t)) {
-      VaR[i,] <- -qnorm(alpha)*portfolio_weights%*%eigen_value_decomposition(matrix(obj$H_t[i,], ncol = ncol(x$bekkfit$data)))%*%portfolio_weights
+      VaR[i,] <- -qnorm(alpha)*sqrt(portfolio_weights%*%matrix(obj$H_t[i,], ncol = ncol(x$bekkfit$data))%*%portfolio_weights)
     }
     VaR <- as.data.frame(VaR)
 
@@ -154,8 +154,8 @@ VaR.bekkForecast <-  function(x, p = 0.99, portfolio_weights = NULL)
     H_t_upper <- rbind(x$bekkfit$H_t[-nrow(x$bekkfit$H_t),], x$H_t_upper_conf_band)
 
     for(i in 1:nrow(obj$H_t)) {
-      VaR_lower[i,] <- -qnorm(alpha)*portfolio_weights%*%eigen_value_decomposition(matrix(H_t_lower[i,], ncol = ncol(x$bekkfit$data)))%*%portfolio_weights
-      VaR_upper[i,] <- -qnorm(alpha)*portfolio_weights%*%eigen_value_decomposition(matrix(H_t_upper[i,], ncol = ncol(x$bekkfit$data)))%*%portfolio_weights
+      VaR_lower[i,] <- -qnorm(alpha)*sqrt(portfolio_weights%*%matrix(H_t_lower[i,], ncol = ncol(x$bekkfit$data))%*%portfolio_weights)
+      VaR_upper[i,] <- -qnorm(alpha)*sqrt(portfolio_weights%*%matrix(H_t_upper[i,], ncol = ncol(x$bekkfit$data))%*%portfolio_weights)
     }
     VaR_lower <- as.data.frame(VaR_lower)
     VaR_upper <- as.data.frame(VaR_upper)
