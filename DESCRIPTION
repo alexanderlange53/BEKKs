@@ -1,7 +1,7 @@
 Package: BEKKs
 Title: Multivariate Conditional Volatility Modelling and Forecasting
-Version: 1.2.0
-Authors@R: 
+Version: 1.2.1
+Authors@R:          
     c(person(given = "Markus",
            family = "Fülle",
            role = c("aut"),
