@@ -65,23 +65,32 @@ virf.bekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci = 
   #dupl <- duplication_mat(N)
   #elim <- elimination_mat(N)
 
-  score_final = score_bekk(x$theta, x$data)
-  s1_temp = solve(t(score_final) %*% score_final)
-  s1 = eigen_value_decomposition(s1_temp)
-  print(s1)
-  theta = x$theta
-  theta_lower = theta - s1%*%as.matrix(rep(qnorm(ci), nrow(x$theta)))
-  x_lower <- coef_mat(theta_lower, N)
-  H_lower = matrix(sigma_bekk(x$data,x_lower$c0, x_lower$a, x_lower$g)$sigma_t[time,], N, N)
-  VIRF_lower = virf_bekk(H_lower, theta_lower, matrix(shocks,ncol=N, nrow = 1), n.ahead)
+  # score_final = score_bekk(x$theta, x$data)
+  # s1_temp = solve(t(score_final) %*% score_final)
+  # s1 = eigen_value_decomposition(s1_temp)
+  hesse_final = solve(hesse_bekk(x$theta, x$data))
+  #s1_temp = solve(hesse_final)
 
+  s1_temp = function(th){
+    virf_bekk(H, th, matrix(shocks, ncol=N, nrow = 1), n.ahead)
+  }
 
+  th<-x$theta
+  d_virf = jacobian(s1_temp,th)
+  s1_temp=d_virf%*%hesse_final%*%t(d_virf)
+#   s1 = s1_temp*0
+#   counter = 1
+#   while(counter < nrow(s1)){
+#     s1[counter:(counter+n.ahead-1),counter:(counter+n.ahead-1)]=s1_temp[counter:(counter+n.ahead-1),counter:(counter+n.ahead-1)]
+#   counter = counter + n.ahead
+# }
 
-  theta_upper = theta + s1%*%as.matrix(rep(qnorm(ci), nrow(x$theta)))
-  x_upper <- coef_mat(theta_upper, N)
-  H_upper = matrix(sigma_bekk(x$data, x_upper$c0, x_upper$a, x_upper$g)$sigma_t[time,], N, N)
+  s1 = diag(sqrt(s1)) * qnorm(ci)
+  #return(s1)
+  #print(det(d_virf%*%hesse_final%*%t(d_virf)))
+  VIRF_lower = VIRF  - matrix(s1, nrow = n.ahead, ncol = N*(N+1)/2)
 
-  VIRF_upper = virf_bekk(H_upper, theta_upper, matrix(shocks,ncol=N, nrow = 1), n.ahead)
+  VIRF_upper = VIRF + matrix(s1, nrow = n.ahead, ncol = N*(N+1)/2)
 
   # for (i in 1:nrow(VIRF)) {
   #   tm <- matrix((dupl%*%VIRF[i,]), N, N, byrow = T)
