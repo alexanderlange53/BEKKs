@@ -125,12 +125,16 @@ virf_bekk <- function(H_t, theta, shocks, periods) {
     .Call('_BEKKs_virf_bekk', PACKAGE = 'BEKKs', H_t, theta, shocks, periods)
 }
 
-virf_sbekk <- function(H_t, theta, shocks, periods) {
-    .Call('_BEKKs_virf_sbekk', PACKAGE = 'BEKKs', H_t, theta, shocks, periods)
+virf_dbekk <- function(H_t, theta, shocks, periods) {
+    .Call('_BEKKs_virf_dbekk', PACKAGE = 'BEKKs', H_t, theta, shocks, periods)
 }
 
 virf_bekka <- function(H_t, C, A, B, G, signs, expected_signs, shocks, periods) {
     .Call('_BEKKs_virf_bekka', PACKAGE = 'BEKKs', H_t, C, A, B, G, signs, expected_signs, shocks, periods)
+}
+
+virf_sbekk <- function(H_t, theta, shocks, periods) {
+    .Call('_BEKKs_virf_sbekk', PACKAGE = 'BEKKs', H_t, theta, shocks, periods)
 }
 
 simulate_bekk_c <- function(theta, NoObs, n) {
@@ -219,22 +223,6 @@ hesse_sbekk <- function(theta, r) {
 
 hesse_asymm_sbekk <- function(theta, r, signs) {
     .Call('_BEKKs_hesse_asymm_sbekk', PACKAGE = 'BEKKs', theta, r, signs)
-}
-
-sigma_sbekk <- function(r, C, a, g) {
-    .Call('_BEKKs_sigma_sbekk', PACKAGE = 'BEKKs', r, C, a, g)
-}
-
-sigma_sbekk_asymm <- function(r, C, a, b, g, signs) {
-    .Call('_BEKKs_sigma_sbekk_asymm', PACKAGE = 'BEKKs', r, C, a, b, g, signs)
-}
-
-random_grid_search_sBEKK <- function(r) {
-    .Call('_BEKKs_random_grid_search_sBEKK', PACKAGE = 'BEKKs', r)
-}
-
-random_grid_search_asymmetric_sBEKK <- function(r, signs) {
-    .Call('_BEKKs_random_grid_search_asymmetric_sBEKK', PACKAGE = 'BEKKs', r, signs)
 }
 
 YLagCr <- function(y, p) {

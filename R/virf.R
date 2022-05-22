@@ -10,6 +10,7 @@
 #'
 #' @import xts
 #' @import stats
+#' @import numDeriv
 #' @export
 
 virf <- function(x ,time = 1, q = 0.05, index_series = 1, n.ahead = 10, ci = 0.9){
@@ -78,6 +79,8 @@ virf.bekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci = 
   th<-x$theta
   d_virf = jacobian(s1_temp,th)
   s1_temp=d_virf%*%hesse_final%*%t(d_virf)
+
+  print(s1_temp)
 #   s1 = s1_temp*0
 #   counter = 1
 #   while(counter < nrow(s1)){
@@ -85,7 +88,7 @@ virf.bekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci = 
 #   counter = counter + n.ahead
 # }
 
-  s1 = diag(sqrt(s1)) * qnorm(ci)
+  s1 = sqrt(diag(s1_temp)) * qnorm(ci)
   #return(s1)
   #print(det(d_virf%*%hesse_final%*%t(d_virf)))
   VIRF_lower = VIRF  - matrix(s1, nrow = n.ahead, ncol = N*(N+1)/2)
@@ -144,15 +147,8 @@ virf.dbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci =
   }
 
   VIRF = virf_dbekk(H, x$theta, matrix(shocks, ncol=N, nrow = 1), n.ahead)
-  #dupl <- duplication_mat(N)
-  #elim <- elimination_mat(N)
 
-  # score_final = score_bekk(x$theta, x$data)
-  # s1_temp = solve(t(score_final) %*% score_final)
-  # s1 = eigen_value_decomposition(s1_temp)
-  #fehlt noch hesse_dbekk
-  hesse_final = solve(hesse_bekk(x$theta, x$data))
-  #s1_temp = solve(hesse_final)
+  hesse_final = solve(hesse_dbekk(x$theta, x$data))
 
   s1_temp = function(th){
     virf_bekk(H, th, matrix(shocks, ncol=N, nrow = 1), n.ahead)
@@ -168,7 +164,7 @@ virf.dbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci =
   #   counter = counter + n.ahead
   # }
 
-  s1 = diag(sqrt(s1)) * qnorm(ci)
+  s1 = sqrt(diag(s1_temp)) * qnorm(ci)
   #return(s1)
   #print(det(d_virf%*%hesse_final%*%t(d_virf)))
   VIRF_lower = VIRF  - matrix(s1, nrow = n.ahead, ncol = N*(N+1)/2)
@@ -250,8 +246,7 @@ virf.sbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci =
   #   counter = counter + n.ahead
   # }
 
-  s1 = diag(sqrt(s1)) * qnorm(ci)
-  #return(s1)
+  s1 = sqrt(diag(s1_temp)) * qnorm(ci)  #return(s1)
   #print(det(d_virf%*%hesse_final%*%t(d_virf)))
   VIRF_lower = VIRF  - matrix(s1, nrow = n.ahead, ncol = N*(N+1)/2)
 

@@ -4,20 +4,20 @@
 \alias{virf}
 \title{Estimating multivariate volatility impulse response functions (VIRF) for BEKK models}
 \usage{
-virf(fit, time = 1, q = 0.05, index_series = 1, periods = 10)
+virf(x, time = 1, q = 0.05, index_series = 1, n.ahead = 10, ci = 0.9)
 }
 \arguments{
-\item{fit}{An object of class "bekkfit" from function \link{bekk_fit}.}
+\item{x}{An object of class "bekkfit" from function \link{bekk_fit}.}
 
 \item{time}{Time instace to calculate VIRFs for.}
 
 \item{q}{A vector specifying the quantiles to be considered for a shock on which basis the VIRFs are generated.}
 
-\item{periods}{An integer defining the number periods for which the VIRFs are generated.}
+\item{n.ahead}{An integer defining the number periods for which the VIRFs are generated.}
 }
 \value{
 Returns an object of class "bekkVIRF".
 }
 \description{
-Method for estimating VIRFs of N-dimensional BEKK models.
+Method for estimating VIRFs of N-dimensional BEKK models. Currently, only VIRFs for symmetric BEKK models are implemented.
 }

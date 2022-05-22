@@ -943,39 +943,3 @@ arma::mat hesse_asymm_sbekk(arma::mat theta, arma::mat r, arma::mat signs){
   return hessian*(-1);
 
 }
-
-// [[Rcpp::export]]
-arma::mat virf_sbekk(arma::mat& H_t, arma::vec& theta, arma::mat& shocks, int& periods){
-  int N = H_t.n_rows;
-
-  arma::mat C;
-  int index = 0;
-
-  for(int i = 0; i < N; i++){
-    for (int j = i; j < N; j++) {
-      C(j, i) = theta(index);
-      index += 1;
-    }
-  }
-  index = N*(N+1)/2;
-  double a = theta(index);
-  double g = theta(index+1);
-
-  arma::mat virf = arma::zeros(periods, N*(N+1)/2);
-  arma::mat L_elimination = elimination_mat(N);
-  arma::mat D_duplication = duplication_mat(N);
-  arma::mat D_gen_inv = arma::inv(D_duplication.t() * D_duplication) * D_duplication.t();
-
-  arma::mat B_t = eigen_value_decomposition(H_t);
-  double A_virf = a;
-  double G_virf = g;
-
-  for (int i=0; i < periods; i++){
-    //arma::mat virf_temp =  L_elimination* arma::vectorise( C * C.t()) + arma::powmat(A_virf+G_virf, i) * A_virf * D_gen_inv * kron(B_t, B_t) * D_duplication * L_elimination * arma::vectorise((shocks.row(0).t() * shocks.row(0)-arma::eye(N,N)));
-    arma::mat virf_temp =  pow(A_virf+G_virf, i) * A_virf * D_gen_inv * kron(B_t, B_t) * D_duplication * L_elimination * arma::vectorise((shocks.row(0).t() * shocks.row(0)-arma::eye(N,N)));
-
-    virf.row(i) = virf_temp.t();
-  }
-  return virf;
-}
-
