@@ -1,6 +1,6 @@
 #' Estimating multivariate volatility impulse response functions (VIRF) for BEKK models
 #'
-#' @description Method for estimating VIRFs of N-dimensional BEKK models.
+#' @description Method for estimating VIRFs of N-dimensional BEKK models. Currently, only VIRFs for symmetric BEKK models are implemented.
 #'
 #' @param x An object of class "bekkfit" from function \link{bekk_fit}.
 #' @param time Time instace to calculate VIRFs for.
@@ -143,13 +143,14 @@ virf.dbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci =
     }
   }
 
-  VIRF = virf_bekk(H, x$theta, matrix(shocks, ncol=N, nrow = 1), n.ahead)
+  VIRF = virf_dbekk(H, x$theta, matrix(shocks, ncol=N, nrow = 1), n.ahead)
   #dupl <- duplication_mat(N)
   #elim <- elimination_mat(N)
 
   # score_final = score_bekk(x$theta, x$data)
   # s1_temp = solve(t(score_final) %*% score_final)
   # s1 = eigen_value_decomposition(s1_temp)
+  #fehlt noch hesse_dbekk
   hesse_final = solve(hesse_bekk(x$theta, x$data))
   #s1_temp = solve(hesse_final)
 
@@ -225,18 +226,18 @@ virf.sbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci =
     }
   }
 
-  VIRF = virf_bekk(H, x$theta, matrix(shocks, ncol=N, nrow = 1), n.ahead)
+  VIRF = virf_sbekk(H, x$theta, matrix(shocks, ncol=N, nrow = 1), n.ahead)
   #dupl <- duplication_mat(N)
   #elim <- elimination_mat(N)
 
   # score_final = score_bekk(x$theta, x$data)
   # s1_temp = solve(t(score_final) %*% score_final)
   # s1 = eigen_value_decomposition(s1_temp)
-  hesse_final = solve(hesse_bekk(x$theta, x$data))
+  hesse_final = solve(hesse_scalar_bekk(x$theta, x$data))
   #s1_temp = solve(hesse_final)
 
   s1_temp = function(th){
-    virf_bekk(H, th, matrix(shocks, ncol=N, nrow = 1), n.ahead)
+    virf_sbekk(H, th, matrix(shocks, ncol=N, nrow = 1), n.ahead)
   }
 
   th<-x$theta
