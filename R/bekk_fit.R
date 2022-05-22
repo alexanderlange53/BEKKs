@@ -184,9 +184,11 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
 
   if (inherits(data, "ts")) {
     sigma_t <- ts(sigma_t, start = time(data)[1], frequency = frequency(data))
+    H_t <- ts(var_process$sigma_t, start = time(data)[1], frequency = frequency(data))
   }
   else if(inherits(data, "xts") || inherits(data, "zoo") ){
     sigma_t <- xts(sigma_t, order.by = time(data))
+    H_t <-  xts(var_process$sigma_t, order.by = time(data))
   }
 
   # Final check if BEKK is valid
@@ -205,7 +207,7 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
                  log_likelihood = params$likelihood,
                  BEKK_valid = BEKK_valid,
                  sigma_t = sigma_t,
-                 H_t = var_process$sigma_t,
+                 H_t = H_t,
                  e_t = var_process$e_t,
                  Second_moments_of_residuals = cov(var_process$e_t),
                  iter = params$iter,
@@ -333,9 +335,11 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE,
 
   if (inherits(data, "ts")) {
     sigma_t <- ts(sigma_t, start = time(data)[1], frequency = frequency(data))
+    H_t <- ts(var_process$sigma_t, start = time(data)[1], frequency = frequency(data))
   }
   else if(inherits(data, "xts") || inherits(data, "zoo") ){
     sigma_t <- xts(sigma_t, order.by = time(data))
+    H_t <-  xts(var_process$sigma_t, order.by = time(data))
   }
 
   # Final check if BEKK is valid
@@ -358,7 +362,7 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE,
                  log_likelihood = params$likelihood,
                  BEKK_valid = BEKK_valid,
                  sigma_t = sigma_t,
-                 H_t = var_process$sigma_t,
+                 H_t = H_t,
                  e_t = var_process$e_t,
                  Second_moments_of_residuals = cov(var_process$e_t),
                  iter = params$iter,
