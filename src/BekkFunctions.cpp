@@ -213,7 +213,7 @@ double loglike_bekk(const arma::vec& theta, const arma::mat& r) {
 
   for(int i = 0; i < n; i++){
     for (int j = i; j < n; j++) {
-      C(j, i) = theta(index);
+      C(j, i) = theta[index];
       index += 1;
     }
    }
@@ -259,7 +259,7 @@ double loglike_asymm_bekk(const arma::vec& theta, const arma::mat& r, arma::mat&
 
   for(int i = 0; i < n; i++){
     for (int j = i; j < n; j++) {
-      C(j, i) = theta(index);
+      C(j, i) = theta[index];
       index += 1;
     }
   }
@@ -308,7 +308,7 @@ double loglike_dbekk(const arma::vec& theta, const arma::mat& r) {
 
   for(int i = 0; i < N; i++){
     for (int j = i; j < N; j++) {
-      C(j, i) = theta(index);
+      C(j, i) = theta[index];
       index += 1;
     }
   }
@@ -353,7 +353,7 @@ double loglike_asymm_dbekk(const arma::vec& theta, const arma::mat& r, arma::mat
 
   for(int i = 0; i < N; i++){
     for (int j = i; j < N; j++) {
-      C(j, i) = theta(index);
+      C(j, i) = theta[index];
       index += 1;
     }
   }
@@ -408,7 +408,7 @@ arma::mat score_bekk(const arma::mat& theta, arma::mat& r) {
 
   for(int i = 0; i < N; i++){
     for (int j = i; j < N; j++) {
-      c0(j, i) = theta(index);
+      c0(j, i) = theta[index];
       index += 1;
     }
   }
@@ -508,7 +508,7 @@ arma::mat score_dbekk(const arma::mat& theta, arma::mat& r) {
 
   for(int i = 0; i < N; i++){
     for (int j = i; j < N; j++) {
-      c0(j, i) = theta(index);
+      c0(j, i) = theta[index];
       index += 1;
     }
   }
@@ -610,7 +610,7 @@ arma::mat score_asymm_bekk(const arma::mat& theta, arma::mat& r, arma::mat& sign
 
   for(int i = 0; i < N; i++){
     for (int j = i; j < N; j++) {
-      c0(j, i) = theta(index);
+      c0(j, i) = theta[index];
       index += 1;
     }
   }
@@ -713,7 +713,7 @@ arma::mat score_asymm_dbekk(const arma::mat& theta, arma::mat& r, arma::mat& sig
 
   for(int i = 0; i < N; i++){
     for (int j = i; j < N; j++) {
-      c0(j, i) = theta(index);
+      c0(j, i) = theta[index];
       index += 1;
     }
   }
@@ -1708,7 +1708,7 @@ arma::mat hesse_bekk(arma::mat theta, arma::mat r){
   int index =0;
   for(int i = 0; i < N; i++){
     for (int j = i; j < N; j++) {
-      c0(j, i) = theta(index);
+      c0(j, i) = theta[index];
       index += 1;
     }
   }
@@ -1911,7 +1911,7 @@ arma::mat hesse_dbekk(arma::mat theta, arma::mat r){
   int index =0;
   for(int i = 0; i < N; i++){
     for (int j = i; j < N; j++) {
-      c0(j, i) = theta(index);
+      c0(j, i) = theta[index];
       index += 1;
     }
   }
@@ -2113,7 +2113,7 @@ arma::mat hesse_asymm_bekk(arma::mat theta, arma::mat r, arma::mat& signs){
   int index =0;
   for(int i = 0; i < N; i++){
     for (int j = i; j < N; j++) {
-      c0(j, i) = theta(index);
+      c0(j, i) = theta[index];
       index += 1;
     }
   }
@@ -2338,7 +2338,7 @@ arma::mat hesse_asymm_dbekk(arma::mat theta, arma::mat r, arma::mat& signs){
   int index =0;
   for(int i = 0; i < N; i++){
     for (int j = i; j < N; j++) {
-      c0(j, i) = theta(index);
+      c0(j, i) = theta[index];
       index += 1;
     }
   }
@@ -2562,7 +2562,7 @@ arma::mat virf_bekk(arma::mat& H_t, arma::vec& theta, arma::mat& shocks, int& pe
 
   for(int i = 0; i < N; i++){
     for (int j = i; j < N; j++) {
-      C(j, i) = theta(index);
+      C(j, i) = theta[index];
       index += 1;
     }
   }
@@ -2599,7 +2599,7 @@ arma::mat virf_dbekk(arma::mat& H_t, arma::vec& theta, arma::mat& shocks, int& p
 
   for(int i = 0; i < N; i++){
     for (int j = i; j < N; j++) {
-      C(j, i) = theta(index);
+      C(j, i) = theta[index];
       index += 1;
     }
   }
@@ -2772,18 +2772,18 @@ Rcpp::List grid_search_BEKK(arma::mat r) {
 arma::mat virf_sbekk(arma::mat& H_t, arma::vec& theta, arma::mat& shocks, int& periods){
   int N = H_t.n_rows;
 
-  arma::mat C;
+  arma::mat C = arma::zeros(N,N);
   int index = 0;
 
   for(int i = 0; i < N; i++){
     for (int j = i; j < N; j++) {
-      C(j, i) = theta(index);
+      C(j, i) = theta[index];
       index += 1;
     }
   }
   index = N*(N+1)/2;
-  double a = theta(index);
-  double g = theta(index+1);
+  double a = theta[index];
+  double g = theta[index+1];
 
   arma::mat virf = arma::zeros(periods, N*(N+1)/2);
   arma::mat L_elimination = elimination_mat(N);

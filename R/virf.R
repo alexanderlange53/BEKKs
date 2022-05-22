@@ -7,7 +7,18 @@
 #' @param q A vector specifying the quantiles to be considered for a shock on which basis the VIRFs are generated.
 #' @param n.ahead An integer defining the number periods for which the VIRFs are generated.
 #' @return  Returns an object of class "bekkVIRF".
+#' @examples
+#' \donttest{
 #'
+#' data(StocksBonds)
+#' obj_spec <- bekk_spec()
+#' x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
+#'
+#' # 20 day ahead VIRFs and 90% CI for a Shock in the 5% quantile  of Bonds (i.e. series=2)
+#' # shock is supposed to occur at day 50
+#' x2 <- virf(x1, time = 50, q = 0.05, index_series=2, n.ahead = 20, ci = 0.90)
+#' plot(x2)
+#' }
 #' @import xts
 #' @import stats
 #' @import numDeriv
@@ -18,6 +29,11 @@ virf <- function(x ,time = 1, q = 0.05, index_series = 1, n.ahead = 10, ci = 0.9
   if (!inherits(x, 'bekkFit')) {
     stop('Please provide and object of class "bekkFit" for x')
   }
+
+  if (x$spec$model$asymmetric==T) {
+    stop('VIRFs are implemented only for symmetric BEKK models.')
+  }
+
 
   if(!( n.ahead%%1==0) || n.ahead < 1){
     stop('Please provide a posive integer for periods')
@@ -80,7 +96,7 @@ virf.bekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci = 
   d_virf = jacobian(s1_temp,th)
   s1_temp=d_virf%*%hesse_final%*%t(d_virf)
 
-  print(s1_temp)
+
 #   s1 = s1_temp*0
 #   counter = 1
 #   while(counter < nrow(s1)){
@@ -88,7 +104,7 @@ virf.bekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci = 
 #   counter = counter + n.ahead
 # }
 
-  s1 = sqrt(diag(s1_temp)) * qnorm(ci)
+  s1 = sqrt(abs(diag(s1_temp))) * qnorm(ci)
   #return(s1)
   #print(det(d_virf%*%hesse_final%*%t(d_virf)))
   VIRF_lower = VIRF  - matrix(s1, nrow = n.ahead, ncol = N*(N+1)/2)
@@ -151,7 +167,7 @@ virf.dbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci =
   hesse_final = solve(hesse_dbekk(x$theta, x$data))
 
   s1_temp = function(th){
-    virf_bekk(H, th, matrix(shocks, ncol=N, nrow = 1), n.ahead)
+    virf_dbekk(H, th, matrix(shocks, ncol=N, nrow = 1), n.ahead)
   }
 
   th<-x$theta
@@ -199,7 +215,7 @@ virf.dbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci =
                  q=q,
                  index_series=index_series,
                  x=x)
-  class(result) <- c('virf','bekkFit', 'bekk')
+  class(result) <- c('virf','bekkFit', 'dbekk')
   return(result)
 }
 #' @export
@@ -222,6 +238,7 @@ virf.sbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci =
     }
   }
 
+
   VIRF = virf_sbekk(H, x$theta, matrix(shocks, ncol=N, nrow = 1), n.ahead)
   #dupl <- duplication_mat(N)
   #elim <- elimination_mat(N)
@@ -229,7 +246,7 @@ virf.sbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci =
   # score_final = score_bekk(x$theta, x$data)
   # s1_temp = solve(t(score_final) %*% score_final)
   # s1 = eigen_value_decomposition(s1_temp)
-  hesse_final = solve(hesse_scalar_bekk(x$theta, x$data))
+  hesse_final = solve(hesse_sbekk(x$theta, x$data))
   #s1_temp = solve(hesse_final)
 
   s1_temp = function(th){

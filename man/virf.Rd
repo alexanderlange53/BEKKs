@@ -21,3 +21,16 @@ Returns an object of class "bekkVIRF".
 \description{
 Method for estimating VIRFs of N-dimensional BEKK models. Currently, only VIRFs for symmetric BEKK models are implemented.
 }
+\examples{
+\donttest{
+
+data(StocksBonds)
+obj_spec <- bekk_spec()
+x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
+
+# 20 day ahead VIRFs and 90\% CI for a Shock in the 5\% quantile  of Bonds (i.e. series=2)
+# shock is supposed to occur at day 50
+x2 <- virf(x1, time = 50, q = 0.05, index_series=2, n.ahead = 20, ci = 0.90)
+plot(x2)
+}
+}
