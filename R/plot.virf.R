@@ -7,6 +7,8 @@ plot.virf <- function(x, ...){
 
   V1 <- NULL
   l <- NULL
+  lower <- NULL
+  upper <- NULL
 
     trianglePlotGrid <- function(plots){
       #take a list of plots and returns a single plot where the elements in the list arranged in a triangular grid

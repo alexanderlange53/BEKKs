@@ -5,8 +5,11 @@
 #' @param x An object of class "bekkfit" from function \link{bekk_fit}.
 #' @param time Time instace to calculate VIRFs for.
 #' @param q A vector specifying the quantiles to be considered for a shock on which basis the VIRFs are generated.
+#' @param index_series An integer defining the number of series for which a shock is assumed.
 #' @param n.ahead An integer defining the number periods for which the VIRFs are generated.
-#' @return  Returns an object of class "bekkVIRF".
+#' @param ci A number defining the confidence level for the confidence bands.
+#' @return  Returns an object of class "virf".
+#' @references Hafner CM, Herwartz H (2006). Volatility impulse responses for multivariate GARCH models:  An exchange rate illustration. Journal of International Money and Finance,25,719–740.
 #' @examples
 #' \donttest{
 #'

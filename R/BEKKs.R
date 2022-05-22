@@ -29,11 +29,13 @@
 #' \item \tabular{ll}{ \code{\link{bekk_forecast}} \tab Forecasts conditional volatility using a \link{bekk_fit} object,}
 #' \item \tabular{ll}{ \code{\link{VaR}} \tab Estimates (portfolio) Value-at-Risk using a fitted BEKK(1,1,1) model.}
 #' \item \tabular{ll}{ \code{\link{backtest}} \tab Uses estimated (portfolio) Value-at-Risk of a fitted BEKK(1,1,1) model to backtest the risk-forecasting accuracy.}
+#' \item \tabular{ll}{ \code{\link{virf}} \tab Calculaes volatility impulse response functions for fitted symmetric BEKK(1,1,1) models as described by Hafner and Herwartz (2006).}
 #' }
 #' @references Engle, R. F. and K. F. Kroner (1995). Multivariate simultaneous generalized arch. Econometric Theory 11(1),122–150.
 #' @references Kroner, K. F. and V. K. Ng (1998). Modeling asymmetric comovements of asset returns. Review of Financial Studies 11(4), 817–44.
 #' @references Ding, Zhuanxin and Engle, Robert F (2001). Large scale conditional covariance matrix modeling, estimation and testing. NYU working paper No. Fin-01-029.
 #' @references Grier, K. B., Olan T. Henry, N. Olekalns, and K. Shields (2004). The asymmetric effects of uncertainty on inflation and output growth. Journal of Applied Econometrics  19(5), 551–565.
+#' @references Hafner CM, Herwartz H (2006). Volatility impulse responses for multivariate GARCH models:  An exchange rate illustration. Journal of International Money and Finance,25,719–740.
 #' @useDynLib BEKKs
 #' @importFrom Rcpp sourceCpp
 NULL

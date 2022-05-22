@@ -13,10 +13,14 @@ virf(x, time = 1, q = 0.05, index_series = 1, n.ahead = 10, ci = 0.9)
 
 \item{q}{A vector specifying the quantiles to be considered for a shock on which basis the VIRFs are generated.}
 
+\item{index_series}{An integer defining the number of series for which a shock is assumed.}
+
 \item{n.ahead}{An integer defining the number periods for which the VIRFs are generated.}
+
+\item{ci}{A number defining the confidence level for the confidence bands.}
 }
 \value{
-Returns an object of class "bekkVIRF".
+Returns an object of class "virf".
 }
 \description{
 Method for estimating VIRFs of N-dimensional BEKK models. Currently, only VIRFs for symmetric BEKK models are implemented.
@@ -33,4 +37,7 @@ x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit 
 x2 <- virf(x1, time = 50, q = 0.05, index_series=2, n.ahead = 20, ci = 0.90)
 plot(x2)
 }
+}
+\references{
+Hafner CM, Herwartz H (2006). Volatility impulse responses for multivariate GARCH models:  An exchange rate illustration. Journal of International Money and Finance,25,719–740.
 }
