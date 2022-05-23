@@ -8,8 +8,7 @@ bekk_spec(
   model = list(type = "bekk", asymmetric = FALSE),
   init_values = NULL,
   signs = NULL,
-  N = NULL,
-  compare = FALSE
+  N = NULL
 )
 }
 \arguments{
@@ -24,8 +23,6 @@ Setting the i-th element of the vector to "1" or "-1" means that the model takes
 If "asymmetric = TRUE", the default is set to "rep(-1, N)" i.e. it is assumed that excess volatility occurs for all series if the returns are negative.}
 
 \item{N}{Integer specifying the dimension of the BEKK model. Only relevant for \link{bekk_sim}.}
-
-\item{compare}{Boolean specifying if the outcome of an asymmetric model is compared to its symmetric estimation result.}
 }
 \value{
 Returns a S3 class "bekkSpec"  object containing the specifications of the model to be estimated.

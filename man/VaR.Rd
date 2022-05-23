@@ -4,7 +4,7 @@
 \alias{VaR}
 \title{Calculating Value-at-Risk (VaR)}
 \usage{
-VaR(x, p = 0.99, portfolio_weights = NULL)
+VaR(x, p = 0.99, portfolio_weights = NULL, distribution = "empirical")
 }
 \arguments{
 \item{x}{An object of class "bekkFit" from the function \link{bekk_fit} or an object of class "bekkForecast" from the function \link{bekk_forecast}.}
@@ -12,6 +12,8 @@ VaR(x, p = 0.99, portfolio_weights = NULL)
 \item{p}{A numerical value that determines the confidence level. The default value is set at 0.99 in accordance with the Basel Regulation.}
 
 \item{portfolio_weights}{A vector determining the portfolio weights to calculate the portfolio VaR. If set to "NULL", the univariate VaR for each series are calculated.}
+
+\item{distribution}{A character string determining the assumed distribution of the residuals. Implemented are "normal", "empirical" and "t". The default is assuming skewed-t distribution.}
 }
 \value{
 Returns a S3 class "var" object containing the VaR forecast and respective confidence bands.

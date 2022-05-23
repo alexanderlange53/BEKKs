@@ -10,6 +10,7 @@ backtest(
   p = 0.99,
   portfolio_weights = NULL,
   n.ahead = 1,
+  distribution = "empirical",
   nc = 1
 )
 }
@@ -23,6 +24,8 @@ backtest(
 \item{portfolio_weights}{A vector determining the portfolio weights to calculate the portfolio VaR. If set to "NULL", the univariate VaR for each series are calculated.}
 
 \item{n.ahead}{Number of periods to forecast conditional volatility. Default is a one-period ahead forecast.}
+
+\item{distribution}{A character string determining the assumed distribution of the residuals. Implemented are "normal", "empirical" and "t". The default is assuming skewed-t distribution.}
 
 \item{nc}{Number of cores to be used for parallel computation.}
 }
