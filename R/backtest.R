@@ -7,6 +7,7 @@
 #' @param p A numerical value that determines the confidence level. The default value is set at 0.99 in accordance with the Basel Regulation.
 #' @param portfolio_weights A vector determining the portfolio weights to calculate the portfolio VaR. If set to "NULL", the univariate VaR for each series are calculated.
 #' @param n.ahead Number of periods to forecast conditional volatility. Default is a one-period ahead forecast.
+#' @param distribution A character string determining the assumed distribution of the residuals. Implemented are "normal", "empirical" and "t". The default is assuming skewed-t distribution.
 #' @param nc Number of cores to be used for parallel computation.
 #' @return  Returns a S3 class "backtest" object containing the VaR forecast, out-of-sample returns and backtest statistics according to the R-package "GAS". conf
 #' @examples
@@ -34,12 +35,12 @@
 #' @import lubridate
 #' @export
 
-backtest<- function(x, window_length = 500, p = 0.99, portfolio_weights = NULL,  n.ahead = 1, nc = 1) {
+backtest<- function(x, window_length = 500, p = 0.99, portfolio_weights = NULL,  n.ahead = 1, distribution = "empirical", nc = 1) {
   UseMethod('backtest')
 }
 
 #' @export
-backtest.bekkFit <-  function(x, window_length = 500, p = 0.99, portfolio_weights = NULL, n.ahead = 1, nc = 1)
+backtest.bekkFit <-  function(x, window_length = 500, p = 0.99, portfolio_weights = NULL, n.ahead = 1, distribution = "empirical", nc = 1)
 {
   data <- x$data
   n <- nrow(data)
@@ -75,36 +76,12 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.99, portfolio_weight
       fit <- bekk_fit(spec, data[i:(window_length-1+i),])
       forecast <- bekk_forecast(fit, n.ahead = n.ahead, ci = 0.5)
       #VaR[i:(i+n.ahead-1),] = as.matrix(VaR(forecast, p = p, portfolio_weights = portfolio_weights)$VaR[(window_length+1):(window_length+n.ahead),])
-      res = as.matrix(VaR(forecast, p = p, portfolio_weights = portfolio_weights)$VaR[(window_length+1):(window_length+n.ahead),])
+      res = as.matrix(VaR(forecast, p = p, portfolio_weights = portfolio_weights, distribution = distribution)$VaR[(window_length+1):(window_length+n.ahead),])
       return(res)
 
 
     }
-    # i = 1
-    # while(i <= n_out){
-    #   spec = bekk_spec()
-    #   fit <- bekk_fit(spec, data[i:(window_length-1+i),])
-    #   forecast <- bekk_forecast(fit, n.ahead = n.ahead, ci = 0.5)
-    #   VaR[i:(i+n.ahead-1),] = as.matrix(VaR(forecast, p = p, portfolio_weights = portfolio_weights)$VaR[(window_length+1):(window_length+n.ahead),])
-    #
-    #
-    #   for(j in 1:N){
-    #   hit_rate[j]= hit_rate[j]  + sum(VaR[i:(i+n.ahead-1),j] > out_sample_returns[i:(i+n.ahead-1),j])
-    #   }
-    #
-    #
-    #   i = i + n.ahead
-    #   if(n.ahead > 1 && i >= (n_out-n.ahead)){
-    #     n.ahead = 1
-    #   }
-    #
-    #
-    # }
 
-    #future::plan(future::multicore(workers = n_cores))
-    # cl = future::makeClusterPSOCK(nc)
-    # VaR = future.apply::future_lapply(X=OoS_indices, FUN=wrapper)
-    #
     cl = parallel::makeCluster(nc)
     VaR = pbapply::pblapply(X=OoS_indices, FUN=wrapper, cl = cl)
 
@@ -165,7 +142,7 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.99, portfolio_weight
       fit <- bekk_fit(spec, data[i:(window_length-1+i),])
       forecast <- bekk_forecast(fit, n.ahead = n.ahead, ci = 0.5)
 
-      res = as.matrix(VaR(forecast, p = p, portfolio_weights = portfolio_weights)$VaR[(window_length+1):(window_length+n.ahead),])
+      res = as.matrix(VaR(forecast, p = p, portfolio_weights = portfolio_weights, distribution = distribution)$VaR[(window_length+1):(window_length+n.ahead),])
       return(res)
 
 

@@ -69,6 +69,9 @@ bekk_fit <- function(spec, data, QML_t_ratios = FALSE,
   if (any(is.na(data))) {
     stop("\nNAs in data.\n")
   }
+  if (is.null(ncol(data))) {
+    stop("The data matrix should contain at least two variables.")
+  }
   if (ncol(data) < 2) {
     stop("The data matrix should contain at least two variables.")
   }
