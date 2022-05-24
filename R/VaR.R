@@ -5,7 +5,7 @@
 #' @param x An object of class "bekkFit" from the function \link{bekk_fit} or an object of class "bekkForecast" from the function \link{bekk_forecast}.
 #' @param p A numerical value that determines the confidence level. The default value is set at 0.99 in accordance with the Basel Regulation.
 #' @param portfolio_weights A vector determining the portfolio weights to calculate the portfolio VaR. If set to "NULL", the univariate VaR for each series are calculated.
-#' @param distribution A character string determining the assumed distribution of the residuals. Implemented are "normal", "empirical" and "t". The default is assuming skewed-t distribution.
+#' @param distribution A character string determining the assumed distribution of the residuals. Implemented are "normal", "empirical" and "t". The default is assuming the empirical distribution of the residuals.
 #' @return  Returns a S3 class "var" object containing the VaR forecast and respective confidence bands.
 #' @examples
 #' \donttest{
@@ -236,7 +236,7 @@ VaR.bekkForecast <-  function(x, p = 0.99, portfolio_weights = NULL, distributio
 
     for(i in 1:nrow(obj$H_t)) {
       #VaR[i,] <- -qnorm(alpha)*sqrt(portfolio_weights%*%matrix(x$H_t[i,], ncol = ncol(x$data))%*%portfolio_weights)
-      VaR[i,] <- portfolio_weights%*%eigen_value_decomposition(matrix(x$H_t[i,], ncol = ncol(x$bekkfit$data)))%*%qtls
+      VaR[i,] <- portfolio_weights%*%eigen_value_decomposition(matrix(obj$H_t[i,], ncol = ncol(x$bekkfit$data)))%*%qtls
     }
     # for(i in 1:nrow(obj$H_t)) {
     #   VaR[i,] <- -qnorm(alpha)*sqrt(portfolio_weights%*%matrix(obj$H_t[i,], ncol = ncol(x$bekkfit$data))%*%portfolio_weights)
@@ -256,8 +256,8 @@ VaR.bekkForecast <-  function(x, p = 0.99, portfolio_weights = NULL, distributio
     # }
 
     for(i in 1:nrow(obj$H_t)) {
-      VaR_lower[i,] <- portfolio_weights%*%eigen_value_decomposition(matrix(x$H_t_lower[i,], ncol = ncol(x$bekkfit$data)))%*%qtls
-      VaR_upper[i,] <- portfolio_weights%*%eigen_value_decomposition(matrix(x$H_t_upper[i,], ncol = ncol(x$bekkfit$data)))%*%qtls
+      VaR_lower[i,] <- portfolio_weights%*%eigen_value_decomposition(matrix(H_t_lower[i,], ncol = ncol(x$bekkfit$data)))%*%qtls
+      VaR_upper[i,] <- portfolio_weights%*%eigen_value_decomposition(matrix(H_t_upper[i,], ncol = ncol(x$bekkfit$data)))%*%qtls
     }
     VaR_lower <- as.data.frame(VaR_lower)
     VaR_upper <- as.data.frame(VaR_upper)

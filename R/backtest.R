@@ -7,7 +7,7 @@
 #' @param p A numerical value that determines the confidence level. The default value is set at 0.99 in accordance with the Basel Regulation.
 #' @param portfolio_weights A vector determining the portfolio weights to calculate the portfolio VaR. If set to "NULL", the univariate VaR for each series are calculated.
 #' @param n.ahead Number of periods to forecast conditional volatility. Default is a one-period ahead forecast.
-#' @param distribution A character string determining the assumed distribution of the residuals. Implemented are "normal", "empirical" and "t". The default is assuming skewed-t distribution.
+#' @param distribution A character string determining the assumed distribution of the residuals. Implemented are "normal", "empirical" and "t". The default is assuming the empirical distribution of the residuals.
 #' @param nc Number of cores to be used for parallel computation.
 #' @return  Returns a S3 class "backtest" object containing the VaR forecast, out-of-sample returns and backtest statistics according to the R-package "GAS". conf
 #' @examples
@@ -51,10 +51,10 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.99, portfolio_weight
 
   #out_sample_returns <-  x$data[(window_length+1):n,] %*% t(portfolio_weights)
   if(window_length < 500){
-    stop("The supplied window_length must be larger than 500.")
+    stop("The supplied 'window_length' must be larger than 500.")
   }
  if(window_length >= n){
-   stop("The supplied window_length exeeds the length of the data.")
+   stop("The supplied 'window_length' exeeds the length of the data.")
  }
 
   if((n-window_length) < n.ahead){

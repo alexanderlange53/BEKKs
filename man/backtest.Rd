@@ -25,7 +25,7 @@ backtest(
 
 \item{n.ahead}{Number of periods to forecast conditional volatility. Default is a one-period ahead forecast.}
 
-\item{distribution}{A character string determining the assumed distribution of the residuals. Implemented are "normal", "empirical" and "t". The default is assuming skewed-t distribution.}
+\item{distribution}{A character string determining the assumed distribution of the residuals. Implemented are "normal", "empirical" and "t". The default is assuming the empirical distribution of the residuals.}
 
 \item{nc}{Number of cores to be used for parallel computation.}
 }
