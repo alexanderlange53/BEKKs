@@ -69,6 +69,8 @@ summary(m1)
 # Log-likelihood: -7382.256
 # BEKK model stationary: TRUE
 # Number of BHHH iterations: 15
+# AIC: 14783.51
+# BIC: 14794.65
 # Estimated paramater matrices: 
 # 
 # C 
@@ -108,7 +110,7 @@ The summary includes general information on the estimation (see `?bekk_fit`), th
 
 ![](man/figures/est_vola.png)
 
-The estimated conditional covariances can be used for risk management purposes, for example, to calculate VaR at the 99% level in accordance with Basel regulations.
+The estimated conditional correlations can be used for risk management purposes, for example, to calculate VaR at the 1% nominal coverage level in accordance with Basel regulations.
 
 ```r
 v1 <- VaR(m1)
@@ -117,7 +119,7 @@ plot(v1)
 
 ![](man/figures/VaR_in_sample.png)
 
-Alternatively, we can calculate the 99% VaR of a typical portfolio consisting of 30% bonds and 70% stocks:
+Alternatively, we can calculate the VaR of a typical portfolio consisting of 30% bonds and 70% stocks:
 
 ```r
 portfolio_weights <- c(0.3, 0.7)
@@ -135,3 +137,34 @@ v3 <- VaR(f1, portfolio_weights = portfolio_weights)
 plot(v3)
 ```
 ![](man/figures/VaR_portfolio_forecast.png)
+
+It is possible to perform backtests with the 'BEKKs' package to evaluate the model specification through rolling window fitting and forecasting, e.g., using the time period from January 2018 to January 2019 as testing period.
+
+```r
+b1 <- backtest(m1, window_length = 5800, portfolio_weights = portfolio_weights, n.ahead = 2)
+plot(b1)
+```
+
+![](man/figures/backtest.png)
+
+The summary includes information about the hit rate and traditional backtesting risk measures `summary(b1)`.
+
+```r
+# BEKK backtesting results
+# ------------------------
+# Value-at-risk confidence level: 0.99
+# Window length: 5800
+# Portfolio weights: 0.3 0.7
+# ------------------------
+# Hit rate: 0.004 
+# 
+# Unconditional coverage test of Kupiec: 
+#                   
+# Test:    1.4624470
+# p-value: 0.2265412
+# 
+# conditional coverage test of Christoffesen: 
+#                   
+# Test:    1.4698271
+# p-value: 0.4795469
+```

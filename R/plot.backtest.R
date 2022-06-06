@@ -26,7 +26,9 @@ plot.backtest <- function(x, ...) {
 
         ggplot(t_series) + geom_point(data = out_sample_returns, mapping = aes(x = time, y = value, colour = "Returns"),  show.legend = TRUE) + theme_bw() + xlab('') + ylab('Returns/VaR') +
           geom_line(aes(x = time, y = value, colour = "Estimated VaR")) + scale_color_manual(values = c('black', 'blue'), "") +
-          facet_wrap(~variable, scales = 'free_y', ncol = 1)
+          facet_wrap(~variable, scales = 'free_y', ncol = 1)+
+          theme(legend.position="bottom", legend.title = element_blank())
+
 
 
       }else if (inherits(x$VaR, c("xts","zoo"))) {
@@ -43,7 +45,8 @@ plot.backtest <- function(x, ...) {
 
         ggplot(t_series) + geom_point(data = out_sample_returns, mapping = aes(x = time, y = value, colour = "Returns"),  show.legend = TRUE) + theme_bw() + xlab('') + ylab('Returns/VaR') +
           geom_line(aes(x = time, y = value, colour = "Estimated VaR")) + scale_color_manual(values = c('black', 'blue'), "") +
-          facet_wrap(~variable, scales = 'free_y', ncol = 1)
+          facet_wrap(~variable, scales = 'free_y', ncol = 1)+
+          theme(legend.position="bottom", legend.title = element_blank())
 
         } else {
 
@@ -60,17 +63,20 @@ plot.backtest <- function(x, ...) {
 
         ggplot(VaR) + geom_point(data = out_sample_returns, mapping = aes(x = obs, y = value, colour = "Returns"),  show.legend = TRUE) + theme_bw() + xlab('') + ylab('VaR') +
           geom_line(aes(x = obs, y = value, colour = "Estimated VaR")) + scale_color_manual(values = c('black', 'blue'), "") +
-          facet_wrap(~variable, scales = 'free_y', ncol = 1)
+          facet_wrap(~variable, scales = 'free_y', ncol = 1)+
+          theme(legend.position="bottom", legend.title = element_blank())
     }
       }else {
       if (inherits(x$VaR, c("xts","zoo"))) {
 
         ggplot(data=x$VaR) + geom_point(data=x$out_sample_returns, mapping = aes(x = time(x$VaR), y = Portfolio, colour="Returns")) +
-          geom_line(x$VaR , mapping = aes(x = time(x$VaR), y = Portfolio, colour="Estimated VaR")) + theme_bw() + xlab("") + ylab('Portfolio returns/VaR') + ggtitle('Portfolio Backtest')+ scale_color_manual(values = c('blue', 'black'), "")
+          geom_line(x$VaR , mapping = aes(x = time(x$VaR), y = Portfolio, colour="Estimated VaR")) + theme_bw() + xlab("") + ylab('Portfolio returns/VaR') + ggtitle('Portfolio Backtest')+ scale_color_manual(values = c('blue', 'black'), "") +
+          theme(legend.position="bottom", legend.title = element_blank())
       } else {
         ggplot(x$VaR) + geom_point(data = x$out_sample_returns,
                                                                               mapping = aes(x = 1:nrow(x$VaR), y = Portfolio, colour="Returns")) + theme_bw() + xlab('') + ylab('Returns/VaR') +
-        geom_line(aes(x = 1:nrow(x$VaR), y = Portfolio, colour="Estimated VaR")) + ggtitle('Portfolio Backtest')+ scale_color_manual(values = c('blue', 'black'), "")
+        geom_line(aes(x = 1:nrow(x$VaR), y = Portfolio, colour="Estimated VaR")) + ggtitle('Portfolio Backtest')+ scale_color_manual(values = c('blue', 'black'), "") +
+          theme(legend.position="bottom", legend.title = element_blank())
 
       }
     }
