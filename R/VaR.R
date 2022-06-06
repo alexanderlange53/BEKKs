@@ -71,9 +71,9 @@ VaR.bekkFit <-  function(x, p = 0.99, portfolio_weights = NULL, distribution = "
   } else if(distribution == "normal"){
     #fit skewed t
 
-    qtls <- rep(qnorm(alpha),ncol(x$data))
+    qtls <- rep(qnorm(1-alpha),ncol(x$data))
   } else{
-    qtls <- rep(qnorm(alpha),ncol(x$data))
+    qtls <- rep(qnorm(1-alpha),ncol(x$data))
   }
   #quantile(x$e_t, )
 
@@ -162,9 +162,9 @@ VaR.bekkForecast <-  function(x, p = 0.99, portfolio_weights = NULL, distributio
   } else if(distribution == "normal"){
     #fit skewed t
 
-    qtls <- rep(qnorm(alpha),ncol(x$data))
+    qtls <- rep(qnorm(1-alpha),ncol(x$data))
   } else{
-    qtls <- rep(qnorm(alpha),ncol(x$data))
+    qtls <- rep(qnorm(1-alpha),ncol(x$data))
   }
 
   if (is.null(portfolio_weights)) {
