@@ -82,10 +82,17 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.99, portfolio_weight
 
     }
 
-    cl = parallel::makeCluster(nc)
-    VaR = pbapply::pblapply(X=OoS_indices, FUN=wrapper, cl = cl)
+    if(.Platform$OS.type == "Windows") {
+      cl = parallel::makeCluster(nc)
+      VaR = pbapply::pblapply(X=OoS_indices, FUN=wrapper, cl = cl)
+      parallel::stopCluster(cl)
+    } else {
+      VaR = pbapply::pblapply(X=OoS_indices, FUN=wrapper, cl = nc)
+    }
 
-    parallel::stopCluster(cl)
+
+
+
     VaR = do.call(rbind,VaR)
 
 
@@ -151,9 +158,14 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.99, portfolio_weight
 
     # cl = future::makeClusterPSOCK(nc)
     # VaR = future.apply::future_lapply(X=OoS_indices, FUN=wrapper)
-    cl = parallel::makeCluster(nc)
-    VaR = pbapply::pblapply(X=OoS_indices, FUN=wrapper, cl = cl)
-    parallel::stopCluster(cl)
+
+    if(.Platform$OS.type == "Windows") {
+      cl = parallel::makeCluster(nc)
+      VaR = pbapply::pblapply(X=OoS_indices, FUN=wrapper, cl = cl)
+      parallel::stopCluster(cl)
+    } else {
+      VaR = pbapply::pblapply(X=OoS_indices, FUN=wrapper, cl = nc)
+    }
 
     VaR = do.call(rbind,VaR)
 
