@@ -15,7 +15,7 @@
 #' x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 #'
 #' # single VaRs of series
-#' x2 <- VaR(x1)
+#' x2 <- VaR(x1, distribution="normal")
 #' plot(x2)
 #'
 #' # VaR of equally-weighted portfolio

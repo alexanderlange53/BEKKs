@@ -13,7 +13,7 @@ VaR(x, p = 0.99, portfolio_weights = NULL, distribution = "empirical")
 
 \item{portfolio_weights}{A vector determining the portfolio weights to calculate the portfolio VaR. If set to "NULL", the univariate VaR for each series are calculated.}
 
-\item{distribution}{A character string determining the assumed distribution of the residuals. Implemented are "normal", "empirical" and "t". The default is assuming the empirical distribution of the residuals.}
+\item{distribution}{A character string determining the assumed distribution of the residuals. Implemented are "normal", "empirical" and "t". The default is using the empirical distribution of the residuals.}
 }
 \value{
 Returns a S3 class "var" object containing the VaR forecast and respective confidence bands.
@@ -29,7 +29,7 @@ obj_spec <- bekk_spec()
 x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 
 # single VaRs of series
-x2 <- VaR(x1)
+x2 <- VaR(x1, distribution="normal")
 plot(x2)
 
 # VaR of equally-weighted portfolio

@@ -17,9 +17,9 @@
 #' obj_spec <- bekk_spec()
 #' x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 #'
-#' # 20 day ahead VIRFs and 90% CI for a Shock in the 5% quantile  of Bonds (i.e. series=2)
-#' # shock is supposed to occur at day 50
-#' x2 <- virf(x1, time = 50, q = 0.05, index_series=2, n.ahead = 20, ci = 0.90)
+#' # 250 day ahead VIRFs and 90% CI for a Shock in the 1% quantile  of Bonds (i.e. series=2)
+#' # shock is supposed to occur at day 500
+#' x2 <- virf(x1, time = 500, q = 0.01, index_series=2, n.ahead = 500, ci = 0.90)
 #' plot(x2)
 #' }
 #' @import xts
@@ -129,10 +129,11 @@ virf.bekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci = 
   VIRF_upper <- as.data.frame(VIRF_upper)
   for(i in 1:ncol(VIRF)){
     colnames(VIRF)[i] <- paste("VIRF for", colnames(x$sigma_t)[i], sep=" ")
-    sub("Conditional","conditional",  colnames(VIRF)[i])
-  }
+         }
 
-
+  colnames(VIRF) <- gsub("Conditional","conditional",  colnames(VIRF))
+  colnames(VIRF) <- gsub("correlation","covariance",  colnames(VIRF))
+  colnames(VIRF) <- gsub("standard deviation","variance",  colnames(VIRF))
 
   result <- list(VIRF=VIRF,
                  VIRF_upper=VIRF_upper,
@@ -205,8 +206,11 @@ virf.dbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci =
   VIRF_upper <- as.data.frame(VIRF_upper)
   for(i in 1:ncol(VIRF)){
     colnames(VIRF)[i] <- paste("VIRF for", colnames(x$sigma_t)[i], sep=" ")
-    sub("Conditional","conditional",  colnames(VIRF)[i])
+
   }
+  colnames(VIRF) <- gsub("Conditional","conditional",  colnames(VIRF))
+  colnames(VIRF) <- gsub("correlation","covariance",  colnames(VIRF))
+  colnames(VIRF) <- gsub("standard deviation","variance",  colnames(VIRF))
 
 
 
@@ -287,9 +291,12 @@ virf.sbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci =
   VIRF_upper <- as.data.frame(VIRF_upper)
   for(i in 1:ncol(VIRF)){
     colnames(VIRF)[i] <- paste("VIRF for", colnames(x$sigma_t)[i], sep=" ")
-    sub("Conditional","conditional",  colnames(VIRF)[i])
+
   }
 
+  colnames(VIRF) <- gsub("Conditional","conditional",  colnames(VIRF))
+  colnames(VIRF) <- gsub("correlation","covariance",  colnames(VIRF))
+  colnames(VIRF) <- gsub("standard deviation","variance",  colnames(VIRF))
 
 
   result <- list(VIRF=VIRF,
