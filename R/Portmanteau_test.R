@@ -20,6 +20,9 @@ portmanteau.test <- function(x, lags = 5){
   if(!is.numeric(lags)){
     stop("Please provide a numeric object or vector for 'lags'.")
   }
+  if(any(lags<3)){
+    stop("Please provide 'lags' larger than 2.")
+  }
   UseMethod("portmanteau.test")
 }
 
@@ -52,12 +55,12 @@ portmanteau.test.bekkFit <- function(x, lags = 5){
     return(q)
   }
   p_val_q <- function(c, lgs){
-    return(1-pchisq(c, df=(lgs)*(N^2)))
+    return(1-pchisq(c, df=(lgs-2)*(N^2)))
   }
 
   summary_res <- function(lgs){
     t_stat = Q(lgs)
-    return(c(lgs, t_stat, lgs*(N^2), p_val_q(t_stat,lgs)))
+    return(c(lgs, t_stat, (lgs-2)*(N^2), p_val_q(t_stat,lgs)))
   }
 
 
