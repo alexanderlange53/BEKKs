@@ -3,7 +3,7 @@
 #' @description Method for estimating VIRFs of N-dimensional BEKK models. Currently, only VIRFs for symmetric BEKK models are implemented.
 #'
 #' @param x An object of class "bekkfit" from function \link{bekk_fit}.
-#' @param time Time instace to calculate VIRFs for.
+#' @param time Time instance to calculate VIRFs for.
 #' @param q A vector specifying the quantiles to be considered for a shock on which basis the VIRFs are generated.
 #' @param index_series An integer defining the number of series for which a shock is assumed.
 #' @param n.ahead An integer defining the number periods for which the VIRFs are generated.
