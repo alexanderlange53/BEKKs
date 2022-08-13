@@ -2,11 +2,11 @@ Package: BEKKs
 Title: Multivariate Conditional Volatility Modelling and Forecasting
 Version: 1.3.0
 Authors@R:          
-    c(person(given = "Markus",
+    c(person(given = "Markus J.",
            family = "Fülle",
            role = c("aut"),
            email = "fuelle@uni-goettingen.de"),
-      person("Hafner", "Christian", 
+      person("Christian M.", "Hafner", 
            role = c("aut"), 
            email = "christian.hafner@uclouvain.be"),
       person("Helmut", "Herwartz", 
