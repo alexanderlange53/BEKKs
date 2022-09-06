@@ -35,12 +35,12 @@
 #' @import lubridate
 #' @export
 
-backtest<- function(x, window_length = 500, p = 0.99, portfolio_weights = NULL,  n.ahead = 1, distribution = "empirical", nc = 1) {
+backtest<- function(x, window_length = 1000, p = 0.99, portfolio_weights = NULL,  n.ahead = 1, distribution = "empirical", nc = 1) {
   UseMethod('backtest')
 }
 
 #' @export
-backtest.bekkFit <-  function(x, window_length = 500, p = 0.99, portfolio_weights = NULL, n.ahead = 1, distribution = "empirical", nc = 1)
+backtest.bekkFit <-  function(x, window_length = 1000, p = 0.99, portfolio_weights = NULL, n.ahead = 1, distribution = "empirical", nc = 1)
 {
   data <- x$data
   n <- nrow(data)
@@ -56,6 +56,9 @@ backtest.bekkFit <-  function(x, window_length = 500, p = 0.99, portfolio_weight
  if(window_length >= n){
    stop("The supplied 'window_length' exeeds the length of the data.")
  }
+  if(window_length < 1000 &&  distribution == "empirical"){
+    stop("Empirical distribution only available for window_length > 1000.")
+  }
 
   if((n-window_length) < n.ahead){
     stop("The supplied 'n.ahead' exceeds the forecasting horizon.")

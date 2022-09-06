@@ -202,10 +202,10 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
 
   params$likelihood_iter <- params$likelihood_iter[params$likelihood_iter != 0]
 
-  result <- list(C0 =  param_mat$c0,
+  result <- list(C0 =  t(param_mat$c0),
                  A = param_mat$a,
                  G = param_mat$g,
-                 C0_t = tratios_mat$c0,
+                 C0_t = t(tratios_mat$c0),
                  A_t = tratios_mat$a,
                  G_t = tratios_mat$g,
                  theta = params$theta,
@@ -356,11 +356,11 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE,
 
   params$likelihood_iter <- params$likelihood_iter[params$likelihood_iter != 0]
 
-  result <- list(C0 =  param_mat$c0,
+  result <- list(C0 =  t(param_mat$c0),
                  A = param_mat$a,
                  B = param_mat$b,
                  G = param_mat$g,
-                 C0_t = tratios_mat$c0,
+                 C0_t = t(tratios_mat$c0),
                  A_t = tratios_mat$a,
                  B_t = tratios_mat$b,
                  G_t = tratios_mat$g,
@@ -472,10 +472,10 @@ bekk_fit.dbekk <- function(spec, data, QML_t_ratios = FALSE,
 
   params$likelihood_iter <- params$likelihood_iter[params$likelihood_iter != 0]
 
-  result <- list(C0 =  param_mat$c0,
+  result <- list(C0 =  t(param_mat$c0),
                  A = param_mat$a,
                  G = param_mat$g,
-                 C0_t = tratios_mat$c0,
+                 C0_t = t(tratios_mat$c0),
                  A_t = tratios_mat$a,
                  G_t = tratios_mat$g,
                  theta = params$theta,
@@ -589,11 +589,11 @@ bekk_fit.dbekka <- function(spec, data, QML_t_ratios = FALSE,
 
   params$likelihood_iter <- params$likelihood_iter[params$likelihood_iter != 0]
 
-  result <- list(C0 =  param_mat$c0,
+  result <- list(C0 =  t(param_mat$c0),
                  A = param_mat$a,
                  B = param_mat$b,
                  G = param_mat$g,
-                 C0_t = tratios_mat$c0,
+                 C0_t = t(tratios_mat$c0),
                  A_t = tratios_mat$a,
                  B_t = tratios_mat$b,
                  G_t = tratios_mat$g,
@@ -705,10 +705,10 @@ bekk_fit.sbekk <- function(spec, data, QML_t_ratios = FALSE,
 
   params$likelihood_iter <- params$likelihood_iter[params$likelihood_iter != 0]
 
-  result <- list(C0 =  param_mat$c0,
+  result <- list(C0 =  t(param_mat$c0),
                  a = param_mat$a,
                  g = param_mat$g,
-                 C0_t = tratios_mat$c0,
+                 C0_t = t(tratios_mat$c0),
                  a_t = tratios_mat$a,
                  g_t = tratios_mat$g,
                  theta = params$theta,
@@ -822,11 +822,11 @@ bekk_fit.sbekka <- function(spec, data, QML_t_ratios = FALSE,
 
   params$likelihood_iter <- params$likelihood_iter[params$likelihood_iter != 0]
 
-  result <- list(C0 =  param_mat$c0,
+  result <- list(C0 =  t(param_mat$c0),
                  a = param_mat$a,
                  b = param_mat$b,
                  g = param_mat$g,
-                 C0_t = tratios_mat$c0,
+                 C0_t = t(tratios_mat$c0),
                  a_t = tratios_mat$a,
                  b_t = tratios_mat$b,
                  g_t = tratios_mat$g,

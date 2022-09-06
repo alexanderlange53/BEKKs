@@ -79,7 +79,7 @@ bekk_forecast.bekk <- function(x, n.ahead = 1, ci = 0.95) {
   # Generating confidence intervals
 
   score_final = score_bekk(x$theta, x$data)
-  s1_temp = diag(solve(t(score_final) %*% score_final),names=T)
+  s1_temp = diag(inv_gen(t(score_final) %*% score_final),names=T )
   s1 = sqrt(s1_temp)
 
   lower_theta = x$theta - qnorm(ci)*s1
@@ -149,7 +149,7 @@ bekk_forecast.bekk <- function(x, n.ahead = 1, ci = 0.95) {
   sigma_t_lower <- sigma_t_lower[, which(colSums(elim) == 1)]
   sigma_t_upper <- sigma_t_upper[, which(colSums(elim) == 1)]
 
-  H_t_f_lower <- H_t_f_upper <- matrix(NA, nrow = n.ahead + 1, ncol = ncol(x$data)^2)
+  H_t_f_lower <- H_t_f_upper <- matrix(NA, nrow = n.ahead+1 , ncol = ncol(x$data)^2)
 
   for (i in 1:(n.ahead+1)){
     H_t_f_lower[i, ] <- c(H_t_lower[[i]])
@@ -160,7 +160,11 @@ bekk_forecast.bekk <- function(x, n.ahead = 1, ci = 0.95) {
     sigma_t <- ts(sigma_t, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
     sigma_t_lower <- ts(sigma_t_lower, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
     sigma_t_upper <- ts(sigma_t_upper, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
-  }
+    H_t_f <- ts(H_t_f, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+    H_t_f_lower <- ts(H_t_f_lower, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+    H_t_f_upper <- ts(H_t_f_upper, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+
+    }
   else if(inherits(x$data, "xts") || inherits(x$data, "zoo") ){
     sigma_t <- xts(matrix(sigma_t, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
                                                                    by = periodicity(x$data)$units))
@@ -168,7 +172,14 @@ bekk_forecast.bekk <- function(x, n.ahead = 1, ci = 0.95) {
                                                                          by = periodicity(x$data)$units))
     sigma_t_upper <- xts(matrix(sigma_t_upper, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
                                                                          by = periodicity(x$data)$units))
-  }
+    H_t_f <- xts(matrix(H_t_f, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                                   by = periodicity(x$data)$units))
+    H_t_f_lower <- xts(matrix(H_t_f_lower, nrow = n.ahead+1), order.by = seq((time(x$data)[nrow(x$data)]), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                                               by = periodicity(x$data)$units))
+    H_t_f_upper <- xts(matrix(H_t_f_upper, nrow = n.ahead+1), order.by = seq((time(x$data)[nrow(x$data)]), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                                               by = periodicity(x$data)$units))
+
+    }
 
 
   result <- list(
@@ -318,6 +329,10 @@ bekk_forecast.bekka <- function(x, n.ahead = 1, ci = 0.95) {
     sigma_t <- ts(sigma_t, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
     sigma_t_lower <- ts(sigma_t_lower, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
     sigma_t_upper <- ts(sigma_t_upper, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+    H_t_f <- ts(H_t_f, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+    H_t_f_lower <- ts(H_t_f_lower, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+    H_t_f_upper <- ts(H_t_f_upper, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+
   }
   else if(inherits(x$data, "xts") || inherits(x$data, "zoo") ){
     sigma_t <- xts(matrix(sigma_t, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
@@ -326,6 +341,13 @@ bekk_forecast.bekka <- function(x, n.ahead = 1, ci = 0.95) {
                                                                                by = periodicity(x$data)$units))
     sigma_t_upper <- xts(matrix(sigma_t_upper, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
                                                                                by = periodicity(x$data)$units))
+    H_t_f <- xts(matrix(H_t_f, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                               by = periodicity(x$data)$units))
+    H_t_f_lower <- xts(matrix(H_t_f_lower, nrow = n.ahead+1), order.by = seq((time(x$data)[nrow(x$data)]), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                                             by = periodicity(x$data)$units))
+    H_t_f_upper <- xts(matrix(H_t_f_upper, nrow = n.ahead+1), order.by = seq((time(x$data)[nrow(x$data)]), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                                             by = periodicity(x$data)$units))
+
   }
 
 
@@ -472,6 +494,10 @@ bekk_forecast.dbekk <- function(x, n.ahead = 1, ci = 0.95) {
     sigma_t <- ts(sigma_t, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
     sigma_t_lower <- ts(sigma_t_lower, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
     sigma_t_upper <- ts(sigma_t_upper, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+    H_t_f <- ts(H_t_f, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+    H_t_f_lower <- ts(H_t_f_lower, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+    H_t_f_upper <- ts(H_t_f_upper, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+
   }
   else if(inherits(x$data, "xts") || inherits(x$data, "zoo") ){
     sigma_t <- xts(matrix(sigma_t, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
@@ -480,6 +506,13 @@ bekk_forecast.dbekk <- function(x, n.ahead = 1, ci = 0.95) {
                                                                                by = periodicity(x$data)$units))
     sigma_t_upper <- xts(matrix(sigma_t_upper, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
                                                                                by = periodicity(x$data)$units))
+    H_t_f <- xts(matrix(H_t_f, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                               by = periodicity(x$data)$units))
+    H_t_f_lower <- xts(matrix(H_t_f_lower, nrow = n.ahead+1), order.by = seq((time(x$data)[nrow(x$data)]), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                                             by = periodicity(x$data)$units))
+    H_t_f_upper <- xts(matrix(H_t_f_upper, nrow = n.ahead+1), order.by = seq((time(x$data)[nrow(x$data)]), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                                             by = periodicity(x$data)$units))
+
   }
 
 
@@ -630,6 +663,10 @@ bekk_forecast.dbekka <- function(x, n.ahead = 1, ci = 0.95) {
     sigma_t <- ts(sigma_t, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
     sigma_t_lower <- ts(sigma_t_lower, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
     sigma_t_upper <- ts(sigma_t_upper, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+    H_t_f <- ts(H_t_f, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+    H_t_f_lower <- ts(H_t_f_lower, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+    H_t_f_upper <- ts(H_t_f_upper, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+
   }
   else if(inherits(x$data, "xts") || inherits(x$data, "zoo") ){
     sigma_t <- xts(matrix(sigma_t, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
@@ -638,6 +675,13 @@ bekk_forecast.dbekka <- function(x, n.ahead = 1, ci = 0.95) {
                                                                                by = periodicity(x$data)$units))
     sigma_t_upper <- xts(matrix(sigma_t_upper, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
                                                                                by = periodicity(x$data)$units))
+    H_t_f <- xts(matrix(H_t_f, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                               by = periodicity(x$data)$units))
+    H_t_f_lower <- xts(matrix(H_t_f_lower, nrow = n.ahead+1), order.by = seq((time(x$data)[nrow(x$data)]), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                                             by = periodicity(x$data)$units))
+    H_t_f_upper <- xts(matrix(H_t_f_upper, nrow = n.ahead+1), order.by = seq((time(x$data)[nrow(x$data)]), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                                             by = periodicity(x$data)$units))
+
   }
 
 
@@ -783,6 +827,10 @@ bekk_forecast.sbekk <- function(x, n.ahead = 1, ci = 0.95) {
     sigma_t <- ts(sigma_t, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
     sigma_t_lower <- ts(sigma_t_lower, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
     sigma_t_upper <- ts(sigma_t_upper, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+    H_t_f <- ts(H_t_f, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+    H_t_f_lower <- ts(H_t_f_lower, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+    H_t_f_upper <- ts(H_t_f_upper, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+
   }
   else if(inherits(x$data, "xts") || inherits(x$data, "zoo") ){
     sigma_t <- xts(matrix(sigma_t, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
@@ -791,6 +839,13 @@ bekk_forecast.sbekk <- function(x, n.ahead = 1, ci = 0.95) {
                                                                                by = periodicity(x$data)$units))
     sigma_t_upper <- xts(matrix(sigma_t_upper, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
                                                                                by = periodicity(x$data)$units))
+    H_t_f <- xts(matrix(H_t_f, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                               by = periodicity(x$data)$units))
+    H_t_f_lower <- xts(matrix(H_t_f_lower, nrow = n.ahead+1), order.by = seq((time(x$data)[nrow(x$data)]), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                                             by = periodicity(x$data)$units))
+    H_t_f_upper <- xts(matrix(H_t_f_upper, nrow = n.ahead+1), order.by = seq((time(x$data)[nrow(x$data)]), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                                             by = periodicity(x$data)$units))
+
   }
 
 
@@ -941,6 +996,10 @@ bekk_forecast.sbekka <- function(x, n.ahead = 1, ci = 0.95) {
     sigma_t <- ts(sigma_t, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
     sigma_t_lower <- ts(sigma_t_lower, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
     sigma_t_upper <- ts(sigma_t_upper, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+    H_t_f <- ts(H_t_f, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+    H_t_f_lower <- ts(H_t_f_lower, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+    H_t_f_upper <- ts(H_t_f_upper, start = (time(x$data)[nrow(x$data)]+1), frequency = frequency(x$data))
+
   }
   else if(inherits(x$data, "xts") || inherits(x$data, "zoo") ){
     sigma_t <- xts(matrix(sigma_t, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
@@ -949,6 +1008,13 @@ bekk_forecast.sbekka <- function(x, n.ahead = 1, ci = 0.95) {
                                                                                by = periodicity(x$data)$units))
     sigma_t_upper <- xts(matrix(sigma_t_upper, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
                                                                                by = periodicity(x$data)$units))
+    H_t_f <- xts(matrix(H_t_f, nrow = n.ahead), order.by = seq((time(x$data)[nrow(x$data)]+1), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                               by = periodicity(x$data)$units))
+    H_t_f_lower <- xts(matrix(H_t_f_lower, nrow = n.ahead+1), order.by = seq((time(x$data)[nrow(x$data)]), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                                             by = periodicity(x$data)$units))
+    H_t_f_upper <- xts(matrix(H_t_f_upper, nrow = n.ahead+1), order.by = seq((time(x$data)[nrow(x$data)]), (time(x$data)[nrow(x$data)] +  n.ahead),
+                                                                             by = periodicity(x$data)$units))
+
   }
 
 
