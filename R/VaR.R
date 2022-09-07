@@ -83,9 +83,9 @@ VaR.bekkFit <-  function(x, p = 0.99, portfolio_weights = NULL, distribution = "
     VaR <- matrix(NA, nrow = nrow(x$data), ncol = ncol(x$data))
 
     for(i in 1:n) {
-
-      VaR[i, ] =  t(eigen_value_decomposition(matrix(x$H_t[i,],N,N)) %*% qtls)
-
+       for(j in 1: ncol(x$data)){
+      VaR[i, j] =  sqrt(matrix(x$H_t[i,],N,N)[j,j]) * qtls[j]
+        }
     }
     VaR <- as.data.frame(VaR)
     for(column in 1:columns) {
@@ -171,21 +171,19 @@ VaR.bekkForecast <-  function(x, p = 0.99, portfolio_weights = NULL, distributio
     columns = ncol(x$bekkfit$data)
     #csd <- extract_csd(obj)
     VaR <- matrix(NA, nrow = nrow(x$bekkfit$data) + x$n.ahead, ncol = ncol(x$bekkfit$data))
-    for(i in 1:n) {
 
-      VaR[i, ] =  t(eigen_value_decomposition(matrix(obj$H_t[i,],N,N)) %*% qtls)
 
+    for(i in 1:nrow(obj$H_t)) {
+      for(j in 1: ncol(x$bekkfit$data)){
+        VaR[i, j] =  sqrt(matrix(obj$H_t[i,],N,N)[j,j]) * qtls[j]
+      }
     }
     VaR <- as.data.frame(VaR)
-    for(column in 1:columns) {
-      # m2 =  csd[, column]
-      # VaR[, column] = - qnorm(alpha)*m2
-      # VaR <- as.data.frame(VaR)
 
       for (i in 1:ncol(x$bekkfit$data)) {
         colnames(VaR)[i] <- paste('VaR of', colnames(x$bekkfit$data)[i])
       }
-    }
+
 
     # Confidence intervals
     H_t_lower <- rbind(x$bekkfit$H_t[-nrow(x$bekkfit$H_t),], x$H_t_lower_conf_band)
@@ -196,39 +194,36 @@ VaR.bekkForecast <-  function(x, p = 0.99, portfolio_weights = NULL, distributio
 
     csd_lower <- extract_csd(obj)
     VaR_lower <- matrix(NA, nrow = nrow(x$bekkfit$data) + x$n.ahead, ncol = ncol(x$bekkfit$data))
-    for(i in 1:n) {
 
-      VaR_lower[i, ] =  t(eigen_value_decomposition(matrix(H_t_lower[i,],N,N)) %*% qtls)
-
+    for(i in 1:nrow(obj$H_t)) {
+      for(j in 1: ncol(x$bekkfit$data)){
+        VaR_lower[i, j] =  sqrt(matrix(H_t_lower[i,],N,N)[j,j]) * qtls[j]
+      }
     }
-    for(column in 1:columns) {
-      #m2 =  csd_lower[, column]
-      #VaR_lower[, column] = - qnorm(alpha)*m2
+
       VaR_lower <- as.data.frame(VaR_lower)
 
       for (i in 1:ncol(x$bekkfit$data)) {
         colnames(VaR_lower)[i] <- paste('VaR of', colnames(x$bekkfit$data)[i])
       }
-    }
+
     colnames(x$volatility_upper_conf_band) = colnames(x$volatility_forecast)
     obj$sigma_t <- rbind(x$bekkfit$sigma_t, x$volatility_upper_conf_band)
 
     csd_upper <- extract_csd(obj)
     VaR_upper <- matrix(NA, nrow = nrow(x$bekkfit$data) + x$n.ahead, ncol = ncol(x$bekkfit$data))
-    for(i in 1:n) {
-
-      VaR_upper[i, ] =  t(eigen_value_decomposition(matrix(H_t_upper[i,],N,N)) %*% qtls)
-
+    for(i in 1:nrow(obj$H_t)) {
+      for(j in 1: ncol(x$bekkfit$data)){
+        VaR_upper[i, j] =  sqrt(matrix(H_t_upper[i,],N,N)[j,j]) * qtls[j]
+      }
     }
-    for(column in 1:columns) {
-      #m2 =  csd_upper[, column]
-      #VaR_upper[, column] = - qnorm(alpha)*m2
+
       VaR_upper <- as.data.frame(VaR_upper)
 
       for (i in 1:ncol(x$bekkfit$data)) {
         colnames(VaR_upper)[i] <- paste('VaR of', colnames(x$bekkfit$data)[i])
       }
-    }
+
 
 
   } else {

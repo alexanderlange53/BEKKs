@@ -9,7 +9,7 @@ virf(x, time = 1, q = 0.05, index_series = 1, n.ahead = 10, ci = 0.9)
 \arguments{
 \item{x}{An object of class "bekkfit" from function \link{bekk_fit}.}
 
-\item{time}{Time instace to calculate VIRFs for.}
+\item{time}{Time instance to calculate VIRFs for.}
 
 \item{q}{A vector specifying the quantiles to be considered for a shock on which basis the VIRFs are generated.}
 

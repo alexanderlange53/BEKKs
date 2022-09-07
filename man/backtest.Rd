@@ -6,7 +6,7 @@
 \usage{
 backtest(
   x,
-  window_length = 500,
+  window_length = 1000,
   p = 0.99,
   portfolio_weights = NULL,
   n.ahead = 1,
