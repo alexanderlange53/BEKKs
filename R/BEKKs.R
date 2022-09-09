@@ -3,7 +3,7 @@
 #' @docType package
 #' @name BEKKs
 #' @author \itemize{
-#' \item Markus Fülle  \email{fuelle@uni-goettingen.de}
+#' \item Markus J. Fülle  \email{fuelle@uni-goettingen.de}
 #' \item Helmut Herwartz \email{hherwartz@uni-goettingen.de}
 #' \item Alexander Lange \email{alexander.lange@uni-goettingen.de}
 #' }
