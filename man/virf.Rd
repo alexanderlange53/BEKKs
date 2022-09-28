@@ -11,7 +11,7 @@ virf(
   index_series = 1,
   n.ahead = 10,
   ci = 0.9,
-  schock_date = NULL
+  time_shock = FALSE
 )
 }
 \arguments{
@@ -26,6 +26,8 @@ virf(
 \item{n.ahead}{An integer defining the number periods for which the VIRFs are generated.}
 
 \item{ci}{A number defining the confidence level for the confidence bands.}
+
+\item{time_shock}{Boolean indicating if the estimated residuals at date specified by "time" shall be used as a shock.}
 }
 \value{
 Returns an object of class "virf".
