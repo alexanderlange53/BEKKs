@@ -31,11 +31,12 @@ portmanteau.test.bekkFit <- function(x, lags = 5){
   e <- x$e_t
   n <- nrow(e)
   N <- ncol(e)
+  e <- matrix(e,n,N)
   #e <- matrix(e, nrow = n, ncol = N)
   e2 <- matrix(NA,nrow = n, ncol = N*(N+1)/2)
 
   for(i in 1:n){
-    e2[i,] <- ks::vech(crossprod(t(e[i,]),e[i,]))
+    e2[i,] <- ks::vech(crossprod(t(e[i,])))
   }
   e=e2
 

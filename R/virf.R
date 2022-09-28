@@ -4,9 +4,10 @@
 #'
 #' @param x An object of class "bekkfit" from function \link{bekk_fit}.
 #' @param time Time instance to calculate VIRFs for.
-#' @param q A vector specifying the quantiles to be considered for a shock on which basis the VIRFs are generated.
+#' @param q A number specifying the quantile to be considered for a shock on which basis the VIRFs are generated.
 #' @param index_series An integer defining the number of series for which a shock is assumed.
 #' @param n.ahead An integer defining the number periods for which the VIRFs are generated.
+#' @param ci A number defining the confidence level for the confidence bands.
 #' @param ci A number defining the confidence level for the confidence bands.
 #' @return  Returns an object of class "virf".
 #' @references Hafner CM, Herwartz H (2006). Volatility impulse responses for multivariate GARCH models:  An exchange rate illustration. Journal of International Money and Finance,25,719–740.
@@ -27,7 +28,7 @@
 #' @import numDeriv
 #' @export
 
-virf <- function(x ,time = 1, q = 0.05, index_series = 1, n.ahead = 10, ci = 0.9){
+virf <- function(x ,time = 1, q = 0.05, index_series = 1, n.ahead = 10, ci = 0.9, time_shock = FALSE){
 
   if (!inherits(x, 'bekkFit')) {
     stop('Please provide and object of class "bekkFit" for x')
@@ -48,27 +49,35 @@ virf <- function(x ,time = 1, q = 0.05, index_series = 1, n.ahead = 10, ci = 0.9
   if(index_series > ncol(x$data)){
     stop('Total number of indices in the data is lower than index_series')
   }
-  if((time%%1!=0 || time < 1) && !inherits(time, 'Date')){
+  if(!is.numeric(time)){
+    if( !is.numeric(x$data[time]) || nrow(x$data[time])==0){
+  stop('Provided date object is not included in data')
+    }
+  }else{
+  if((time%%1!=0 || time < 1) ){
     stop('Please provide a posive integer or a date object for time')
   }else if(!(time%%1!=0 || time < 1) && time > nrow(x$data)){
     stop('Total number of observations is exeded by time')
-  }  else if(inherits(time, 'Date') && !is.numeric(x$data[time])){
-    stop('Provided date object is not included in data')
+  }
   }
 
+  if(!is.numeric(q) || q < 0 || q > 1 || length(q)>1 || length(q) == 0){
+    stop('Please provide a number in the interval (0,1) for q.')
 
+  }
   UseMethod('virf')
 
 }
 
 #' @export
-virf.bekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci = 0.9) {
+virf.bekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci = 0.9, time_shock = FALSE) {
 
   N <- ncol(x$data)
   data <- x$data
   H <- matrix(x$H_t[time,],N,N)
   #get quantiles of returns
   residuals = x$e_t
+  if(!time_shock ){
   shocks = matrix(0, nrow = 1, ncol = N)
 
   shocks[index_series] = sapply(q,FUN=quantile,x=as.matrix(residuals[,index_series]))
@@ -76,20 +85,28 @@ virf.bekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci = 
     if(i==index_series){
       shocks[index_series] = sapply(q,FUN=quantile,x=as.matrix(residuals[,index_series]))
     }else{
-      shocks[i] = sapply(0.5,FUN=quantile,x=as.matrix(residuals[,i])) * 0
+      shocks[i] = sapply(0.5,FUN=quantile,x=as.matrix(residuals[,i])) *0
 
     }
+  }
+  }else{
+    shocks = matrix(x$e_t[time,],nrow = 1, ncol = N)
   }
 
   VIRF = virf_bekk(H, x$theta, matrix(shocks, ncol=N, nrow = 1), n.ahead)
   #dupl <- duplication_mat(N)
   #elim <- elimination_mat(N)
 
-  # score_final = score_bekk(x$theta, x$data)
-  # s1_temp = solve(t(score_final) %*% score_final)
+  score_final = score_bekk(x$theta, x$data)
+  score_outer = t(score_final) %*% score_final
   # s1 = eigen_value_decomposition(s1_temp)
   hesse_final = solve(hesse_bekk(x$theta, x$data))
   #s1_temp = solve(hesse_final)
+  if(x$QML_t_ratios==TRUE){
+    Sigma_temp=hesse_final%*%score_outer%*%hesse_final
+  }else{
+    Sigma_temp=solve(score_outer)
+  }
 
   s1_temp = function(th){
     virf_bekk(H, th, matrix(shocks, ncol=N, nrow = 1), n.ahead)
@@ -97,7 +114,7 @@ virf.bekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci = 
 
   th<-x$theta
   d_virf = jacobian(s1_temp,th)
-  s1_temp=d_virf%*%hesse_final%*%t(d_virf)
+  s1_temp=d_virf%*%Sigma_temp%*%t(d_virf)
 
 
 #   s1 = s1_temp*0
@@ -147,7 +164,7 @@ virf.bekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci = 
   return(result)
 }
 #' @export
-virf.dbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci = 0.9) {
+virf.dbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci = 0.9, time_shock = FALSE) {
 
   N <- ncol(x$data)
   data <- x$data
@@ -155,7 +172,7 @@ virf.dbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci =
   #get quantiles of returns
   residuals = x$e_t
   shocks = matrix(0, nrow = 1, ncol = N)
-
+  if(!time_shock ){
   shocks[index_series] = sapply(q,FUN=quantile,x=as.matrix(residuals[,index_series]))
   for(i in 1: N){
     if(i==index_series){
@@ -165,10 +182,19 @@ virf.dbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci =
 
     }
   }
-
+  }else{
+    shocks = matrix(x$e_t[time,],nrow = 1, ncol = N)
+  }
   VIRF = virf_dbekk(H, x$theta, matrix(shocks, ncol=N, nrow = 1), n.ahead)
 
   hesse_final = solve(hesse_dbekk(x$theta, x$data))
+  score_final = score_dbekk(x$theta, x$data)
+  score_outer = t(score_final) %*% score_final
+  if(x$QML_t_ratios==TRUE){
+    Sigma_temp=hesse_final%*%score_outer%*%hesse_final
+  }else{
+    Sigma_temp=solve(score_outer)
+  }
 
   s1_temp = function(th){
     virf_dbekk(H, th, matrix(shocks, ncol=N, nrow = 1), n.ahead)
@@ -176,7 +202,7 @@ virf.dbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci =
 
   th<-x$theta
   d_virf = jacobian(s1_temp,th)
-  s1_temp=d_virf%*%hesse_final%*%t(d_virf)
+  s1_temp=d_virf%*%Sigma_temp%*%t(d_virf)
   #   s1 = s1_temp*0
   #   counter = 1
   #   while(counter < nrow(s1)){
@@ -226,7 +252,7 @@ virf.dbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci =
   return(result)
 }
 #' @export
-virf.sbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci = 0.9) {
+virf.sbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci = 0.9, time_shock = FALSE) {
 
   N <- ncol(x$data)
   data <- x$data
@@ -234,7 +260,7 @@ virf.sbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci =
   #get quantiles of returns
   residuals = x$e_t
   shocks = matrix(0, nrow = 1, ncol = N)
-
+  if(!time_shock ){
   shocks[index_series] = sapply(q,FUN=quantile,x=as.matrix(residuals[,index_series]))
   for(i in 1: N){
     if(i==index_series){
@@ -244,7 +270,9 @@ virf.sbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci =
 
     }
   }
-
+  }else{
+    shocks = matrix(x$e_t[time,],nrow = 1, ncol = N)
+  }
 
   VIRF = virf_sbekk(H, x$theta, matrix(shocks, ncol=N, nrow = 1), n.ahead)
   #dupl <- duplication_mat(N)
@@ -253,8 +281,21 @@ virf.sbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci =
   # score_final = score_bekk(x$theta, x$data)
   # s1_temp = solve(t(score_final) %*% score_final)
   # s1 = eigen_value_decomposition(s1_temp)
-  hesse_final = solve(hesse_sbekk(x$theta, x$data))
+  #hesse_final = solve(hesse_sbekk(x$theta, x$data))
   #s1_temp = solve(hesse_final)
+
+  hesse_final = solve(hesse_sbekk(x$theta, x$data))
+  score_final = score_sbekk(x$theta, x$data)
+  score_outer = t(score_final) %*% score_final
+  if(x$QML_t_ratios==TRUE){
+    Sigma_temp=hesse_final%*%score_outer%*%hesse_final
+  }else{
+    Sigma_temp=solve(score_outer)
+  }
+
+  s1_temp = function(th){
+    virf_dbekk(H, th, matrix(shocks, ncol=N, nrow = 1), n.ahead)
+  }
 
   s1_temp = function(th){
     virf_sbekk(H, th, matrix(shocks, ncol=N, nrow = 1), n.ahead)
@@ -262,7 +303,7 @@ virf.sbekk <- function(x, time = 1, q = 0.05, index_series=1, n.ahead = 10, ci =
 
   th<-x$theta
   d_virf = jacobian(s1_temp,th)
-  s1_temp=d_virf%*%hesse_final%*%t(d_virf)
+  s1_temp=d_virf%*%Sigma_temp%*%t(d_virf)
   #   s1 = s1_temp*0
   #   counter = 1
   #   while(counter < nrow(s1)){

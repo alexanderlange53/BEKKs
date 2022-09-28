@@ -29,16 +29,16 @@ summary.backtest <- function(object, ...) {
   if(!is.null(object$portfolio_weights)){
     res_hit <- data.frame(matrix(NA, ncol = ncol(object$VaR), nrow=1))
     res_Kupiec <- data.frame(matrix(NA, ncol = ncol(object$VaR), nrow=2))
-    res_Christoffesen <- data.frame(matrix(NA, ncol = ncol(object$VaR), nrow=2))
+    res_Christoffersen <- data.frame(matrix(NA, ncol = ncol(object$VaR), nrow=2))
     colnames(res_hit)=c("")
     colnames(res_Kupiec)=c("")
-    colnames(res_Christoffesen)=c("")
+    colnames(res_Christoffersen)=c("")
     row.names(res_hit)=c("")
     row.names(res_Kupiec)=c("Test:", "p-value:")
-    row.names(res_Christoffesen)=c("Test:", "p-value:")
+    row.names(res_Christoffersen)=c("Test:", "p-value:")
 
       res_Kupiec[,1]=object$backtests$LRuc
-      res_Christoffesen[,1]=object$backtests$LRcc
+      res_Christoffersen[,1]=object$backtests$LRcc
 
 
     cat("\nPortfolio weights: ")
@@ -50,21 +50,21 @@ summary.backtest <- function(object, ...) {
 
     cat("\nUnconditional coverage test of Kupiec: \n")
     print(res_Kupiec)
-    cat("\nconditional coverage test of Christoffesen: \n")
-    print(res_Christoffesen)
+    cat("\nconditional coverage test of Christoffersen: \n")
+    print(res_Christoffersen)
   }else{
     res_hit <- data.frame(matrix(NA, ncol = ncol(object$VaR), nrow=1))
     res_Kupiec <- data.frame(matrix(NA, ncol = ncol(object$VaR), nrow=2))
-    res_Christoffesen <- data.frame(matrix(NA, ncol = ncol(object$VaR), nrow=2))
+    res_Christoffersen <- data.frame(matrix(NA, ncol = ncol(object$VaR), nrow=2))
     colnames(res_hit)=colnames(object$out_sample_returns)
     colnames(res_Kupiec)=colnames(res_hit)
-    colnames(res_Christoffesen)=colnames(res_hit)
+    colnames(res_Christoffersen)=colnames(res_hit)
     row.names(res_hit)=c("")
     row.names(res_Kupiec)=c("Test:", "p-value:")
-    row.names(res_Christoffesen)=c("Test:", "p-value:")
+    row.names(res_Christoffersen)=c("Test:", "p-value:")
     for(i in 1:ncol(object$VaR)){
       res_Kupiec[,i]=object$backtests[[i]]$LRuc
-      res_Christoffesen[,i]=object$backtests[[i]]$LRcc
+      res_Christoffersen[,i]=object$backtests[[i]]$LRcc
     }
 
     cat("\nPortfolio weights: None\n")
@@ -75,8 +75,8 @@ summary.backtest <- function(object, ...) {
     print(res_hit)
     cat("\nUnconditional coverage test of Kupiec: \n")
     print(res_Kupiec)
-    cat("\nconditional coverage test of Christoffesen: \n")
-    print(res_Christoffesen)
+    cat("\nconditional coverage test of Christoffersen: \n")
+    print(res_Christoffersen)
   }
 
 }
