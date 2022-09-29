@@ -100,7 +100,7 @@ void set_seed(double seed) {
 // [[Rcpp::export]]
 bool valid_bekk(arma::mat& C,arma::mat& A,arma::mat& G){
   int n =C.n_cols;
-  arma::mat prod = kron(A,A)+kron(G,G);
+  arma::mat prod = kron(A,A).t()+kron(G,G).t();
 
   arma::vec eigvals;
   eigvals= abs(arma::eig_gen(prod));
@@ -134,7 +134,7 @@ bool valid_asymm_bekk(arma::mat& C,arma::mat& A, arma::mat& B ,arma::mat& G, arm
   //int N =r.n_rows;
   double exp_indicator_value = expected_indicator_value(r,signs);
 
-  arma::mat prod = kron(A,A)+exp_indicator_value*kron(B,B)+kron(G,G);
+  arma::mat prod = kron(A,A).t()+exp_indicator_value*kron(B,B).t()+kron(G,G).t();
 
   arma::vec eigvals;
   eigvals= abs(arma::eig_gen(prod));
@@ -169,7 +169,7 @@ bool valid_asymm_bekk_sim(arma::mat& C,arma::mat& A, arma::mat& B ,arma::mat& G,
 
 
 
-  arma::mat prod = kron(A,A)+exp_indicator_value*kron(B,B)+kron(G,G);
+  arma::mat prod = kron(A,A).t()+exp_indicator_value*kron(B,B).t()+kron(G,G).t();
 
   arma::vec eigvals;
   eigvals= abs(arma::eig_gen(prod));
