@@ -33,7 +33,7 @@ backtest(
 Returns a S3 class "backtest" object containing the VaR forecast, out-of-sample returns and backtest statistics according to the R-package "GAS". conf
 }
 \description{
-Method for calculating VaR from estimated covariance processes (\link{bekk_fit}).
+Method for backtesting a model obtained from \link{bekk_fit} in terms of VaR-forcasting accuracy using a rolling window approach.
 }
 \examples{
 \donttest{

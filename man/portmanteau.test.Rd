@@ -9,10 +9,10 @@ portmanteau.test(x, lags = 5)
 \arguments{
 \item{x}{An object of class "bekkFit" from function \link{bekk_fit}.}
 
-\item{lags}{Either an integer vector or scalar defining the lag length.}
+\item{lags}{An integer defining the lag length.}
 }
 \value{
-Returns a matrix containing the p-values and test statistics.
+Returns an Object of class "htest" containing the p-value and test statistic.
 }
 \description{
 Method for a Portmanteau test of the null hypothesis of no remaining correlation in the co-variances of the estimated BEKK residuals.
