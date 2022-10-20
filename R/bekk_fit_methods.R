@@ -151,6 +151,7 @@ print.bekkFit <- function(x,...){
     cat(bekkObject$AIC)
     cat("\nBIC: ")
     cat(bekkObject$BIC)
+    cat("\n")
   }
   bekkObject
 }

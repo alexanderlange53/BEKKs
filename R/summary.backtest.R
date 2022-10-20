@@ -78,6 +78,7 @@ summary.backtest <- function(object, ...) {
     cat("\nconditional coverage test of Christoffersen: \n")
     print(res_Christoffersen)
   }
+  cat("\n")
 
 }
 
@@ -128,4 +129,5 @@ print.backtest <- function(x,...){
     print(res_hit)
 
   }
+  cat("\n")
 }

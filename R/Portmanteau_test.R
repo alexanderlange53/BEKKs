@@ -4,8 +4,8 @@
 #' @description Method for a Portmanteau test of the null hypothesis of no remaining correlation in the co-variances of the estimated BEKK residuals.
 #'
 #' @param x An object of class "bekkFit" from function \link{bekk_fit}.
-#' @param lags Either an integer vector or scalar defining the lag length.
-#' @return  Returns a matrix containing the p-values and test statistics.
+#' @param lags An integer defining the lag length.
+#' @return  Returns an Object of class "htest" containing the p-value and test statistic.
 #'
 #' @details Here, the multivariate Portmanteau test of Hosking (1980) is implemented.
 #'
@@ -55,20 +55,25 @@ portmanteau.test.bekkFit <- function(x, lags = 5){
    }
     return(q)
   }
-  p_val_q <- function(c, lgs){
-    return(1-pchisq(c, df=(lgs-2)*(N^2)))
-  }
-
-  summary_res <- function(lgs){
-    t_stat = Q(lgs)
-    return(c(lgs, t_stat, (lgs-2)*(N^2), p_val_q(t_stat,lgs)))
+  p_val_q <- function(k, lgs){
+    return(1-pchisq(k, df=(lgs-2)*(N^2)))
   }
 
 
-  res = t(sapply(lags,FUN=summary_res))
-  dimnames(res) <- list(rep("", length(lags)),c("lags","statistic","df","p-value"))
-  cat(paste("\n", "Portmanteau Test", "\n", sep = ""))
-  underScore <- paste(rep("-", nchar("Portmanteau Test")), collapse = "")
-  cat(underScore, "\n")
-  return(res)
+
+  statistic = Q(lags)
+  names(statistic) = "statistic"
+  p.value = p_val_q(p_val_q(statistic,lags),lags)
+  names(p.value) = "p.value"
+  parameter = (lags-2)*(N^2)
+  names(parameter) = "df"
+  data = "Residuals of estimated BEKK process"
+
+
+
+  rval <- list(statistic = statistic, parameter = parameter, p.value = p.value, data.name
+
+               = data, method = paste("Portmanteau Test (Lags = ", as.character(lags), ")", sep = "" ))
+  class(rval) <- "htest"
+  return(rval)
 }

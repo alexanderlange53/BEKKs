@@ -6,6 +6,7 @@
 #' \item Markus J. Fülle  \email{fuelle@uni-goettingen.de}
 #' \item Helmut Herwartz \email{hherwartz@uni-goettingen.de}
 #' \item Alexander Lange \email{alexander.lange@uni-goettingen.de}
+#' \item Christian M. Hafner \email{christian.hafner@uclouvain.be}
 #' }
 #'
 #' @import mathjaxr
@@ -13,13 +14,13 @@
 #' \loadmathjax
 #' This package implements estimation, simulation and forecasting techniques for conditional volatility modelling using the BEKK model.
 #'  The full BEKK(1,1,1) model of Engle and Kroner (1995)
-#' \mjdeqn{H_t = CC' + A' r_{t-1} r'_{t-1}A + G' H_{t-1}G }{ASCII representation},  the asymmetric extensions of Kroner and Ng (1998) and Grier et. al. (2004)
-#' \mjdeqn{H_t = CC' +A'r_{t-1} r'_{t-1}A +B'\gamma_{t-1} \gamma'_{t-1} B+G'H_{t-1}G}{ASCII representation}
-#' with \mjdeqn{\gamma_t = r_t I\left(r_t < 0 \right)}{ASCII representation} are implemented.
+#' \mjdeqn{H_t = CC' + A' r_{t-1} r'_{t-1}A + G' H_{t-1}G ,}{H_t = CC' + A' r_{t-1} r'_{t-1}A + G' H_{t-1}G ,}  the asymmetric extensions of Kroner and Ng (1998) and Grier et. al. (2004)
+#' \mjdeqn{H_t = CC' + A' r_{t-1} r'_{t-1}A +B'\gamma_{t-1} \gamma'_{t-1} B+G'H_{t-1}G}{H_t = CC' +A'r_{t-1} r'_{t-1}A +B'\gamma_{t-1} \gamma'_{t-1} B+G'H_{t-1}G}
+#' with \mjdeqn{\gamma_t = r_t I\left(r_t < 0 \right)}{\gamma_t = r_t I(r_t < 0 )} are implemented.
 #' Moreover, the diagonal BEKK, where the parameter matrices A, B and G are reduced to diagonal matrices and
 #' the scalar BEKK model of Ding and Engle (2001)
-#' \mjdeqn{H_t = CC' + a r_{t-1} r'_{t-1} + g H_{t-1},}{ASCII representation}
-#' where a and g are scalar parameters are implemented to allow faster but less flexible estimation in higher dimensions.
+#' \mjdeqn{H_t = CC' + a r_{t-1} r'_{t-1} + g H_{t-1},}{H_t = CC' + a r_{t-1} r'_{t-1} + g H_{t-1},}
+#' where a and g are scalar parameters and are implemented to allow faster but less flexible estimation in higher dimensions.
 #' @details
 #' The main functions are:
 #' \itemize{
@@ -28,14 +29,16 @@
 #' \item \tabular{ll}{ \code{\link{bekk_sim}} \tab Simulates a BEKK(1,1,1) process using either a \link{bekk_sim} or \link{bekk_spec} object,}
 #' \item \tabular{ll}{ \code{\link{bekk_forecast}} \tab Forecasts conditional volatility using a \link{bekk_fit} object,}
 #' \item \tabular{ll}{ \code{\link{VaR}} \tab Estimates (portfolio) Value-at-Risk using a fitted BEKK(1,1,1) model.}
-#' \item \tabular{ll}{ \code{\link{backtest}} \tab Uses estimated (portfolio) Value-at-Risk of a fitted BEKK(1,1,1) model to backtest the risk-forecasting accuracy.}
-#' \item \tabular{ll}{ \code{\link{virf}} \tab Calculaes volatility impulse response functions for fitted symmetric BEKK(1,1,1) models as described by Hafner and Herwartz (2006).}
+#' \item \tabular{ll}{ \code{\link{backtest}} \tab Uses estimated (portfolio) Value-at-Risk of a fitted BEKK(1,1,1) model
+#' to backtest the risk-forecasting accuracy.}
+#' \item \tabular{ll}{ \code{\link{virf}} \tab Calculaes volatility impulse response functions for fitted symmetric BEKK(1,1,1) models
+#'  as described by Hafner and Herwartz (2006).}
 #' }
-#' @references Engle, R. F. and K. F. Kroner (1995). Multivariate simultaneous generalized arch. Econometric Theory 11(1),122–150.
-#' @references Kroner, K. F. and V. K. Ng (1998). Modeling asymmetric comovements of asset returns. Review of Financial Studies 11(4), 817–44.
+#' @references Engle, R. F. and K. F. Kroner (1995). Multivariate simultaneous generalized arch. Econometric Theory 11(1),122-150.
+#' @references Kroner, K. F. and V. K. Ng (1998). Modeling asymmetric comovements of asset returns. Review of Financial Studies 11(4), 817-44.
 #' @references Ding, Zhuanxin and Engle, Robert F (2001). Large scale conditional covariance matrix modeling, estimation and testing. NYU working paper No. Fin-01-029.
-#' @references Grier, K. B., Olan T. Henry, N. Olekalns, and K. Shields (2004). The asymmetric effects of uncertainty on inflation and output growth. Journal of Applied Econometrics  19(5), 551–565.
-#' @references Hafner CM, Herwartz H (2006). Volatility impulse responses for multivariate GARCH models:  An exchange rate illustration. Journal of International Money and Finance,25,719–740.
+#' @references Grier, K. B., Olan T. Henry, N. Olekalns, and K. Shields (2004). The asymmetric effects of uncertainty on inflation and output growth. Journal of Applied Econometrics  19(5), 551-565.
+#' @references Hafner CM, Herwartz H (2006). Volatility impulse responses for multivariate GARCH models:  An exchange rate illustration. Journal of International Money and Finance,25,719-740.
 #' @useDynLib BEKKs
 #' @importFrom Rcpp sourceCpp
 NULL

@@ -63,7 +63,7 @@ bekk_fit <- function(spec, data, QML_t_ratios = FALSE,
                      max_iter = 50, crit = 1e-9){
 
   if (!inherits(spec, 'bekkSpec')) {
-    stop('Please provide and object of class "bekkSpec" for spec.')
+    stop('Please provide an object of class "bekkSpec" for spec.')
   }
 
   if (any(is.na(data))) {
@@ -392,7 +392,7 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE,
 
   result$AIC <- AIC(result)
   result$BIC <- BIC(result)
-  invisible(capture.output(result$Portmanteau.test <- portmanteau.test(result, lags = c(5,15,30))))
+  result$Portmanteau.test <- portmanteau.test(result, lags = 5)
 
   return(result)
 }

@@ -1,6 +1,6 @@
 #' Backtesting via Value-at-Risk (VaR)
 #'
-#' @description Method for calculating VaR from estimated covariance processes (\link{bekk_fit}).
+#' @description Method for backtesting a model obtained from \link{bekk_fit} in terms of VaR-forcasting accuracy using a rolling window approach.
 #'
 #' @param x An object of class "bekkFit" from the function \link{bekk_fit}.
 #' @param window_length An integer specifying the length of the rolling window.
