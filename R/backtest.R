@@ -77,7 +77,7 @@ backtest.bekkFit <-  function(x, window_length = 1000, p = 0.99, portfolio_weigh
       }
       spec = x$spec
       fit <- bekk_fit(spec, data[i:(window_length-1+i),])
-      forecast <- bekk_forecast(fit, n.ahead = n.ahead, ci = 0.5)
+      forecast <- forecast(fit, n.ahead = n.ahead, ci = 0.5)
       #VaR[i:(i+n.ahead-1),] = as.matrix(VaR(forecast, p = p, portfolio_weights = portfolio_weights)$VaR[(window_length+1):(window_length+n.ahead),])
       res = as.matrix(VaR(forecast, p = p, portfolio_weights = portfolio_weights, distribution = distribution)$VaR[(window_length+1):(window_length+n.ahead),])
       return(res)
@@ -124,7 +124,7 @@ backtest.bekkFit <-  function(x, window_length = 1000, p = 0.99, portfolio_weigh
   #
   #     spec = x$spec
   #     fit <- bekk_fit(spec, data[i:(window_length-1+i),])
-  #     forecast <- bekk_forecast(fit, n.ahead = n.ahead, ci = 0.5)
+  #     forecast <- forecast(fit, n.ahead = n.ahead, ci = 0.5)
   #     VaR[i:(i+n.ahead-1),] = as.matrix(VaR(forecast, p = p, portfolio_weights = portfolio_weights)$VaR[(window_length+1):(window_length+n.ahead),])
   #
   #
@@ -150,7 +150,7 @@ backtest.bekkFit <-  function(x, window_length = 1000, p = 0.99, portfolio_weigh
       }
       spec = x$spec
       fit <- bekk_fit(spec, data[i:(window_length-1+i),])
-      forecast <- bekk_forecast(fit, n.ahead = n.ahead, ci = 0.5)
+      forecast <- forecast(fit, n.ahead = n.ahead, ci = 0.5)
 
       res = as.matrix(VaR(forecast, p = p, portfolio_weights = portfolio_weights, distribution = distribution)$VaR[(window_length+1):(window_length+n.ahead),])
       return(res)

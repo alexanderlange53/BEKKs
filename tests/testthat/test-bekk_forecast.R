@@ -2,7 +2,7 @@ test_that("Symmetric BEKK 2-dims works, ts object and QML_t_ratios = FALSE, n.ah
   obj_spec <- bekk_spec()
   x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 
-  x2 <- bekk_forecast(x1, n.ahead = 1)
+  x2 <- forecast(x1, n.ahead = 1)
 
   expect_equal(round(as.numeric(x2$volatility_forecast[1]), 2), 0.2)
   expect_equal(round(as.numeric(x2$volatility_forecast[2]), 2), -0.21)
@@ -17,7 +17,7 @@ test_that("Symmetric BEKK 2-dims works, ts object and QML_t_ratios = FALSE, n.ah
   obj_spec <- bekk_spec()
   x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 
-  x2 <- bekk_forecast(x1, n.ahead = 5)
+  x2 <- forecast(x1, n.ahead = 5)
 
   expect_equal(round(sum(x2$volatility_forecast[,1]), 2), 1.01)
   expect_equal(round(sum(x2$volatility_forecast[,2]), 2), -1.1)
@@ -33,7 +33,7 @@ test_that("Symmetric BEKK 2-dims works, ts object and QML_t_ratios = FALSE, n.ah
 #   obj_spec <- bekk_spec()
 #   x1 <- bekk_fit(obj_spec, GoldStocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 #
-#   x2 <- bekk_forecast(x1, n.ahead = 1)
+#   x2 <- forecast(x1, n.ahead = 1)
 #
 #   expect_equal(round(as.numeric(x2$volatility_forecast[,1]), 2), 0.01)
 #   expect_equal(round(as.numeric(x2$volatility_forecast[,2]), 2), 0.12)
@@ -50,7 +50,7 @@ test_that("Symmetric BEKK 2-dims works, ts object and QML_t_ratios = FALSE, n.ah
 #   obj_spec <- bekk_spec()
 #   x1 <- bekk_fit(obj_spec, GoldStocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 #
-#   x2 <- bekk_forecast(x1, n.ahead = 5)
+#   x2 <- forecast(x1, n.ahead = 5)
 #
 #   expect_equal(round(sum(as.numeric(x2$volatility_forecast[,1])), 2), 0.05)
 #   expect_equal(round(sum(as.numeric(x2$volatility_forecast[,2])), 2), 0.58)
@@ -68,7 +68,7 @@ test_that("Asymmetric BEKK 2-dims works, ts object and QML_t_ratios = FALSE, n.a
   obj_spec <- bekk_spec(model = list(type = "bekk", asymmetric = TRUE))
   x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 
-  x2 <- bekk_forecast(x1, n.ahead = 1)
+  x2 <- forecast(x1, n.ahead = 1)
 
   expect_equal(round(as.numeric(x2$volatility_forecast[1]), 2), 0.2)
   expect_equal(round(as.numeric(x2$volatility_forecast[2]), 2), -0.25)
@@ -83,7 +83,7 @@ test_that("Symmetric BEKK 2-dims works, ts object and QML_t_ratios = FALSE, n.ah
   obj_spec <- bekk_spec(model = list(type = "bekk", asymmetric = TRUE))
   x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 
-  x2 <- bekk_forecast(x1, n.ahead = 5)
+  x2 <- forecast(x1, n.ahead = 5)
 
   expect_equal(round(sum(as.numeric(x2$volatility_forecast[,1])), 2), 1.01)
   expect_equal(round(sum(as.numeric(x2$volatility_forecast[,2])), 2), -1.30)
@@ -99,7 +99,7 @@ test_that("Symmetric BEKK 2-dims works, ts object and QML_t_ratios = FALSE, n.ah
 #   obj_spec <- bekk_spec(model = list(type = "bekk", asymmetric = TRUE))
 #   x1 <- bekk_fit(obj_spec, GoldStocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 #
-#   x2 <- bekk_forecast(x1, n.ahead = 1)
+#   x2 <- forecast(x1, n.ahead = 1)
 #
 #   expect_equal(round(as.numeric(x2$volatility_forecast[,1]), 2), 0.01)
 #   expect_equal(round(as.numeric(x2$volatility_forecast[,2]), 2), 0.01)
@@ -116,7 +116,7 @@ test_that("Symmetric BEKK 2-dims works, ts object and QML_t_ratios = FALSE, n.ah
 #   obj_spec <- bekk_spec(model = list(type = "bekk", asymmetric = TRUE))
 #   x1 <- bekk_fit(obj_spec, GoldStocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 #
-#   x2 <- bekk_forecast(x1, n.ahead = 5)
+#   x2 <- forecast(x1, n.ahead = 5)
 #
 #   expect_equal(round(sum(as.numeric(x2$volatility_forecast[,1])), 2), 0.05)
 #   expect_equal(round(sum(as.numeric(x2$volatility_forecast[,2])), 2), 0.09)
@@ -135,7 +135,7 @@ test_that("Symmetric scalar BEKK 2-dims works, ts object and QML_t_ratios = FALS
   obj_spec <- bekk_spec(model = list(type="sbekk", asymmetric =F))
   x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 
-  x2 <- bekk_forecast(x1, n.ahead = 10)
+  x2 <- forecast(x1, n.ahead = 10)
 
   expect_equal(round(as.numeric(x2$volatility_forecast[1,1]), 2), 0.19)
   expect_equal(round(as.numeric(x2$volatility_forecast[2,2]), 2), -0.1)

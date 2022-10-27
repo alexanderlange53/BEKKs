@@ -12,25 +12,25 @@
 #' obj_spec <- bekk_spec()
 #' x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 #'
-#' x2 <- bekk_forecast(x1, n.ahead = 1)
+#' x2 <- forecast(x1, n.ahead = 1)
 #'
 #' }
 #'
 #' @export
 
-bekk_forecast <- function(x, n.ahead = 1, ci = 0.95){
+forecast <- function(x, n.ahead = 1, ci = 0.95){
 
   if (!inherits(x, 'bekkFit')) {
     stop('Please provide and object of class "bekkFit" for "x".')
   }
 
 
-  UseMethod('bekk_forecast')
+  UseMethod('forecast')
 
 }
 
 #' @export
-bekk_forecast.bekk <- function(x, n.ahead = 1, ci = 0.95) {
+forecast.bekk <- function(x, n.ahead = 1, ci = 0.95) {
   N <- ncol(x$data)
   NoBs <- nrow(x$data)
   #var_process <- sigma_bekk(xx$data, xx$C0, xx$A, xx$G)
@@ -197,7 +197,7 @@ bekk_forecast.bekk <- function(x, n.ahead = 1, ci = 0.95) {
 }
 
 #' @export
-bekk_forecast.bekka <- function(x, n.ahead = 1, ci = 0.95) {
+forecast.bekka <- function(x, n.ahead = 1, ci = 0.95) {
   N <- ncol(x$data)
   NoBs <- nrow(x$data)
   #var_process <- sigma_bekk(xx$data, xx$C0, xx$A, xx$G)
@@ -367,7 +367,7 @@ bekk_forecast.bekka <- function(x, n.ahead = 1, ci = 0.95) {
 
 
 #' @export
-bekk_forecast.dbekk <- function(x, n.ahead = 1, ci = 0.95) {
+forecast.dbekk <- function(x, n.ahead = 1, ci = 0.95) {
   N <- ncol(x$data)
   NoBs <- nrow(x$data)
   #var_process <- sigma_bekk(xx$data, xx$C0, xx$A, xx$G)
@@ -531,7 +531,7 @@ bekk_forecast.dbekk <- function(x, n.ahead = 1, ci = 0.95) {
 }
 
 #' @export
-bekk_forecast.dbekka <- function(x, n.ahead = 1, ci = 0.95) {
+forecast.dbekka <- function(x, n.ahead = 1, ci = 0.95) {
   N <- ncol(x$data)
   NoBs <- nrow(x$data)
   #var_process <- sigma_bekk(xx$data, xx$C0, xx$A, xx$G)
@@ -700,7 +700,7 @@ bekk_forecast.dbekka <- function(x, n.ahead = 1, ci = 0.95) {
 }
 
 #' @export
-bekk_forecast.sbekk <- function(x, n.ahead = 1, ci = 0.95) {
+forecast.sbekk <- function(x, n.ahead = 1, ci = 0.95) {
   N <- ncol(x$data)
   NoBs <- nrow(x$data)
   #var_process <- sigma_bekk(xx$data, xx$C0, xx$A, xx$G)
@@ -864,7 +864,7 @@ bekk_forecast.sbekk <- function(x, n.ahead = 1, ci = 0.95) {
 }
 
 #' @export
-bekk_forecast.sbekka <- function(x, n.ahead = 1, ci = 0.95) {
+forecast.sbekka <- function(x, n.ahead = 1, ci = 0.95) {
   N <- ncol(x$data)
   NoBs <- nrow(x$data)
   #var_process <- sigma_bekk(xx$data, xx$C0, xx$A, xx$G)

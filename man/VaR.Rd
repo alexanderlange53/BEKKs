@@ -7,7 +7,7 @@
 VaR(x, p = 0.99, portfolio_weights = NULL, distribution = "empirical")
 }
 \arguments{
-\item{x}{An object of class "bekkFit" from the function \link{bekk_fit} or an object of class "bekkForecast" from the function \link{bekk_forecast}.}
+\item{x}{An object of class "bekkFit" from the function \link{bekk_fit} or an object of class "bekkForecast" from the function \link{forecast}.}
 
 \item{p}{A numerical value that determines the confidence level. The default value is set at 0.99 in accordance with the Basel Regulation.}
 
@@ -19,7 +19,7 @@ VaR(x, p = 0.99, portfolio_weights = NULL, distribution = "empirical")
 Returns a S3 class "var" object containing the VaR forecast and respective confidence bands.
 }
 \description{
-Method for calculating VaR from estimated covariance processes (\link{bekk_fit}) or predicted covariances (\link{bekk_forecast}).
+Method for calculating VaR from estimated covariance processes (\link{bekk_fit}) or predicted covariances (\link{forecast}).
 }
 \examples{
 \donttest{

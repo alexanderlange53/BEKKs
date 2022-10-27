@@ -5,11 +5,11 @@
 #' @param model A list containing the model type specification: Either "bekk" "dbekk" or "sbekk".
 #' Moreover it can be specified whether the model should be estimated allowing for asymmetric volatility structure.
 #' @param init_values initial values for \link{bekk_fit} during BHHH algorithm. It can be either a numerical vector of suitable dimension, or a character vector i.e. "random" to use a random starting value generator (set a seed in advance for reproducible results), or
-#'  "simple" for relying on a simple initial values generator based on typical values for BEKK parameter found in the literature. If the object from this function is passed to \link{bekk_sim}, "init_values" are used as parameters for data generating process.
+#'  "simple" for relying on a simple initial values generator based on typical values for BEKK parameter found in the literature. If the object from this function is passed to \link{simulate}, "init_values" are used as parameters for data generating process.
 #' @param signs An N-dimensional vector consisting of "1" or "-1" to indicate the asymmetric effects to be considered.
 #' Setting the i-th element of the vector to "1" or "-1" means that the model takes into account additional volatility if the returns of the i-th column in the data matrix are either positive or negative.
 #' If "asymmetric = TRUE", the default is set to "rep(-1, N)" i.e. it is assumed that excess volatility occurs for all series if the returns are negative.
-#' @param N Integer specifying the dimension of the BEKK model. Only relevant for \link{bekk_sim}.
+#' @param N Integer specifying the dimension of the BEKK model. Only relevant when this object of class "bekkSpec"" is used for simulating BEKK processes by applying it to \link{simulate}.
 #' @return Returns a S3 class "bekkSpec"  object containing the specifications of the model to be estimated.
 #'
 #'

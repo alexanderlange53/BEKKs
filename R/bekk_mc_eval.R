@@ -12,7 +12,7 @@ bekk_mc_eval <- function(object, spec, sample_sizes, iter, nc = 1) {
     print(paste('Sample size: ', j))
     sim_dat <- vector(mode = "list", iter)
 
-    sim_dat <- future_lapply(1:iter, function(x){bekk_sim(object, nobs = j)}, future.seed=TRUE)
+    sim_dat <- future_lapply(1:iter, function(x){simulate(object, nobs = j)}, future.seed=TRUE)
 
     dd <- future_lapply(sim_dat, function(x){bekk_fit(spec = spec, data = x, max_iter = 200)},future.seed=TRUE)
 
