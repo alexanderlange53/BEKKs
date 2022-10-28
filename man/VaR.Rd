@@ -7,7 +7,7 @@
 VaR(x, p = 0.99, portfolio_weights = NULL, distribution = "empirical")
 }
 \arguments{
-\item{x}{An object of class "bekkFit" from the function \link{bekk_fit} or an object of class "bekkForecast" from the function \link{forecast}.}
+\item{x}{An object of class "bekkFit" from the function \link{bekk_fit} or an object of class "bekkForecast" from the function \link{predict}.}
 
 \item{p}{A numerical value that determines the confidence level. The default value is set at 0.99 in accordance with the Basel Regulation.}
 
