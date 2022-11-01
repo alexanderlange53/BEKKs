@@ -41,7 +41,7 @@ VaR <- function(x, p = 0.99, portfolio_weights = NULL, distribution = "empirical
 }
 
 #' @export
-VaR.bekkFit <-  function(x, p = 0.99, portfolio_weights = NULL, distribution = "empirical")
+VaR.bekkFit <-  function(x, p = 0.99, portfolio_weights = NULL, distribution = "empirical" )
 {
   if(nrow(x$data) < 1000 && distribution == "empirical"){
     stop("Using the empirical distribution is not stable for time series with less than 1000 observations!")
@@ -49,6 +49,11 @@ VaR.bekkFit <-  function(x, p = 0.99, portfolio_weights = NULL, distribution = "
   alpha = p
   N = ncol(x$data)
   n = nrow(x$data)
+  match.arg(distribution, c("empirical", "t", "normal"))
+
+
+
+
   #specify quantiles here
   if(distribution == "t"){
     #fit skewed t

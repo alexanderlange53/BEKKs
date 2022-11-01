@@ -23,6 +23,8 @@ bekk_spec <- function(model = list(type = "bekk", asymmetric = FALSE),
     stop('Please specify whether the model to be estimated is asymmetric or not.')
 
   }
+  # Checking type
+  match.arg(model$type, c("bekk", "dbekk", "sbekk"))
   # Checking inputs
   if(!is.null(N) & is.numeric(init_values) ) {
     if(nrow(init_values) != 2 * N^2 + N * (N + 1)/2 & model$type == "bekk"  & model$asymmetric == FALSE) {

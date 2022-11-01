@@ -25,8 +25,8 @@
 #' @export
 logLik.bekkFit <- function(object, ...) {
 
-  x <- object
 
+  llv_inner <- function(x){
   if (any(class(x) == 'bekk')) {
     logl <- loglike_bekk(x$theta, x$data)
   } else if (any(class(x) == 'bekka')) {
@@ -42,6 +42,18 @@ logLik.bekkFit <- function(object, ...) {
   }
 
   return(logl)
+
+  }
+
+  if(!missing(...)) {# several objects: produce data.frame
+    lls <- sapply(list(object, ...), llv_inner)
+    vals <- sapply(list(object, ...), function(e1){length(e1$theta)})
+    aic <- data.frame(df = vals, LLV = lls, AIC = AIC(object, ...)$AIC, BIC = BIC(object, ...)$BIC)
+  } else {
+    lls <- llv_inner(object)
+    aic <- data.frame(df = vals, LLV = lls, AIC = AIC(object), BIC = BIC(object))
+  }
+  return(aic)
 }
 
 #' @rdname bekk_fit_methods

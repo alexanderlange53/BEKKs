@@ -47,6 +47,7 @@ backtest.bekkFit <-  function(x, window_length = 1000, p = 0.99, portfolio_weigh
   N <- ncol(data)
   n_out = n - window_length
 
+  match.arg(distribution, c("empirical", "t", "normal"))
 
 
   #out_sample_returns <-  x$data[(window_length+1):n,] %*% t(portfolio_weights)

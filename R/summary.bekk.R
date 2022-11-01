@@ -29,6 +29,7 @@ summary.bekk <- function(object, ...) {
   print(bekkObject$A_t)
   cat("\nG \n")
   print(bekkObject$G_t)
+  cat("\n")
 }
 
 #' @export
@@ -65,6 +66,7 @@ summary.bekka <- function(object, ...) {
   print(bekkObject$B_t)
   cat("\nG \n")
   print(bekkObject$G_t)
+  cat("\n")
 }
 
 #' @export
@@ -98,6 +100,7 @@ summary.dbekk <- function(object, ...) {
   print(bekkObject$A_t)
   cat("\nG \n")
   print(bekkObject$G_t)
+  cat("\n")
 }
 
 #' @export
@@ -134,6 +137,7 @@ summary.dbekka <- function(object, ...) {
   print(bekkObject$B_t)
   cat("\nG \n")
   print(bekkObject$G_t)
+  cat("\n")
 }
 
 
@@ -168,6 +172,7 @@ summary.sbekk <- function(object, ...) {
   print(bekkObject$a_t)
   cat("\ng \n")
   print(bekkObject$g_t)
+  cat("\n")
 }
 
 #' @export
@@ -204,4 +209,5 @@ summary.sbekka <- function(object, ...) {
   print(bekkObject$b_t)
   cat("\ng \n")
   print(bekkObject$g_t)
+  cat("\n")
 }
