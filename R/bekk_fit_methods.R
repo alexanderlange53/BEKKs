@@ -51,8 +51,10 @@ logLik.bekkFit <- function(object, ...) {
     aic <- data.frame(df = vals, LLV = lls, AIC = AIC(object, ...)$AIC, BIC = BIC(object, ...)$BIC)
   } else {
     lls <- llv_inner(object)
-    aic <- data.frame(df = vals, LLV = lls, AIC = AIC(object), BIC = BIC(object))
-  }
+    #aic <- data.frame(df = length(object$theta), LLV = lls, AIC = AIC(object), BIC = BIC(object))
+    aic <- lls
+
+     }
   return(aic)
 }
 
