@@ -1,6 +1,10 @@
 Package: BEKKs
 Title: Multivariate Conditional Volatility Modelling and Forecasting
 Version: 1.4.0
+Author: Alexander Lange [aut, cre],
+        Markus J. Fülle [aut],
+        Helmut Herwartz [aut],
+        Christian M. Hafner [aut]
 Authors@R:          
     c(person(given = "Markus J.",
            family = "Fülle",

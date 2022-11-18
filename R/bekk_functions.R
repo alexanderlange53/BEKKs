@@ -55,7 +55,7 @@ QML_t_ratios <- function(theta, r) {
 
   s2 <- sqrt(abs(diag(s2)))
 
-  return(abs(theta/s2))
+  return(theta/s2)
 }
 
 QML_t_ratios_asymm <- function(theta, r, signs) {
@@ -67,7 +67,7 @@ QML_t_ratios_asymm <- function(theta, r, signs) {
 
   s2 <- sqrt(abs(diag(s2)))
 
-  return(abs(theta/s2))
+  return(theta/s2)
 }
 
 QML_t_ratios_dbekk <- function(theta, r) {
@@ -79,7 +79,7 @@ QML_t_ratios_dbekk <- function(theta, r) {
 
   s2 <- sqrt(abs(diag(s2)))
 
-  return(abs(theta/s2))
+  return(theta/s2)
 }
 
 QML_t_ratios_dbekka <- function(theta, r, signs) {
@@ -91,7 +91,7 @@ QML_t_ratios_dbekka <- function(theta, r, signs) {
 
   s2 <- sqrt(abs(diag(s2)))
 
-  return(abs(theta/s2))
+  return(theta/s2)
 }
 
 QML_t_ratios_sbekk <- function(theta, r) {
@@ -103,7 +103,7 @@ QML_t_ratios_sbekk <- function(theta, r) {
 
   s2 <- sqrt(abs(diag(s2)))
 
-  return(abs(theta/s2))
+  return(theta/s2)
 }
 
 QML_t_ratios_sbekk_asymm <- function(theta, r, signs) {
@@ -115,6 +115,6 @@ QML_t_ratios_sbekk_asymm <- function(theta, r, signs) {
 
   s2 <- sqrt(abs(diag(s2)))
 
-  return(abs(theta/s2))
+  return(theta/s2)
 }
 

@@ -7,27 +7,26 @@
 \description{
 \loadmathjax
 This package implements estimation, simulation and forecasting techniques for conditional volatility modelling using the BEKK model.
- The full BEKK(1,1,1) model of Engle and Kroner (1995)
-\mjdeqn{H_t = CC' + A' r_{t-1} r'_{t-1}A + G' H_{t-1}G ,}{H_t = CC' + A' r_{t-1} r'_{t-1}A + G' H_{t-1}G ,}  the asymmetric extensions of Kroner and Ng (1998) and Grier et. al. (2004)
-\mjdeqn{H_t = CC' + A' r_{t-1} r'_{t-1}A +B'\gamma_{t-1} \gamma'_{t-1} B+G'H_{t-1}G}{H_t = CC' +A'r_{t-1} r'_{t-1}A +B'\gamma_{t-1} \gamma'_{t-1} B+G'H_{t-1}G}
+The full BEKK(1,1,1) model of Engle and Kroner (1995)
+\mjdeqn{H_t = CC' + A' r_{t-1} r_{t-1}'A + G' H_{t-1}G ,}{H_t = CC' + A' r_{t-1} r_{t-1}'A + G' H_{t-1}G ,}  the asymmetric extensions of Kroner and Ng (1998) and Grier et. al. (2004)
+\mjdeqn{H_t = CC' + A' r_{t-1} r_{t-1}'A +B'\gamma_{t-1} \gamma_{t-1}' B+G'H_{t-1}G}{H_t = CC' +A'r_{t-1} r_{t-1}'A +B'\gamma_{t-1} \gamma_{t-1}' B+G'H_{t-1}G,,}
 with \mjdeqn{\gamma_t = r_t I\left(r_t < 0 \right)}{\gamma_t = r_t I(r_t < 0 )} are implemented.
 Moreover, the diagonal BEKK, where the parameter matrices A, B and G are reduced to diagonal matrices and
 the scalar BEKK model of Ding and Engle (2001)
-\mjdeqn{H_t = CC' + a r_{t-1} r'_{t-1} + g H_{t-1},}{H_t = CC' + a r_{t-1} r'_{t-1} + g H_{t-1},}
+\mjdeqn{H_t = CC' + a r_{t-1} r_{t-1}' + g H_{t-1},}{H_t = CC' + a r_{t-1} r_{t-1}' + g H_{t-1},}
 where a and g are scalar parameters and are implemented to allow faster but less flexible estimation in higher dimensions.
 }
 \details{
 The main functions are:
 \itemize{
-\item \tabular{ll}{ \code{\link{bekk_spec}} \tab Specifies the model type to be estimated,}
-\item \tabular{ll}{ \code{\link{bekk_fit}} \tab Estimates a BEKK(1,1,1) model of a given series and specification object \link{bekk_spec},}
-\item \tabular{ll}{ \code{\link{simulate}} \tab Simulates a BEKK(1,1,1) process using either a \link{bekk_fit} or \link{bekk_spec} object,}
-\item \tabular{ll}{ \code{\link{predict}} \tab Forecasts conditional volatility using a \link{bekk_fit} object,}
+\item \tabular{ll}{ \code{\link{bekk_spec}} \tab Specifies the model type to be estimated.}
+\item \tabular{ll}{\code{\link{bekk_fit}} \tab Estimates a BEKK(1,1,1) model of a given series and
+specification object \link{bekk_spec}.}
+\item \tabular{ll}{ \code{\link{simulate}} \tab Simulates a BEKK(1,1,1) process using either a \link{bekk_fit} or \link{bekk_spec} object.}
+\item \tabular{ll}{ \code{\link{predict}} \tab Forecasts  conditional volatility using a \link{bekk_fit} object.}
 \item \tabular{ll}{ \code{\link{VaR}} \tab Estimates (portfolio) Value-at-Risk using a fitted BEKK(1,1,1) model.}
-\item \tabular{ll}{ \code{\link{backtest}} \tab Uses estimated (portfolio) Value-at-Risk of a fitted BEKK(1,1,1) model
-to backtest the risk-forecasting accuracy.}
-\item \tabular{ll}{ \code{\link{virf}} \tab Calculaes volatility impulse response functions for fitted symmetric BEKK(1,1,1) models
- as described by Hafner and Herwartz (2006).}
+\item \tabular{ll}{ \code{\link{backtest}} \tab Backtesting estimated (portfolio) value-at-risks of a fitted BEKK(1,1,1) model.}
+\item \tabular{ll}{ \code{\link{virf}} \tab Calculates volatility impulse response functions for fitted symmetric BEKK(1,1,1) models.}
 }
 }
 \references{
@@ -48,4 +47,5 @@ Hafner CM, Herwartz H (2006). Volatility impulse responses for multivariate GARC
 \item Alexander Lange \email{alexander.lange@uni-goettingen.de}
 \item Christian M. Hafner \email{christian.hafner@uclouvain.be}
 }
+S
 }
