@@ -8,7 +8,7 @@
 #' \item Alexander Lange \email{alexander.lange@uni-goettingen.de}
 #' \item Christian M. Hafner \email{christian.hafner@uclouvain.be}
 #' }
-#'S
+#'
 #' @import mathjaxr
 #' @description
 #' \loadmathjax

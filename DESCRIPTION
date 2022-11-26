@@ -1,6 +1,7 @@
 Package: BEKKs
 Title: Multivariate Conditional Volatility Modelling and Forecasting
 Version: 1.4.1
+Year: 2022
 Author: Alexander Lange [aut, cre],
         Markus J. Fülle [aut],
         Helmut Herwartz [aut],
