@@ -2,9 +2,9 @@ test_that("virf works with 2-dimensional test data set", {
   spec = bekk_spec()
   x = bekk_fit(spec, StocksBonds)
   s = virf(x)
-  expect_equal(round(sum(s$VIRF),3), -0.731)
-  expect_equal(round(sum(s$VIRF_upper),3), -0.665)
-  expect_equal(round(sum(s$VIRF_lower),3), -0.796)
+  expect_equal(round(sum(s$VIRF),3), -0.727)
+  expect_equal(round(sum(s$VIRF_upper),3), -0.661)
+  expect_equal(round(sum(s$VIRF_lower),3), -0.794)
 })
 # test_that("virf works with 3-dimensional test data set", {
 #   spec = bekk_spec()

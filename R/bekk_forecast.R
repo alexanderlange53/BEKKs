@@ -39,7 +39,7 @@ predict.bekk <- function(x, n.ahead = 1, ci = 0.95) {
   current_returns <- matrix(c(x$data[NoBs,]), nrow = 1)
 
   for(i in 1:n.ahead){
-    H_t[[i+1]] <- t(x$C0) %*% x$C0 + t(x$A) %*% t(current_returns) %*% current_returns %*% x$A + t(x$G) %*% H_t[[i]] %*% x$G
+    H_t[[i+1]] <- x$C0 %*% t(x$C0) + t(x$A) %*% t(current_returns) %*% current_returns %*% x$A + t(x$G) %*% H_t[[i]] %*% x$G
     current_returns <- eigen_value_decomposition(H_t[[i+1]])
   }
 
@@ -99,14 +99,14 @@ predict.bekk <- function(x, n.ahead = 1, ci = 0.95) {
 
 
   for(i in 1:n.ahead){
-    H_t_lower[[i+1]] <- t(x_lower$c0) %*% x_lower$c0 + t(x_lower$a) %*% t(current_returns) %*% current_returns %*% x_lower$a + t(x_lower$g) %*% H_t[[i]] %*% x_lower$g
+    H_t_lower[[i+1]] <- x_lower$c0 %*% t(x_lower$c0) + t(x_lower$a) %*% t(current_returns) %*% current_returns %*% x_lower$a + t(x_lower$g) %*% H_t[[i]] %*% x_lower$g
     current_returns <- eigen_value_decomposition(H_t_lower[[i+1]])
   }
 
   current_returns <- matrix(c(x$data[NoBs,]), nrow = 1)
 
   for(i in 1:n.ahead){
-    H_t_upper[[i+1]] <- t(x_upper$c0) %*% x_upper$c0 + t(x_upper$a) %*% t(current_returns) %*% current_returns %*% x_upper$a + t(x_upper$g) %*% H_t[[i]] %*% x_upper$g
+    H_t_upper[[i+1]] <- x_upper$c0 %*% t(x_upper$c0) + t(x_upper$a) %*% t(current_returns) %*% current_returns %*% x_upper$a + t(x_upper$g) %*% H_t[[i]] %*% x_upper$g
     current_returns <- eigen_value_decomposition(H_t_upper[[i+1]])
   }
   sigma_t_lower <- matrix(NA, nrow = n.ahead, ncol = N^2)
@@ -205,11 +205,11 @@ predict.bekka <- function(x, n.ahead = 1, ci = 0.95) {
   H_t[[1]] = matrix(x$H_t[NoBs,],nrow = N, ncol = N)
   current_returns <- matrix(c(x$data[NoBs,]), nrow = 1)
 
-  H_t[[2]]=t(x$C0) %*% x$C0 + t(x$A) %*% t(current_returns) %*% current_returns %*% x$A + indicatorFunction(as.matrix(current_returns), x$signs) * t(x$B) %*% t(current_returns) %*% current_returns %*% x$B + t(x$G) %*% H_t[[1]] %*% x$G
+  H_t[[2]]=x$C0 %*% t(x$C0) + t(x$A) %*% t(current_returns) %*% current_returns %*% x$A + indicatorFunction(as.matrix(current_returns), x$signs) * t(x$B) %*% t(current_returns) %*% current_returns %*% x$B + t(x$G) %*% H_t[[1]] %*% x$G
 
   expected_signs=expected_indicator_value(x$data,x$signs)
   for(i in 2:n.ahead){
-    H_t[[i+1]]=t(x$C0) %*% x$C0 + t(x$A) %*% H_t[[i]] %*% x$A + expected_signs * t(x$B) %*% H_t[[i]] %*% x$B + t(x$G) %*% H_t[[i]] %*% x$G
+    H_t[[i+1]]=x$C0 %*% t(x$C0) + t(x$A) %*% H_t[[i]] %*% x$A + expected_signs * t(x$B) %*% H_t[[i]] %*% x$B + t(x$G) %*% H_t[[i]] %*% x$G
 
   }
 
@@ -268,14 +268,14 @@ predict.bekka <- function(x, n.ahead = 1, ci = 0.95) {
 
 
   for(i in 1:n.ahead){
-    H_t_lower[[i+1]] <- t(x_lower$c0) %*% x_lower$c0 + t(x_lower$a) %*% t(current_returns) %*% current_returns %*% x_lower$a + expected_signs * t(x_lower$b) %*% H_t_lower[[i]] %*% x_lower$b + t(x_lower$g) %*% H_t[[i]] %*% x_lower$g
+    H_t_lower[[i+1]] <- x_lower$c0 %*% t(x_lower$c0) + t(x_lower$a) %*% t(current_returns) %*% current_returns %*% x_lower$a + expected_signs * t(x_lower$b) %*% H_t_lower[[i]] %*% x_lower$b + t(x_lower$g) %*% H_t[[i]] %*% x_lower$g
     current_returns <- eigen_value_decomposition(H_t_lower[[i+1]])
   }
 
   current_returns <- matrix(c(x$data[NoBs,]), nrow = 1)
 
   for(i in 1:n.ahead){
-    H_t_upper[[i+1]] <- t(x_upper$c0) %*% x_upper$c0 + t(x_upper$a) %*% t(current_returns) %*% current_returns %*% x_upper$a + expected_signs * t(x_upper$b) %*% H_t_upper[[i]] %*% x_upper$b + t(x_upper$g) %*% H_t[[i]] %*% x_upper$g
+    H_t_upper[[i+1]] <- x_upper$c0 %*% t(x_upper$c0) + t(x_upper$a) %*% t(current_returns) %*% current_returns %*% x_upper$a + expected_signs * t(x_upper$b) %*% H_t_upper[[i]] %*% x_upper$b + t(x_upper$g) %*% H_t[[i]] %*% x_upper$g
     current_returns <- eigen_value_decomposition(H_t_upper[[i+1]])
   }
   sigma_t_lower <- matrix(NA, nrow = n.ahead, ncol = N^2)
@@ -376,7 +376,7 @@ predict.dbekk <- function(x, n.ahead = 1, ci = 0.95) {
   current_returns <- matrix(c(x$data[NoBs,]), nrow = 1)
 
   for(i in 1:n.ahead){
-    H_t[[i+1]] <- t(x$C0) %*% x$C0 + t(x$A) %*% t(current_returns) %*% current_returns %*% x$A + t(x$G) %*% H_t[[i]] %*% x$G
+    H_t[[i+1]] <- x$C0 %*% t(x$C0) + t(x$A) %*% t(current_returns) %*% current_returns %*% x$A + t(x$G) %*% H_t[[i]] %*% x$G
     current_returns <- eigen_value_decomposition(H_t[[i+1]])
   }
 
@@ -433,14 +433,14 @@ predict.dbekk <- function(x, n.ahead = 1, ci = 0.95) {
 
 
   for(i in 1:n.ahead){
-    H_t_lower[[i+1]] <- t(x_lower$c0) %*% x_lower$c0 + t(x_lower$a) %*% t(current_returns) %*% current_returns %*% x_lower$a + t(x_lower$g) %*% H_t[[i]] %*% x_lower$g
+    H_t_lower[[i+1]] <- x_lower$c0 %*% t(x_lower$c0) + t(x_lower$a) %*% t(current_returns) %*% current_returns %*% x_lower$a + t(x_lower$g) %*% H_t[[i]] %*% x_lower$g
     current_returns <- eigen_value_decomposition(H_t_lower[[i+1]])
   }
 
   current_returns <- matrix(c(x$data[NoBs,]), nrow = 1)
 
   for(i in 1:n.ahead){
-    H_t_upper[[i+1]] <- t(x_upper$c0) %*% x_upper$c0 + t(x_upper$a) %*% t(current_returns) %*% current_returns %*% x_upper$a + t(x_upper$g) %*% H_t[[i]] %*% x_upper$g
+    H_t_upper[[i+1]] <- x_upper$c0 %*% t(x_upper$c0) + t(x_upper$a) %*% t(current_returns) %*% current_returns %*% x_upper$a + t(x_upper$g) %*% H_t[[i]] %*% x_upper$g
     current_returns <- eigen_value_decomposition(H_t_upper[[i+1]])
   }
   sigma_t_lower <- matrix(NA, nrow = n.ahead, ncol = N^2)
@@ -539,11 +539,11 @@ predict.dbekka <- function(x, n.ahead = 1, ci = 0.95) {
   H_t[[1]] = matrix(x$H_t[NoBs,],nrow = N, ncol = N)
   current_returns <- matrix(c(x$data[NoBs,]), nrow = 1)
 
-  H_t[[2]]=t(x$C0) %*% x$C0 + t(x$A) %*% t(current_returns) %*% current_returns %*% x$A + indicatorFunction(as.matrix(current_returns), x$signs) * t(x$B) %*% t(current_returns) %*% current_returns %*% x$B + t(x$G) %*% H_t[[1]] %*% x$G
+  H_t[[2]]=x$C0 %*% t(x$C0) + t(x$A) %*% t(current_returns) %*% current_returns %*% x$A + indicatorFunction(as.matrix(current_returns), x$signs) * t(x$B) %*% t(current_returns) %*% current_returns %*% x$B + t(x$G) %*% H_t[[1]] %*% x$G
 
   expected_signs=expected_indicator_value(x$data,x$signs)
   for(i in 2:n.ahead){
-    H_t[[i+1]]=t(x$C0) %*% x$C0 + t(x$A) %*% H_t[[i]] %*% x$A + expected_signs * t(x$B) %*% H_t[[i]] %*% x$B + t(x$G) %*% H_t[[i]] %*% x$G
+    H_t[[i+1]]=x$C0 %*% t(x$C0) + t(x$A) %*% H_t[[i]] %*% x$A + expected_signs * t(x$B) %*% H_t[[i]] %*% x$B + t(x$G) %*% H_t[[i]] %*% x$G
 
   }
 
@@ -602,14 +602,14 @@ predict.dbekka <- function(x, n.ahead = 1, ci = 0.95) {
 
 
   for(i in 1:n.ahead){
-    H_t_lower[[i+1]] <- t(x_lower$c0) %*% x_lower$c0 + t(x_lower$a) %*% t(current_returns) %*% current_returns %*% x_lower$a + expected_signs * t(x_lower$b) %*% H_t_lower[[i]] %*% x_lower$b + t(x_lower$g) %*% H_t[[i]] %*% x_lower$g
+    H_t_lower[[i+1]] <- x_lower$c0 %*% t(x_lower$c0) + t(x_lower$a) %*% t(current_returns) %*% current_returns %*% x_lower$a + expected_signs * t(x_lower$b) %*% H_t_lower[[i]] %*% x_lower$b + t(x_lower$g) %*% H_t[[i]] %*% x_lower$g
     current_returns <- eigen_value_decomposition(H_t_lower[[i+1]])
   }
 
   current_returns <- matrix(c(x$data[NoBs,]), nrow = 1)
 
   for(i in 1:n.ahead){
-    H_t_upper[[i+1]] <- t(x_upper$c0) %*% x_upper$c0 + t(x_upper$a) %*% t(current_returns) %*% current_returns %*% x_upper$a + expected_signs * t(x_upper$b) %*% H_t_upper[[i]] %*% x_upper$b + t(x_upper$g) %*% H_t[[i]] %*% x_upper$g
+    H_t_upper[[i+1]] <- x_upper$c0 %*% t(x_upper$c0) + t(x_upper$a) %*% t(current_returns) %*% current_returns %*% x_upper$a + expected_signs * t(x_upper$b) %*% H_t_upper[[i]] %*% x_upper$b + t(x_upper$g) %*% H_t[[i]] %*% x_upper$g
     current_returns <- eigen_value_decomposition(H_t_upper[[i+1]])
   }
   sigma_t_lower <- matrix(NA, nrow = n.ahead, ncol = N^2)
@@ -709,7 +709,7 @@ predict.sbekk <- function(x, n.ahead = 1, ci = 0.95) {
   current_returns <- matrix(c(x$data[NoBs,]), nrow = 1)
 
   for(i in 1:n.ahead){
-    H_t[[i+1]] <- t(x$C0) %*% x$C0 + x$a * t(current_returns) %*% current_returns+ x$g * H_t[[i]]
+    H_t[[i+1]] <- x$C0 %*% t(x$C0) + x$a * t(current_returns) %*% current_returns+ x$g * H_t[[i]]
     current_returns <- eigen_value_decomposition(H_t[[i+1]])
   }
 
@@ -766,14 +766,14 @@ predict.sbekk <- function(x, n.ahead = 1, ci = 0.95) {
 
 
   for(i in 1:n.ahead){
-    H_t_lower[[i+1]] <- t(x_lower$c0) %*% x_lower$c0 + x_lower$a * t(current_returns) %*% current_returns + x_lower$g * H_t[[i]]
+    H_t_lower[[i+1]] <- x_lower$c0 %*% t(x_lower$c0) + x_lower$a * t(current_returns) %*% current_returns + x_lower$g * H_t[[i]]
     current_returns <- eigen_value_decomposition(H_t_lower[[i+1]])
   }
 
   current_returns <- matrix(c(x$data[NoBs,]), nrow = 1)
 
   for(i in 1:n.ahead){
-    H_t_upper[[i+1]] <- t(x_upper$c0) %*% x_upper$c0 + x_upper$a * t(current_returns) %*% current_returns + x_upper$g * H_t[[i]]
+    H_t_upper[[i+1]] <- x_upper$c0 %*% t(x_upper$c0) + x_upper$a * t(current_returns) %*% current_returns + x_upper$g * H_t[[i]]
     current_returns <- eigen_value_decomposition(H_t_upper[[i+1]])
   }
   sigma_t_lower <- matrix(NA, nrow = n.ahead, ncol = N^2)
@@ -872,11 +872,11 @@ predict.sbekka <- function(x, n.ahead = 1, ci = 0.95) {
   H_t[[1]] = matrix(x$H_t[NoBs,],nrow = N, ncol = N)
   current_returns <- matrix(c(x$data[NoBs,]), nrow = 1)
 
-  H_t[[2]]=t(x$C0) %*% x$C0 + x$a * t(current_returns) %*% current_returns + indicatorFunction(as.matrix(current_returns), x$signs) * x$b * t(current_returns) %*% current_returns + x$g * H_t[[1]]
+  H_t[[2]]=x$C0 %*% t(x$C0) + x$a * t(current_returns) %*% current_returns + indicatorFunction(as.matrix(current_returns), x$signs) * x$b * t(current_returns) %*% current_returns + x$g * H_t[[1]]
 
   expected_signs=expected_indicator_value(x$data,x$signs)
   for(i in 2:n.ahead){
-    H_t[[i+1]]=t(x$C0) %*% x$C0 + x$a * H_t[[i]]  + expected_signs * x$b * H_t[[i]]  + x$g * H_t[[i]]
+    H_t[[i+1]]=x$C0 %*% t(x$C0) + x$a * H_t[[i]]  + expected_signs * x$b * H_t[[i]]  + x$g * H_t[[i]]
 
   }
 
@@ -935,14 +935,14 @@ predict.sbekka <- function(x, n.ahead = 1, ci = 0.95) {
 
 
   for(i in 1:n.ahead){
-    H_t_lower[[i+1]] <- t(x_lower$c0) %*% x_lower$c0 + x_lower$a * t(current_returns) %*% current_returns + expected_signs * x_lower$b * H_t_lower[[i]]  + x_lower$g * H_t[[i]]
+    H_t_lower[[i+1]] <- x_lower$c0 %*% t(x_lower$c0) + x_lower$a * t(current_returns) %*% current_returns + expected_signs * x_lower$b * H_t_lower[[i]]  + x_lower$g * H_t[[i]]
     current_returns <- eigen_value_decomposition(H_t_lower[[i+1]])
   }
 
   current_returns <- matrix(c(x$data[NoBs,]), nrow = 1)
 
   for(i in 1:n.ahead){
-    H_t_upper[[i+1]] <- t(x_upper$c0) %*% x_upper$c0 + x_upper$a * t(current_returns) %*% current_returns + expected_signs * x_upper$b * H_t_upper[[i]] + x_upper$g * H_t[[i]]
+    H_t_upper[[i+1]] <- x_upper$c0 %*% t(x_upper$c0) + x_upper$a * t(current_returns) %*% current_returns + expected_signs * x_upper$b * H_t_upper[[i]] + x_upper$g * H_t[[i]]
     current_returns <- eigen_value_decomposition(H_t_upper[[i+1]])
   }
   sigma_t_lower <- matrix(NA, nrow = n.ahead, ncol = N^2)

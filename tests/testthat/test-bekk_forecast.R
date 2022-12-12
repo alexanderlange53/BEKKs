@@ -4,13 +4,13 @@ test_that("Symmetric BEKK 2-dims works, ts object and QML_t_ratios = FALSE, n.ah
 
   x2 <- predict(x1, n.ahead = 1)
 
-  expect_equal(round(as.numeric(x2$volatility_forecast[1]), 2), 0.2)
-  expect_equal(round(as.numeric(x2$volatility_forecast[2]), 2), -0.21)
-  expect_equal(round(as.numeric(x2$volatility_forecast[3]), 2), 0.6)
+  expect_equal(round(as.numeric(x2$volatility_forecast[1]), 2), 0.19)
+  expect_equal(round(as.numeric(x2$volatility_forecast[2]), 2), -0.1)
+  expect_equal(round(as.numeric(x2$volatility_forecast[3]), 2), 0.61)
 
-  expect_equal(round(sum(x2$H_t_forecast), 2), 0.35)
-  expect_equal(round(sum(x2$volatility_lower_conf_band), 2), 0.59)
-  expect_equal(round(sum(x2$volatility_upper_conf_band), 2), 0.62)
+  expect_equal(round(sum(x2$H_t_forecast), 2), 0.38)
+  expect_equal(round(sum(x2$volatility_lower_conf_band), 2), 0.68)
+  expect_equal(round(sum(x2$volatility_upper_conf_band), 2), 0.71)
 })
 
 test_that("Symmetric BEKK 2-dims works, ts object and QML_t_ratios = FALSE, n.ahead = 5", {
@@ -19,13 +19,13 @@ test_that("Symmetric BEKK 2-dims works, ts object and QML_t_ratios = FALSE, n.ah
 
   x2 <- predict(x1, n.ahead = 5)
 
-  expect_equal(round(sum(x2$volatility_forecast[,1]), 2), 1.01)
-  expect_equal(round(sum(x2$volatility_forecast[,2]), 2), -1.1)
-  expect_equal(round(sum(x2$volatility_forecast[,3]), 2), 3.05)
+  expect_equal(round(sum(x2$volatility_forecast[,1]), 2), 0.94)
+  expect_equal(round(sum(x2$volatility_forecast[,2]), 2), -0.51)
+  expect_equal(round(sum(x2$volatility_forecast[,3]), 2), 3.08)
 
-  expect_equal(round(sum(x2$H_t_forecast), 2), 1.80)
-  expect_equal(round(sum(x2$volatility_lower_conf_band), 2), 2.91)
-  expect_equal(round(sum(x2$volatility_upper_conf_band), 2), 3.11)
+  expect_equal(round(sum(x2$H_t_forecast), 2), 1.96)
+  expect_equal(round(sum(x2$volatility_lower_conf_band), 2), 3.42)
+  expect_equal(round(sum(x2$volatility_upper_conf_band), 2), 3.62)
 })
 
 #
@@ -70,13 +70,13 @@ test_that("Asymmetric BEKK 2-dims works, ts object and QML_t_ratios = FALSE, n.a
 
   x2 <- predict(x1, n.ahead = 1)
 
-  expect_equal(round(as.numeric(x2$volatility_forecast[1]), 2), 0.2)
-  expect_equal(round(as.numeric(x2$volatility_forecast[2]), 2), -0.25)
-  expect_equal(round(as.numeric(x2$volatility_forecast[3]), 2), 0.58)
+  expect_equal(round(as.numeric(x2$volatility_forecast[1]), 2), 0.19)
+  expect_equal(round(as.numeric(x2$volatility_forecast[2]), 2), -0.13)
+  expect_equal(round(as.numeric(x2$volatility_forecast[3]), 2), 0.59)
 
-  expect_equal(round(sum(x2$H_t_forecast), 2), 0.32)
-  expect_equal(round(sum(x2$volatility_lower_conf_band), 2), 0.51)
-  expect_equal(round(sum(x2$volatility_upper_conf_band), 2), 0.57)
+  expect_equal(round(sum(x2$H_t_forecast), 2), 0.36)
+  expect_equal(round(sum(x2$volatility_lower_conf_band), 2), 0.61)
+  expect_equal(round(sum(x2$volatility_upper_conf_band), 2), 0.67)
 })
 
 test_that("Symmetric BEKK 2-dims works, ts object and QML_t_ratios = FALSE, n.ahead = 5", {
@@ -85,13 +85,13 @@ test_that("Symmetric BEKK 2-dims works, ts object and QML_t_ratios = FALSE, n.ah
 
   x2 <- predict(x1, n.ahead = 5)
 
-  expect_equal(round(sum(as.numeric(x2$volatility_forecast[,1])), 2), 1.01)
-  expect_equal(round(sum(as.numeric(x2$volatility_forecast[,2])), 2), -1.30)
-  expect_equal(round(sum(as.numeric(x2$volatility_forecast[,3])), 2), 2.85)
+  expect_equal(round(sum(as.numeric(x2$volatility_forecast[,1])), 2), 0.93)
+  expect_equal(round(sum(as.numeric(x2$volatility_forecast[,2])), 2), -0.65)
+  expect_equal(round(sum(as.numeric(x2$volatility_forecast[,3])), 2), 2.88)
 
-  expect_equal(round(sum(x2$H_t_forecast), 2), 1.53)
-  expect_equal(round(sum(x2$volatility_lower_conf_band), 2), 2.49)
-  expect_equal(round(sum(x2$volatility_upper_conf_band), 2), 2.78)
+  expect_equal(round(sum(x2$H_t_forecast), 2), 1.69)
+  expect_equal(round(sum(x2$volatility_lower_conf_band), 2), 3.04)
+  expect_equal(round(sum(x2$volatility_upper_conf_band), 2), 3.33)
 })
 
 #
@@ -138,10 +138,10 @@ test_that("Symmetric scalar BEKK 2-dims works, ts object and QML_t_ratios = FALS
   x2 <- predict(x1, n.ahead = 10)
 
   expect_equal(round(as.numeric(x2$volatility_forecast[1,1]), 2), 0.19)
-  expect_equal(round(as.numeric(x2$volatility_forecast[2,2]), 2), -0.1)
+  expect_equal(round(as.numeric(x2$volatility_forecast[2,2]), 2), -0.09)
   expect_equal(round(as.numeric(x2$volatility_forecast[2,3]), 2), 0.64)
 
-  expect_equal(round(sum(x2$H_t_forecast), 2), 4.27)
-  expect_equal(round(sum(x2$volatility_lower_conf_band), 2), 7.34)
-  expect_equal(round(sum(x2$volatility_upper_conf_band), 2), 7.46)
+  expect_equal(round(sum(x2$H_t_forecast), 2), 4.31)
+  expect_equal(round(sum(x2$volatility_lower_conf_band), 2), 7.48)
+  expect_equal(round(sum(x2$volatility_upper_conf_band), 2), 7.6)
 })

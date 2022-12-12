@@ -105,10 +105,33 @@ VaR.bekkFit <-  function(x, p = 0.99, portfolio_weights = NULL, distribution = "
       }
     }
   } else {
+    if(distribution == "t"){
+      #fit skewed t
+
+        kurtos = moments::kurtosis(x$e_t%*%portfolio_weights)-3
+        df = 6/kurtos+4
+        if(df <= 4){
+          df=4.001
+        }
+        qtls <- qt(1-alpha, df = df)/sqrt(df/(df-2))
+      }
+    else if(distribution == "empirical"){
+
+      qtls <- quantile(x$e_t%*%portfolio_weights,1-alpha)
+
+      } else if(distribution == "normal"){
+      #fit skewed t
+
+      qtls <-qnorm(1-alpha)
+    } else{
+      qtls <- qnorm(1-alpha)
+    }
+
+
     VaR <- matrix(NA, nrow = nrow(x$data), ncol = 1)
     for(i in 1:nrow(x$H_t)) {
-      #VaR[i,] <- -qnorm(alpha)*sqrt(portfolio_weights%*%matrix(x$H_t[i,], ncol = ncol(x$data))%*%portfolio_weights)
-      VaR[i,] <- portfolio_weights%*%eigen_value_decomposition(matrix(x$H_t[i,], ncol = ncol(x$data)))%*%qtls
+      VaR[i,] <- qtls*sqrt(portfolio_weights%*%matrix(x$H_t[i,], ncol = ncol(x$data))%*%portfolio_weights)
+      #VaR[i,] <- portfolio_weights%*%eigen_value_decomposition(matrix(x$H_t[i,], ncol = ncol(x$data)))%*%qtls
       }
     VaR <- as.data.frame(VaR)
   }
