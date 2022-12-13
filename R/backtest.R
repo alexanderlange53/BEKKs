@@ -64,6 +64,10 @@ backtest.bekkFit <-  function(x, window_length = 1000, p = 0.99, portfolio_weigh
   if((n-window_length) < n.ahead){
     stop("The supplied 'n.ahead' exceeds the forecasting horizon.")
   }
+  if(length(portfolio_weights)!= N && !is.null(portfolio_weights)){
+    stop("Portfolio weights do no match number of time series")
+  }
+
   if (is.null(portfolio_weights)) {
     hit_rate = numeric(N)
     out_sample_returns <-  x$data[(window_length+1):n,]
@@ -86,7 +90,7 @@ backtest.bekkFit <-  function(x, window_length = 1000, p = 0.99, portfolio_weigh
 
     }
 
-    if(.Platform$OS.type == "Windows") {
+    if(.Platform$OS.type == "windows") {
       cl = parallel::makeCluster(nc)
       VaR = pbapply::pblapply(X=OoS_indices, FUN=wrapper, cl = cl)
       parallel::stopCluster(cl)

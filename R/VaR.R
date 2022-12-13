@@ -46,12 +46,15 @@ VaR.bekkFit <-  function(x, p = 0.99, portfolio_weights = NULL, distribution = "
   if(nrow(x$data) < 1000 && distribution == "empirical"){
     stop("Using the empirical distribution is not stable for time series with less than 1000 observations!")
   }
+
   alpha = p
   N = ncol(x$data)
   n = nrow(x$data)
   match.arg(distribution, c("empirical", "t", "normal"))
 
-
+  if(length(portfolio_weights)!= N && !is.null(portfolio_weights)){
+    stop("Portfolio weights do no match number of time series")
+  }
 
 
   #specify quantiles here
@@ -167,7 +170,9 @@ VaR.bekkForecast <-  function(x, p = 0.99, portfolio_weights = NULL, distributio
   obj$sigma_t <- rbind(x$bekkfit$sigma_t, x$volatility_forecast)
   N = ncol(obj$data)
   n = nrow(obj$H_t)
-
+  if(length(portfolio_weights)!= N && !is.null(portfolio_weights)){
+    stop("Portfolio weights do no match number of time series")
+  }
 
   if(distribution == "t"){
     #fit skewed t
