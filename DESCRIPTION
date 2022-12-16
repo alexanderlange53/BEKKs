@@ -1,25 +1,24 @@
 Package: BEKKs
 Title: Multivariate Conditional Volatility Modelling and Forecasting
 Version: 1.4.1
-Year: 2021
-Author: Alexander Lange [aut],
-        Markus J. Fülle [aut, cre], 
-        Helmut Herwartz [aut],
-        Christian M. Hafner [aut]
+Author: Markus J. Fülle [aut, cre], 
+        Alexander Lange [aut],
+        Christian M. Hafner [aut],
+        Helmut Herwartz [aut]
 Authors@R:          
     c(person("Markus J.",
             "Fülle",
            role = c("aut", "cre"),
            email = "fuelle@uni-goettingen.de"),
+           person("Alexander", "Lange", 
+          role = c("aut"),
+          email = "alexander.lange@uni-goettingen.de"),
       person("Christian M.", "Hafner", 
            role = c("aut"), 
            email = "christian.hafner@uclouvain.be"),
       person("Helmut", "Herwartz", 
            role = c("aut"), 
-           email = "hherwartz@uni-goettingen.de"),
-      person("Alexander", "Lange", 
-          role = c("aut"),
-          email = "alexander.lange@uni-goettingen.de"))
+           email = "hherwartz@uni-goettingen.de"))
 Maintainer: Markus J. Fülle <fuelle@uni-goettingen.de>
 Description: Methods and tools for estimating, simulating and forecasting of so-called BEKK-models (named after Baba, Engle, Kraft and Kroner) based on the fast Berndt–Hall–Hall–Hausman (BHHH) algorithm described in Hafner and Herwartz (2008) <doi:10.1007/s00184-007-0130-y>. 
 Depends: R (>= 3.5.0)
