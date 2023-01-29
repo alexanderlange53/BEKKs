@@ -97,7 +97,7 @@ arma::mat inv_gen(const arma::mat& m) {
   // the inverse or generalized inverse
 
   if (m.is_sympd() == TRUE) {
-    return m.i();
+    return arma::inv_sympd(m);
   } else {
     return arma::pinv(m);
   }

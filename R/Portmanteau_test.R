@@ -45,8 +45,8 @@ portmanteau.test.bekkFit <- function(x, lags = 5){
         return(c/n)
   }
   c_0 = c_hat(0)
-  c_0_inv = solve(c_0)
-
+  #c_0_inv = solve(c_0)
+  c_0_inv = chol2inv(chol(c_0))
   Q <- function(lgs){
     q=0
    for(i in 1:lgs){

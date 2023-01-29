@@ -51,7 +51,7 @@ logLik.bekkFit <- function(object, ...) {
     aic <- data.frame(df = vals, LLV = lls, AIC = AIC(object, ...)$AIC, BIC = BIC(object, ...)$BIC)
   } else {
     lls <- llv_inner(object)
-    #aic <- data.frame(df = length(object$theta), LLV = lls, AIC = AIC(object), BIC = BIC(object))
+    aic <- data.frame(df = length(object$theta), LLV = lls, AIC = AIC(object), BIC = BIC(object))
     aic <- lls
 
      }
@@ -59,7 +59,6 @@ logLik.bekkFit <- function(object, ...) {
 }
 
 #' @rdname bekk_fit_methods
-#' @export
 AIC.bekkFit <- function(object, ..., k = 2) {
 
   x <- object
@@ -67,17 +66,17 @@ AIC.bekkFit <- function(object, ..., k = 2) {
   AICinner <- function(e) {
     N <- ncol(e$data)
     if (any(class(e) == 'bekk')) {
-      aic <- k * 2 * N^2 + N * (N + 1)/2 - 2 * logLik(e)
+      aic <- k * 2 * N^2 + N * (N + 1)/2 - 2 * logLik(e)[2]
     } else if (any(class(e) == 'bekka')) {
-      aic <- k * 3 * N^2 + N * (N + 1)/2 - 2 * logLik(e)
+      aic <- k * 3 * N^2 + N * (N + 1)/2 - 2 * logLik(e)[2]
     } else if (any(class(e) == 'sbekk')) {
-      aic <- k * 2  + N * (N + 1)/2 - 2 * logLik(e)
+      aic <- k * 2  + N * (N + 1)/2 - 2 * logLik(e)[2]
     } else if (any(class(e) == 'sbekka')) {
-      aic <- k * 3 + N * (N + 1)/2 - 2 * logLik(e)
+      aic <- k * 3 + N * (N + 1)/2 - 2 * logLik(e)[2]
     }else if (any(class(e) == 'dbekk')) {
-      aic <- k * 2  + N * (N + 1)/2 - 2 * logLik(e)
+      aic <- k * 2  + N * (N + 1)/2 - 2 * logLik(e)[2]
     } else if (any(class(e) == 'dbekka')) {
-      aic <- k * 3 + N * (N + 1)/2 - 2 * logLik(e)
+      aic <- k * 3 + N * (N + 1)/2 - 2 * logLik(e)[2]
     }
     return(aic)
   }
@@ -94,7 +93,7 @@ AIC.bekkFit <- function(object, ..., k = 2) {
 }
 
 #' @rdname bekk_fit_methods
-#' @export
+
 BIC.bekkFit <- function(object, ...) {
 
   x <- object
@@ -102,17 +101,17 @@ BIC.bekkFit <- function(object, ...) {
   BICinner <- function(e) {
     N <- ncol(e$data)
     if (any(class(e) == 'bekk')) {
-      bic <- N^2 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)
+      bic <- N^2 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)[2]
     } else if (any(class(e) == 'bekka')) {
-      bic <- 3 * N^2 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)
+      bic <- 3 * N^2 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)[2]
     } else if (any(class(e) == 'sbekk')) {
-      bic <- 2 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)
+      bic <- 2 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)[2]
     } else if (any(class(e) == 'sbekka')) {
-      bic <- 3 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)
+      bic <- 3 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)[2]
     } else if (any(class(e) == 'dbekk')) {
-      bic <- 2 * N + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)
+      bic <- 2 * N + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)[2]
     } else if (any(class(e) == 'dbekka')) {
-      bic <- 3 * N + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)
+      bic <- 3 * N + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)[2]
     }
     return(bic)
   }
