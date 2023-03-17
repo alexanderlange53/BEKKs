@@ -4,7 +4,7 @@
 #'
 #' @param x An object of class "bekkFit" from function \link{bekk_fit}.
 #' @param object An object of class "bekkFit" from function \link{bekk_fit}.
-#' @param k Numeric value, the penalty per parameter to be used; the default k = 2 is the classical AIC.
+#' @param k Numeric value, the penalty per parameter for AIC to be used; the default k = 2 is the classical AIC.
 #' @param ...	Further arguments to be passed to and from other methods.
 #'
 #' @examples
@@ -16,14 +16,114 @@
 #' obj_spec <- bekk_spec()
 #' x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
 #'
-#' AIC(x1)
+#' logLik(x1)
 #' }
 #' @import xts
 #' @import stats
+#' @rdname bekk_fit_methods
+#' @internal
+AIC.bekkFit <- function(object, ..., k = 2) {
+
+  x <- object
+
+  AICinner <- function(e) {
+    N <- ncol(e$data)
+    if (any(class(e) == 'bekk')) {
+      aic <- k * 2 * N^2 + N * (N + 1)/2 - 2 * llv(e)
+    } else if (any(class(e) == 'bekka')) {
+      aic <- k * 3 * N^2 + N * (N + 1)/2 - 2 * llv(e)
+    } else if (any(class(e) == 'sbekk')) {
+      aic <- k * 2  + N * (N + 1)/2 - 2 * llv(e)
+    } else if (any(class(e) == 'sbekka')) {
+      aic <- k * 3 + N * (N + 1)/2 - 2 * llv(e)
+    }else if (any(class(e) == 'dbekk')) {
+      aic <- k * 2  + N * (N + 1)/2 - 2 * llv(e)
+    } else if (any(class(e) == 'dbekka')) {
+      aic <- k * 3 + N * (N + 1)/2 - 2 * llv(e)
+    }
+    return(aic)
+  }
+
+  if(!missing(...)) {# several objects: produce data.frame
+    lls <- sapply(list(x, ...), AICinner)
+    vals <- sapply(list(x, ...), function(e1){length(e1$theta)})
+    aic <- data.frame(df = vals, AIC = lls)
+  } else {
+    aic <- AICinner(x)
+    aic <- data.frame(df = length(x$theta), AIC = aic)
+  }
+
+  return(aic)
+}
+#' @rdname bekk_fit_methods
+#' @internal
+BIC.bekkFit <- function(object, ...) {
+
+  x <- object
+
+  BICinner <- function(e) {
+    N <- ncol(e$data)
+    if (any(class(e) == 'bekk')) {
+      bic <- N^2 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * llv(e)
+    } else if (any(class(e) == 'bekka')) {
+      bic <- 3 * N^2 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * llv(e)
+    } else if (any(class(e) == 'sbekk')) {
+      bic <- 2 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * llv(e)
+    } else if (any(class(e) == 'sbekka')) {
+      bic <- 3 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * llv(e)
+    } else if (any(class(e) == 'dbekk')) {
+      bic <- 2 * N + N * (N + 1)/2 * log(nrow(e$data)) - 2 * llv(e)
+    } else if (any(class(e) == 'dbekka')) {
+      bic <- 3 * N + N * (N + 1)/2 * log(nrow(e$data)) - 2 * llv(e)
+    }
+    return(bic)
+  }
+
+  if(!missing(...)) {# several objects: produce data.frame
+    lls <- sapply(list(x, ...), BICinner)
+    vals <- sapply(list(x, ...), function(e1){length(e1$theta)})
+    bic <- data.frame(df = vals, BIC = lls)
+  } else {
+    bic <- data.frame(df = length(x$theta), BIC = BICinner(x))
+  }
+
+  return(bic)
+}
+
+#' @rdname bekk_fit_methods
+llv <- function(object) {
+
+
+  llv_inner <- function(x){
+    if (any(class(x) == 'bekk')) {
+      logl <- loglike_bekk(x$theta, x$data)
+    } else if (any(class(x) == 'bekka')) {
+      logl <- loglike_asymm_bekk(x$theta, x$data, x$signs)
+    } else if (any(class(x) == 'sbekk')) {
+      logl <- loglike_sbekk(x$theta, x$data)
+    } else if (any(class(x) == 'sbekka')) {
+      logl <- loglike_asymm_sbekk(x$theta, x$data, x$signs)
+    }else if (any(class(x) == 'dbekk')) {
+      logl <- loglike_dbekk(x$theta, x$data)
+    } else if (any(class(x) == 'dbekka')) {
+      logl <- loglike_asymm_dbekk(x$theta, x$data, x$signs)
+    }
+
+    return(logl)
+
+  }
+
+
+    lls <- llv_inner(object)
+
+
+
+  return(lls)
+}
 
 #' @rdname bekk_fit_methods
 #' @export
-logLik.bekkFit <- function(object, ...) {
+logLik.bekkFit <- function(object, ..., k = 2) {
 
 
   llv_inner <- function(x){
@@ -48,83 +148,14 @@ logLik.bekkFit <- function(object, ...) {
   if(!missing(...)) {# several objects: produce data.frame
     lls <- sapply(list(object, ...), llv_inner)
     vals <- sapply(list(object, ...), function(e1){length(e1$theta)})
-    aic <- data.frame(df = vals, LLV = lls, AIC = AIC(object, ...)$AIC, BIC = BIC(object, ...)$BIC)
+    aic <- data.frame(df = vals, LLV = lls, AIC = AIC(object, ..., k = k)$AIC, BIC = BIC(object, ...)$BIC)
   } else {
     lls <- llv_inner(object)
-    aic <- data.frame(df = length(object$theta), LLV = lls, AIC = AIC(object), BIC = BIC(object))
-    aic <- lls
+    aic <- data.frame(df = length(object$theta), LLV = lls, AIC = AIC(object, k = k)$AIC, BIC = BIC(object)$BIC)
+
 
      }
   return(aic)
-}
-
-#' @rdname bekk_fit_methods
-AIC.bekkFit <- function(object, ..., k = 2) {
-
-  x <- object
-
-  AICinner <- function(e) {
-    N <- ncol(e$data)
-    if (any(class(e) == 'bekk')) {
-      aic <- k * 2 * N^2 + N * (N + 1)/2 - 2 * logLik(e)[2]
-    } else if (any(class(e) == 'bekka')) {
-      aic <- k * 3 * N^2 + N * (N + 1)/2 - 2 * logLik(e)[2]
-    } else if (any(class(e) == 'sbekk')) {
-      aic <- k * 2  + N * (N + 1)/2 - 2 * logLik(e)[2]
-    } else if (any(class(e) == 'sbekka')) {
-      aic <- k * 3 + N * (N + 1)/2 - 2 * logLik(e)[2]
-    }else if (any(class(e) == 'dbekk')) {
-      aic <- k * 2  + N * (N + 1)/2 - 2 * logLik(e)[2]
-    } else if (any(class(e) == 'dbekka')) {
-      aic <- k * 3 + N * (N + 1)/2 - 2 * logLik(e)[2]
-    }
-    return(aic)
-  }
-
-  if(!missing(...)) {# several objects: produce data.frame
-    lls <- sapply(list(x, ...), AICinner)
-    vals <- sapply(list(x, ...), function(e1){length(e1$theta)})
-    aic <- data.frame(df = vals, AIC = lls)
-  } else {
-    aic <- AICinner(x)
-  }
-
-  return(aic)
-}
-
-#' @rdname bekk_fit_methods
-
-BIC.bekkFit <- function(object, ...) {
-
-  x <- object
-
-  BICinner <- function(e) {
-    N <- ncol(e$data)
-    if (any(class(e) == 'bekk')) {
-      bic <- N^2 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)[2]
-    } else if (any(class(e) == 'bekka')) {
-      bic <- 3 * N^2 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)[2]
-    } else if (any(class(e) == 'sbekk')) {
-      bic <- 2 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)[2]
-    } else if (any(class(e) == 'sbekka')) {
-      bic <- 3 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)[2]
-    } else if (any(class(e) == 'dbekk')) {
-      bic <- 2 * N + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)[2]
-    } else if (any(class(e) == 'dbekka')) {
-      bic <- 3 * N + N * (N + 1)/2 * log(nrow(e$data)) - 2 * logLik(e)[2]
-    }
-    return(bic)
-  }
-
-  if(!missing(...)) {# several objects: produce data.frame
-    lls <- sapply(list(x, ...), BICinner)
-    vals <- sapply(list(x, ...), function(e1){length(e1$theta)})
-    bic <- data.frame(df = vals, BIC = lls)
-  } else {
-    bic <- BICinner(x)
-  }
-
-  return(bic)
 }
 
 #' @rdname bekk_fit_methods

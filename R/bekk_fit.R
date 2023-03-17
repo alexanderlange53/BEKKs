@@ -226,9 +226,8 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
                  spec = spec,
                  QML_t_ratios = QML_t_ratios)
   class(result) <- c('bekkFit', 'bekk')
-
-  result$AIC <- AIC(result)
-  result$BIC <- BIC(result)
+  result$AIC <- logLik(result)$AIC
+  result$BIC <- logLik(result)$BIC
   result$Portmanteau.test <- portmanteau.test(result, lags = 5)
 
   return(result)
@@ -390,8 +389,8 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE,
                  QML_t_ratios = QML_t_ratios)
   class(result) <- c('bekkFit', 'bekka')
 
-  result$AIC <- AIC(result)
-  result$BIC <- BIC(result)
+  result$AIC <- AIC(result)$AIC
+  result$BIC <- BIC(result)$BIC
   result$Portmanteau.test <- portmanteau.test(result, lags = 5)
 
   return(result)
@@ -507,8 +506,8 @@ bekk_fit.dbekk <- function(spec, data, QML_t_ratios = FALSE,
                  QML_t_ratios = QML_t_ratios)
   class(result) <- c('bekkFit', 'dbekk')
 
-  result$AIC <- AIC(result)
-  result$BIC <- BIC(result)
+  result$AIC <- AIC(result)$AIC
+  result$BIC <- BIC(result)$BIC
   result$Portmanteau.test <- portmanteau.test(result, lags = 5)
 
   return(result)
@@ -633,8 +632,8 @@ bekk_fit.dbekka <- function(spec, data, QML_t_ratios = FALSE,
                  QML_t_ratios = QML_t_ratios)
   class(result) <- c('bekkFit', 'dbekka')
 
-  result$AIC <- AIC(result)
-  result$BIC <- BIC(result)
+  result$AIC <- AIC(result)$AIC
+  result$BIC <- BIC(result)$BIC
   result$Portmanteau.test <- portmanteau.test(result, lags = 5)
 
   return(result)
@@ -750,8 +749,8 @@ bekk_fit.sbekk <- function(spec, data, QML_t_ratios = FALSE,
                  QML_t_ratios = QML_t_ratios)
   class(result) <- c('bekkFit', 'sbekk')
 
-  result$AIC <- AIC(result)
-  result$BIC <- BIC(result)
+  result$AIC <- AIC(result)$AIC
+  result$BIC <- BIC(result)$BIC
     result$Portmanteau.test <- portmanteau.test(result, lags = 5)
 
   return(result)
@@ -875,8 +874,8 @@ bekk_fit.sbekka <- function(spec, data, QML_t_ratios = FALSE,
                  QML_t_ratios = QML_t_ratios)
   class(result) <- c('bekkFit', 'sbekka')
 
-  result$AIC <- AIC(result)
-  result$BIC <- BIC(result)
+  result$AIC <- AIC(result)$AIC
+  result$BIC <- BIC(result)$BIC
   result$Portmanteau.test <- portmanteau.test(result, lags = 5)
 
   return(result)
