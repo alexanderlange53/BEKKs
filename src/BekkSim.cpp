@@ -3,7 +3,7 @@
  #include "IndicatorFunctions.h"
 
 // [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::plugins(cpp17)]]
 
 // [[Rcpp::export]]
 arma::mat simulate_bekk_c(arma::vec theta, const int NoObs, const int n){

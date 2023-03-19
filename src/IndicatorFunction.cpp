@@ -4,7 +4,7 @@
 
 
 // [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::plugins(cpp17)]]
 
 // [[Rcpp::export]]
 int indicatorFunction(arma::mat r, arma::mat signs){

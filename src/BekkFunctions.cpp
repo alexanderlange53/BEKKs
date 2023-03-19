@@ -5,7 +5,7 @@
 
 
 // [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::plugins(cpp17)]]
 
 // [[Rcpp::export]]
 arma::mat diag_selection_mat(const int& n) {
