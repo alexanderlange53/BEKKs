@@ -21,7 +21,6 @@
 #' @import xts
 #' @import stats
 #' @rdname bekk_fit_methods
-#' @internal
 AIC.bekkFit <- function(object, ..., k = 2) {
 
   x <- object
@@ -56,7 +55,6 @@ AIC.bekkFit <- function(object, ..., k = 2) {
   return(aic)
 }
 #' @rdname bekk_fit_methods
-#' @internal
 BIC.bekkFit <- function(object, ...) {
 
   x <- object
