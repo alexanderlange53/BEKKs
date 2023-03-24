@@ -21,6 +21,57 @@
 #' @import xts
 #' @import stats
 #' @rdname bekk_fit_methods
+#' @export
+print.bekkFit <- function(x,...){
+  bekkObject <- x
+
+  if (all(class(bekkObject) != 'var')) {
+    if (any(class(bekkObject) == 'bekk')) {
+      cat(paste("\n", "BEKK estimation results", "\n", sep = ""))
+      underScore <- paste(rep("-", nchar("BEKK estimation results")), collapse = "")
+    } else if (any(class(bekkObject) == 'bekka')) {
+      cat(paste("\n", "Asymmetric BEKK estimation results", "\n", sep = ""))
+      underScore <- paste(rep("-", nchar("Asymmetric BEKK estimation results")), collapse = "")
+    } else if (any(class(bekkObject) == 'dbekk')) {
+      cat(paste("\n", "Diagonal BEKK estimation results", "\n", sep = ""))
+      underScore <- paste(rep("-", nchar("Diagonal BEKK estimation results")), collapse = "")
+    } else if (any(class(bekkObject) == 'dbekka')) {
+      cat(paste("\n", "Asymmetric diagonal BEKK estimation results", "\n", sep = ""))
+      underScore <- paste(rep("-", nchar("Asymmetric diagonal BEKK estimation results")), collapse = "")
+    } else if (any(class(bekkObject) == 'sbekk')) {
+      cat(paste("\n", "Scalar BEKK estimation results", "\n", sep = ""))
+      underScore <- paste(rep("-", nchar("Scalar BEKK estimation results")), collapse = "")
+    } else if (any(class(bekkObject) == 'sbekka')) {
+      cat(paste("\n", "Asymmetric scalar BEKK estimation results", "\n", sep = ""))
+      underScore <- paste(rep("-", nchar("Asymmetric scalar BEKK estimation results")), collapse = "")
+    }
+
+    cat(underScore)
+    cat("\nLog-likelihood: ")
+    cat(bekkObject$log_likelihood)
+    cat("\nBEKK model stationary: ")
+    cat(bekkObject$BEKK_valid)
+    cat("\nNumber of BHHH iterations: ")
+    cat(bekkObject$iter)
+    cat("\nAIC: ")
+    cat(bekkObject$AIC)
+    cat("\nBIC: ")
+    cat(bekkObject$BIC)
+    cat("\n")
+  }
+  bekkObject
+}
+
+#' @rdname bekk_fit_methods
+#' @export
+residuals.bekkFit <- function(object, ...) {
+  object$e_t
+}
+
+
+
+
+#' @noRd
 AIC.bekkFit <- function(object, ..., k = 2) {
 
   x <- object
@@ -54,7 +105,7 @@ AIC.bekkFit <- function(object, ..., k = 2) {
 
   return(aic)
 }
-#' @rdname bekk_fit_methods
+#' @noRd
 BIC.bekkFit <- function(object, ...) {
 
   x <- object
@@ -88,7 +139,7 @@ BIC.bekkFit <- function(object, ...) {
   return(bic)
 }
 
-#' @rdname bekk_fit_methods
+#' @noRd
 llv <- function(object) {
 
 
@@ -156,50 +207,3 @@ logLik.bekkFit <- function(object, ..., k = 2) {
   return(aic)
 }
 
-#' @rdname bekk_fit_methods
-#' @export
-print.bekkFit <- function(x,...){
-  bekkObject <- x
-
-  if (all(class(bekkObject) != 'var')) {
-    if (any(class(bekkObject) == 'bekk')) {
-      cat(paste("\n", "BEKK estimation results", "\n", sep = ""))
-      underScore <- paste(rep("-", nchar("BEKK estimation results")), collapse = "")
-    } else if (any(class(bekkObject) == 'bekka')) {
-      cat(paste("\n", "Asymmetric BEKK estimation results", "\n", sep = ""))
-      underScore <- paste(rep("-", nchar("Asymmetric BEKK estimation results")), collapse = "")
-    } else if (any(class(bekkObject) == 'dbekk')) {
-      cat(paste("\n", "Diagonal BEKK estimation results", "\n", sep = ""))
-      underScore <- paste(rep("-", nchar("Diagonal BEKK estimation results")), collapse = "")
-    } else if (any(class(bekkObject) == 'dbekka')) {
-      cat(paste("\n", "Asymmetric diagonal BEKK estimation results", "\n", sep = ""))
-      underScore <- paste(rep("-", nchar("Asymmetric diagonal BEKK estimation results")), collapse = "")
-    } else if (any(class(bekkObject) == 'sbekk')) {
-      cat(paste("\n", "Scalar BEKK estimation results", "\n", sep = ""))
-      underScore <- paste(rep("-", nchar("Scalar BEKK estimation results")), collapse = "")
-    } else if (any(class(bekkObject) == 'sbekka')) {
-      cat(paste("\n", "Asymmetric scalar BEKK estimation results", "\n", sep = ""))
-      underScore <- paste(rep("-", nchar("Asymmetric scalar BEKK estimation results")), collapse = "")
-    }
-
-    cat(underScore)
-    cat("\nLog-likelihood: ")
-    cat(bekkObject$log_likelihood)
-    cat("\nBEKK model stationary: ")
-    cat(bekkObject$BEKK_valid)
-    cat("\nNumber of BHHH iterations: ")
-    cat(bekkObject$iter)
-    cat("\nAIC: ")
-    cat(bekkObject$AIC)
-    cat("\nBIC: ")
-    cat(bekkObject$BIC)
-    cat("\n")
-  }
-  bekkObject
-}
-
-#' @rdname bekk_fit_methods
-#' @export
-residuals.bekkFit <- function(object, ...) {
-  object$e_t
-}
