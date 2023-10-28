@@ -16,18 +16,18 @@
 #'
 #' }
 #'
-#' @export
-
-predict <- function(x, n.ahead = 1, ci = 0.95){
-
-  if (!inherits(x, 'bekkFit')) {
-    stop('Please provide and object of class "bekkFit" for "x".')
-  }
 
 
-  UseMethod('predict')
-
-}
+# predict <- function(x, n.ahead = 1, ci = 0.95){
+#
+#   if (!inherits(x, 'bekkFit')) {
+#     stop('Please provide and object of class "bekkFit" for "x".')
+#   }
+#
+#
+#   UseMethod('predict')
+#
+# }
 
 #' @export
 predict.bekk <- function(x, n.ahead = 1, ci = 0.95) {

@@ -20,17 +20,17 @@
 #'
 #' }
 #'
-#' @export
 
-simulate <- function(spec, nobs) {
-  if(is.null(nobs) || !is.numeric(nobs) || nobs < 1){
-    stop("Please provide an integer specifying the number of observations")
-  }
-  if(!inherits(spec,c("bekkSpec", "bekkFit"))){
-    stop("Please provide an object of class bekk_fit or 'bekk_spec'.")
-  }
-  UseMethod('simulate')
-}
+
+# simulate <- function(spec, nobs) {
+#   if(is.null(nobs) || !is.numeric(nobs) || nobs < 1){
+#     stop("Please provide an integer specifying the number of observations")
+#   }
+#   if(!inherits(spec,c("bekkSpec", "bekkFit"))){
+#     stop("Please provide an object of class bekk_fit or 'bekk_spec'.")
+#   }
+#   UseMethod('simulate')
+# }
 
 #' @export
 simulate.bekk <- function(spec, nobs) {
