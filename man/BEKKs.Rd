@@ -3,6 +3,7 @@
 \docType{package}
 \name{BEKKs}
 \alias{BEKKs}
+\alias{_PACKAGE}
 \title{BEKKs: Volatility modelling}
 \description{
 \loadmathjax
