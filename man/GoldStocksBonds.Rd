@@ -9,7 +9,7 @@ Trivariate data set consisting of daily gold, S&P 500 and U.S. Treasury Bond Fut
 }
 \usage{data("GoldStocksBonds")}
 \format{
-  A data frame with 7346 observations on the following 3 variables.
+  A time series matrix of class mts 7346 observations on the following 3 variables.
   \describe{
     \item{Gold}{a numeric vector}
     \item{S&P 500}{a numeric vector}
