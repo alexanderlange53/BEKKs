@@ -30,6 +30,14 @@ summary.bekk <- function(object, ...) {
   cat("\nG \n")
   print(bekkObject$G_t)
   cat("\n")
+  cat("\nstandard errors of parameter matrices: \n")
+  cat("\nC \n")
+  print(bekkObject$C0_sd)
+  cat("\nA \n")
+  print(bekkObject$A_sd)
+  cat("\nG \n")
+  print(bekkObject$G_sd)
+  cat("\n")
 }
 
 #' @export
@@ -67,6 +75,16 @@ summary.bekka <- function(object, ...) {
   cat("\nG \n")
   print(bekkObject$G_t)
   cat("\n")
+  cat("\nstandard errors of parameter matrices: \n")
+  cat("\nC \n")
+  print(bekkObject$C0_sd)
+  cat("\nA \n")
+  print(bekkObject$A_sd)
+  cat("\nA \n")
+  print(bekkObject$B_sd)
+  cat("\nG \n")
+  print(bekkObject$G_sd)
+  cat("\n")
 }
 
 #' @export
@@ -100,6 +118,14 @@ summary.dbekk <- function(object, ...) {
   print(bekkObject$A_t)
   cat("\nG \n")
   print(bekkObject$G_t)
+  cat("\n")
+  cat("\nstandard errors of parameter matrices: \n")
+  cat("\nC \n")
+  print(bekkObject$C0_sd)
+  cat("\nA \n")
+  print(bekkObject$A_sd)
+  cat("\nG \n")
+  print(bekkObject$G_sd)
   cat("\n")
 }
 
@@ -138,6 +164,16 @@ summary.dbekka <- function(object, ...) {
   cat("\nG \n")
   print(bekkObject$G_t)
   cat("\n")
+  cat("\nstandard errors of parameter matrices: \n")
+  cat("\nC \n")
+  print(bekkObject$C0_sd)
+  cat("\nA \n")
+  print(bekkObject$A_sd)
+  cat("\nA \n")
+  print(bekkObject$B_sd)
+  cat("\nG \n")
+  print(bekkObject$G_sd)
+  cat("\n")
 }
 
 
@@ -172,6 +208,14 @@ summary.sbekk <- function(object, ...) {
   print(bekkObject$a_t)
   cat("\ng \n")
   print(bekkObject$g_t)
+  cat("\n")
+  cat("\nstandard errors of parameter matrices: \n")
+  cat("\nC \n")
+  print(bekkObject$C0_sd)
+  cat("\na \n")
+  print(bekkObject$a_sd)
+  cat("\ng \n")
+  print(bekkObject$g_sd)
   cat("\n")
 }
 
@@ -209,5 +253,15 @@ summary.sbekka <- function(object, ...) {
   print(bekkObject$b_t)
   cat("\ng \n")
   print(bekkObject$g_t)
+  cat("\n")
+  cat("\nstandard errors of parameter matrices: \n")
+  cat("\nC \n")
+  print(bekkObject$C0_sd)
+  cat("\na \n")
+  print(bekkObject$a_sd)
+  cat("\na \n")
+  print(bekkObject$b_sd)
+  cat("\ng \n")
+  print(bekkObject$g_sd)
   cat("\n")
 }

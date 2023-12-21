@@ -8,7 +8,7 @@
 #'                     are exactly calculated via second order derivatives.
 #' @param max_iter Maximum number of BHHH algorithm iterations.
 #' @param crit Determines the precision of the BHHH algorithm.
-#' @return  Returns a S3 class "bekkFit" object containing the estimated parameters, t-values, volatility process of the model defined by the BEKK_spec object.
+#' @return  Returns a S3 class "bekkFit" object containing the estimated parameters, t-values, standard errors and volatility process of the model defined by the BEKK_spec object.
 #'
 #' @details The BEKK optimization routine is based on the Berndt–Hall–Hall–Hausman (BHHH) algorithm and is inspired by the study of Hafner and Herwartz (2008).
 #' The authors provide analytical formulas for the score and Hessian of several MGARCH models in a QML framework and show that analytical derivations significantly outperform numerical methods.
@@ -148,8 +148,11 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
   if (QML_t_ratios == TRUE) {
     tratios <- QML_t_ratios(params$theta, data)
     tratios_mat <- coef_mat(tratios, N)
+    sds <- QML_sd(params$theta, data)
+    sd_mat <- coef_mat(sds, N)
   } else {
     tratios_mat <- coef_mat(params$t_val, N)
+    sd_mat <- coef_mat(params$sd, N)
   }
 
   param_mat <- coef_mat(params$theta, N)
@@ -212,6 +215,9 @@ bekk_fit.bekk <- function(spec, data, QML_t_ratios = FALSE,
                  C0_t = tratios_mat$c0,
                  A_t = tratios_mat$a,
                  G_t = tratios_mat$g,
+                 C0_sd = sd_mat$c0,
+                 A_sd = sd_mat$a,
+                 G_sd = sd_mat$g,
                  theta = params$theta,
                  log_likelihood = params$likelihood,
                  BEKK_valid = BEKK_valid,
@@ -307,8 +313,11 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE,
   if (QML_t_ratios == TRUE) {
     tratios <- QML_t_ratios_asymm(params$theta, data, spec$model$signs)
     tratios_mat <- coef_mat_asymm(tratios, N)
+    sds <- QML_sd_asymm(params$theta, data, spec$model$signs)
+    sd_mat <- coef_mat_asymm(sds, N)
   } else {
     tratios_mat <- coef_mat_asymm(params$t_val, N)
+    sd_mat <- coef_mat_asymm(params$sd, N)
   }
 
   param_mat <- coef_mat_asymm(params$theta, N)
@@ -372,6 +381,10 @@ bekk_fit.bekka <- function(spec, data, QML_t_ratios = FALSE,
                  A_t = tratios_mat$a,
                  B_t = tratios_mat$b,
                  G_t = tratios_mat$g,
+                 C0_sd = sd_mat$c0,
+                 A_sd = sd_mat$a,
+                 B_sd = sd_mat$b,
+                 G_sd = sd_mat$g,
                  theta = params$theta,
                  signs = spec$model$signs,
                  log_likelihood = params$likelihood,
@@ -427,8 +440,11 @@ bekk_fit.dbekk <- function(spec, data, QML_t_ratios = FALSE,
   if (QML_t_ratios == TRUE) {
     tratios <- QML_t_ratios_dbekk(params$theta, data)
     tratios_mat <- coef_mat_diagonal(tratios, N)
+    sds <- QML_sd_dbekk(params$theta, data)
+    sd_mat <- coef_mat_diagonal(sds, N)
   } else {
     tratios_mat <- coef_mat_diagonal(params$t_val, N)
+    sd_mat <- coef_mat_diagonal(params$sd, N)
   }
 
   param_mat <- coef_mat_diagonal(params$theta, N)
@@ -491,6 +507,9 @@ bekk_fit.dbekk <- function(spec, data, QML_t_ratios = FALSE,
                  C0_t = tratios_mat$c0,
                  A_t = tratios_mat$a,
                  G_t = tratios_mat$g,
+                 C0_sd = sd_mat$c0,
+                 A_sd = sd_mat$a,
+                 G_sd = sd_mat$g,
                  theta = params$theta,
                  log_likelihood = params$likelihood,
                  BEKK_valid = BEKK_valid,
@@ -550,8 +569,11 @@ bekk_fit.dbekka <- function(spec, data, QML_t_ratios = FALSE,
   if (QML_t_ratios == TRUE) {
     tratios <- QML_t_ratios_dbekka(params$theta, data, spec$model$signs)
     tratios_mat <- coef_mat_asymm_diagonal(tratios, N)
+    sds <- QML_sd_dbekka(params$theta, data, spec$model$signs)
+    sd_mat <- coef_mat_asymm_diagonal(sds, N)
   } else {
     tratios_mat <- coef_mat_asymm_diagonal(params$t_val, N)
+    sd_mat <- coef_mat_asymm_diagonal(params$sd, N)
   }
 
   param_mat <- coef_mat_asymm_diagonal(params$theta, N)
@@ -615,6 +637,10 @@ bekk_fit.dbekka <- function(spec, data, QML_t_ratios = FALSE,
                  A_t = tratios_mat$a,
                  B_t = tratios_mat$b,
                  G_t = tratios_mat$g,
+                 C0_sd = sd_mat$c0,
+                 A_sd = sd_mat$a,
+                 B_sd = sd_mat$b,
+                 G_sd = sd_mat$g,
                  theta = params$theta,
                  signs = spec$model$signs,
                  log_likelihood = params$likelihood,
@@ -670,8 +696,11 @@ bekk_fit.sbekk <- function(spec, data, QML_t_ratios = FALSE,
   if (QML_t_ratios == TRUE) {
     tratios <- QML_t_ratios_sbekk(params$theta, data)
     tratios_mat <- coef_mat_scalar(tratios, N)
+    sds <- QML_sd_sbekk(params$theta, data)
+    sd_mat <- coef_mat_scalar(sds, N)
   } else {
     tratios_mat <- coef_mat_scalar(params$t_val, N)
+    sd_mat <- coef_mat_scalar(params$sd, N)
   }
 
   param_mat <- coef_mat_scalar(params$theta, N)
@@ -734,6 +763,9 @@ bekk_fit.sbekk <- function(spec, data, QML_t_ratios = FALSE,
                  C0_t = tratios_mat$c0,
                  a_t = tratios_mat$a,
                  g_t = tratios_mat$g,
+                 C0_sd = sd_mat$c0,
+                 a_sd = sd_mat$a,
+                 g_sd = sd_mat$g,
                  theta = params$theta,
                  log_likelihood = params$likelihood,
                  BEKK_valid = BEKK_valid,
@@ -789,12 +821,16 @@ bekk_fit.sbekka <- function(spec, data, QML_t_ratios = FALSE,
   theta <- matrix(theta, ncol =1)
 
   params <- bhh_asymm_sbekk(data, theta, max_iter, crit, spec$model$signs)
+  print(params)
 
   if (QML_t_ratios == TRUE) {
     tratios <- QML_t_ratios_sbekk_asymm(params$theta, data, spec$model$signs)
     tratios_mat <- coef_mat_asymm_scalar(tratios, N)
+    sds <- QML_sd_sbekk_asymm(params$theta, data, spec$model$signs)
+    sd_mat <- coef_mat_asymm_scalar(sds, N)
   } else {
     tratios_mat <- coef_mat_asymm_scalar(params$t_val, N)
+    sd_mat <- coef_mat_asymm_scalar(params$sd, N)
   }
 
   param_mat <- coef_mat_asymm_scalar(params$theta, N)
@@ -857,6 +893,10 @@ bekk_fit.sbekka <- function(spec, data, QML_t_ratios = FALSE,
                  a_t = tratios_mat$a,
                  b_t = tratios_mat$b,
                  g_t = tratios_mat$g,
+                 C0_sd = sd_mat$c0,
+                 a_sd = sd_mat$a,
+                 b_sd = sd_mat$b,
+                 g_sd = sd_mat$g,
                  theta = params$theta,
                  signs = spec$model$signs,
                  log_likelihood = params$likelihood,

@@ -19,7 +19,7 @@ are exactly calculated via second order derivatives.}
 \item{crit}{Determines the precision of the BHHH algorithm.}
 }
 \value{
-Returns a S3 class "bekkFit" object containing the estimated parameters, t-values, volatility process of the model defined by the BEKK_spec object.
+Returns a S3 class "bekkFit" object containing the estimated parameters, t-values, standard errors and volatility process of the model defined by the BEKK_spec object.
 }
 \description{
 Method for fitting a variety of N-dimensional BEKK models.

@@ -118,3 +118,75 @@ QML_t_ratios_sbekk_asymm <- function(theta, r, signs) {
   return(theta/s2)
 }
 
+QML_sd <- function(theta, r) {
+  s1 <- score_bekk(theta, r)
+  s1 <- crossprod(s1)
+
+  s2 <- hesse_bekk(theta, r)
+  s2 <- solve(s2) %*% s1 %*% solve(s2)
+
+  s2 <- sqrt(abs(diag(s2)))
+
+  return(s2)
+}
+
+QML_sd_asymm <- function(theta, r, signs) {
+  s1 <- score_asymm_bekk(theta, r, signs)
+  s1 <- crossprod(s1)
+
+  s2 <- hesse_asymm_bekk(theta, r, signs)
+  s2 <- solve(s2) %*% s1 %*% solve(s2)
+
+  s2 <- sqrt(abs(diag(s2)))
+
+  return(s2)
+}
+
+QML_sd_dbekk <- function(theta, r) {
+  s1 <- score_dbekk(theta, r)
+  s1 <- crossprod(s1)
+
+  s2 <- hesse_dbekk(theta, r)
+  s2 <- solve(s2) %*% s1 %*% solve(s2)
+
+  s2 <- sqrt(abs(diag(s2)))
+
+  return(s2)
+}
+
+QML_sd_dbekka <- function(theta, r, signs) {
+  s1 <- score_asymm_dbekk(theta, r, signs)
+  s1 <- crossprod(s1)
+
+  s2 <- hesse_asymm_dbekk(theta, r, signs)
+  s2 <- solve(s2) %*% s1 %*% solve(s2)
+
+  s2 <- sqrt(abs(diag(s2)))
+
+  return(s2)
+}
+
+QML_sd_sbekk <- function(theta, r) {
+  s1 <- score_sbekk(theta, r)
+  s1 <- crossprod(s1)
+
+  s2 <- hesse_sbekk(theta, r)
+  s2 <- solve(s2) %*% s1 %*% solve(s2)
+
+  s2 <- sqrt(abs(diag(s2)))
+
+  return(s2)
+}
+
+QML_sd_sbekk_asymm <- function(theta, r, signs) {
+  s1 <- score_asymm_sbekk(theta, r, signs)
+  s1 <- crossprod(s1)
+
+  s2 <- hesse_asymm_sbekk(theta, r, signs)
+  s2 <- solve(s2) %*% s1 %*% solve(s2)
+
+  s2 <- sqrt(abs(diag(s2)))
+
+  return(s2)
+}
+

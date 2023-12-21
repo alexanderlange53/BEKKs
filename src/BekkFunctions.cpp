@@ -874,6 +874,7 @@ Rcpp::List  bhh_bekk(arma::mat& r, const arma::mat& theta, int& max_iter, double
   arma::mat t_val = theta_candidate/s1;
   return Rcpp::List::create(Rcpp::Named("theta") = theta_candidate,
                        Rcpp::Named("t_val") = t_val,
+                       Rcpp::Named("sd") = s1,
                        Rcpp::Named("likelihood") = likelihood_final,
                        Rcpp::Named("iter") = count_loop,
                        Rcpp::Named("likelihood_iter") = lik_all);
@@ -957,6 +958,7 @@ Rcpp::List  bhh_asymm_bekk(arma::mat& r, const arma::mat& theta, int& max_iter, 
   arma::mat t_val = theta_candidate/s1;
   return Rcpp::List::create(Rcpp::Named("theta") = theta_candidate,
                             Rcpp::Named("t_val") = t_val,
+                            Rcpp::Named("sd") = s1,
                             Rcpp::Named("likelihood") = likelihood_final,
                             Rcpp::Named("iter") = count_loop,
                             Rcpp::Named("likelihood_iter") = lik_all);
@@ -1041,6 +1043,7 @@ Rcpp::List  bhh_dbekk(arma::mat& r, const arma::mat& theta, int& max_iter, doubl
   arma::mat t_val = theta_candidate/s1;
   return Rcpp::List::create(Rcpp::Named("theta") = theta_candidate,
                             Rcpp::Named("t_val") = t_val,
+                            Rcpp::Named("sd") = s1,
                             Rcpp::Named("likelihood") = likelihood_final,
                             Rcpp::Named("iter") = count_loop,
                             Rcpp::Named("likelihood_iter") = lik_all);
@@ -1124,6 +1127,7 @@ Rcpp::List  bhh_asymm_dbekk(arma::mat& r, const arma::mat& theta, int& max_iter,
   arma::mat t_val = theta_candidate/s1;
   return Rcpp::List::create(Rcpp::Named("theta") = theta_candidate,
                             Rcpp::Named("t_val") = t_val,
+                            Rcpp::Named("sd") = s1,
                             Rcpp::Named("likelihood") = likelihood_final,
                             Rcpp::Named("iter") = count_loop,
                             Rcpp::Named("likelihood_iter") = lik_all);

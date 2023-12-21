@@ -30,3 +30,29 @@ Returns a S3 class "bekkSpec"  object containing the specifications of the model
 \description{
 Method for creating a N-dimensional BEKK model specification object prior to fitting and/or simulating.
 }
+\examples{
+\donttest{
+
+data(StocksBonds)
+
+# Fitting a symmetric BEKK model using default starting values - i.e. fixed values
+obj_spec_fixed <- bekk_spec(init_values = NULL)
+x1 <- bekk_fit(obj_spec_fixed, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
+# Fitting a symmetric BEKK model using initial values originating from a random grid serach algorithm
+obj_spec_random <- bekk_spec(init_values = "random")
+x2 <- bekk_fit(obj_spec_random, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
+summary(x1)
+summary(x2)
+plot(x1)
+plot(x2)
+# Fitting an asymmetric BEKK model with default starting values
+obj_spec_fix <- bekk_spec(model = list(type = "bekk", asymmetric = TRUE),init_values = NULL)
+x1 <- bekk_fit(obj_spec_fix, StocksBonds)
+obj_spec_random <- bekk_spec(model = list(type = "bekk", asymmetric = TRUE),init_values = "random")
+x2 <- bekk_fit(obj_spec_random, StocksBonds)
+summary(x1)
+summary(x2)
+plot(x1)
+plot(x2)
+}
+}
