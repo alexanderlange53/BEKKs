@@ -1,18 +1,18 @@
-#' @name Simulate
-#' @rdname Simulate
+#' @name simulate
+#' @rdname simulate
 #' @title Simulating BEKK models
 #'
 #' @description Method for simulating a N-dimensional BEKK model.
 #'
-#' @param spec A spec object of class "bekkSpec" from the function \link{bekk_spec} or a fitted bekk model of class "bekkFit" from the \link{bekk_fit} function
+#' @param object A spec object of class "bekkSpec" from the function \link{bekk_spec} or a fitted bekk model of class "bekkFit" from the \link{bekk_fit} function
 #' @param nobs Number of observations of the simulated sample
-#'
+#' @param ... Further parameters to be passed on to the function.
 #' @return Returns a simulated time series S3 class object using the parameters of passed "bekkSpec" or "bekkFit".
 #'
 #' @examples
 #' \donttest{
 #'
-#' # Simulate a BEKK with estimated parameter
+#' # simulate a BEKK with estimated parameter
 #' obj_spec <- bekk_spec()
 #' x1 <- bekk_fit(obj_spec, StocksBonds)
 #'
@@ -24,7 +24,8 @@
 #'
 
 #' @export
-simulate.bekk <- function(spec, nobs) {
+simulate.bekk <- function(object, ..., nobs) {
+  spec <- object
   if(is.null(nobs) || !is.numeric(nobs) || nobs < 1){
     stop("Please provide an integer specifying the number of observations")
   }
@@ -42,10 +43,11 @@ simulate.bekk <- function(spec, nobs) {
 
   return(ts(sim_dat))
 }
-#' @rdname Simulate
+#' @rdname simulate
 
 #' @export
-simulate.bekka <- function(spec, nobs) {
+simulate.bekka <- function(object, ..., nobs) {
+  spec <- object
   if(is.null(nobs) || !is.numeric(nobs) || nobs < 1){
     stop("Please provide an integer specifying the number of observations")
   }
@@ -64,10 +66,11 @@ simulate.bekka <- function(spec, nobs) {
   return(ts(sim_dat))
 }
 
-#' @rdname Simulate
+#' @rdname simulate
 
 #' @export
-simulate.dbekk <- function(spec, nobs) {
+simulate.dbekk <- function(object, ..., nobs) {
+  spec <- object
   if(is.null(nobs) || !is.numeric(nobs) || nobs < 1){
     stop("Please provide an integer specifying the number of observations")
   }
@@ -85,9 +88,10 @@ simulate.dbekk <- function(spec, nobs) {
 
   return(ts(sim_dat))
 }
-#' @rdname Simulate
+#' @rdname simulate
 #' @export
-simulate.dbekka <- function(spec, nobs) {
+simulate.dbekka <- function(object, ..., nobs) {
+  spec <- object
   if(is.null(nobs) || !is.numeric(nobs) || nobs < 1){
     stop("Please provide an integer specifying the number of observations")
   }
@@ -105,9 +109,10 @@ simulate.dbekka <- function(spec, nobs) {
   return(ts(sim_dat))
 }
 
-#' @rdname Simulate
+#' @rdname simulate
 #' @export
-simulate.sbekk <- function(spec, nobs) {
+simulate.sbekk <- function(object, ..., nobs) {
+  spec <- object
   if(is.null(nobs) || !is.numeric(nobs) || nobs < 1){
     stop("Please provide an integer specifying the number of observations")
   }
@@ -124,9 +129,10 @@ simulate.sbekk <- function(spec, nobs) {
 
   return(ts(sim_dat))
 }
-#' @rdname Simulate
+#' @rdname simulate
 #' @export
-simulate.sbekka <- function(spec, nobs) {
+simulate.sbekka <- function(object, ..., nobs) {
+  spec <- object
   if(is.null(nobs) || !is.numeric(nobs) || nobs < 1){
     stop("Please provide an integer specifying the number of observations")
   }

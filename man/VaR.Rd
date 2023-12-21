@@ -19,7 +19,7 @@ VaR(x, p = 0.99, portfolio_weights = NULL, distribution = "empirical")
 Returns a S3 class "var" object containing the VaR forecast and respective confidence bands.
 }
 \description{
-Method for calculating VaR from estimated covariance processes (\link{bekk_fit}) or predicted covariances (\link{forecast}).
+Method for calculating VaR from estimated covariance processes (\link{bekk_fit}) or predicted covariances (\link{predict}).
 }
 \examples{
 \donttest{

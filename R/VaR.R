@@ -1,6 +1,6 @@
 #' Calculating Value-at-Risk (VaR)
 #'
-#' @description Method for calculating VaR from estimated covariance processes (\link{bekk_fit}) or predicted covariances (\link{forecast}).
+#' @description Method for calculating VaR from estimated covariance processes (\link{bekk_fit}) or predicted covariances (\link{predict}).
 #'
 #' @param x An object of class "bekkFit" from the function \link{bekk_fit} or an object of class "bekkForecast" from the function \link{predict}.
 #' @param p A numerical value that determines the confidence level. The default value is set at 0.99 in accordance with the Basel Regulation.
