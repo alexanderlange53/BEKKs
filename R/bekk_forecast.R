@@ -16,14 +16,10 @@
 #'
 #' }
 #'
-
-#' @export
-predict <- function(x, n.ahead = 1, ci = 0.95){
-
+#'@export
+predict <- function(...) {
   UseMethod('predict')
-
 }
-
 #' @export
 predict.bekk <- function(x, n.ahead = 1, ci = 0.95) {
   N <- ncol(x$data)

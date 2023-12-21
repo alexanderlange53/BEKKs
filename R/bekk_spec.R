@@ -22,7 +22,7 @@
 #' # - i.e. fixed values
 #' obj_spec_fixed <- bekk_spec(init_values = NULL)
 #' x1 <- bekk_fit(obj_spec_fixed, StocksBonds, QML_t_ratios = FALSE,
-#' + max_iter = 50, crit = 1e-9)
+#' max_iter = 50, crit = 1e-9)
 #'# Fitting a symmetric BEKK model using initial values originating from a
 #'# random grid search algorithm
 #' obj_spec_random <- bekk_spec(init_values = "random")
@@ -34,10 +34,10 @@
 #' plot(x2)
 #' # Fitting an asymmetric BEKK model with default starting values
 #' obj_spec_fix <- bekk_spec(model = list(type = "bekk", asymmetric = TRUE),
-#' + init_values = NULL)
+#' init_values = NULL)
 #' x1 <- bekk_fit(obj_spec_fix, StocksBonds)
 #' obj_spec_random <- bekk_spec(model = list(type = "bekk", asymmetric = TRUE),
-#' + init_values = "random")
+#' init_values = "random")
 #' x2 <- bekk_fit(obj_spec_random, StocksBonds)
 #' print(x1)
 #' print(x2)

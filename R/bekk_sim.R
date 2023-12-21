@@ -21,7 +21,7 @@
 #' }
 #'
 #' @export
-simulate <- function(spec, nobs) {
+simulate <- function(...) {
   UseMethod('simulate')
 }
 
