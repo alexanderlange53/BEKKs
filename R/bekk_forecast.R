@@ -2,7 +2,7 @@
 #'
 #' @description Method for predicting a N-dimensional BEKK covariances.
 #'
-#' @param x A fitted bekk model of class bekk from the \link{bekk_fit} function
+#' @param x A fitted bekk model of class "bekkFit" from the \link{bekk_fit} function
 #' @param n.ahead Number of periods to forecast conditional volatility. Default is a one-period ahead forecast.
 #' @param ci Floating point in [0,1] defining the niveau for confidence bands of the conditional volatility forecast. Default is 95 per cent niveau confidence bands.
 #' @return Returns a S3 class "bekkForecast" object containing the conditional volatility forecasts and respective confindence bands.
@@ -17,9 +17,11 @@
 #' }
 #'
 #'@export
-predict <- function(...) {
+predict <- function(x, n.ahead = 1, ci = 0.95) {
   UseMethod('predict')
 }
+predict.default <- function(x, n.ahead, ...) {stats::predict(x)}
+
 #' @export
 predict.bekk <- function(x, n.ahead = 1, ci = 0.95) {
   N <- ncol(x$data)

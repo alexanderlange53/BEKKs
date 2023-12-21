@@ -4,10 +4,10 @@
 \alias{predict}
 \title{Forecasting conditional volatilities with BEKK models}
 \usage{
-predict(...)
+predict(x, n.ahead = 1, ci = 0.95)
 }
 \arguments{
-\item{x}{A fitted bekk model of class bekk from the \link{bekk_fit} function}
+\item{x}{A fitted bekk model of class "bekkFit" from the \link{bekk_fit} function}
 
 \item{n.ahead}{Number of periods to forecast conditional volatility. Default is a one-period ahead forecast.}
 

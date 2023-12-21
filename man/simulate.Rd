@@ -4,7 +4,7 @@
 \alias{simulate}
 \title{Simulating BEKK models}
 \usage{
-simulate(...)
+simulate(spec, nobs, ...)
 }
 \arguments{
 \item{spec}{A spec object of class "bekkSpec" from the function \link{bekk_spec} or a fitted bekk model of class "bekkFit" from the \link{bekk_fit} function}

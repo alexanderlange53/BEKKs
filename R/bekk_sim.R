@@ -21,9 +21,10 @@
 #' }
 #'
 #' @export
-simulate <- function(...) {
+simulate <- function(spec, nobs, ...) {
   UseMethod('simulate')
 }
+simulate.default <- function(spec, ...) {stats::simulate(spec)}
 
 #' @export
 simulate.bekk <- function(spec, nobs) {
