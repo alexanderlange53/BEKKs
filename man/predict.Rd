@@ -4,7 +4,7 @@
 \alias{predict}
 \title{Forecasting conditional volatilities with BEKK models}
 \usage{
-predict(x, n.ahead = 1, ci = 0.95)
+predict(x, n.ahead = 1, ci = 0.95, ...)
 }
 \arguments{
 \item{x}{A fitted bekk model of class "bekkFit" from the \link{bekk_fit} function}

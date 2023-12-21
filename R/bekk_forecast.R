@@ -17,10 +17,10 @@
 #' }
 #'
 #'@export
-predict <- function(x, n.ahead = 1, ci = 0.95) {
+predict <- function(x, n.ahead = 1, ci = 0.95, ...) {
   UseMethod('predict')
 }
-predict.default <- function(x, n.ahead, ...) {stats::predict(x)}
+predict.default <- function(x, n.ahead, ...) {stats::predict(x, n.ahead, ...)}
 
 #' @export
 predict.bekk <- function(x, n.ahead = 1, ci = 0.95) {
