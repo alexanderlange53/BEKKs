@@ -821,7 +821,6 @@ bekk_fit.sbekka <- function(spec, data, QML_t_ratios = FALSE,
   theta <- matrix(theta, ncol =1)
 
   params <- bhh_asymm_sbekk(data, theta, max_iter, crit, spec$model$signs)
-  print(params)
 
   if (QML_t_ratios == TRUE) {
     tratios <- QML_t_ratios_sbekk_asymm(params$theta, data, spec$model$signs)

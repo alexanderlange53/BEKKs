@@ -127,7 +127,7 @@ QML_sd <- function(theta, r) {
 
   s2 <- sqrt(abs(diag(s2)))
 
-  return(s2)
+  return(as.matrix(s2))
 }
 
 QML_sd_asymm <- function(theta, r, signs) {
@@ -139,7 +139,7 @@ QML_sd_asymm <- function(theta, r, signs) {
 
   s2 <- sqrt(abs(diag(s2)))
 
-  return(s2)
+  return(as.matrix(s2))
 }
 
 QML_sd_dbekk <- function(theta, r) {
@@ -151,7 +151,7 @@ QML_sd_dbekk <- function(theta, r) {
 
   s2 <- sqrt(abs(diag(s2)))
 
-  return(s2)
+  return(as.matrix(s2))
 }
 
 QML_sd_dbekka <- function(theta, r, signs) {
@@ -162,8 +162,7 @@ QML_sd_dbekka <- function(theta, r, signs) {
   s2 <- solve(s2) %*% s1 %*% solve(s2)
 
   s2 <- sqrt(abs(diag(s2)))
-
-  return(s2)
+  return(as.matrix(s2))
 }
 
 QML_sd_sbekk <- function(theta, r) {
@@ -175,7 +174,7 @@ QML_sd_sbekk <- function(theta, r) {
 
   s2 <- sqrt(abs(diag(s2)))
 
-  return(s2)
+  return(as.matrix(s2))
 }
 
 QML_sd_sbekk_asymm <- function(theta, r, signs) {
@@ -187,6 +186,6 @@ QML_sd_sbekk_asymm <- function(theta, r, signs) {
 
   s2 <- sqrt(abs(diag(s2)))
 
-  return(s2)
+  return(as.matrix(s2))
 }
 
