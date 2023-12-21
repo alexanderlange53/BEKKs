@@ -1,4 +1,6 @@
-#' Simulating BEKK models
+#' @name Simulate
+#' @rdname Simulate
+#' @title Simulating BEKK models
 #'
 #' @description Method for simulating a N-dimensional BEKK model.
 #'
@@ -20,11 +22,6 @@
 #'
 #' }
 #'
-#' @export
-simulate <- function(spec, nobs, ...) {
-  UseMethod('simulate')
-}
-simulate.default <- function(spec, ...) {stats::simulate(spec, ...)}
 
 #' @export
 simulate.bekk <- function(spec, nobs) {
@@ -45,6 +42,7 @@ simulate.bekk <- function(spec, nobs) {
 
   return(ts(sim_dat))
 }
+#' @rdname Simulate
 
 #' @export
 simulate.bekka <- function(spec, nobs) {
@@ -66,6 +64,7 @@ simulate.bekka <- function(spec, nobs) {
   return(ts(sim_dat))
 }
 
+#' @rdname Simulate
 
 #' @export
 simulate.dbekk <- function(spec, nobs) {
@@ -86,7 +85,7 @@ simulate.dbekk <- function(spec, nobs) {
 
   return(ts(sim_dat))
 }
-
+#' @rdname Simulate
 #' @export
 simulate.dbekka <- function(spec, nobs) {
   if(is.null(nobs) || !is.numeric(nobs) || nobs < 1){
@@ -106,7 +105,7 @@ simulate.dbekka <- function(spec, nobs) {
   return(ts(sim_dat))
 }
 
-
+#' @rdname Simulate
 #' @export
 simulate.sbekk <- function(spec, nobs) {
   if(is.null(nobs) || !is.numeric(nobs) || nobs < 1){
@@ -125,7 +124,7 @@ simulate.sbekk <- function(spec, nobs) {
 
   return(ts(sim_dat))
 }
-
+#' @rdname Simulate
 #' @export
 simulate.sbekka <- function(spec, nobs) {
   if(is.null(nobs) || !is.numeric(nobs) || nobs < 1){

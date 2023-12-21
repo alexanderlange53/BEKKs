@@ -1,4 +1,6 @@
-#' Forecasting conditional volatilities with BEKK models
+#' @name Predict
+#' @rdname Predict
+#' @title Forecasting conditional volatilities with BEKK models
 #'
 #' @description Method for predicting a N-dimensional BEKK covariances.
 #'
@@ -16,11 +18,7 @@
 #'
 #' }
 #'
-#'@export
-predict <- function(x, n.ahead = 1, ci = 0.95, ...) {
-  UseMethod('predict')
-}
-predict.default <- function(x, n.ahead, ...) {stats::predict(x, n.ahead, ...)}
+
 
 #' @export
 predict.bekk <- function(x, n.ahead = 1, ci = 0.95) {
@@ -188,7 +186,7 @@ predict.bekk <- function(x, n.ahead = 1, ci = 0.95) {
   class(result) <- c('bekkForecast', 'bekk')
   return(result)
 }
-
+#' @rdname Predict
 #' @export
 predict.bekka <- function(x, n.ahead = 1, ci = 0.95) {
   N <- ncol(x$data)
@@ -358,7 +356,7 @@ predict.bekka <- function(x, n.ahead = 1, ci = 0.95) {
   return(result)
 }
 
-
+#' @rdname Predict
 #' @export
 predict.dbekk <- function(x, n.ahead = 1, ci = 0.95) {
   N <- ncol(x$data)
@@ -522,7 +520,7 @@ predict.dbekk <- function(x, n.ahead = 1, ci = 0.95) {
   class(result) <- c('bekkForecast', 'dbekk')
   return(result)
 }
-
+#' @rdname Predict
 #' @export
 predict.dbekka <- function(x, n.ahead = 1, ci = 0.95) {
   N <- ncol(x$data)
@@ -691,7 +689,7 @@ predict.dbekka <- function(x, n.ahead = 1, ci = 0.95) {
   class(result) <-  c('bekkForecast', 'dbekka')
   return(result)
 }
-
+#' @rdname Predict
 #' @export
 predict.sbekk <- function(x, n.ahead = 1, ci = 0.95) {
   N <- ncol(x$data)
@@ -856,6 +854,7 @@ predict.sbekk <- function(x, n.ahead = 1, ci = 0.95) {
   return(result)
 }
 
+#' @rdname Predict
 #' @export
 predict.sbekka <- function(x, n.ahead = 1, ci = 0.95) {
   N <- ncol(x$data)
