@@ -16,7 +16,7 @@
 #' obj_spec <- bekk_spec()
 #' x1 <- bekk_fit(obj_spec, StocksBonds)
 #'
-#' x2 <- simulate(x1, 3000)
+#' x2 <- simulate(x1, nobs = 3000)
 #'
 #' plot(x2)
 #'
