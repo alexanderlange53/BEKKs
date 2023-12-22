@@ -5,7 +5,7 @@
 #' @description Method for simulating a N-dimensional BEKK model.
 #'
 #' @param object A spec object of class "bekkSpec" from the function \link{bekk_spec} or a fitted bekk model of class "bekkFit" from the \link{bekk_fit} function
-#' @param nobs Number of observations of the simulated sample
+#' @param nsim Number of observations of the simulated sample
 #' @param ... Further parameters to be passed on to the function.
 #' @return Returns a simulated time series S3 class object using the parameters of passed "bekkSpec" or "bekkFit".
 #'
@@ -16,7 +16,7 @@
 #' obj_spec <- bekk_spec()
 #' x1 <- bekk_fit(obj_spec, StocksBonds)
 #'
-#' x2 <- simulate(x1, nobs = 3000)
+#' x2 <- simulate(x1, nsim = 3000)
 #'
 #' plot(x2)
 #'
@@ -24,9 +24,9 @@
 #'
 
 #' @export
-simulate.bekk <- function(object, ..., nobs) {
+simulate.bekk <- function(object, nsim, ...) {
   spec <- object
-  if(is.null(nobs) || !is.numeric(nobs) || nobs < 1){
+  if(is.null(nsim) || !is.numeric(nsim) || nsim < 1){
     stop("Please provide an integer specifying the number of observations")
   }
   if(!inherits(spec,c("bekkSpec", "bekkFit"))){
@@ -39,16 +39,16 @@ simulate.bekk <- function(object, ..., nobs) {
 
   }
 
-  sim_dat <- simulate_bekk_c(c(xx$theta), nobs, xx$N)
+  sim_dat <- simulate_bekk_c(c(xx$theta), nsim, xx$N)
 
   return(ts(sim_dat))
 }
 #' @rdname simulate
 
 #' @export
-simulate.bekka <- function(object, ..., nobs) {
+simulate.bekka <- function(object, ..., nsim) {
   spec <- object
-  if(is.null(nobs) || !is.numeric(nobs) || nobs < 1){
+  if(is.null(nsim) || !is.numeric(nsim) || nsim < 1){
     stop("Please provide an integer specifying the number of observations")
   }
   if(!inherits(spec,c("bekkSpec", "bekkFit"))){
@@ -61,7 +61,7 @@ simulate.bekka <- function(object, ..., nobs) {
 
   }
   #expected_signs
-  sim_dat <- simulate_bekka_c(c(xx$theta), nobs, xx$N, xx$signs, xx$expected_signs)
+  sim_dat <- simulate_bekka_c(c(xx$theta), nsim, xx$N, xx$signs, xx$expected_signs)
 
   return(ts(sim_dat))
 }
@@ -69,9 +69,9 @@ simulate.bekka <- function(object, ..., nobs) {
 #' @rdname simulate
 
 #' @export
-simulate.dbekk <- function(object, ..., nobs) {
+simulate.dbekk <- function(object, ..., nsim) {
   spec <- object
-  if(is.null(nobs) || !is.numeric(nobs) || nobs < 1){
+  if(is.null(nsim) || !is.numeric(nsim) || nsim < 1){
     stop("Please provide an integer specifying the number of observations")
   }
   if(!inherits(spec,c("bekkSpec", "bekkFit"))){
@@ -84,15 +84,15 @@ simulate.dbekk <- function(object, ..., nobs) {
 
   }
 
-  sim_dat <- simulate_dbekk_c(c(xx$theta), nobs, xx$N)
+  sim_dat <- simulate_dbekk_c(c(xx$theta), nsim, xx$N)
 
   return(ts(sim_dat))
 }
 #' @rdname simulate
 #' @export
-simulate.dbekka <- function(object, ..., nobs) {
+simulate.dbekka <- function(object, ..., nsim) {
   spec <- object
-  if(is.null(nobs) || !is.numeric(nobs) || nobs < 1){
+  if(is.null(nsim) || !is.numeric(nsim) || nsim < 1){
     stop("Please provide an integer specifying the number of observations")
   }
   if(!inherits(spec,c("bekkSpec", "bekkFit"))){
@@ -104,16 +104,16 @@ simulate.dbekka <- function(object, ..., nobs) {
     stop("Please provide a stationary BEKK model.")
   }
   #expected_signs
-  sim_dat <- simulate_dbekka_c(c(xx$theta), nobs, xx$N, xx$signs, xx$expected_signs)
+  sim_dat <- simulate_dbekka_c(c(xx$theta), nsim, xx$N, xx$signs, xx$expected_signs)
 
   return(ts(sim_dat))
 }
 
 #' @rdname simulate
 #' @export
-simulate.sbekk <- function(object, ..., nobs) {
+simulate.sbekk <- function(object, ..., nsim) {
   spec <- object
-  if(is.null(nobs) || !is.numeric(nobs) || nobs < 1){
+  if(is.null(nsim) || !is.numeric(nsim) || nsim < 1){
     stop("Please provide an integer specifying the number of observations")
   }
   if(!inherits(spec,c("bekkSpec", "bekkFit"))){
@@ -125,15 +125,15 @@ simulate.sbekk <- function(object, ..., nobs) {
     stop("Please provide a stationary BEKK model.")
   }
 
-  sim_dat <- simulate_sbekk_c(c(xx$theta), nobs, xx$N)
+  sim_dat <- simulate_sbekk_c(c(xx$theta), nsim, xx$N)
 
   return(ts(sim_dat))
 }
 #' @rdname simulate
 #' @export
-simulate.sbekka <- function(object, ..., nobs) {
+simulate.sbekka <- function(object, ..., nsim) {
   spec <- object
-  if(is.null(nobs) || !is.numeric(nobs) || nobs < 1){
+  if(is.null(nsim) || !is.numeric(nsim) || nsim < 1){
     stop("Please provide an integer specifying the number of observations")
   }
   if(!inherits(spec,c("bekkSpec", "bekkFit"))){
@@ -145,7 +145,7 @@ simulate.sbekka <- function(object, ..., nobs) {
     stop("Please provide a stationary BEKK model.")
       }
   #expected_signs
-  sim_dat <- simulate_sbekka_c(c(xx$theta), nobs, xx$N, xx$signs, xx$expected_signs)
+  sim_dat <- simulate_sbekka_c(c(xx$theta), nsim, xx$N, xx$signs, xx$expected_signs)
 
   return(ts(sim_dat))
 }

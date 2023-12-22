@@ -10,24 +10,24 @@
 \alias{simulate.sbekka}
 \title{Simulating BEKK models}
 \usage{
-\method{simulate}{bekk}(object, ..., nobs)
+\method{simulate}{bekk}(object, nsim, ...)
 
-\method{simulate}{bekka}(object, ..., nobs)
+\method{simulate}{bekka}(object, ..., nsim)
 
-\method{simulate}{dbekk}(object, ..., nobs)
+\method{simulate}{dbekk}(object, ..., nsim)
 
-\method{simulate}{dbekka}(object, ..., nobs)
+\method{simulate}{dbekka}(object, ..., nsim)
 
-\method{simulate}{sbekk}(object, ..., nobs)
+\method{simulate}{sbekk}(object, ..., nsim)
 
-\method{simulate}{sbekka}(object, ..., nobs)
+\method{simulate}{sbekka}(object, ..., nsim)
 }
 \arguments{
 \item{object}{A spec object of class "bekkSpec" from the function \link{bekk_spec} or a fitted bekk model of class "bekkFit" from the \link{bekk_fit} function}
 
-\item{...}{Further parameters to be passed on to the function.}
+\item{nsim}{Number of observations of the simulated sample}
 
-\item{nobs}{Number of observations of the simulated sample}
+\item{...}{Further parameters to be passed on to the function.}
 }
 \value{
 Returns a simulated time series S3 class object using the parameters of passed "bekkSpec" or "bekkFit".
@@ -42,7 +42,7 @@ Method for simulating a N-dimensional BEKK model.
 obj_spec <- bekk_spec()
 x1 <- bekk_fit(obj_spec, StocksBonds)
 
-x2 <- simulate(x1, nobs = 3000)
+x2 <- simulate(x1, nsim = 3000)
 
 plot(x2)
 

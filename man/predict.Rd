@@ -10,26 +10,26 @@
 \alias{predict.sbekka}
 \title{Forecasting conditional volatilities with BEKK models}
 \usage{
-\method{predict}{bekk}(object, ..., n.ahead = 1, ci = 0.95)
+\method{predict}{bekk}(object, n.ahead = 1, ci = 0.95, ...)
 
-\method{predict}{bekka}(object, ..., n.ahead = 1, ci = 0.95)
+\method{predict}{bekka}(object, n.ahead = 1, ci = 0.95, ...)
 
-\method{predict}{dbekk}(object, ..., n.ahead = 1, ci = 0.95)
+\method{predict}{dbekk}(object, n.ahead = 1, ci = 0.95, ...)
 
-\method{predict}{dbekka}(object, ..., n.ahead = 1, ci = 0.95)
+\method{predict}{dbekka}(object, n.ahead = 1, ci = 0.95, ...)
 
-\method{predict}{sbekk}(object, ..., n.ahead = 1, ci = 0.95)
+\method{predict}{sbekk}(object, n.ahead = 1, ci = 0.95, ...)
 
-\method{predict}{sbekka}(object, ..., n.ahead = 1, ci = 0.95)
+\method{predict}{sbekka}(object, n.ahead = 1, ci = 0.95, ...)
 }
 \arguments{
 \item{object}{A fitted bekk model of class "bekkFit" from the \link{bekk_fit} function}
 
-\item{...}{Further parameters to be passed on to the function.}
-
 \item{n.ahead}{Number of periods to forecast conditional volatility. Default is a one-period ahead forecast.}
 
 \item{ci}{Floating point in [0,1] defining the niveau for confidence bands of the conditional volatility forecast. Default is 95 per cent niveau confidence bands.}
+
+\item{...}{Further parameters to be passed on to the function.}
 }
 \value{
 Returns a S3 class "bekkForecast" object containing the conditional volatility forecasts and respective confindence bands.

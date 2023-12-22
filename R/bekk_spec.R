@@ -39,8 +39,8 @@
 #' obj_spec_random <- bekk_spec(model = list(type = "bekk", asymmetric = TRUE),
 #' init_values = "random")
 #' x2 <- bekk_fit(obj_spec_random, StocksBonds)
-#' print(x1)
-#' print(x2)
+#' summary(x1)
+#' summary(x2)
 #' }
 #' @export
 bekk_spec <- function(model = list(type = "bekk", asymmetric = FALSE),

@@ -22,7 +22,7 @@
 
 
 #' @export
-predict.bekk <- function(object, ..., n.ahead = 1, ci = 0.95) {
+predict.bekk <- function(object, n.ahead = 1, ci = 0.95, ...) {
   x <- object
   N <- ncol(x$data)
   NoBs <- nrow(x$data)
@@ -190,7 +190,7 @@ predict.bekk <- function(object, ..., n.ahead = 1, ci = 0.95) {
 }
 #' @rdname predict
 #' @export
-predict.bekka <- function(object, ..., n.ahead = 1, ci = 0.95) {
+predict.bekka <- function(object, n.ahead = 1, ci = 0.95, ...) {
   x <- object
   N <- ncol(x$data)
   NoBs <- nrow(x$data)
@@ -361,7 +361,7 @@ predict.bekka <- function(object, ..., n.ahead = 1, ci = 0.95) {
 
 #' @rdname predict
 #' @export
-predict.dbekk <- function(object, ..., n.ahead = 1, ci = 0.95) {
+predict.dbekk <- function(object, n.ahead = 1, ci = 0.95, ...) {
   x <- object
   N <- ncol(x$data)
   NoBs <- nrow(x$data)
@@ -526,7 +526,7 @@ predict.dbekk <- function(object, ..., n.ahead = 1, ci = 0.95) {
 }
 #' @rdname predict
 #' @export
-predict.dbekka <- function(object, ..., n.ahead = 1, ci = 0.95) {
+predict.dbekka <- function(object, n.ahead = 1, ci = 0.95, ...) {
   x <- object
   N <- ncol(x$data)
   NoBs <- nrow(x$data)
@@ -696,7 +696,7 @@ predict.dbekka <- function(object, ..., n.ahead = 1, ci = 0.95) {
 }
 #' @rdname predict
 #' @export
-predict.sbekk <- function(object, ..., n.ahead = 1, ci = 0.95) {
+predict.sbekk <- function(object, n.ahead = 1, ci = 0.95, ...) {
   x <- object
   N <- ncol(x$data)
   NoBs <- nrow(x$data)
@@ -862,7 +862,7 @@ predict.sbekk <- function(object, ..., n.ahead = 1, ci = 0.95) {
 
 #' @rdname predict
 #' @export
-predict.sbekka <- function(object, ..., n.ahead = 1, ci = 0.95) {
+predict.sbekka <- function(object, n.ahead = 1, ci = 0.95, ...) {
   x <- object
   N <- ncol(x$data)
   NoBs <- nrow(x$data)
