@@ -12,7 +12,7 @@
 #' @return  Returns a S3 class "backtest" object containing the VaR forecast, out-of-sample returns and backtest statistics according to the R-package "GAS". conf
 #' @examples
 #' \donttest{
-#'
+#' \dontshow{Sys.setenv("OMP_THREAD_LIMIT"="1")}
 #' data(StocksBonds)
 #' obj_spec <- bekk_spec()
 #' x1 <- bekk_fit(obj_spec, StocksBonds, QML_t_ratios = FALSE, max_iter = 50, crit = 1e-9)
