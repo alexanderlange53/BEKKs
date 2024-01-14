@@ -32,3 +32,5 @@ LazyData: true
 Suggests:    testthat (>= 2.1.0)
 RdMacros: mathjaxr    
 RoxygenNote: 7.2.3
+URL: https://github.com/alexanderlange53/BEKKs
+BugReports: https://github.com/alexanderlange53/BEKKs/issues
