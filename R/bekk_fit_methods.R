@@ -113,7 +113,7 @@ BIC.bekkFit <- function(object, ...) {
   BICinner <- function(e) {
     N <- ncol(e$data)
     if (any(class(e) == 'bekk')) {
-      bic <- N^2 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * llv(e)
+      bic <- 2* N^2 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * llv(e)
     } else if (any(class(e) == 'bekka')) {
       bic <- 3 * N^2 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * llv(e)
     } else if (any(class(e) == 'sbekk')) {
