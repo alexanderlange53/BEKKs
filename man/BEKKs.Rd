@@ -7,7 +7,7 @@
 \alias{_PACKAGE}
 \title{BEKKs: Volatility modelling}
 \description{
-\loadmathja
+\loadmathjax
 This package implements estimation, simulation and forecasting techniques for conditional volatility modelling using the BEKK model. We refer the reader to Fülle et al. (2024) for a package overview.
 The full BEKK(1,1,1) model of Engle and Kroner (1995)
 \mjdeqn{H_t = CC' + A' r_{t-1} r_{t-1}'A + G' H_{t-1}G ,}{H_t = CC' + A' r_{t-1} r_{t-1}'A + G' H_{t-1}G ,}  the asymmetric extensions of Kroner and Ng (1998) and Grier et. al. (2004)
@@ -53,3 +53,4 @@ Hafner CM, Herwartz H (2006). Volatility impulse responses for multivariate GARC
 \item Christian M. Hafner \email{christian.hafner@uclouvain.be}
 }
 }
+
