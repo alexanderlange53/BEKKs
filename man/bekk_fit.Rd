@@ -70,4 +70,7 @@ plot(x1)
 }
 \references{
 Hafner and Herwartz (2008). Analytical quasi maximum likelihood inference in multivariate volatility models. Metrika, 67, 219-239.
+
+Fülle, M. J., A. Lange, C. M. Hafner, and H. Herwartz (2024). BEKKs: An R package for estimation of
+conditional volatility of multivariate time series. Journal of Statistical Software 111 (4), 1–34. <doi:10.18637/jss.v111.i04>.
 }

@@ -2,6 +2,7 @@ process_object <- function(x) {
   UseMethod('process_object')
 }
 
+
 process_object.bekkFit <- function(x) {
   theta <- x$theta
   N <- ncol(x$C0)
