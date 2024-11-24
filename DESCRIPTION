@@ -9,7 +9,7 @@ Authors@R:
     c(person("Markus J.",
             "Fülle",
            role = c("aut", "cre"),
-           email = "fuelle@uni-goettingen.de"),
+           email = "markus.fuelle@gmail.com"),
            person("Alexander", "Lange", 
           role = c("aut"),
           email = "alexander.lange@uni-goettingen.de"),
@@ -19,7 +19,7 @@ Authors@R:
       person("Helmut", "Herwartz", 
            role = c("aut"), 
            email = "hherwartz@uni-goettingen.de"))
-Maintainer: Markus J. Fülle <fuelle@uni-goettingen.de>
+Maintainer: Markus J. Fülle <markus.fuelle@gmail.com>
 Description: Methods and tools for estimating, simulating and forecasting of so-called BEKK-models (named after Baba, Engle, Kraft and Kroner) based on the fast Berndt–Hall–Hall–Hausman (BHHH) algorithm described in Hafner and Herwartz (2008) <doi:10.1007/s00184-007-0130-y>. For an overview, we refer the reader to Fülle et al. (2024) <doi:10.18637/jss.v111.i04>.  
 Depends: R (>= 3.5.0)
 Imports: Rcpp, reshape2, ggplot2, mathjaxr, gridExtra, grid, ggfortify, parallel, xts, stats, future, future.apply, GAS, ks, lubridate, utils, pbapply, numDeriv, moments

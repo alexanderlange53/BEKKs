@@ -53,4 +53,3 @@ Hafner CM, Herwartz H (2006). Volatility impulse responses for multivariate GARC
 \item Christian M. Hafner \email{christian.hafner@uclouvain.be}
 }
 }
-
