@@ -854,7 +854,7 @@ Rcpp::List  bhh_bekk(arma::mat& r, const arma::mat& theta, int& max_iter, double
      if (likelihood_best < lik_all(count_loop)) {
         exit_loop = 1;
         count_loop += 1;
-      } else if (pow(likelihood_best - likelihood_candidates(steps.n_elem -1), 2)/abs(likelihood_candidates(steps.n_elem -1)) < crit) {// if (pow(likelihood_best - lik_all(count_loop), 2)/abs(lik_all(count_loop)) < crit) {
+     } else if (pow(likelihood_best - likelihood_candidates(steps.n_elem -1), 2)/std::fabs(likelihood_candidates(steps.n_elem -1)) < crit) {// if (pow(likelihood_best - lik_all(count_loop), 2)/abs(lik_all(count_loop)) < crit) {
         exit_loop = 1;
         count_loop += 1;
         theta_candidate = theta_temp.col(max_index);
@@ -938,7 +938,7 @@ Rcpp::List  bhh_asymm_bekk(arma::mat& r, const arma::mat& theta, int& max_iter, 
     if (likelihood_best < lik_all(count_loop)) {
       exit_loop = 1;
       count_loop += 1;
-    } else if (pow(likelihood_best - likelihood_candidates(steps.n_elem -1), 2)/abs(likelihood_candidates(steps.n_elem -1)) < crit) {// if (pow(likelihood_best - lik_all(count_loop), 2)/abs(lik_all(count_loop)) < crit) {
+    } else if (pow(likelihood_best - likelihood_candidates(steps.n_elem -1), 2)/std::fabs(likelihood_candidates(steps.n_elem -1)) < crit) {// if (pow(likelihood_best - lik_all(count_loop), 2)/abs(lik_all(count_loop)) < crit) {
       exit_loop = 1;
       count_loop += 1;
       theta_candidate = theta_temp.col(max_index);
@@ -1023,7 +1023,7 @@ Rcpp::List  bhh_dbekk(arma::mat& r, const arma::mat& theta, int& max_iter, doubl
     if (likelihood_best < lik_all(count_loop)) {
       exit_loop = 1;
       count_loop += 1;
-    } else if (pow(likelihood_best - likelihood_candidates(steps.n_elem -1), 2)/abs(likelihood_candidates(steps.n_elem -1)) < crit) {// if (pow(likelihood_best - lik_all(count_loop), 2)/abs(lik_all(count_loop)) < crit) {
+    } else if (pow(likelihood_best - likelihood_candidates(steps.n_elem -1), 2)/std::fabs(likelihood_candidates(steps.n_elem -1)) < crit) {// if (pow(likelihood_best - lik_all(count_loop), 2)/abs(lik_all(count_loop)) < crit) {
       exit_loop = 1;
       count_loop += 1;
       theta_candidate = theta_temp.col(max_index);
@@ -1107,7 +1107,7 @@ Rcpp::List  bhh_asymm_dbekk(arma::mat& r, const arma::mat& theta, int& max_iter,
     if (likelihood_best < lik_all(count_loop)) {
       exit_loop = 1;
       count_loop += 1;
-    } else if (pow(likelihood_best - likelihood_candidates(steps.n_elem -1), 2)/abs(likelihood_candidates(steps.n_elem -1)) < crit) {// if (pow(likelihood_best - lik_all(count_loop), 2)/abs(lik_all(count_loop)) < crit) {
+    } else if (pow(likelihood_best - likelihood_candidates(steps.n_elem -1), 2)/std::fabs(likelihood_candidates(steps.n_elem -1)) < crit) {// if (pow(likelihood_best - lik_all(count_loop), 2)/abs(lik_all(count_loop)) < crit) {
       exit_loop = 1;
       count_loop += 1;
       theta_candidate = theta_temp.col(max_index);
