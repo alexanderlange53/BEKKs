@@ -30,5 +30,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests: testthat (>= 2.1.0)
-RdMacros: mathjaxr    
+RdMacros: mathjaxr
 RoxygenNote: 7.3.2
+URL: https://github.com/alexanderlange53/BEKKs
+BugReports: https://github.com/alexanderlange53/BEKKs/issues
