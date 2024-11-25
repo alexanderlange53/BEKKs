@@ -1,0 +1,21 @@
+bibentry(bibtype = "Article",
+  title        = "{BEKKs}: An {R} Package for Estimation of Conditional Volatility of Multivariate Time Series",
+  author       = c(person(given = c("Markus", "J."),
+                          family = "F\\\"ulle",
+                          email = "fuelle@uni-goettingen.de"),
+                   person(given = "Alexander",
+                          family = "Lange"),
+                   person(given = c("Christian", "M."),
+                          family = "Hafner",
+                          email = "christian.hafner@uclouvain.be"),
+                   person(given = "Helmut",
+                          family = "Herwartz")),
+  journal      = "Journal of Statistical Software",
+  year         = "2024",
+  volume       = "111",
+  number       = "4",
+  pages        = "1--34",
+  doi          = "10.18637/jss.v111.i04",
+  header       = "To cite BEKKs in publications use:"
+)
+

@@ -1,0 +1,2 @@
+1. New maintainer mail address.
+2. New reference to corresponding JSS article Fülle et al. (2024).

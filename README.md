@@ -1,7 +1,7 @@
 BEKKs
 =====
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/BEKKs)](https://cran.r-project.org/package=BEKKs) 
-[![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/grand-total/BEKKs)](https://cran.r-project.org/package=BEKKs)
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/BEKKs)](https://cran.r-project.org/package=BEKKs) 
+[![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/grand-total/BEKKs)](https://cran.r-project.org/package=BEKKs)
 
 Modelling conditional volatilities and correlations among multivariate time series in R
 

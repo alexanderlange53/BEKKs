@@ -2,12 +2,13 @@
 % Please edit documentation in R/BEKKs.R
 \docType{package}
 \name{BEKKs}
+\alias{BEKKs-package}
 \alias{BEKKs}
 \alias{_PACKAGE}
 \title{BEKKs: Volatility modelling}
 \description{
 \loadmathjax
-This package implements estimation, simulation and forecasting techniques for conditional volatility modelling using the BEKK model.
+This package implements estimation, simulation and forecasting techniques for conditional volatility modelling using the BEKK model. We refer the reader to Fülle et al. (2024) for a package overview.
 The full BEKK(1,1,1) model of Engle and Kroner (1995)
 \mjdeqn{H_t = CC' + A' r_{t-1} r_{t-1}'A + G' H_{t-1}G ,}{H_t = CC' + A' r_{t-1} r_{t-1}'A + G' H_{t-1}G ,}  the asymmetric extensions of Kroner and Ng (1998) and Grier et. al. (2004)
 \mjdeqn{H_t = CC' + A' r_{t-1} r_{t-1}'A +B'\gamma_{t-1} \gamma_{t-1}' B+G'H_{t-1}G}{H_t = CC' +A'r_{t-1} r_{t-1}'A +B'\gamma_{t-1} \gamma_{t-1}' B+G'H_{t-1}G,,}
@@ -32,6 +33,9 @@ specification object \link{bekk_spec}.}
 }
 \references{
 Engle, R. F. and K. F. Kroner (1995). Multivariate simultaneous generalized arch. Econometric Theory 11(1),122-150.
+
+Fülle, M. J., A. Lange, C. M. Hafner, and H. Herwartz (2024). BEKKs: An R package for estimation of
+conditional volatility of multivariate time series. Journal of Statistical Software 111 (4), 1–34. \url{doi:10.18637/jss.v111.i04}.
 
 Kroner, K. F. and V. K. Ng (1998). Modeling asymmetric comovements of asset returns. Review of Financial Studies 11(4), 817-44.
 

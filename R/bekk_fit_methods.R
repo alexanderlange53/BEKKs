@@ -79,17 +79,17 @@ AIC.bekkFit <- function(object, ..., k = 2) {
   AICinner <- function(e) {
     N <- ncol(e$data)
     if (any(class(e) == 'bekk')) {
-      aic <- k * 2 * N^2 + N * (N + 1)/2 - 2 * llv(e)
+      aic <- k * (2 * N^2 + N * (N + 1)/2) - 2 * llv(e)
     } else if (any(class(e) == 'bekka')) {
-      aic <- k * 3 * N^2 + N * (N + 1)/2 - 2 * llv(e)
+      aic <- k * (3 * N^2 + N * (N + 1)/2) - 2 * llv(e)
     } else if (any(class(e) == 'sbekk')) {
-      aic <- k * 2  + N * (N + 1)/2 - 2 * llv(e)
+      aic <- k * (2  + N * (N + 1)/2) - 2 * llv(e)
     } else if (any(class(e) == 'sbekka')) {
-      aic <- k * 3 + N * (N + 1)/2 - 2 * llv(e)
+      aic <- k * (3 + N * (N + 1)/2) - 2 * llv(e)
     }else if (any(class(e) == 'dbekk')) {
-      aic <- k * 2  + N * (N + 1)/2 - 2 * llv(e)
+      aic <- k * (2  + N * (N + 1)/2) - 2 * llv(e)
     } else if (any(class(e) == 'dbekka')) {
-      aic <- k * 3 + N * (N + 1)/2 - 2 * llv(e)
+      aic <- k * (3 + N * (N + 1)/2) - 2 * llv(e)
     }
     return(aic)
   }
@@ -113,17 +113,17 @@ BIC.bekkFit <- function(object, ...) {
   BICinner <- function(e) {
     N <- ncol(e$data)
     if (any(class(e) == 'bekk')) {
-      bic <- N^2 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * llv(e)
+      bic <- (2* N^2 + N * (N + 1)/2) * log(nrow(e$data)) - 2 * llv(e)
     } else if (any(class(e) == 'bekka')) {
-      bic <- 3 * N^2 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * llv(e)
+      bic <- (3 * N^2 + N * (N + 1)/2) * log(nrow(e$data)) - 2 * llv(e)
     } else if (any(class(e) == 'sbekk')) {
-      bic <- 2 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * llv(e)
+      bic <- (2 + N * (N + 1)/2) * log(nrow(e$data)) - 2 * llv(e)
     } else if (any(class(e) == 'sbekka')) {
-      bic <- 3 + N * (N + 1)/2 * log(nrow(e$data)) - 2 * llv(e)
+      bic <- (3 + N * (N + 1)/2) * log(nrow(e$data)) - 2 * llv(e)
     } else if (any(class(e) == 'dbekk')) {
-      bic <- 2 * N + N * (N + 1)/2 * log(nrow(e$data)) - 2 * llv(e)
+      bic <- (2 * N + N * (N + 1)/2)*  log(nrow(e$data)) - 2 * llv(e)
     } else if (any(class(e) == 'dbekka')) {
-      bic <- 3 * N + N * (N + 1)/2 * log(nrow(e$data)) - 2 * llv(e)
+      bic <- (3 * N + N * (N + 1)/2) * log(nrow(e$data)) - 2 * llv(e)
     }
     return(bic)
   }
