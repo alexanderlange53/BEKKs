@@ -1,20 +1,34 @@
 Package: BEKKs
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Multivariate Conditional Volatility Modelling and Forecasting
+Version: 1.4.5
+Author: Markus J. Fülle [aut, cre], 
+        Alexander Lange [aut],
+        Christian M. Hafner [aut],
+        Helmut Herwartz [aut]
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    c(person("Markus J.",
+            "Fülle",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-Imports: Rcpp
+           email = "markus.fuelle@gmail.com"),
+           person("Alexander", "Lange", 
+          role = c("aut"),
+          email = "alexander.lange@uni-goettingen.de"),
+      person("Christian M.", "Hafner", 
+           role = c("aut"), 
+           email = "christian.hafner@uclouvain.be"),
+      person("Helmut", "Herwartz", 
+           role = c("aut"), 
+           email = "hherwartz@uni-goettingen.de"))
+Maintainer: Markus J. Fülle <markus.fuelle@gmail.com>
+Description: Methods and tools for estimating, simulating and forecasting of so-called BEKK-models (named after Baba, Engle, Kraft and Kroner) based on the fast Berndt–Hall–Hall–Hausman (BHHH) algorithm described in Hafner and Herwartz (2008) <doi:10.1007/s00184-007-0130-y>. For an overview, we refer the reader to Fülle et al. (2024) <doi:10.18637/jss.v111.i04>.  
+Depends: R (>= 3.5.0)
+Imports: Rcpp, reshape2, ggplot2, mathjaxr, gridExtra, grid, ggfortify, parallel, xts, stats, future, future.apply, GAS, ks, lubridate, utils, pbapply, numDeriv, moments
 LinkingTo: Rcpp, RcppArmadillo
 NeedsCompilation: yes
-SystemRequirements: C++11
-License: What license it uses
+SystemRequirements: C++17
+License: MIT + file LICENSE           
 Encoding: UTF-8
 LazyData: true
-Suggests: 
-    testthat (>= 2.1.0)
-RoxygenNote: 7.0.2
+Suggests: testthat (>= 2.1.0)
+RdMacros: mathjaxr    
+RoxygenNote: 7.3.2

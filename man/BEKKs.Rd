@@ -2,14 +2,54 @@
 % Please edit documentation in R/BEKKs.R
 \docType{package}
 \name{BEKKs}
+\alias{BEKKs-package}
 \alias{BEKKs}
+\alias{_PACKAGE}
 \title{BEKKs: Volatility modelling}
 \description{
-BEKKs: Volatility modelling
+\loadmathjax
+This package implements estimation, simulation and forecasting techniques for conditional volatility modelling using the BEKK model. We refer the reader to Fülle et al. (2024) for a package overview.
+The full BEKK(1,1,1) model of Engle and Kroner (1995)
+\mjdeqn{H_t = CC' + A' r_{t-1} r_{t-1}'A + G' H_{t-1}G ,}{H_t = CC' + A' r_{t-1} r_{t-1}'A + G' H_{t-1}G ,}  the asymmetric extensions of Kroner and Ng (1998) and Grier et. al. (2004)
+\mjdeqn{H_t = CC' + A' r_{t-1} r_{t-1}'A +B'\gamma_{t-1} \gamma_{t-1}' B+G'H_{t-1}G}{H_t = CC' +A'r_{t-1} r_{t-1}'A +B'\gamma_{t-1} \gamma_{t-1}' B+G'H_{t-1}G,,}
+with \mjdeqn{\gamma_t = r_t I\left(r_t < 0 \right)}{\gamma_t = r_t I(r_t < 0 )} are implemented.
+Moreover, the diagonal BEKK, where the parameter matrices A, B and G are reduced to diagonal matrices and
+the scalar BEKK model of Ding and Engle (2001)
+\mjdeqn{H_t = CC' + a r_{t-1} r_{t-1}' + g H_{t-1},}{H_t = CC' + a r_{t-1} r_{t-1}' + g H_{t-1},}
+where a and g are scalar parameters and are implemented to allow faster but less flexible estimation in higher dimensions.
+}
+\details{
+The main functions are:
+\itemize{
+\item \tabular{ll}{ \code{\link{bekk_spec}} \tab Specifies the model type to be estimated.}
+\item \tabular{ll}{\code{\link{bekk_fit}} \tab Estimates a BEKK(1,1,1) model of a given series and
+specification object \link{bekk_spec}.}
+\item \tabular{ll}{ \code{\link{simulate}} \tab Simulates a BEKK(1,1,1) process using either a \link{bekk_fit} or \link{bekk_spec} object.}
+\item \tabular{ll}{ \code{\link{predict}} \tab Forecasts  conditional volatility using a \link{bekk_fit} object.}
+\item \tabular{ll}{ \code{\link{VaR}} \tab Estimates (portfolio) Value-at-Risk using a fitted BEKK(1,1,1) model.}
+\item \tabular{ll}{ \code{\link{backtest}} \tab Backtesting estimated (portfolio) value-at-risks of a fitted BEKK(1,1,1) model.}
+\item \tabular{ll}{ \code{\link{virf}} \tab Calculates volatility impulse response functions for fitted symmetric BEKK(1,1,1) models.}
+}
+}
+\references{
+Engle, R. F. and K. F. Kroner (1995). Multivariate simultaneous generalized arch. Econometric Theory 11(1),122-150.
+
+Fülle, M. J., A. Lange, C. M. Hafner, and H. Herwartz (2024). BEKKs: An R package for estimation of
+conditional volatility of multivariate time series. Journal of Statistical Software 111 (4), 1–34. \url{doi:10.18637/jss.v111.i04}.
+
+Kroner, K. F. and V. K. Ng (1998). Modeling asymmetric comovements of asset returns. Review of Financial Studies 11(4), 817-44.
+
+Ding, Zhuanxin and Engle, Robert F (2001). Large scale conditional covariance matrix modeling, estimation and testing. NYU working paper No. Fin-01-029.
+
+Grier, K. B., Olan T. Henry, N. Olekalns, and K. Shields (2004). The asymmetric effects of uncertainty on inflation and output growth. Journal of Applied Econometrics  19(5), 551-565.
+
+Hafner CM, Herwartz H (2006). Volatility impulse responses for multivariate GARCH models:  An exchange rate illustration. Journal of International Money and Finance,25,719-740.
 }
 \author{
 \itemize{
-\item Alexander Lange \email{alexander.lange@uni-goettingen.de}
+\item Markus J. Fülle  \email{fuelle@uni-goettingen.de}
 \item Helmut Herwartz \email{hherwartz@uni-goettingen.de}
+\item Alexander Lange \email{alexander.lange@uni-goettingen.de}
+\item Christian M. Hafner \email{christian.hafner@uclouvain.be}
 }
 }
