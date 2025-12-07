@@ -2,7 +2,7 @@ process_object <- function(x) {
   UseMethod('process_object')
 }
 
-
+#'@exportS3Method
 process_object.bekkFit <- function(x) {
   theta <- x$theta
   N <- ncol(x$C0)
@@ -14,7 +14,7 @@ process_object.bekkFit <- function(x) {
               N = N, signs=signs, expected_signs = expected_signs, BEKK_valid = BEKK_valid
               ))
 }
-
+#'@exportS3Method
 process_object.bekkSpec <- function(x) {
   if (is.null(x$init_values)) {
     stop('Please provide "initial_values" in "bekk_spec" as paramater for simulation.')

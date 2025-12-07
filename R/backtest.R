@@ -110,13 +110,13 @@ backtest.bekkFit <-  function(x, window_length = 1000, p = 0.99, portfolio_weigh
 
 
     hit_rate = hit_rate/n_out
-    backtests = list()
+    #backtests = list()
 
 
 
     #VaR <- as.data.frame(VaR)
     for (i in 1:N) {
-      backtests[[i]] = suppressWarnings(BacktestVaR(out_sample_returns[,i], VaR[,i], alpha = 1- p))
+      #backtests[[i]] = suppressWarnings(BacktestVaR(out_sample_returns[,i], VaR[,i], alpha = 1- p))
       colnames(VaR)[i] <- paste('VaR of', colnames(x$data)[i])
     }
   } else {
@@ -179,7 +179,7 @@ backtest.bekkFit <-  function(x, window_length = 1000, p = 0.99, portfolio_weigh
     hit_rate= sum(VaR > out_sample_returns)
 
     hit_rate = hit_rate/n_out
-    backtests= suppressWarnings(GAS::BacktestVaR(out_sample_returns, VaR, alpha = 1- p))
+    #backtests= suppressWarnings(GAS::BacktestVaR(out_sample_returns, VaR, alpha = 1- p))
 
     out_sample_returns = as.data.frame(out_sample_returns)
 
@@ -203,7 +203,7 @@ backtest.bekkFit <-  function(x, window_length = 1000, p = 0.99, portfolio_weigh
     VaR = VaR,
     out_sample_returns = out_sample_returns,
     hit_rate = hit_rate,
-    backtests = backtests,
+    #backtests = backtests,
     portfolio_weights = portfolio_weights,
     bekkFit = x,
     p = p,

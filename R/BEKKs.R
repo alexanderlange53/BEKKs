@@ -1,6 +1,6 @@
 #' BEKKs: Volatility modelling
 #'
-#' @docType package
+#' @docType _PACKAGE
 #' @aliases _PACKAGE
 #' @name BEKKs
 #' @author \itemize{

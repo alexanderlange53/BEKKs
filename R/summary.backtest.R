@@ -31,14 +31,14 @@ summary.backtest <- function(object, ...) {
     res_Kupiec <- data.frame(matrix(NA, ncol = ncol(object$VaR), nrow=2))
     res_Christoffersen <- data.frame(matrix(NA, ncol = ncol(object$VaR), nrow=2))
     colnames(res_hit)=c("")
-    colnames(res_Kupiec)=c("")
-    colnames(res_Christoffersen)=c("")
+    #colnames(res_Kupiec)=c("")
+    #colnames(res_Christoffersen)=c("")
     row.names(res_hit)=c("")
-    row.names(res_Kupiec)=c("Test:", "p-value:")
-    row.names(res_Christoffersen)=c("Test:", "p-value:")
+    #row.names(res_Kupiec)=c("Test:", "p-value:")
+    #row.names(res_Christoffersen)=c("Test:", "p-value:")
 
-      res_Kupiec[,1]=object$backtests$LRuc
-      res_Christoffersen[,1]=object$backtests$LRcc
+      #res_Kupiec[,1]=object$backtests$LRuc
+      #res_Christoffersen[,1]=object$backtests$LRcc
 
 
     cat("\nPortfolio weights: ")
@@ -62,10 +62,10 @@ summary.backtest <- function(object, ...) {
     row.names(res_hit)=c("")
     row.names(res_Kupiec)=c("Test:", "p-value:")
     row.names(res_Christoffersen)=c("Test:", "p-value:")
-    for(i in 1:ncol(object$VaR)){
-      res_Kupiec[,i]=object$backtests[[i]]$LRuc
-      res_Christoffersen[,i]=object$backtests[[i]]$LRcc
-    }
+    # for(i in 1:ncol(object$VaR)){
+    #  res_Kupiec[,i]=object$backtests[[i]]$LRuc
+    #  res_Christoffersen[,i]=object$backtests[[i]]$LRcc
+    # }
 
     cat("\nPortfolio weights: None\n")
     cat(underScore)

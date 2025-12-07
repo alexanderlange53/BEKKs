@@ -1,6 +1,7 @@
 #' @import future
 #' @import future.apply
 
+
 bekk_mc_eval <- function(object, spec, sample_sizes, iter, nc = 1) {
   xx <- process_object(object)
   theta <- xx$theta
@@ -35,7 +36,7 @@ RMSE <- function(x, theta_true) {
   theta_est <- x$theta
   return(mean(sqrt(((theta_true - theta_est) / theta_true)^2)))
 }
-
+#'@exportS3Method
 plot.bekkMC <- function(x, ...) {
   Sample <- NULL
   MSE <- NULL
