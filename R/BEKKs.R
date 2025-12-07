@@ -1,7 +1,5 @@
 #' BEKKs: Volatility modelling
 #'
-#' @docType _PACKAGE
-#' @aliases _PACKAGE
 #' @name BEKKs
 #' @author \itemize{
 #' \item Markus J. Fülle  \email{fuelle@uni-goettingen.de}
