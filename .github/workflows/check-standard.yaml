@@ -57,4 +57,4 @@ jobs:
 
       - name: Run VNU Checker
         run:
-              run: docker run --rm -v ${{ github.workspace }}:/site ghcr.io/validator/validator:latest /site --errors-only
+              docker run --rm -v ${{ github.workspace }}:/site ghcr.io/validator/validator:latest /site --errors-only
