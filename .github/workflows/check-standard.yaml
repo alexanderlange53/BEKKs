@@ -12,18 +12,6 @@ on:
       - master
 
 
-  validate:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Run VNU Checker
-        run:
-          docker run --rm -v ${{ github.workspace }}:/site \
-          ghcr.io/validator/validator:latest \
-          /site --errors-only
-
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
@@ -60,3 +48,15 @@ on:
 
       - name: Check R Package
         uses: r-lib/actions/check-r-package@v2
+
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run VNU Checker
+        run:
+            docker run --rm -v ${{ github.workspace }}:/site \
+            ghcr.io/validator/validator:latest \
+            /site --errors-only
