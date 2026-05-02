@@ -9,7 +9,7 @@ This package implements estimation, simulation and forecasting techniques for co
 The full BEKK(1,1,1) model of Engle and Kroner (1995)
 \mjdeqn{H_t = CC' + A' r_{t-1} r_{t-1}'A + G' H_{t-1}G ,}{H_t = CC' + A' r_{t-1} r_{t-1}'A + G' H_{t-1}G ,}  the asymmetric extensions of Kroner and Ng (1998) and Grier et. al. (2004)
 \mjdeqn{H_t = CC' + A' r_{t-1} r_{t-1}'A +B'\gamma_{t-1} \gamma_{t-1}' B+G'H_{t-1}G}{H_t = CC' +A'r_{t-1} r_{t-1}'A +B'\gamma_{t-1} \gamma_{t-1}' B+G'H_{t-1}G,,}
-with \mjdeqn{\gamma_t = r_t I\left(r_t \lt 0 \right)}{\gamma_t = r_t I(r_t \lt 0 )} are implemented.
+with \mjdeqn{\gamma_t = r_t I\left(r_t &lt; 0 \right)}{\gamma_t = r_t I(r_t &lt; 0 )} are implemented.
 Moreover, the diagonal BEKK, where the parameter matrices A, B and G are reduced to diagonal matrices and
 the scalar BEKK model of Ding and Engle (2001)
 \mjdeqn{H_t = CC' + a r_{t-1} r_{t-1}' + g H_{t-1},}{H_t = CC' + a r_{t-1} r_{t-1}' + g H_{t-1},}
